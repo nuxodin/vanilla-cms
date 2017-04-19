@@ -44,3 +44,5 @@ Temporary Items
 
 /cache/*
 /qg/qgCacheCounters.txt
+/qg/qgCacheData.txt
+/qg/qgInstalled.txt
