@@ -1,4 +1,4 @@
-# vanilla-cms
+# Vanilla-CMS
 User friendly content management
 
 # Install:
