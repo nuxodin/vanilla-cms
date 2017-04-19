@@ -1,13 +1,7 @@
 # vanilla-cms
-open source, fresh CMS with focus on frontendediting (drog&amp;drop, wysiwyg, copy&amp;past)
-
-
-
-== vanilla-cms
 User friendly content management
 
-= Install:
-
+# Install:
 - move files to your host
 - create a db
 - customize db connection in: project/index.php
@@ -16,9 +10,9 @@ User friendly content management
 
 Feel free to contact me!
 
-= Feedback welcome!
+Feedback welcome!
 
-= License:
+# License:
 MIT License
 http://opensource.org/licenses/mit-license.php
 
