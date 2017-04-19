@@ -1,0 +1,12 @@
+<dbscheme>
+	<table name="file">
+		<field name="vpos" type="float" null="1" key="" />
+		<field name="hpos" type="float" null="1" key="" />
+	</table>
+
+	<table name="_vers_file"> <!-- ugly, add fields to versions-table -->
+		<field name="vpos" type="float" null="1" key="" />
+		<field name="hpos" type="float" null="1" key="" />
+	</table>
+
+</dbscheme>

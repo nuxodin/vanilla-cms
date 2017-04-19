@@ -1,0 +1,6 @@
+<dbscheme>
+	<table name="cms_cont_notfound">
+		<field name="log_id" type="int" length="10" key="PRI" />
+		<field name="request" type="text" key="MUL" />
+	</table>
+</dbscheme>

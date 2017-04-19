@@ -1,0 +1,1 @@
+Erstellung von einfachen Texten. Der Inhalt kann nach Belieben formatiert werden. Zusätzlich können Bild-Elemente eingefügt werden.

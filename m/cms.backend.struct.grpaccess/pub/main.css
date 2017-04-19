@@ -1,0 +1,15 @@
+x#table tbody tr { background:#fff; }
+x#table tbody td { border:1px solid #ddd; }
+#table tbody tr.-mark { background:yellow; }
+#table tbody tr.-inherited > [v] { color:#000; }
+#table tbody tr.-inherited > [v]:after { content:'inh.'; }
+#table tbody td[v]  {
+	cursor:pointer;
+	background:#fff;
+	padding:5px;
+	text-align: center;
+}
+#table tbody td[v="0"] { font-weight:normal; }
+#table tbody td[v="1"] { background-color:var(--cms-access-1);}
+#table tbody td[v="2"] { background-color:var(--cms-access-2); }
+#table tbody td[v="3"] { background-color:var(--cms-access-3); }

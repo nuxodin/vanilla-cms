@@ -1,0 +1,50 @@
+.c1Tabs {
+	background:#eee;
+	position:relative;
+	padding-bottom:300px;
+	letter-spacing:-0.31em;
+}
+.c1Tabs > * {
+	letter-spacing:normal;
+}
+.c1Tabs > h3 {
+	display:inline-block;
+	font:inherit;
+	padding:7px 16px 6px 16px;
+	margin:0;
+	cursor:pointer;
+}
+.c1Tabs > h3.c1TabActive, zzz.c1Tabs > h3:hover, .c1Tabs > h3:focus {
+	background:#ddd;
+	outline:none;
+}
+
+.c1Tabs > h3:hover + div {
+	z-index:2;
+	opacity:1;
+}
+.c1Tabs > h3:focus + div,
+.c1Tabs > h3.c1TabActive + div {
+	z-index:1;
+	opacity:1;
+}
+.c1Tabs:not(:hover) > h3:first-child + div {
+	z-index:0;
+	opacity:1;
+}
+.c1Tabs > div {
+	position:absolute;
+	height:300px;
+	bottom:0;
+	left:0;
+	right:0;
+	opacity:0;
+	background:#f7f7f7;
+	overflow:auto;
+	box-sizing:border-box;
+	transition:opacity .3s;
+	padding:1em;;
+}
+.c1Tabs > div:hover {
+	opacity:1;
+}

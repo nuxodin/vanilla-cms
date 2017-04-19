@@ -1,0 +1,63 @@
+<dbscheme>
+	<table name="page">
+		<field name="id"           type="int"      length="10"  key="PRI" null="" autoincrement="true"  />
+		<field name="log_id"       type="int"      length="10"  key="MUL" null="" parent="log" on_parent_delete="setnull" />
+		<field name="log_id_ch"    type="int"      length="10"  key="MUL" null="" parent="log" on_parent_delete="setnull" />
+		<field name="type"         type="varchar"  length="1"   key="MUL" null="" />
+		<field name="basis"        type="int"      length="10"  key="MUL" null="" parent="page" />
+		<field name="sort"         type="smallint" length="5"   key="MUL" null="" />
+		<field name="lft"          type="int"      length="11"  key="MUL" null="true"/>
+		<field name="rgt"          type="int"      length="11"  key="MUL" null="true" />
+		<field name="module"       type="varchar"  length="255" key="MUL" null="" />
+		<field name="access"       type="tinyint"  length="4"   key="MUL" null="true" />
+		<field name="online_start" type="int"      length="10"  key="MUL" null="true" />
+		<field name="online_end"   type="int"      length="10"  key="MUL" null="true" />
+		<field name="visible"      type="tinyint"  length="1"   key=""    null="" />
+		<field name="searchable"   type="tinyint"  length="1"   key="MUL" null="" />
+		<field name="title_id"     type="int"      length="10"  key="MUL" null="" parent="text" on_parent_delete="setnull" />
+		<field name="name"         type="varchar"  length="64"  key="MUL" null="true" />
+		<field name="_cache"       type="text"                            null="" />
+	</table>
+	<table name="page_class">
+		<field name="page_id"  type="int"      length="10" key="PRI" null="" parent="page" on_parent_copy="cascade" on_parent_delete="cascade" />
+		<field name="class"    type="varchar"  length="64" key="PRI" null="" />
+	</table>
+	<table name="page_access_grp">
+		<field name="page_id"  type="int"      length="10" key="PRI" null="" parent="page" on_parent_copy="cascade" on_parent_delete="cascade" />
+		<field name="grp_id"   type="int"      length="10" key="PRI" null="" parent="grp"  on_parent_copy="cascade" on_parent_delete="cascade" />
+		<field name="access"   type="tinyint"  length="3"  key=""    null="" />
+	</table>
+	<table name="page_access_usr">
+		<field name="page_id"  type="int"      length="10" key="PRI" null="" parent="page" on_parent_copy="cascade" on_parent_delete="cascade" />
+		<field name="usr_id"   type="int"      length="10" key="PRI" null="" parent="usr"  on_parent_copy="cascade" on_parent_delete="cascade" />
+		<field name="access"   type="tinyint"  length="3"  key=""    null="" />
+	</table>
+	<table name="page_file">
+		<field name="page_id"  type="int"      length="10"  key="PRI" null="" parent="page" on_parent_delete="cascade" />
+		<field name="name"     type="varchar"  length="255" key="PRI" null=""  />
+		<field name="file_id"  type="int"      length="10"  key="MUL" null="" parent="file" on_parent_delete="cascade" />
+		<field name="sort"     type="smallint" length="6"   key="MUL" null="" />
+	</table>
+	<table name="page_redirect">
+		<field name="request"  type="varchar"  length="255" key="PRI" null=""  />
+		<field name="redirect" type="text"     length=""    key=""    null="" />
+	</table>
+	<table name="page_text">
+		<field name="page_id"  type="int"      length="10"  key="PRI" null="" parent="page" on_parent_delete="cascade" />
+		<field name="name"     type="varchar"  length="128" key="PRI" null="" />
+		<field name="text_id"  type="int"      length="10"  key="MUL" null="" parent="text" on_parent_delete="cascade" />
+	</table>
+	<table name="page_url">
+		<field name="page_id"  type="int"                   key="PRI" null="" parent="page" on_parent_delete="cascade" />
+		<field name="lang"     type="varchar"  length="12"  key="PRI" null="" />
+		<field name="url"      type="varchar"  length="255" key="MUL" null="" />
+		<field name="custom"   type="tinyint"  length="1"             null="" />
+		<field name="target"   type="text"                            null="" />
+	</table>
+	<table name="grp">
+		<field name="page_access" type="tinyint" length="1" key="MUL" null="" />
+	</table>
+	<table name="mail">
+		<field name="page_id"     type="int"                key="MUL" null="true" parent="page" on_parent_delete="setnull" />
+	</table>
+</dbscheme>

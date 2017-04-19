@@ -1,0 +1,6 @@
+.-m-cms-cont-table1 {
+  overflow:auto;
+}
+.-m-cms-cont-table1 > table {
+  width:100%;
+}

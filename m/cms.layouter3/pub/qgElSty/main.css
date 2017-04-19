@@ -1,0 +1,136 @@
+.qgStyleEditor {
+	position:relative;
+}
+.qgStyleEditor > .-nav {
+	position:relative;
+	z-index:1;
+	padding:5px;
+	background:#fff;
+	border-radius:3px;
+	list-style:none;
+	margin:0;
+	cursor:pointer;
+}
+.qgStyleEditor > .-nav ul {
+	list-style:none;
+	margin:0;
+	padding-left:15px;
+	display:none;
+}
+.qgStyleEditor > .-nav span.active {
+	color:red;
+}
+
+.qgStyleEditor > .-handler {
+	position:absolute;
+	top:0px;
+	padding:5px;
+	box-shadow:0 0 5px #000;
+	background:#fff;
+	border-radius:3px;
+	min-width:150px;
+}
+.qgStyleEditor > .-handler > .-sys {
+	float:right;
+	color:#888;
+	padding:0 4px;
+	margin:2px 2px 12px 2px;
+	background:-webkit-linear-gradient(#fff,#eee);
+	border-radius:3px;
+	cursor:pointer;
+	box-shadow:0 0 2px #999;
+}
+.qgStyleEditor > .-handler > input, .qgStyleEditor > .-handler > textarea {
+	width:100%;
+}
+
+/* qgStyleSheetEditor */
+.qgStyleSheetEditor {
+	position:fixed;
+	left:20px;
+	top:20px;
+	display:none;
+	background:#fff;
+	box-shadow:0 0 5px #000;
+	padding:1px;
+	border-radius: 2px;
+	max-height:95%;
+	box-shadow: black 0px 0px 10px;
+}
+.qgStyleSheetEditor .-title {
+	padding:5px;
+	background:#777;
+	background:-webkit-linear-gradient(#001,#557);
+	background:-moz-linear-gradient(#001,#557);
+	background:linear-gradient(#001,#557);
+	color:#fff;
+	cursor:move;
+}
+.qgStyleSheetEditor .-title > .-close{
+	width:20px;
+	float:right;
+	font-weight:bold;
+	text-align:center;
+	cursor:pointer;
+}
+
+
+.qgStyleSheetEditor .-contents {
+	overflow:hidden;
+}
+.qgStyleSheetEditor .-contents:hover {
+	overflow:auto;
+}
+
+.qgStyleSheetEditor .-contents > table {
+	width:99%;
+    margin-right: 18px; /* scrollbars! very tricky, if the are no scrollbars margin is not active  */
+}
+.qgStyleSheetEditor .-contents .-rules > tr:hover, .qgStyleSheetEditor .-contents > table > tbody > tr.active {
+	background:#ffc;
+}
+.qgStyleSheetEditor .-contents .-rules > tr > td {
+	padding:1px 5px 1px 1px;
+	cursor:pointer;
+}
+.qgStyleSheetEditor .-contents .-rules > tr > td:first-child {
+    max-width: 320px;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    overflow:hidden;
+    padding-left:5px;
+}
+.qgStyleSheetEditor .-contents .-rules > tr > td.-rem, .qgStyleSheetEditor .-contents .-rules > tr > td.-redefine {
+	background:url(rem.png) center no-repeat;
+	width:10px; height:10px;
+	color:transparent;
+}
+.qgStyleSheetEditor .-contents .-rules > tr.-has > td.-rem {
+	opacity:.5;
+}
+.qgStyleSheetEditor .-contents .-rules > tr > td.-redefine {
+	background-image:url(pencil.png);
+}
+
+
+
+
+@-webkit-keyframes styleEditorMark {
+	100% { outline-color:rgba(255,255,0,.6); }
+}
+@keyframes styleEditorMark {
+	100% { outline-color:rgba(255,255,0,.6); }
+}
+.qgCmsPage .qgStyleEditorMarkEl, body.qgStyleEditorMarkEl, html.qgStyleEditorMarkEl, .qgCmsPage.qgStyleEditorMarkEl  {
+	outline:6px solid rgba(190,0,0,.6) !important;
+	outline-offset:-3px !important;
+	-webkit-animation: styleEditorMark 1s linear infinite alternate;
+	-moz-animation: styleEditorMark 1s linear infinite alternate;
+	animation: styleEditorMark 1s infinite alternate;
+}
+
+.qgCmsPage .qgStyleEditorMarkEl_invisible      { display:block      !important; opacity:1 !important; visibility:visible !important; overflow:visible !important; }
+.qgCmsPage span.qgStyleEditorMarkEl_invisible  { display:inline     !important; }
+.qgCmsPage table.qgStyleEditorMarkEl_invisible { display:table      !important; }
+.qgCmsPage td.qgStyleEditorMarkEl_invisible    { display:table-cell !important; }
+.qgCmsPage tr.qgStyleEditorMarkEl_invisible    { display:table-row  !important; }

@@ -1,0 +1,15 @@
+<dbscheme>
+	<table name="m_error_report">
+		<field name="id"        type="int"      length="10"  key="PRI"  autoincrement="true"  />
+		<field name="log_id"    type="int"      length="11"  parent="log" on_parent_delete="setnull" />
+		<field name="time"      type="datetime" Key="MUL" />
+		<field name="source"    type="varchar"  length="5" key="MUL" />
+		<field name="message"   type="varchar"  length="255" key="MUL" />
+		<field name="file"      type="varchar"  length="255" key="MUL" />
+		<field name="line"      type="int"      length="8"   key="MUL" />
+		<field name="backtrace" type="text" />
+		<field name="browser"   type="varchar"  length="255" key="MUL" />
+		<field name="request"   type="varchar"  length="255" key="MUL" />
+		<field name="ip"        type="varchar"  length="255" key="MUL" />
+	</table>
+</dbscheme>

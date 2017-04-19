@@ -1,0 +1,159 @@
+<dbscheme>
+	<table name="qg_db_table">
+		<field name="name"        type="varchar" length="255" key="PRI" null=""/>
+		<field name="title"       type="int"     length="10"  key=""  null=""/>
+		<field name="description" type="int"     length="10"  key=""  null=""/>
+	</table>
+	<table name="qg_db_field">
+		<field name="id"               type="int"     length="10"  null="" key="UNI" autoincrement="true" />
+		<field name="tab"              type="varchar" length="160" null="" key="PRI" />
+		<field name="name"             type="varchar" length="160" null="" key="PRI" parenet="qg_db_table" on_parent_delete="delete" />
+		<field name="title"            type="int"     length="10"  null=""/>
+		<field name="description"      type="int"     length="10"  null=""/>
+		<field name="handler"          type="varchar" length="32"  null=""/>
+		<field name="parent"           type="varchar" length="160" null="" key="MUL" />
+		<field name="on_parent_delete" type="varchar" length="128" null="" key="MUL" />
+		<field name="on_parent_copy"   type="varchar" length="128" null="" key="MUL" />
+	</table>
+	<table name="client">
+		<field name="id"         type="int"      length="10"  key="PRI" autoincrement="true" null=""/>
+		<field name="hash"       type="varchar"  length="255" key="UNI" null=""/>
+		<field name="browser"    type="text"     length=""    key="" null=""/>
+		<field name="usr_id"     type="int"      length="10"  key="MUL" parent="usr" on_parent_delete="setnull" null="true"/>
+	</table>
+	<table name="client_usr">
+		<field name="client_id"  type="int"      length="10" key="PRI" parent="client" on_parent_delete="cascade" null=""/>
+		<field name="usr_id"     type="int"      length="10" key="PRI" parent="usr"    on_parent_delete="cascade" null=""/>
+		<field name="save_login" type="tinyint"  length="1"  key="" null=""/>
+		<field name="time"       type="int"      length="4"  key="" null=""/>
+	</table>
+	<table name="file">
+		<field name="id"         type="int"      length="11"  key="PRI" autoincrement="true" null=""/>
+		<field name="log_id"     type="int"      length="10"  key="MUL" parent="log" on_parent_delete="setnull" null="true"/>
+		<field name="name"       type="varchar"  length="255" key="MUL" null=""/>
+		<field name="text"       type="longtext" length=""    key="MUL" null=""/>
+		<field name="mime"       type="varchar"  length="255" key="MUL" null=""/>
+		<field name="access"     type="tinyint"  length="1"   key="" null=""/>
+		<field name="md5"        type="varchar"  length="32"  key="" null=""/>
+		<field name="size"       type="bigint"   length="32"  key="" null=""/>
+	</table>
+	<table name="grp">
+		<field name="id"         type="int"      length="10"  key="PRI" autoincrement="true"  null=""/>
+		<field name="log_id"     type="int"      length="10"  key="MUL" parent="log" on_parent_delete="setnull" null="true"/>
+		<field name="log_id_ch"  type="int"      length="10"  key="MUL" parent="log" on_parent_delete="setnull" null="true"/>
+		<field name="usr_id"     type="int"      length="10"  key="MUL" null=""/>
+		<field name="type"       type="varchar"  length="255" key="" null=""/>
+		<field name="name"       type="varchar"  length="255" key="" null=""/>
+	</table>
+	<table name="log">
+		<field name="id"         type="int"      length="10" key="PRI" autoincrement="true" null=""/>
+		<field name="time"       type="int"      length="10" key="MUL" null=""/>
+		<field name="sess_id"    type="int"      length="8"  key="MUL" parent="sess" on_parent_delete="setnull" null="true"/>
+		<field name="url"        type="text"     length=""   key="" null=""/>
+		<field name="post"       type="text"     length=""   key="" null=""/>
+		<field name="referer"    type="text"     length=""   key="" null=""/>
+	</table>
+	<table name="mail">
+		<field name="id"         type="int"      length="10"  key="PRI" autoincrement="true"  null=""/>
+		<field name="log_id"     type="int"      length="10"  key="MUL" parent="log" on_parent_delete="setnull" null="true"/>
+		<field name="sender"     type="varchar"  length="255" key="" null=""/>
+		<field name="sendername" type="text"     key="" null=""/>
+		<field name="subject"    type="text"     length="" key="" null=""/>
+		<field name="text"       type="text"     length="" key="" null=""/>
+		<field name="html"       type="text"     length="" key="" null=""/>
+	</table>
+	<table name="mail_attachment">
+		<field name="mail_id"    type="int"      length="10" key="PRI" parent="mail" on_parent_delete="cascade" null=""/>
+		<field name="hash"       type="varchar"  length="40" key="PRI" null=""/>
+		<field name="path"       type="text"     null=""/>
+		<field name="name"       type="tinytext" null=""/>
+		<field name="type"       type="tinytext" null=""/>
+		<field name="inline"     type="tinyint"  length="1" null=""/>
+	</table>
+	<table name="mail_recipient">
+		<field name="mail_id"    type="int"     length="10"  key="PRI"  parent="mail" on_parent_delete="cascade" null=""/>
+		<field name="email"      type="varchar" length="255" key="PRI"  null=""/>
+		<field name="name"       type="text"    length=""    key="" null=""/>
+		<field name="data"       type="text"    length=""    key="" null=""/>
+		<field name="sent"       type="int"     length="10"  key="" null=""/>
+		<field name="opened"     type="int"     length="10"  key="" null=""/>
+		<field name="error"      type="text" null=""/>
+	</table>
+	<table name="module">
+		<field name="id"             type="int"     key="MUL" autoincrement="true" null=""/>
+		<field name="server"         type="varchar" length="127" key="MUL" null=""/>
+		<field name="name"           type="varchar" length="127" key="PRI" null=""/>
+		<field name="local_version"  type="varchar" length="32" key="" null=""/>
+		<field name="local_time"     type="int"     length="10" key="" null=""/>
+		<field name="local_updated"  type="int"     length="10" key="" null=""/>
+		<field name="server_version" type="varchar" length="32" key="" null=""/>
+		<field name="server_time"    type="int"     length="10" key="" null=""/>
+		<field name="server_size"    type="int"     length="10" key="" null=""/>
+		<field name="access"         type="tinyint" length="1"  key="" null=""/>
+		<field name="title_id"       type="int"     length="10" key="MUL" parent="txt" on_parent_delete="setnull" null=""/>
+	</table>
+	<table name="qg_hashaction">
+		<field name="log_id"  type="int"      length="10"  key="" parent="log" on_parent_delete="setnull" null="true"/>
+		<field name="hash"    type="varchar"  length="128" key="PRI" null=""/>
+		<field name="fn"      type="varchar"  length="255" key="" null=""/>
+		<field name="expires" type="bigint"   length="20"  key="" null=""/>
+		<field name="times"   type="int"      length="10"  key="" null=""/>
+		<field name="data"    type="text"     length=""    key="" null=""/>
+	</table>
+	<table name="qg_setting">
+		<field name="id"      type="int"      length="10"  key="PRI" autoincrement="true" null=""/>
+		<field name="basis"   type="int"      length="10"  key="MUL" parent="qg_setting" null=""/>
+		<field name="offset"  type="varchar"  length="255" key="MUL" null=""/>
+		<field name="value"   type="longtext" length=""    key="" null=""/>
+		<field name="type"    type="tinyint"  length="1"   key="" null=""/>
+		<field name="handler" type="text"     length=""    key="" null=""/>
+		<field name="options" type="text"     length=""    key="" null=""/>
+		<field name="w"       type="tinyint"  length="1"   key="" null=""/>
+	</table>
+	<table name="qg_setting_usr">
+		<field name="setting_id" type="int"   length="10"  key="PRI" parent="qg_setting" on_parent_delete="cascade" null=""/>
+		<field name="usr_id"     type="int"   length="10"  key="PRI" parent="usr" on_parent_delete="cascade" null=""/>
+		<field name="value"      type="text"  length=""    key="" null=""/>
+	</table>
+	<table name="sess">
+		<field name="id"        type="int"     length="10"  key="PRI" autoincrement="true" null=""/>
+		<field name="ip"        type="varchar" length="255" key="" null=""/>
+		<field name="time"      type="int"     length="10"  key="" null=""/>
+		<field name="usr_id"    type="int"     length="10"  key="MUL" parent="usr"    on_parent_delete="setnull" null="true"/>
+		<field name="client_id" type="int"     length="10"  key="MUL" parent="client" on_parent_delete="setnull" null="true"/>
+	</table>
+	<table name="smalltext">
+		<field name="hash"      type="varchar" length="32" key="PRI" null=""/>
+		<field name="namespace" type="varchar" length="16" key="PRI" null=""/>
+		<field name="original"  type="text"    length=""   key="" null=""/>
+		<field name="count"     type="tinyint" length="3"  key="" null=""/>
+		<field name="de"        type="text"    length=""   key="" null=""/>
+		<field name="fr"        type="text"    length=""   key="" null=""/>
+		<field name="en"        type="text"    length=""   key="" null=""/>
+		<field name="it"        type="text"    length=""   key="" null=""/>
+	</table>
+	<table name="text">
+		<field name="id"        type="int"     length="10" key="PRI" autoincrement="true" null=""/>
+		<field name="log_id"    type="int"     length="10" key="MUL" parent="log" on_parent_delete="setnull" null="true"/>
+		<field name="lang"      type="varchar" length="12" key="PRI" null=""/>
+		<field name="text"      type="text"    length=""   key="MUL" null=""/>
+	</table>
+	<table name="usr">
+		<field name="id"        type="int"     length="11"  key="PRI" autoincrement="true"  null=""/>
+		<field name="log_id"    type="int"     length="10"  key="MUL" parent="log" on_parent_delete="setnull" null="true"/>
+		<field name="log_id_ch" type="int"     length="10"  key="MUL" parent="log" on_parent_delete="setnull" null="true"/>
+		<field name="active"    type="tinyint" length="1"   key=""    null=""/>
+		<field name="email"     type="varchar" length="255" key="UNI" null="true" />
+		<field name="pw"        type="varchar" length="255" key=""    null=""/>
+		<field name="firstname" type="varchar" length="255" key=""    null=""/>
+		<field name="lastname"  type="varchar" length="255" key=""    null=""/>
+		<field name="superuser" type="tinyint" length="1"   key=""    null=""/>
+		<field name="lang"      type="varchar" length="8"   key=""    null=""/>
+		<field name="company"   type="varchar" length="255" key=""    null=""/>
+	</table>
+	<table name="usr_grp">
+		<field name="usr_id" type="int" length="10" key="PRI" parent="usr" on_parent_delete="cascade" null=""/>
+		<field name="grp_id" type="int" length="10" key="PRI" parent="grp" on_parent_delete="cascade" null=""/>
+		<field name="log_id" type="int" length="10" key="MUL" parent="log" on_parent_delete="setnull" null=""/>
+	</table>
+</dbscheme>

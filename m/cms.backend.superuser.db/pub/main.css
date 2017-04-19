@@ -1,0 +1,19 @@
+a.active {
+	font-weight:bold;
+	color:#aaa;
+}
+.-m-cms-backend-superuser-db ul {
+	list-style:none;
+	margin:0;
+	padding:0;
+}
+.-m-cms-backend-superuser-db li {
+	padding:2px 10px 2px 1px;
+}
+.-m-cms-backend-superuser-db li a {
+	padding-top:2px;
+}
+.-m-cms-backend-superuser-db button {
+	padding-bottom:1px;
+	padding-top:1px;
+}

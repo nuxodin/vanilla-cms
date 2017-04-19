@@ -1,0 +1,154 @@
+<?php
+namespace qg;
+
+$search = $vars['search'] ?? ($_GET['CmsPage'.$Cont] ?? '');
+
+$res['search'] = $search;
+$res['res'] = [];
+
+if (!$search) return $res;
+
+$wheres[] = "1";
+if ($Cont->SET['module']->v) {
+	$wheres[] = "p.module LIKE '".$Cont->SET['module']->v."'";
+}
+
+// title
+$sqls[] =
+" SELECT 																" .
+" 	'title' as type														" .
+" 	,MATCH(t.text) AGAINST (".D()->quote($search).") AS relevance		" .
+"	,p.id AS id															" .
+"	,t.text as text														" .
+" FROM 																	" .
+"	page p		  														" .
+" 	join text t ON t.id = p.title_id AND t.lang = '".L()."'             " .
+" WHERE 1																" .
+"	AND ( 																" .
+"		MATCH(t.text) AGAINST (".D()->quote($search).")					" .
+"		OR t.text LIKE ".D()->quote('%'.$search.'%')."					" .
+"	)																	" .
+"	AND ".implode(' AND ', $wheres)."									" .
+" GROUP BY p.id														    " .
+" ORDER BY relevance													" .
+" LIMIT 100																";
+
+// texts
+$sqls[] =
+" SELECT 																" .
+" 	'text' as type														" .
+" 	,MATCH(t.text) AGAINST (".D()->quote($search).") AS relevance		" .
+"	,p.id AS id															" .
+"	,t.text 															" .
+"	,pt.name															" .
+" FROM 																	" .
+"	page p		  														" .
+"	join page_text pt ON pt.page_id = p.id								" .
+" 	join text t ON t.id = pt.text_id AND t.lang = '".L()."'             " .
+//"	join page rp ON if(p.type='p',p.id=rp.id,p.basis=rp.id)	  			" .
+" WHERE 1   															" .
+"	AND ( 																" .
+"		MATCH(t.text) AGAINST (".D()->quote($search).")					" .
+"		OR t.text LIKE ".D()->quote('%'.$search.'%')."					" .
+"	)																	" .
+"	AND ".implode(' AND ', $wheres)."									" .
+//" GROUP BY rp.id														" .
+" GROUP BY p.id															" .
+" ORDER BY relevance													" .
+" LIMIT 100																";
+
+if ($Cont->SET['files']->setType('bool')->v) {
+	// files
+	$sqls[] =
+	" SELECT 																" .
+	" 	'file' as type														" .
+	" 	,MATCH(f.text) AGAINST (".D()->quote($search).") AS relevance		" .
+	"	,p.id AS id															" .
+	"	,f.name 															" .
+	"	,f.text 															" .
+	"	,f.id as file_id 													" .
+	" FROM 																	" .
+	"	page p		  														" .
+	"	join page_file pf ON pf.page_id = p.id								" .
+	" 	join file f ON f.id = pf.file_id                                    " .
+	" WHERE 1																" .
+	"	AND ( 																" .
+	"		f.name LIKE ".D()->quote($search.'%')."							" .
+	"		OR MATCH(f.text) AGAINST (".D()->quote($search).")				" .
+	"		OR f.text LIKE ".D()->quote($search.'%')."						" .
+	"	)																	" .
+	" GROUP BY p.id														    " .
+	" ORDER BY relevance													" .
+	" LIMIT 100																";
+}
+
+//$start = microtime(true);
+
+$groupBy = $Cont->SET->make('group by','pages')->setHandler('select')->setOptions('contents','pages')->v;
+$startPage = $Cont->SET['startPage']->setHandler('qgcms-page')->v;
+
+
+$enableOnlinStart = $Cont->SET['online_start in relevance']->setType('bool')->v;
+$now = time();
+$oldIf = 60 * 60 * 24 * 356 * 4;
+
+$getClosestVisibleContent = function($Cont){
+    while (1) {
+        if ($Cont->vs['visible'] || $Cont->vs['type'] === 'p') return $Cont;
+        $Next = $Cont->Parent();
+        if (!$Next || !$Next->is()) return $Cont;
+        $Cont = $Next;
+    }
+};
+
+foreach ($sqls as $sql) {
+	foreach (D()->query($sql) as $vs) {
+		$P = Page($vs['id']);
+
+		if (!$P->Page->vs['searchable']      ) continue;
+		if (!$P->isReadable()                ) continue;
+		if ($startPage && !$P->in($startPage)) continue;
+
+        $group = $groupBy === 'contents' ? $getClosestVisibleContent($P)->id : $P->Page->id;
+
+		if (!isset($res['res'][$group]['text']))      $res['res'][$group]['text']      = '';
+		if (!isset($res['res'][$group]['relevance'])) $res['res'][$group]['relevance'] = 0;
+
+		$res['res'][$group]['relevance'] += $vs['relevance'];
+
+		switch ($vs['type']) {
+			case 'file':
+				$res['res'][$group]['files'][] = $vs;
+				$res['res'][$group]['text'] .= ' '.$vs['text'];
+				break;
+			case 'text':
+				$res['res'][$group]['texts'][] = $vs;
+				if (strpos($vs['name'], '_') !== 0) {
+					$res['res'][$group]['text'] .= ' '.$vs['text'];
+				}
+				$text = strtolower(strip_tags($vs['text']));
+				$num = substr_count($text, $search);
+				$num = min($num,7);
+				$res['res'][$group]['relevance'] += 0.2 * $num;
+				break;
+			case 'title':
+				$res['res'][$group]['titles'][] = $vs;
+				$res['res'][$group]['text'] .= '';
+				$res['res'][$group]['relevance'] += 3;
+				break;
+		}
+      	if ($enableOnlinStart && $P->Page->vs['online_start']) {
+      		$timeScore = $oldIf / ($now - $P->Page->vs['online_start']);
+          	$timeScore = $timeScore;
+            $res['res'][$group]['relevance'] = $timeScore * 300;
+      	}
+
+    }
+}
+
+//echo microtime(true)-$start.' Sekunden benötigt';
+uasort($res['res'], function($a, $b) {
+	return ($a['relevance'] > $b['relevance']) ? -1 : 1;
+});
+
+return $res;

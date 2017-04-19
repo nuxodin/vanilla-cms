@@ -1,0 +1,13 @@
+<dbscheme>
+	<table name="vers_space">
+		<field name="space" type="int" length="11" key="PRI" />
+		<field name="time_created" type="datetime" />
+	</table>
+	<table name="vers_cms_page_changed">
+		<field name="page_id" type="int" length="11" key="PRI" />
+		<field name="space"   type="int" length="11" key="PRI" />
+		<field name="changed_inside" type="datetime" />
+		<field name="changed_page"   type="datetime" />
+		<field name="changed"        type="datetime" />
+	</table>
+</dbscheme>

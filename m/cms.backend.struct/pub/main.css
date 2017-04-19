@@ -1,0 +1,27 @@
+.cmsBeTree .-toggle {
+	display:block;
+	height:22px;
+	width:22px;
+	display:inline-block;
+	vertical-align:middle;
+	background-position:50%;
+	background-size:75%;
+	background-repeat: no-repeat;
+}
+.cmsBeTree .-minus {
+	background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' stroke='#000' stroke-width='4.6'><line x1='8' y1='32' x2='56' y2='32'/></svg>");
+}
+.cmsBeTree .-plus  {
+	background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' stroke='#000' stroke-width='4.6'><line x1='8' y1='32' x2='56' y2='32'/><line x1='32' y1='8' x2='32' y2='56'/></svg>");
+}
+
+#content .cmsBeTree tbody tr {
+    background: #fff;
+}
+#content .cmsBeTree tbody td {
+    border: 1px solid #ddd;
+}
+#content .cmsBeTree tbody tr.-isCont  {
+	font-size:10px;
+	background:#f0f0f0;
+}

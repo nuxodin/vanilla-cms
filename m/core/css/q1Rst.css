@@ -1,0 +1,96 @@
+.q1Rst {
+	font-size:12px;
+	font-family:Arial;
+	text-shadow:none;
+	color:#000;
+	font-weight:normal;
+	line-height:normal;
+}
+.q1Rst * {
+	font-size:inherit;
+	font-family:inherit;
+	color:inherit;
+	line-height:inherit;
+	text-transform:inherit;
+	/* xtext-shadow:initial; stronger then ".qgCMS > .el" ?!?  */
+}
+.q1Rst h1, .q1Rst h2, .q1Rst h3, .q1Rst h4, .q1Rst h5, .q1Rst h6 {
+	margin:0;
+    font-weight: bolder;
+}
+.q1Rst li { margin:0; }
+.q1Rst p { margin:0; }
+.q1Rst h1 { font-size: 2em; }
+.q1Rst h2 { font-size: 1.5em; }
+.q1Rst h3 { font-size: 1.17em; }
+.q1Rst h4 { font-size: 1em; }
+.q1Rst h5 { font-size: .83em; }
+.q1Rst h6 { font-size: .75em; }
+
+/*
+html .q1Rst input,
+html .q1Rst textarea { /* "html" makes it a stronger selector then input[type=number] *
+*/
+.q1Rst input,
+.q1Rst textarea {
+	background: #fff;
+	border: 1px inset #ccc;
+	border-radius:0;
+	padding: 1px 0 1px 1px;
+	margin: 0;
+	vertical-align: baseline;
+	width:142px;
+	font-size:inherit;
+}
+.q1Rst select {
+	background:#fff;
+}
+
+.q1Rst button,
+.q1Rst input[type=submit],
+.q1Rst input[type=reset],
+.q1Rst input[type=button] {
+	background:linear-gradient(#fff,#ddd);
+	border-radius:3px;
+	color:inherit;
+
+	padding:.2em .5em;
+	min-height:0;
+	font-weight:normal;
+	width:auto;
+	border:1px solid #aaa;
+}
+.q1Rst button:hover,
+.q1Rst input[type=submit]:hover,
+.q1Rst input[type=reset]:hover,
+.q1Rst input[type=button]:hover {
+	border-color:#666;
+}
+.q1Rst button:active,
+.q1Rst input[type=submit]:active,
+.q1Rst input[type=reset]:active,
+.q1Rst input[type=button]:active {
+	background-image:linear-gradient(#ddd,#fff);
+}
+.q1Rst button[disabled],
+.q1Rst input[type=submit][disabled],
+.q1Rst input[type=reset][disabled],
+.q1Rst input[type=button][disabled] {
+	background-image:linear-gradient(#fff,#eee);
+	border-color:#999;
+	opacity:.9;
+	color:#aaa;
+}
+.q1Rst input[type=checkbox], .q1Rst input[type=radio] {
+	border: none;
+	background:transparent;
+	width:auto;
+}
+.q1Rst ::-webkit-input-placeholder { color: #A9A9A9 }
+.q1Rst :-ms-input-placeholder      { color: #A9A9A9 }
+.q1Rst ::placeholder               { color: #A9A9A9 }
+
+.q1Rst img {
+	border: 0;
+	vertical-align: middle;
+}

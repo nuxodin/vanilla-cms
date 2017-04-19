@@ -1,0 +1,25 @@
+.-m-cms-cont-search1 .-item {
+	display:block;
+	padding-bottom:1em;
+}
+.-m-cms-cont-search1 img {
+	float:left;
+	margin:0 10px 5px 0;
+}
+
+.-m-cms-cont-search1 .-item:after {
+	content:'';
+	display:block;
+	clear:both;
+}
+.-m-cms-cont-search1 .-title,
+.-m-cms-cont-search1 .-content {
+	display:block;
+}
+.-m-cms-cont-search1 form {
+	margin-bottom:1em;
+}
+.-m-cms-cont-search1 .-mark {
+	background:rgb(255,255,200);
+	background:rgba(255,255,100,.3);
+}

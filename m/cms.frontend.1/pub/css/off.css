@@ -1,0 +1,53 @@
+/* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
+.qgCMS_editmode_switch {
+	display:block;
+	top:0;
+	padding:10px 0;
+	right:0;
+	width:50px;
+	text-align:center;
+}
+.qgCMS_editmode_switch div {
+	width:32px;
+	height:16px;
+	box-sizing: border-box;
+	box-shadow:0 0 6px rgba(0,0,0,.5);
+	border-radius:10px;
+	background:#fff;
+	position:relative;
+	margin:auto;
+	padding:2px;
+}
+.qgCMS_editmode_switch i {
+	display: block;
+	width:12px;
+	height:12px;
+	margin:auto;
+	border-radius:50%;
+	transition:transform .3s;
+	transform-origin:50%;
+	transition-property:transform, background-color;
+	transform:translateX(-60%);
+	will-change:background-color, transform;
+	background-color:#222;
+}
+.qgCMS_editmode_switch.-active i {
+	background-color:#0099ff;
+	transform:translateX(60%);
+}
+
+@media (max-width:1024px) {
+	.qgCMS_editmode_switch {
+		width:42px;
+	}
+	.qgCMS_editmode_switch div {
+		width:24px;
+		height:12px;
+		padding:1.5px;
+	}
+	.qgCMS_editmode_switch i {
+		display: block;
+		width:9px;
+		height:9px;
+	}
+}

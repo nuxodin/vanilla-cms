@@ -1,0 +1,26 @@
+#head nav > ul {
+	display:table;
+    table-layout:auto;
+    box-sizing: border-box;
+  	width:100%;
+}
+#head nav > ul > li {
+  display:table-cell;
+  text-align:center;
+}
+
+#head nav li {
+  position:relative;
+}
+#head nav a {
+  padding:10px;
+  display:block;
+}
+#head li > ul {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 100%;
+  z-index: 1;
+}

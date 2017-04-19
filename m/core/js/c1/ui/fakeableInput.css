@@ -1,0 +1,28 @@
+input.c1-fakable {
+    position:absolute;
+    clip: rect(0 0 0 0);
+}
+input.c1-fakable + i {
+	display:inline-block;
+    width:.5em;
+    height:.5em;
+    background-color:#fff;
+    border:.15em solid #fafafa;
+    box-shadow:0 0 .1em rgba(0,0,0,.2), .1em .1em .1em rgba(0,0,0,.2) inset;
+}
+input[type=radio].c1-fakable + i {
+	border-radius:50%;
+}
+input.c1-fakable:checked + i {
+    background-color:#555;
+}
+
+/* usage:
+html:
+<input type=checkbox class=c1-fakable><i></i>
+
+css:
+input[type=checkbox].fakeBox + i { }
+input[type=radio].fakeBox + i { }
+input.fakeBox:checked + i { background:green }
+*/

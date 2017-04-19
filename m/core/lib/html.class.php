@@ -1,0 +1,189 @@
+<?php
+/* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
+namespace qg;
+
+class html {
+	static $head 		= '';
+	static $title       = '';
+	static $titlePrefix = '';
+	static $titleSuffix = '';
+	static $content 	= '';
+	static $meta        = [];
+	static $jsFiles 	= [];
+	static $cssFiles 	= [];
+	static $bodyFiles 	= [];
+	static $optimiseJs  = true;
+	// static function addJsFiles($files, $mode='defer') { // todo?
+	// 	static $all = [];
+	// 	$files = (array)$files;
+	// 	foreach ($files as $file) {
+	// 		if (isset($all[$file])) {
+	// 			unset($files[$file]);
+	// 			continue;
+	// 		}
+	// 		$all[$file] = 1;
+	// 	}
+	//  if (!$files) return;
+	// 	self::$jsFileGroups[] = [
+	// 		'files' => $files,
+	// 		'mode' => $files,
+	// 	];
+	// }
+	static function addJSFile($v, $group=null, $compress=true, $mode='') {
+		if (isset(self::$jsFiles[$v])) return;
+		self::$jsFiles[$v] = ['group'=>$group.$mode, 'file'=>$v, 'compress'=>$compress, 'mode'=>$mode];
+	}
+	static function addCSSFile($v, $group=null, $compress=true) {
+		if (isset( self::$cssFiles[$v] )) return;
+		self::$cssFiles[$v] = ['group'=>$group, 'file'=>$v, 'compress'=>$compress];
+	}
+	static function addBodyFile($v) {
+		self::$bodyFiles[$v] = $v;
+	}
+	static function getHeader() {
+		$return  = '<meta charset=utf-8>'."\n";
+		$return .= '<title>'.hee(self::$titlePrefix.self::$title.self::$titleSuffix).'</title>'."\n";
+		$return .= self::$head;
+		foreach (self::$meta as $name => $value) {
+			if ($value === '') continue;
+			$return .= '<meta name='.hee($name).' content="'.hee($value).'">'."\n";
+		}
+		$return .= self::_getHeaderCSSFiles();
+		if (isset(G()->js_data)) {
+			$return .= '<script type=js-data>'.json_encode(G()->js_data, JSON_HEX_QUOT|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS).'</script>'."\n";
+		}
+		$return .= self::_getHeaderJSFiles();
+		return $return;
+	}
+	static function _getHeaderCssFiles() {
+		$ret = '';
+		$i=0;
+		$groups = [];
+		foreach (self::$cssFiles AS $item) {
+			if (!$item['group']) $item['group'] = $i++;
+			$item['path']  = uri2path($item['file']);
+			$item['mtime'] = filemtime($item['path']);
+			$group = $item['group'];
+			$groups[$group][] = $item;
+		}
+		foreach ($groups as $items) $ret .= self::_getHeaderCSSFilesGroup($items);
+		return $ret;
+	}
+	static function _getHeaderJsFiles() {
+		$ret = [''=>'','async'=>'','defer'=>''];
+		$i=0;
+		$groups = [];
+		foreach (self::$jsFiles AS $item) {
+			if (!$item['group']) $item['group'] = $i++;
+			$item['path']  = uri2path($item['file']);
+			$item['mtime'] = filemtime($item['path']);
+			$group = $item['group'];
+			$groups[$group][] = $item;
+		}
+		foreach ($groups as $items) {
+			$mode = $items[0]['mode'];
+			$ret[$mode] .= self::_getHeaderJsFilesGroup($items);
+		}
+		return $ret[''].$ret['defer'].$ret['async'];
+	}
+	static function _getHeaderCSSFilesGroup($files) {
+		//http://prefixr.com/
+		if (debug) {
+			$ret = '';
+			foreach ($files AS $item) {
+				$ret .= '<link rel=stylesheet href="'.$item['file'].'?'.$item['mtime'].'">'."\n";
+			}
+			return $ret;
+		}
+		$md5 = md5(json_encode($files));
+		$md5 = substr($md5,0,11);
+		$cFile 	= appPATH.'cache/'.$md5.'.css';
+		$cUri 	= appURL .'cache/'.$md5.'.css';
+		if (!is_file($cFile)) {
+			$str = '';
+			foreach ($files AS $item) {
+				$base = path2uri(dirname($item['path'])).'/';
+				$content = file_get_contents($item['path']);
+				$content = self::_modifyCssUrls($content, $base);
+				$str .= $item['compress'] ? "\n".self::_compressCss($content) : "\n".$content;
+			}
+			file_put_contents($cFile, $str);
+		}
+		return '<link rel=stylesheet href="'.$cUri.'">'."\n";
+	}
+	static function _getHeaderJSFilesGroup($files) {
+		$mode = $files[0]['mode'];
+		if (debug || !html::$optimiseJs) {
+			$ret = '';
+			foreach ($files AS $item) {
+				$ret .= '<script src="'.$item['file'].'?'.$item['mtime'].'" '.$mode.'></script>'."\n";
+			}
+			return $ret;
+		}
+		$md5   = md5(json_encode($files));
+		$md5   = substr($md5,0,11);
+		$cFile = appPATH.'cache/'.$md5.'.js';
+		$cUri  = appURL .'cache/'.$md5.'.js';
+		if (!is_file($cFile)) {
+			$str = '';
+			foreach ($files AS $item) {
+				$content = file_get_contents($item['path']);
+				$str .= $item['compress'] ? ';'.self::_compressJs($content) : ';'.$content;
+			}
+			file_put_contents($cFile, $str);
+		}
+		return '<script src="'.$cUri.'" '.$mode.'></script>'."\n";
+	}
+
+	static function _compressJS($str) {
+		/* yuicompressor
+		$arr = [];
+		$x = G()->SET['qg']['binary']['yuicompressor']->v;
+		if ($x) {
+			exec('java -jar '.$x.' --type js '.uri2path($f), $arr);
+			$ret = $arr[0];
+		}
+		//*/
+		// jsmin
+		require_once sysPATH.'core/lib/3part/jsmin.php';
+		return \JSMin::minify($str);
+	}
+	static function _compressCss($str) {
+		require_once sysPATH.'core/lib/3part/csstidy/class.csstidy.php';
+		$css = new \csstidy();
+		$css->set_cfg('remove_last_;',true);
+		//$css->set_cfg('preserve_css',true);
+		$css->load_template('highest_compression');
+		$css->parse($str);
+		$str = $css->print->plain();
+
+		/*csstidy fix: ff needs font-face format value in '"' */
+		$str = preg_replace('/ format\("?([^\")]+)"?\)/',' format("$1")', $str);
+
+		return $str;
+	}
+	static function _modifyCssUrls($str, $base) {
+		return preg_replace_callback('/url\(([^\)]+)\)/', function($matches) use($base) {
+			$url = trim($matches[1]);
+			$url = preg_replace('/^[\'"]/','',$url);
+			$url = preg_replace('/[\'"]$/','',$url);
+
+			if (preg_match('/^(http:|https:|data:image)\//',$url)) {
+				return 'url("'.$url.'")';
+			} else {
+              if ($url[0] === '/') {
+  				return 'url("'.$url.'")';
+              } else {
+                return 'url("'.str_replace('//','/',$base.$url).'")';
+              }
+			}
+		}, $str);
+	}
+
+	static function getBody() {
+		ob_start();
+		foreach (self::$bodyFiles AS $file) include $file;
+		$obc = ob_get_clean();
+		return self::$content.$obc;
+	}
+}

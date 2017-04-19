@@ -1,0 +1,61 @@
+.-m-cms-cont-trash .-list {
+    display:flex;
+    flex-wrap:wrap;
+    margin:-5px;
+}
+.-m-cms-cont-trash .-item {
+    flex: 1 1 260px;
+    margin:5px;
+    padding:10px;
+    box-shadow:0 0 10px rgba(0,0,0,.4);
+    position:relative;
+    cursor:pointer;
+  	background:#fff;
+    overflow:auto;
+}
+.-m-cms-cont-trash .-item > .-more {
+    display:flex;
+    justify-content: flex-end;
+    flex-wrap:wrap;
+    position:absolute;
+    padding:5px;
+    top:0;
+    left:0;
+    right:0;
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .2s;
+}
+.-m-cms-cont-trash .-item > .-more > * {
+    margin:5px;
+    xflex:1 1 auto;
+}
+.-m-cms-cont-trash .-item:hover > .-more {
+    display:flex;
+    opacity:1;
+    visibility:visible;
+}
+.-m-cms-cont-trash .-preview {
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index:100;
+    padding:100px;
+    background:rgba(0,0,0,.6);
+}
+.-m-cms-cont-trash .-preview.-show {
+    display:block;
+}
+.-m-cms-cont-trash .-preview > iframe {
+    background:#fff;
+    border:1px solid #fff;
+    box-shadow: 0 0 20px rgba(0,0,0,.5);
+    width:100%;
+    height:100%;
+}
+.-m-cms-cont-trash th {
+    white-space: nowrap;
+}

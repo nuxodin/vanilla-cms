@@ -1,0 +1,85 @@
+.mob_nav_btn {
+	display:none;
+}
+@media (max-width:930px) {
+  #nav {
+      position:fixed;
+      background:#fff;
+      z-index:2;
+      top:0;
+      left:0;
+      bottom:0;
+	  overflow:auto;
+      transform:translateX(-100%);
+      transition:transform .2s;
+      will-change: transform;
+  }
+  #nav li {
+	  float:none;
+  }
+  #nav ul {
+	  display:block;
+	  position:static;
+  }
+  body.mob_nav_open #nav {
+      transform:translateX(0);
+  }
+
+  /* overlay */
+  #container:after {
+      content:'';
+      opacity:0;
+      visibility:hidden;
+      position:fixed;
+      z-index:1;
+      top:0;left:0;right:0;bottom:0;
+      background:rgba(0, 0, 0, 0.4);
+      pointer-events: none; /* ? */
+      transition:opacity .7s;
+  }
+  body.mob_nav_open #container:after {
+      opacity:1;
+      visibility:visible;
+  }
+
+  /* change the button */
+  .mob_nav_btn {
+	display:block;
+  	transition: transform .2s;
+  	will-change:transform;
+	position: relative;
+    z-index: 1;  /* performance! */
+  }
+  body.mob_nav_open .mob_nav_btn {
+    transform:rotate(270deg);
+  }
+  .mob_nav_btn g {
+    transition:stroke-width .1s;
+    will-change:stroke-width;
+  }
+  .mob_nav_btn .-close {
+    stroke-width:0;
+  }
+  body.mob_nav_open .mob_nav_btn .-close {
+    stroke-width:inherit;
+  }
+  body.mob_nav_open .mob_nav_btn .-menu {
+    stroke-width:0;
+  }
+}
+
+/*
+
+<svg class=mob_nav_btn style="stroke:#4F83A6; stroke-linecap:round; stroke-width:1.5; margin-left:auto; margin-right:10px" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewbox="0 0 30 30">
+    <g class=-menu>
+      <line x1="5" y1="7"  x2="25" y2="7"  />
+      <line x1="5" y1="15" x2="25" y2="15" />
+      <line x1="5" y1="23" x2="25" y2="23" />
+    </g>
+    <g class=-close>
+      <line x1="7" y1="7"  x2="23" y2="23" />
+      <line x1="7" y1="23" x2="23" y2="7" />
+    </g>
+</svg>
+
+*/

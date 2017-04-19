@@ -1,0 +1,1 @@
+Dieses Modul dient dazu eine automatische Weiterleitung auf eine externe oder interne Ziel-Website zu erstellen.

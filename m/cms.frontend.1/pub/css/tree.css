@@ -1,0 +1,113 @@
+/* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
+#cmsTreeContainer {
+	overflow:auto;
+	position:relative;
+	line-height: 1.5;
+}
+#cmsTreeContainer .dynatree-container {
+	background:none;
+	border:none;
+	padding:0;
+	font-size:15px;
+}
+#cmsTreeContainer input {
+	color:#000;
+}
+#cmsTreeContainer a {
+	border:none;
+	min-width:140px;
+	color:var(--cms-dark);
+	text-decoration:none;
+}
+#cmsTreeContainer .dynatree-title > span:first-child {
+	overflow: hidden;
+	max-width: 200px;
+	text-overflow: ellipsis;
+}
+#cmsTreeContainer .dynatree-icon {
+	cursor:pointer;
+	height:auto;
+	background-image:none;
+	text-align:center;
+	vertical-align:bottom;
+}
+#cmsTreeContainer .dynatree-icon::after {
+	vertical-align: text-bottom;
+	content: '';
+    width: 17px;
+    height: 17px;
+    background: currentColor;
+    border-radius: 50%;
+    display: inline-block;
+}
+#cmsTreeContainer .-type-c .dynatree-icon::after {
+	width:10px;
+	height:10px;
+}
+@keyframes blink-animation {
+	to { opacity: .2; }
+}
+#cmsTreeContainer .-new {
+	animation: blink-animation .2s infinite alternate;
+}
+#cmsTreeContainer .-invisible .dynatree-icon {
+	 opacity:.2;
+}
+#cmsTreeContainer .-type-c {
+	font-size:10px;
+}
+#cmsTreeContainer .-private::after {
+	font-family: 'qg_cms';
+	content:'\e900';
+	font-style:normal;
+	font-weight: normal;
+	margin-left:2px;
+}
+#cmsTreeContainer .-offline::after {
+	font-family: 'qg_cms';
+	content:'\e901';
+	font-style:normal;
+	font-weight: normal;
+	margin-left:2px;
+}
+#cmsTreeContainer .-col1 {
+	margin-left:10px;
+	font-size:11px;
+	opacity:.7;
+}
+#cmsTreeContainer .-col2 {
+	font-size:11px;
+	opacity:.7;
+}
+#cmsTreeContainer .dynatree-container {
+	font-family:inherit;
+}
+#cmsTreeContainer a:hover,
+#cmsTreeContainer .dynatree-active a {
+	background:none;
+	font-weight:bold;
+}
+#cmsTreeContainer .dynatree-active a:after {
+	content: '◄';
+    display: inline-block;
+    margin-left: 5px;
+}
+#cmsTreeContainer ul.dynatree-container a:focus,
+#cmsTreeContainer span.dynatree-focused a:link {
+	font-weight:bold;
+	outline:none;
+}
+#cmsTreeContainer .dynatree-container li {
+	line-height:1.5;
+}
+#cmsTreeContainer .dynatree-container .dynatree-node {
+	display:inline-block;
+}
+#cmsTreeContainer .dynatree-container .dynatree-node > * {
+	display:inline-block;
+	vertical-align: middle;
+}
+#cmsTreeContainer .dynatree-expander {
+	position:relative;
+	top:-1px;
+}
