@@ -100,6 +100,20 @@
 			if (myZ <= maxZ) this.style.zIndex = maxZ+1;
 		}
 	};
+
+	// Object.defineProperty(elProto,'c1Attr',{
+	// 	get(){
+	// 		return new Proxy(this,{
+	// 			get(target, name){
+	// 				return target.getAttribute(name);
+	// 			},
+	// 			set(target, name, value) {
+	// 				value === null ? target.removeAttribute(name) : target.setAttribute(name, value);
+	// 			}
+	// 		})
+	// 	},
+	// });
+
 	var autoId = 0;
 	c1.ext(poly, elProto, false, true);
 	c1.ext(poly, Text.prototype, false, true);
@@ -146,18 +160,15 @@
             return CustomEvent;
         }();
     }
-	// NodeLists
-	//if (!NodeList.prototype.forEach) NodeList.prototype.forEach = Array.prototype.forEach;
-	if (!NodeList.prototype.forEach) {
-		NodeList.prototype.forEach = function(callback){
-			return Array.prototype.forEach.call(this, callback);
-		}
-		//NodeList.prototype.forEach = Array.prototype.forEach;
-	}
 
-	if (window.Symbol && Symbol.iterator && !NodeList.prototype[Symbol.iterator]) { // no ie11 :(
-		NodeList.prototype[Symbol.iterator] = HTMLCollection.prototype[Symbol.iterator] = Array.prototype[Symbol.iterator];
-	}
+	// NodeLists
+	var proto = NodeList.prototype;
+	if (!proto.forEach) proto.forEach = Array.prototype.forEach;
+	if (window.Symbol && Symbol.iterator && !proto[Symbol.iterator]) proto[Symbol.iterator] = Array.prototype[Symbol.iterator]; // no ie11 :(
+	// HTMLCollection
+	var proto = HTMLCollection.prototype;
+	if (window.Symbol && Symbol.iterator && !proto[Symbol.iterator]) proto[Symbol.iterator] = Array.prototype[Symbol.iterator]; // no ie11 :(
+
 	// divers fix
 	function loadFix(lib){
         (lib in window) || document.write('<script src="'+c1.c1UseSrc+'/fix/'+lib+'.js"><\/script>');
