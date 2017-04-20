@@ -15,8 +15,10 @@
 	vertical-align:middle;
 }
 .c1-style > * > tr > * {
-	padding:6px 15px;
+	padding:5px;
 }
+.c1-style > * > tr > :first-child { padding-left:15px; }
+.c1-style > * > tr > :last-child { padding-right:15px; }
 .c1-style > * > tr > th {
 	white-space:nowrap;
 	text-overflow:ellipsis;
@@ -28,9 +30,8 @@
     color:#fff;
 }
 
-.c1-style > tbody > tr:nth-child(2n)              { background-color:#f8f8f8; }
-
-
+.c1-style > tbody > tr:nth-child(2n) { background-color:#f8f8f8; }
+.c1-style > tbody > tr:hover         { background:#f3f3f3; }
 /*
 zzz.c1-style > tbody > tr:hover      > :first-child { box-shadow:4px 0 0 -2px currentColor inset; }
 zzz.c1-style > tbody > tr.c1-focusIn > :first-child { box-shadow:4px 0 0 -2px #f80 inset; }

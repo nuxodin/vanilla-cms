@@ -134,16 +134,12 @@ qgStyleEditor = function() {
 			}
 			if (def.vendorPrefix) {
 				var p = prop.charAt(0).toUpperCase() + prop.slice(1);
-				my.active['webkit'+p] = v;
-				my.active['Moz'+p] = v;
-				my.active['ms'+p] = v;
-				my.active['o'+p] = v;
+				my.active['webkit'+p] = my.active['Moz'+p] = my.active['ms'+p] = my.active['o'+p] = v;
 			}
 			my.active[prop] = v;
-
-			if (e.type=='change') {
+			//if (e.type=='change') {
 				e.target === rawInp[0] ? inp && inp.val(v) : rawInp.val(v);
-			}
+			//}
 			my.fire('change');
 		};
 		inp && inp.on('change input',change);
@@ -448,13 +444,14 @@ qgStyleEditor.tree = [{
         		name:'y',
                 prop:'overflow-y'
         	}]
-    	},{
-        	name:'Columns',
-        	prop:'column-count',
-        	options:[0,5],
+		},{
+        	name:'Column',
+        	prop:'column-width',
+        	options:[70,600],
         	sub:[{
         		name:'Gap',
-        		prop:'column-gap'
+        		prop:'column-gap',
+				options:[4,100],
         	}]
     	},{
     		name:'Float',
@@ -485,51 +482,45 @@ getPossibleSelectorsFromElement = function(el,deep) {
 	var selectors = [];
 	var max = 140;
 	var level = 0;
-	el = $(el);
-	deep = deep||4;
-	function addSelector(sel,parent,doNot) {
+	deep = deep||5;
+	function addSelector(selector,parent,skipSelf) {
 		if (deep <= level) return;
-		if (!doNot) {
-			selectors.push(sel);
+		if (!skipSelf) {
+			selectors.push(selector);
 			if (--max < 0) return;
 		}
 		if (parent) {
 			level++;
-			reqursiv(parent, sel);
+			reqursiv(parent, selector);
 			level--;
 		}
 	}
 	function reqursiv(el, before) {
 		before = before ? ' > '+before : '';
-		if (el[0].className === undefined) return;
-		var parent = el.parent();
+		if (el.className === undefined) return;
+		let parent = el.parentNode;
 
 		/* by id */
-		var id = el[0].id;
-		if (id) {
-			var sel = '#'+id+before;
-			addSelector(sel);
-		}
-
+		let id = el.id;
+		id && addSelector('#'+id+before);
 		/* by classes */
-		var classes = el[0].className.split(' ');
-		classes.forEach(function(c) {
-			c = c.trim();
-			if (!c) return;
-			var sel = '.'+c+before;
+		el.classList.forEach(function(c){
+			//c = c.trim();
+			//if (!c) return;
+			if (c === '-e') return; // ignore these
+			if (c === 'c1-focusIn') return;
 
-			if (sel.match(/\.-pid/)) { // unique
-				addSelector(sel);
-			} else if (sel.match(/\.qgCmsCont/)) { // unique
-				addSelector(sel, parent, true);
+			let selector = '.'+c+before;
+			if (selector.match(/\.-pid/)) { // unique
+				addSelector(selector);
+			} else if (selector.match(/\.qgCmsCont/)) { // unique
+				addSelector(selector, parent, true); // ok?
 			} else {
-				addSelector(sel, parent);
+				addSelector(selector, parent);
 			}
 		});
-
 		/* by tagname */
-		var sel = el[0].tagName.toLowerCase()+before;
-		addSelector(sel, parent, true);
+		addSelector(el.tagName.toLowerCase()+before, parent, true);
 	}
 	reqursiv(el,'');
 	return selectors;
@@ -540,10 +531,10 @@ qgStyleEditor.gradientHandler = function(colorPalette) {
 	'use strict';
 
 	var el = $('<div>');
-	var hidden = $('<input type="hidden" style="width:400px">').appendTo(el);
+	var hidden = $('<input type=hidden style="width:400px">').appendTo(el);
 
-	var startInp = $('<input type="text">').appendTo(el);
-	var endInp = $('<input type="text">').appendTo(el);
+	var startInp = $('<input type=text>').appendTo(el);
+	var endInp = $('<input type=text>').appendTo(el);
 
 	var setVal = function() {
 		var startC = startInp.spectrum('get').toRgb();

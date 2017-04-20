@@ -41,9 +41,10 @@ qgStyleSheetEditor = function() {
 		return true;
 	};
 	var hoverMarkEvents = {
-		mouseover: function() {
-			markMatches( $(this).data('unPseudoSel') );
-		}, mouseout: function() {
+		mouseover() {
+			markMatches($(this).data('unPseudoSel'));
+		},
+		mouseout() {
 			markMatches();
 		}
 	};
@@ -54,7 +55,7 @@ qgStyleSheetEditor = function() {
 	my.sheetBox.find('.-rules')
 	.on(hoverMarkEvents,'tr')
 	.on({
-		click:function(e) {
+		click(e) {
 			var td = $(e.target);
 			var tr = td.parent();
 			var cssRule = tr.data('qg');
@@ -109,9 +110,7 @@ qgStyleSheetEditor = function() {
 
 		$(document).on('keydown', function(e){ // not perfect
 			if (e.which !== 27) return;
-			if (my.sheetBox[0].offsetWidth) {
-				my.close();
-			}
+			if (my.sheetBox[0].offsetWidth) my.close();
 			close();
 		});
 	}();
@@ -156,21 +155,20 @@ qgStyleSheetEditor = function() {
 		});
 	}();
 
-
-
-	var crosshair = $('<style> .qgCmsPage * { cursor:crosshair !important; }</style>');
+	var crosshair = $('<style>* { cursor:crosshair !important; }</style>');
 	/* add */
 	!function() {
 		var addBox = $('<div style="display:none;"><div class="-title"><b>add</b><span class="-close">x</span></div><input style="width:300px; margin:2px 0; box-sizing:border-box"></div>').appendTo(my.div);
 		var tmout=0;
 		var mouseout = function() {clearTimeout(tmout);};
 		var mousemove = function(e) {
+			if (e.target.closest('.qgStyleSheetEditor')) return;
 			var el = $(e.target);
 			clearTimeout(tmout);
 			tmout = setTimeout(function() {
 				markMatches();
 				el.addClass('qgStyleEditorMarkEl');
-				var sels = getPossibleSelectorsFromElement(el,5);
+				var sels = getPossibleSelectorsFromElement(el[0],5);
 				inspEl.html('');
 				sels = sels.sort(function(a,b) { return a.length - b.length; } );
 				sels.forEach(function(sel) {
@@ -189,16 +187,16 @@ qgStyleSheetEditor = function() {
 			addBox.hide();
 			my.sheetBox.show();
 			crosshair.detach();
-			$('.qgCmsPage').off('mousemove',mousemove);
-			$('.qgCmsPage').off('mouseout',mouseout);
+			$(document).off('mousemove',mousemove);
+			$(document).off('mouseout',mouseout);
 		};
 		var show = function(e) {
 			addBox.show().find('input').focus();
 			my.sheetBox.hide();
 			crosshair.appendTo($('head'));
 			e && e.preventDefault();
-			$('.qgCmsPage').on('mousemove',mousemove);
-			$('.qgCmsPage').on('mouseout',mouseout);
+			$(document).on('mousemove',mousemove);
+			$(document).on('mouseout',mouseout);
 		};
 		my.showAddRule = function(selector) {
 			show();
@@ -217,11 +215,10 @@ qgStyleSheetEditor = function() {
 		.on(hoverMarkEvents,'li')
 		.on('click',function(e) {
 			var sel = $(e.target).data('unPseudoSel');
-			e.ctrlKey ? addBox.find('input').val(sel).focus() : add( sel );
+			e.ctrlKey ? addBox.find('input').val(sel).focus() : add(sel);
 		});
 		$('<a href="#" style="margin:6px; padding:4px; display:inline-block">hinzufügen</a>').insertAfter(my.sheetBox.find('.-title')).on('click',show);
 	}();
-
 
 	/* inspect */
 	!function() {
@@ -229,8 +226,8 @@ qgStyleSheetEditor = function() {
             my.sheetBox.find('table tr').hide();
 			e && e.preventDefault();
 			crosshair.appendTo($('head'));
-			$('.qgCmsPage').on('mousemove', mousemove);
-			$('.qgCmsPage').on('mouseout' , mouseout);
+			$(document).on('mousemove', mousemove);
+			$(document).on('mouseout' , mouseout);
             inspEl.hide();
             allEl.show();
         }
@@ -238,8 +235,8 @@ qgStyleSheetEditor = function() {
             my.sheetBox.find('table tr').show();
 			e && e.preventDefault();
 			crosshair.detach();
-			$('.qgCmsPage').off('mousemove', mousemove);
-			$('.qgCmsPage').off('mouseout' , mouseout);
+			$(document).off('mousemove', mousemove);
+			$(document).off('mouseout' , mouseout);
 			clearTimeout(tmout);
             inspEl.show();
             allEl.hide();
@@ -247,21 +244,16 @@ qgStyleSheetEditor = function() {
 		var tmout=0;
 		var mouseout  = function() {clearTimeout(tmout);};
 		var mousemove = function(e) {
-			var el = $(e.target);
-            var els = el.parents().add(el);
+			if (e.target.closest('.qgStyleSheetEditor')) return;
 			clearTimeout(tmout);
 			tmout = setTimeout(function() {
                 my.sheetBox.find('table tr').each(function() {
                     var tr = $(this);
                     var selector = tr.data('unPseudoSel').replace(/::(before|after)/,'');
                     try {
-                        if (els.is(selector)) {
-                            tr.show();
-                        } else {
-                            tr.hide();
-                        }
+						e.target.closest(selector) ? tr.show() : tr.hide();
                     } catch(e) {
-                            tr.hide();
+                        tr.hide();
                     }
                 });
 			}, 300);
@@ -269,11 +261,7 @@ qgStyleSheetEditor = function() {
 		var inspEl = $('<a href="#" style="margin:6px; padding:4px; display:inline-block">Inspect</a>').insertAfter(my.sheetBox.find('.-title')).on('click',inspect);
 		var allEl = $('<a href="#" style="margin:6px; padding:4px; display:inline-block">Show all</a>').insertAfter(my.sheetBox.find('.-title')).on('click',showAll).hide();
 	}();
-
-
 };
-
-
 
 qgStyleSheetEditor.prototype = {
 	insertRule(rule, pos) {
@@ -308,8 +296,6 @@ qgStyleSheetEditor.prototype = {
 		$.each(ss.cssRules, function(i,cssRule) {
 			var selectorText = cssRule.selectorText.replace(/\[([^\]]+)[^\\]:([^\]]+)\]/g, '[$1\\:$2]')
 			var unPseudoSel = selectorText.replace(/:focus|:hover|:visited|::after|::before/g,'');
-
-			//unPseudoSel = unPseudoSel.replace(/:/g,'\\:'); // but in chrome and edge, ugly hack?
 			//unPseudoSel = unPseudoSel.replace(/:/g,'\\:'); // but in chrome and edge, ugly hack?
 			var len = $(unPseudoSel).length;
 			$('<tr'+(cssRule.style.length?' class=-has':'')+'><td>'+cssRule.selectorText+'<td>'+len+'<td class=-redefine title=redefine>edit<td class=-rem title=remove>x</tr>').data({'qg':cssRule,'unPseudoSel':unPseudoSel,'index':i}).appendTo(table);
@@ -348,7 +334,7 @@ qgStyleSheetEditor.prototype = {
 				tmp1.push({value:i,num:tmp[i]});
 			}
 		}
-		tmp1.sort(function(a,b) {return a.num<b.num;});
+		tmp1.sort(function(a,b) {return a.num < b.num;});
 		var res = [];
 		tmp1.forEach(obj => res.push(obj.value));
 		return res;
@@ -367,13 +353,13 @@ q_CSSStyleSheetContents = function(sheet) {
 	});
 	return str;
 };
-
-
-// hacky correction for CSSRule.selectorText, edge, chrome, safari, https://bugs.chromium.org/p/chromium/issues/detail?id=681814
-var desc = Object.getOwnPropertyDescriptor(CSSStyleRule.prototype, 'selectorText');
-var getter = desc.get;
-desc.get = function(){
-	var str = getter.apply(this).replace(/\[([^\]]+[^\\\]]):([^\]]+)\]/g, '[$1\\:$2]');
-	return str;
+// hacky correction polyfill for CSSRule.selectorText, edge, safari, https://bugs.chromium.org/p/chromium/issues/detail?id=681814
+{
+	let desc = Object.getOwnPropertyDescriptor(CSSStyleRule.prototype, 'selectorText');
+	let getter = desc.get;
+	desc.get = function(){
+		let str = getter.apply(this).replace(/\[([^\]]+[^\\\]]):([^\]]+)\]/g, '[$1\\:$2]');
+		return str;
+	}
+	Object.defineProperty(CSSStyleRule.prototype, 'selectorText', desc)
 }
-Object.defineProperty(CSSStyleRule.prototype, 'selectorText', desc)

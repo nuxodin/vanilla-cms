@@ -20,7 +20,7 @@ if (isset($_SESSION['liveUser']) && isset($_GET['debugmode'])) {
 define('debug', $debug??false || $_SESSION['qg']['debug']);
 ini_set('display_errors', debug);
 
-$GLOBALS['skip_stacks'] = 0; // error_report
+$skip_stacks = 0; // error_report
 
 set_include_path(sysPATH); // zend
 require_once sysPATH.'core/lib/cache.php';

@@ -72,13 +72,13 @@
 
 <svg class=mob_nav_btn style="stroke:#4F83A6; stroke-linecap:round; stroke-width:1.5; margin-left:auto; margin-right:10px" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewbox="0 0 30 30">
     <g class=-menu>
-      <line x1="5" y1="7"  x2="25" y2="7"  />
-      <line x1="5" y1="15" x2="25" y2="15" />
-      <line x1="5" y1="23" x2="25" y2="23" />
+      <line x1="5" y1="7"  x2="25" y2="7" ></line>
+      <line x1="5" y1="15" x2="25" y2="15"></line>
+      <line x1="5" y1="23" x2="25" y2="23"></line>
     </g>
     <g class=-close>
-      <line x1="7" y1="7"  x2="23" y2="23" />
-      <line x1="7" y1="23" x2="23" y2="7" />
+      <line x1="7" y1="7"  x2="23" y2="23"></line>
+      <line x1="7" y1="23" x2="23" y2="7" ></line>
     </g>
 </svg>
 

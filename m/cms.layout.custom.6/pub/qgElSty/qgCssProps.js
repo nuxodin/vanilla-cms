@@ -206,6 +206,12 @@
 			float:true,
 			vendorPrefix:true
 		},
+		columnWidth:{
+			length:true,
+		},
+		columnGap:{
+			length:true,
+		},
 		overflow:{
 			options:overflow
 		},

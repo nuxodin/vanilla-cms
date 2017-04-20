@@ -2,37 +2,34 @@ function q1CssText(style) {
 	'use strict';
 
 	var props = {};
-	$.each(style,function(i,r) {
 
+	for (let r of style) {
 		/* moz */
-		if (r=='padding-right-value') { r = 'padding-right'; }
-		if (r=='padding-left-value')  { r = 'padding-left'; }
-		if (r=='padding-right-ltr-source') return;
-		if (r=='padding-left-ltr-source')  return;
-		if (r=='padding-right-rtl-source') return;
-		if (r=='padding-left-rtl-source')  return;
-
-		if (r=='margin-right-value') { r = 'margin-right'; }
-		if (r=='margin-left-value')  { r = 'margin-left'; }
-		if (r=='margin-right-ltr-source') return;
-		if (r=='margin-left-ltr-source')  return;
-		if (r=='margin-right-rtl-source') return;
-		if (r=='margin-left-rtl-source')  return;
-
+		if (r==='padding-right-value') r = 'padding-right';
+		if (r==='padding-left-value')  r = 'padding-left';
+		if (r==='padding-right-ltr-source') return;
+		if (r==='padding-left-ltr-source')  return;
+		if (r==='padding-right-rtl-source') return;
+		if (r==='padding-left-rtl-source')  return;
+		if (r==='margin-right-value') r = 'margin-right';
+		if (r==='margin-left-value')  r = 'margin-left';
+		if (r==='margin-right-ltr-source') return;
+		if (r==='margin-left-ltr-source')  return;
+		if (r==='margin-right-rtl-source') return;
+		if (r==='margin-left-rtl-source')  return;
 		/* chrome */
-		if (r=='background-repeat-x') { r = 'background-repeat'; }
-		if (r=='background-repeat-y') return;
-		if (r=='background-position-x') { r = 'background-position'; } /* firefox has no packground-position-x/y */
-		if (r=='background-position-y') return;
+		if (r==='background-repeat-x') r = 'background-repeat';
+		if (r==='background-repeat-y') return;
+		if (r==='background-position-x') r = 'background-position'; /* firefox has no packground-position-x/y */
+		if (r==='background-position-y') return;
 
 		var value = style.getPropertyValue(r);
 
-        if (r === 'text-decoration' && value === 'initial') value = 'none';
-        if (r === 'transition-duration'                && value === 'initial') return;
-        if (r === 'transition-delay'                   && value === 'initial') return;
-        if (r === 'transition-timing-function'         && value === 'initial') return;
-
-		if (value==='initial') { /*return; // why uncommented?*/ }
+        if (value==='initial' && r==='text-decoration') value = 'none';
+		//if (value==='initial') return; // why uncommented?
+        if (value==='initial' && r==='transition-duration'       ) return;
+        if (value==='initial' && r==='transition-delay'          ) return;
+        if (value==='initial' && r==='transition-timing-function') return;
 		if (value==='initial' && r.match(/border-image-/)) return;
 
         if (r==='content') { // buggy chrome
@@ -56,30 +53,26 @@ function q1CssText(style) {
             });
         }
 
-		var camelCase = $.camelCase(r);
+		var camelCase = camelCased(r);
 		var def = qgCssProps[camelCase];
 		var needsPrefix = def ? def.vendorPrefix : false;
 		if (r.match(/^-[a-z]+-/)) {
 			r = r.replace(/^-[a-z]+-/,'');
 			needsPrefix = true;
 		}
-		if (needsPrefix) {
-			props['-webkit-'+r] = value;
-			props['-moz-'+r] = value;
-			props['-ms-'+r] = value;
-		}
+		if (needsPrefix) props['-webkit-'+r] = props['-moz-'+r] = props['-ms-'+r] = value;
 		props[r] = value;
-	});
+	}
 
-	if ( props['overflow-y'] !== undefined && props['overflow-y'] === props['overflow-x'] ) {
+	if (props['overflow-y'] !== undefined && props['overflow-y'] === props['overflow-x']) {
 		props['overflow'] = props['overflow-y'];
 		delete props['overflow-y'];
 		delete props['overflow-x'];
 	}
 
-    if (props['background-repeat'] === 'no-repeat no-repeat') { props['background-repeat'] = 'no-repeat'; }
-    if (props['background-repeat'] === 'no-repeat repeat'  ) { props['background-repeat'] = 'repeat-y'; }
-    if (props['background-repeat'] === 'repeat no-repeat'  ) { props['background-repeat'] = 'repeat-x'; }
+    if (props['background-repeat'] === 'no-repeat no-repeat') props['background-repeat'] = 'no-repeat';
+    if (props['background-repeat'] === 'no-repeat repeat'   ) props['background-repeat'] = 'repeat-y';
+    if (props['background-repeat'] === 'repeat no-repeat'   ) props['background-repeat'] = 'repeat-x';
 
 	if (
 		props['padding-top'] !== undefined
@@ -194,9 +187,14 @@ function q1CssText(style) {
 	}
 
 	var str = '';
-	$.each(props,function(prop,value) {
-		var important = style.getPropertyPriority(prop) === 'important';
+	for (let [prop,value] of Object.entries(props)) {
+		let important = style.getPropertyPriority(prop) === 'important';
 		str += '    '+prop+': '+value+(important?' !important':'')+';\n';
-	});
+	}
 	return str;
+
+	function camelCased(str){
+		return str.replace(/-([a-z])/g, g=>g[1].toUpperCase() );
+	}
+
 }

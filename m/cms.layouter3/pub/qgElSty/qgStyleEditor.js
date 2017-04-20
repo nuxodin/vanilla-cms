@@ -541,10 +541,10 @@ qgStyleEditor.gradientHandler = function(colorPalette) {
 	'use strict';
 
 	var el = $('<div>');
-	var hidden = $('<input type="hidden" style="width:400px">').appendTo(el);
+	var hidden = $('<input type=hidden style="width:400px">').appendTo(el);
 
-	var startInp = $('<input type="text">').appendTo(el);
-	var endInp = $('<input type="text">').appendTo(el);
+	var startInp = $('<input type=text>').appendTo(el);
+	var endInp = $('<input type=text>').appendTo(el);
 
 	var setVal = function() {
 		var startC = startInp.spectrum('get').toRgb();
