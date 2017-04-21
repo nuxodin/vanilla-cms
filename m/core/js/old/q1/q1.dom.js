@@ -92,20 +92,4 @@
 		return el;
 	};
 
-	/*	*/
-	var proto;
-	if (window.Element && (proto = Element.prototype) && !proto.matchesSelector) {
-		proto.matchesSelector = proto.webkitMatchesSelector || proto.mozMatchesSelector || proto.msMatchesSelector || proto.oMatchesSelector;
-	}
-
-
-	/*
-	// Add support for Node.contains for Firefox < 9
-	if (!d.contains) {
-		Node.prototype.contains = function(node) {
-			return !!(this.compareDocumentPosition(node) & 16)
-		};
-	}
-	*/
-
 }();

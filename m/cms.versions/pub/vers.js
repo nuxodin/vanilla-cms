@@ -45,7 +45,6 @@ window.$ && $(function(){
 	'	padding:5px 10px; '+
 	'	position:relative; '+
 	'} '+
-
 	'#qgCms_vers .-list > li:hover { '+
 	'	color:var(--cms-color); '+
 	'} '+

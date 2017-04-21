@@ -18,6 +18,17 @@ $(()=>{
 		});
 	}
 	// frontend1 integration
+	var css =
+	'#qgCmsFrontend1 [itemid=publish].-HasChanges > .-title { '+
+	'	background:var(--cms-access-2); '+
+	'} '+
+	'#qgCmsFrontend1 [itemid=publish].-HasChanges > .-title::before { '+
+	'	border-right-color:var(--cms-access-2); '+
+	'} '+
+	'#qgCmsFrontend1 [itemid=publish].-HasChanges .qgCms_vers_page_changed { '+
+	'	display:block; '+
+	'} '+
+	'';
 	var $el = $('<div class=-item itemid=publish>'+
 		'<div class=-content>'+
 			'<div class=-standalone>'+
@@ -36,7 +47,7 @@ $(()=>{
 				'<br><br><br>'+
 				'<div class=-h1>Veröffentlichen</div>'+
 				'<div>Machen Sie Ihren Entwurf öffentlich!</div>'+
-				'<div class=qgCms_vers_page_changed hidden style="color:var(--cms-color);">Sie haben unveröffentlichte Änderungen!</div>'+
+				'<div class=qgCms_vers_page_changed hidden style="color:var(--cms-access-2);">Sie haben unveröffentlichte Änderungen!</div>'+
 				'<br>'+
 				'<div style="text-align:right">'+
 					'<button class=-versionPublish style="width:200px">Veröffentlichen</button><br><br>'+
@@ -44,13 +55,10 @@ $(()=>{
 				'</div>'+
 			'</div>'+
 		'</div>'+
-		'<div class=-title style="position:relative">'+
-			'<svg id=qgCmsVersionsSidebarIcon xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="currentColor" width="38" height="36" style="margin:15px auto">'+
-				'<use xlink:href="'+sysURL+'cms.versions/pub/draft.svg#main" />'+
-			'</svg>'+
-			'<span class=qgCms_vers_page_changed hidden style="position:absolute; right:5px; top:5px; background:var(--cms-color); font-size:12px; border-radius:50%; color:var(--cms-dark); padding:2px 8px">!</span>'+
+		'<div class=-title style="xposition:relative">'+
 			'<div class=-text>Entwurf</div>'+
 		'</div>'+
+		'<style>'+css+'</style>'+
 	'</div>')
 	.insertAfter('#qgCmsFrontend1 > .-sidebar > [itemid="more"]');
 	let el = $el[0];
@@ -70,7 +78,7 @@ $(()=>{
 		let subPages = this.parentNode.querySelector('.-subPages').checked;
 		if (!confirm("Achtung! \nMöchten Sie den Entwurf wirklich überschreiben?")) return;
 		$fn('cms_vers::publishCont')(Page, {toSpace:1, fromSpace:0, subPages}).run(()=>{
-			location.href=location.href;
+			location.href = location.href.replace(/#.*$/,'');
 		});
 	});
 
@@ -78,11 +86,9 @@ $(()=>{
 	Ask.on('complete', function(res) {
 		if (!res || !res.cms_vers_changed) return;
 		for (var pid in res.cms_vers_changed) {
-			if (pid == Page) {
-				$('.qgCms_vers_page_changed').show();
-			}
+			pid == Page && el.classList.add('-HasChanges');
 		}
 	});
-	window.cms_vers_draft_changed && $('.qgCms_vers_page_changed').show();
+	window.cms_vers_draft_changed && el.classList.add('-HasChanges');
 
 });

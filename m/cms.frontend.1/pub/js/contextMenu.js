@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 			if (!confirm('Möchten Sie die Seite "'+n.data.title+'" wirklich löschen?')) return;
 			$fn('page::remove')(n.data.key).run(ret=>{
 				if (ret.parent_id && n.data.key==Page) {
-					location.href="?cmspid="+ret.parent_id;
+					location.href = "?cmspid="+ret.parent_id;
 				} else {
 					var s = n.getPrevSibling() || n.getNextSibling() || n.parent;
 					n.remove();
