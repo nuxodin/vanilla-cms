@@ -31,26 +31,26 @@ Date.prototype.fromStr = function(val, format) {
 Date.prototype.toStr = function(format) {
 	var my = this;
 	return format.replace(/\%[a-zA-Z\%]/g, function(match) {
-		var token = Date.tokens[match.substr(1)]; 
+		var token = Date.tokens[match.substr(1)];
 		if (token) {
-			return token.getDate(my); 
+			return token.getDate(my);
 		} else {
 			return match;
 		}
 	});
 };
 Date.tokens = {
-	'%':{	
+	'%':{
 		reg: /%/,
 		setDate: function(date, match) { },
 		getDate: function(date) { return '%'; }
 	},
-	d:{	
+	d:{
 		reg: /[0-9]{2}/,
 		setDate: function(date, match) { date.setD(parseInt(match)); },
 		getDate: function(date) { return (100+date.getDate()+'').substr(1); }
 	},
-	m:{	
+	m:{
 		reg:/[0-9]{2}/,
 		setDate: function(date, match) { date.setM(parseInt(match)-1); },
 		getDate: function(date) { return (101+date.getMonth()+'').substr(1); }
@@ -60,22 +60,22 @@ Date.tokens = {
 		setDate: function(date, match) { date.setM(parseInt(match)-1); },
 		getDate: function(date) { return date.getMonth()+1; }
 	},
-	Y:{	
+	Y:{
 		reg:/[0-9]{4}/,
 		setDate: function(date, match) { date.setY(parseInt(match)); },
 		getDate: function(date) { return date.getFullYear(); }
 	},
-	y:{	
+	y:{
 		reg:/[0-9]{1,2}/,
 		setDate: function(date, match) { date.setY(parseInt(match)+2000); },
 		getDate: function(date) { return date.getYear(); }
 	},
-	p:{	
+	p:{
 		reg:/[ap]m/i,
 		setDate: function(date, match) { date.setH( date.getH + (match=='am'?0:12) ); },
 		getDate: function(date) { return date.getHours() >= 12 ? 'pm' : 'am'; }
 	},
-	I:{	
+	I:{
 		reg:/[0-9]{2}/,
 		setDate: function(date, match) { date.setH( date.getH + parseInt(match) ); },
 		getDate: function(date) { return (date.getHours()) >= 12 ? date.getHours()-12 : date.getHours(); }
@@ -85,12 +85,12 @@ Date.tokens = {
 		setDate: function(date, match) { date.setH( parseInt(match) ); },
 		getDate: function(date) { return (100+date.getHours()+'').substr(1); }
 	},
-	M:{	
+	M:{
 		reg:/[0-9]{1,2}/,
 		setDate: function(date, match) { date.setMin( parseInt(match) ); },
 		getDate: function(date) { return (100+date.getMinutes()+'').substr(1); }
 	},
-	S:{	
+	S:{
 		reg:/[0-9]{1,2}/,
 		setDate: function(date, match) { date.setSec(parseInt(match)); },
 		getDate: function(date) { return (100+date.getSeconds()+'').substr(1); }
@@ -105,13 +105,13 @@ Date.tokens = {
 		},
 		getDate: function(date) { return Date.tokens.H.getDate(date)+':'+Date.tokens.M.getDate(date)+':'+Date.tokens.S.getDate(date); }
 	},
-	D:{	
+	D:{
 		reg:/[0-9]{2}\/[0-9]{2}\/[0-9]{2}/,
-		setDate: function(date, match) { 
+		setDate: function(date, match) {
 			var parts = match.split('/');
 			date.setM(parts[0].toInt());
 			date.setD(parts[1].toInt());
-			date.setY(parts[2].toInt()+2000); 
+			date.setY(parts[2].toInt()+2000);
 		},
 		getDate: function(date) { return Date.tokens.m.getDate(date)+'/'+Date.tokens.d.getDate(date)+'/'+Date.tokens.y.getDate(date); }
 	}

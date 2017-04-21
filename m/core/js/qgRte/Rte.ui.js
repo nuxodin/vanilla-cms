@@ -1,11 +1,11 @@
 
 Rte.ui = {
-	init: function() {
+	init() {
 		var my = this;
 		my.div = document.createElement('div');
 		my.div.id = 'qgRteToolbar';
-		my.div.addEventListener('mousedown',  function(e){ e.stopPropagation(); });
-		my.div.addEventListener('touchstart', function(e){ e.stopPropagation(); });
+		my.div.addEventListener('mousedown',  e=>e.stopPropagation());
+		my.div.addEventListener('touchstart', e=>e.stopPropagation());
 
 		Rte.addUiElement(my.div);
 
@@ -18,21 +18,17 @@ Rte.ui = {
 		my.div.appendChild(my.moreContainer);
 
 		Rte.on('activate', function() {
-
 			var config = Rte.ui.config['rteDef']; // todo
-
 			my.activeItems = {};
 			var appendTo = my.mainContainer;
-			var addItem = function(i,n) {
-				if (my.items[n]) {
-					my.activeItems[n] = my.items[n];
-					appendTo.appendChild(my.items[n].el);
-				}
+			var addItem = function(n) {
+				if (!my.items[n]) return;
+				my.activeItems[n] = my.items[n];
+				appendTo.appendChild(my.items[n].el);
 			};
-			$.each(config.main, addItem);
+			config.main.forEach(addItem);
 			appendTo = my.moreContainer;
-			$.each(config.more, addItem);
-
+			config.more.forEach(addItem);
 			if (my.activeItems) {
 				document.body.appendChild(my.div);
 				my.div.style.display = 'none';
@@ -42,7 +38,6 @@ Rte.ui = {
 				},90);
 				document.addEventListener('keydown', shortcutListener, false);
 			}
-
 		});
 		Rte.on('deactivate', function() {
 			document.removeEventListener('keydown', shortcutListener, false);
@@ -52,44 +47,43 @@ Rte.ui = {
 		});
 		Rte.on('elementchange', function() {
 			//if (!Rte.element) return; needed?
-			$.each(my.activeItems, function(name,item) {
+			for (let [name,item] of Object.entries(my.activeItems)){
 				if (!item.enable || item.enable(Rte.element)) {
 					item.enabled = true;
-					$(item.el).attr('hidden',null);
+					item.el.removeAttribute('hidden');
 					if (item.check) {
-						var act = item.check( Rte.element )?'add':'remove';
-						$(item.el)[act+'Class']('active');
+						var act = item.check(Rte.element) ? 'add' : 'remove';
+						item.el.classList[act]('active');
 					}
 				} else {
 					item.enabled = false;
-					$(item.el).attr('hidden',true);
+					item.el.setAttribute('hidden',true);
 				}
-			});
+			}
 		});
 		var shortcutListener = function(e) {
 			if (e.ctrlKey && !e.metaKey && !e.shiftkey && !e.altkey) {
 				var char = String.fromCharCode(e.which).toLowerCase();
-				$.each(my.activeItems,function(i,item) {
+				for (let [name,item] of Object.entries(my.activeItems)){
 					if (item.enabled && item.shortcut === char) {
-						var ev = document.createEvent('Events');
-						ev.initEvent('mousedown', true, false);
-		                item.el.dispatchEvent(ev);
+						let event = new MouseEvent('mousedown',{'bubbles': true,'cancelable': true});
+						item.el.dispatchEvent(event);
 		                e.preventDefault();
 					}
-				});
+				}
 			}
 		};
 		/* ui hover */
 		var moreTimeout = null;
 		$(my.div).on({
-			mouseenter:function() {
+			mouseenter() {
 				clearTimeout(moreTimeout);
 				moreTimeout = setTimeout(function() {
 					Rte.ui.div.querySelector('.-more').style.display = 'flex';
 				},300);
 				Rte.ui.mouseover = 1;
 			},
-			mouseleave:function() {
+			mouseleave() {
 				clearTimeout(moreTimeout);
 				moreTimeout = setTimeout(function() {
 					Rte.ui.div.querySelector('.-more').style.display = 'none';
@@ -97,13 +91,12 @@ Rte.ui = {
 				Rte.ui.mouseover = 0;
 			}
 		});
-	}
-	,setItem: function(name, opt) {
+	},
+	setItem(name, opt) {
 		if (!opt.el) {
 			opt.el = document.createElement('span');
 			opt.el.className = '-item -'+name;
 		}
-
 		if (opt.cmd) {
 			if (!opt.click && opt.click != false) { opt.click = function() { qgExecCommand(opt.cmd,false,false); }; }
 			if (!opt.check && opt.check != false) { opt.check = function() { return qgQueryCommandState(opt.cmd); }; }
@@ -112,24 +105,21 @@ Rte.ui = {
 		if (enable && enable.toLowerCase) {
 			opt.enable = function(el) { return $(el).is(enable); };
 		}
-
 		opt.click && opt.el.addEventListener('mousedown',function(e) {
 			Rte.manipulate(function() { // todo: manipulate schon hier??
 				opt.click(e);
 			});
 		},false);
-
 		opt.shortcut && opt.el.setAttribute('title','ctrl+'+opt.shortcut);
-
 		this.items[name] = opt;
 		return opt.el;
 	},
-	setSelect: function(name, opt) {
+	setSelect(name, opt) {
 		var timeout = null;
 		var el =  $('<div class="-item -select">').on({
-			mousedown: function() { opts.show(); },
-			mouseover: function() { clearTimeout(timeout); },
-			mouseout:  function() { timeout = setTimeout(function() {opts.hide();},300); }
+			mousedown(e) { opts.show(); e.preventDefault(); },
+			mouseover() { clearTimeout(timeout); },
+			mouseout()  { timeout = setTimeout(()=>opts.hide(),300); }
 		});
 		$('<div class=-state>').appendTo(el).html(name);
 		var opts = $('<div class=-options>').appendTo(el);

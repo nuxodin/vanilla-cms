@@ -92,8 +92,8 @@ class serverInterface_page {
 	}
 	static function text($pid, $name, $l, $value=null) { // todo getter
 		if (!self::checkRight(2)) return false;
-		Page($pid)->Text($name, $l, $value);
-		G()->Answer['cmsInfo'] = L('Der Text wurde gespeichert.');
+		$changed = Page($pid)->Text($name, $l, $value);
+		if ($changed !== false) G()->Answer['cmsInfo'] = L('Der Text wurde gespeichert.');
 		return 1;
 	}
 	static function title($pid, $l, $value=null) { // todo getter

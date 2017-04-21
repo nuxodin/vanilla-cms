@@ -1,7 +1,7 @@
 Rte = {
 	range : {}
 	,rangeStaticValues : {}
-	,checkSelection:function() {
+	,checkSelection() {
 		/*
 		 * Problem:
 		 * Es sollte auch nach neuem element geprüft werden wenn eltern elemente geändert werden
@@ -40,7 +40,7 @@ Rte = {
 		}
 		Rte.fire('selectionchange');
 	}
-	,manipulate:function(fn) {
+	,manipulate(fn) {
 		setTimeout(function() {
 			var s = getSelection(); s.removeAllRanges(); s.addRange(Rte.range);
 			fn && fn();
@@ -49,9 +49,8 @@ Rte = {
 			Rte.active.focus(); // firefox
 		}, 80);
 	}
-	,modifySelection:function(fn) {
+	,modifySelection(fn) {
 		var els = [Rte.element];
-
 		if (!Rte.range.collapsed) {
 			if (rangeIsElement(Rte.range)) {
 				els = [Rte.range.commonAncestorContainer];
@@ -75,7 +74,7 @@ Rte = {
 			Rte.checkSelection();
 		},90);
 	}
-	,addUiElement:function(el) {
+	,addUiElement(el) {
 		var activate = function() {
 			Rte.dontBlur = true;
 			var gMousedown = function(e) {
@@ -90,10 +89,10 @@ Rte = {
 		};
 		el.addEventListener('mousedown',activate);
 	}
-	,isTarget: function(el) {
+	,isTarget(el) {
 		return el.isContentEditable && el.tagName!=='INPUT' && el.tagName!=='TEXTAREA' && el.tagName!=='SELECT';
 	}
-	,init:function() {
+	,init() {
 		var root = window;
 		root.addEventListener('focus',function(e) {
 	        if (!Rte.isTarget(e.target)) return;
@@ -157,19 +156,18 @@ document.addEventListener('mouseup', e=>{
 document.addEventListener('mousedown',function(e){
 	if (!e.target.isContentEditable) return;
 	e.which === 3 && e.preventDefault();
-})
+});
 
 Rte.init();
 
-/* cleaner */
-!function() {
-    var Cleaner;
+
+{ // cleaner
+    let Cleaner;
 	Rte.on('input', function() {
 	    Cleaner = Cleaner || (new c1.NodeCleaner());
 		Cleaner.cleanContents(Rte.active,true);
 	});
-}();
-
+}
 
 { // force li's in contenteditable uls
 	let check = function(){
@@ -198,22 +196,3 @@ Rte.init();
 		Rte.active.removeEventListener('input', check);
 	});
 }
-
-
-/* debug *
-Rte.on('selectionchange', function() {
-	console.log('selection change',Rte.range);
-});
-Rte.on('elementchange', function() {
-	console.log('element change',Rte.element.tagName);
-});
-Rte.on('activate', function() {
-	console.log('activate',Rte.active.getAttribute('cmstxt'));
-});
-Rte.on('deactivate', function() {
-	console.log('deactivate',Rte.active);
-});
-Rte.on('input', function() {
-	console.log('input',Rte.active);
-});
-/**/

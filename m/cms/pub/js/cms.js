@@ -147,7 +147,6 @@
 	document.addEventListener('DOMContentLoaded',function(){
 	  	var w = window,
 	        d = document;
-
 		/* sync / save txts */
 	    function isFormEl(el) {
 	    	return el.value !== undefined && el.tagName !== 'BUTTON';
@@ -160,7 +159,6 @@
 	            src.indexOf(location.origin) === 0 && el.setAttribute('src', src.replace(location.origin,''));
 	        }
 	    }
-
 		d.body.addEventListener('keyup', function(e) {
 			if (!e.target.hasAttribute('cmstxt')) return;
 			var el = e.target,

@@ -1,9 +1,8 @@
 domCodeIndent = function(str) {
 	var res = '';
 	var ind = '';
-	str = str.replace(/\n|\t/g, ' ').replace(/<([\/a-zA-Z0-9]+)/g, function(a) { return a.toLowerCase(); });
-
 	var pre = false;
+	str = str.replace(/\n|\t/g, ' ').replace(/<([\/a-zA-Z0-9]+)/g, function(a) { return a.toLowerCase(); });
 
 	var makeStartTag = function(tag, attrs, unary) {
 		var str = '<' + tag;
@@ -15,34 +14,27 @@ domCodeIndent = function(str) {
 	};
 
 	HTMLParser(str,{
-		start: function( tag, attrs, unary) {
-			pre = tag==='pre'?true:pre;
+		start(tag, attrs, unary) {
+			pre = tag==='pre' ? true : pre;
 			!pre && (res += ind);
 			res += makeStartTag(tag,attrs,unary);
 			!pre && (res+='\n');
 			!unary && (ind += '\t');
 		},
-		end: function(tag) {
-			pre = tag==='pre'?false:pre;
-
+		end(tag) {
+			pre = tag==='pre' ? false : pre;
 			!pre && (ind=ind.substr(1));
 			res += ind+'</' + tag.toLowerCase() + '>';
 			!pre && (res+='\n');
 		},
-		chars: function(text) {
+		chars(text) {
 			!pre && (res += ind);
-
-			if (!text.match(/^\s/)) { // mark if no whitespace
-				text = '\uFEFF'+text;
-			}
-			if (!text.match(/\s$/)) {
-				text = text+'\uFEFF';
-			}
-
+			if (!text.match(/^\s/)) text = '\uFEFF'+text; // mark if no whitespace
+			if (!text.match(/\s$/)) text = text+'\uFEFF';
 			res += text;
 			!pre && (res+='\n');
 		},
-		comment: function(text) {
+		comment(text) {
 			res += "<!--" + text + "-->";
 		}
 	});

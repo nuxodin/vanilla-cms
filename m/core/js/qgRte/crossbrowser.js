@@ -32,7 +32,7 @@ qgExecCommand = function(com,x,val) {
 };
 
 qgSelection = {
-	element: function() {
+	element() {
 		let el;
 		if (!getSelection().rangeCount) return;
 		let r = getSelection().getRangeAt(0);
@@ -44,23 +44,23 @@ qgSelection = {
 		while (el.nodeType === 3) el = el.parentNode;
 		return el;
 	},
-	text: function() {
+	text() {
 		return window.getSelection().getRangeAt(0).toString();
 	},
-	isElement: function() {
+	isElement() {
 		let el = this.element();
 		let text = el.textContent || el.innerText || '';
 		return text === this.text();
 	},
-	bookmark: function() {
+	bookmark() {
 		return getSelection().getRangeAt(0).cloneRange();
 	},
-	fromBookmark: function(bookmark) {
+	fromBookmark(bookmark) {
 		let sel = getSelection();
 		sel.removeAllRanges();
 		sel.addRange(bookmark);
 	},
-	toElement: function(el) {
+	toElement(el) {
 		let s = getSelection();
 		s.removeAllRanges();
 		r = document.createRange();
@@ -68,7 +68,7 @@ qgSelection = {
 		r.selectNode(el);
 		s.addRange(r);
 	},
-	toChildren: function(el) {
+	toChildren(el) {
 		//getSelection().selectAllChildren(el); // firefox cms->linkDialog->removeLink strange failure!?!?
 		let s = getSelection();
 		let r = document.createRange();
@@ -76,7 +76,7 @@ qgSelection = {
 		s.removeAllRanges();
 		s.addRange(r);
 	},
-	surroundContents: function(el) {
+	surroundContents(el) {
 		let range = getSelection().getRangeAt(0);
 		range.surroundContents(el);
 		qgSelection.toChildren(el);
@@ -87,15 +87,15 @@ qgSelection = {
 		// } catch(e) {}
 		return el;
 	},
-	collapsed: function() {
+	collapsed() {
 		return getSelection().getRangeAt(0).collapsed;
 	},
-	collapse:function(where) {
+	collapse(where) {
 		try{ // firefox has an error
 			where === 'start' ? getSelection().collapseToStart() : getSelection().collapseToEnd();
 		} catch(e) {}
 	},
-	rect: function() {
+	rect() {
 		let r = getSelection().getRangeAt(0);
 		let pos = r.getBoundingClientRect();
 		if (pos.top===0 && r.getClientRects) {
@@ -212,9 +212,6 @@ document.addEventListener('mousedown', function(e) {
 		el.addEventListener('mousedown', startFn);
 	});
 }
-
-
-
 
 
 /* contenteditable focus bug */

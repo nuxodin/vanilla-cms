@@ -143,8 +143,8 @@ $('#text').c1Use('myplugin', function() {
     'use strict';
 
 	/* Frequently used and small polyfills */
-	if (!w.MutationObserver) w.MutationObserver = w.WebKitMutationObserver; // android 4.3
-    if (!w.requestAnimationFrame) w.requestAnimationFrame = w.webkitRequestAnimationFrame || w.setTimeout; // android 4.3
+	//if (!w.MutationObserver) w.MutationObserver = w.WebKitMutationObserver; // android 4.3
+    //if (!w.requestAnimationFrame) w.requestAnimationFrame = w.webkitRequestAnimationFrame || w.setTimeout; // android 4.3
 
 	if (!HTMLFormElement.prototype.reportValidity) { // ie 11, edge 14, safari 10
 	    HTMLFormElement.prototype.reportValidity = function() {

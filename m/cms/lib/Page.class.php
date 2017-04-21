@@ -286,9 +286,13 @@ class Page {
 			$this->cache('texts');
 		}
 		if ($lang === null)  return $this->Texts[$name];
-		if ($value === null) return $this->Texts[$name]->get($lang)->get();
+		$TextLang = $this->Texts[$name]->get($lang);
+		if ($value === null) return $TextLang->get();
+
+		if ($TextLang->get() === $value) return false; // no chang
+
 		qg::fire('page::text_set-before', ['Page'=>$this, 'name'=>$name, 'lang'=>&$lang, 'value'=>&$value]);
-		$this->Texts[$name]->get($lang)->set($value);
+		$TextLang->set($value);
 		qg::fire('page::text_set-after',  ['Page'=>$this, 'name'=>$name, 'lang'=>&$lang, 'value'=>&$value]);
 	}
 	function TextDelete($name) {
