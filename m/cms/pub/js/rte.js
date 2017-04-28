@@ -1,4 +1,5 @@
 /* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
+// todo? // externe Seiten http://github.com/codepo8/GooHooBi/blob/master/multisearch.html
 
 Rte.on('ready', ()=>{
 	'use strict';
@@ -6,17 +7,17 @@ Rte.on('ready', ()=>{
 	var urlRegexp = /^[a-zA-Z0-9-]{2,999}\.[a-z0-9]{2,10}/;
 	var mailRegexp = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,10})+$/;
 
-	var inp = $('<input placeholder=url type=qgcms-page style="width:102%">'); // externe Seiten http://github.com/codepo8/GooHooBi/blob/master/multisearch.html
+	var inp = c1.dom.fragment('<input placeholder=url spellcheck=false type=qgcms-page>').firstChild;
 	var end = function() {
-		var el = $(Rte.element).closest('a');
-		if (!el[0]) return;
+		var el = Rte.element.closest('a');
+		if (!el) return;
 
-		qgSelection.toElement(el[0]);
+		qgSelection.toElement(el);
 		qgSelection.collapse();
 
-		var v = inp.val();
+		var v = inp.value;
 		if (v.trim() === '') {
-			el[0].removeNode();
+			el.removeNode();
 			Rte.fire('input');
 			return;
 		} else if (!isNaN(v)) {
@@ -26,59 +27,53 @@ Rte.on('ready', ()=>{
 		} else if (v.match(urlRegexp)) {
 			v = 'http://'+v;
 		}
-		inp.val(v);
-
-		var atts = { href:v };
-		if (!el.attr('target')) {
-			atts.target = v.match(/^(cmspid|mailto)/) ? '_self' : '_blank';
+		inp.value = v;
+		el.setAttribute('href',v);
+		if (!el.hasAttribute('target')) {
+			el.setAttribute('target', v.match(/^(cmspid|mailto)/) ? '_self' : '_blank');
 		}
-		el.attr(atts);
-
 		Rte.active && Rte.active.focus(); // always false? needed?
 		Rte.fire('input');
 	};
-	inp.on({
-		blur: end,
-		keyup(e) { e.which === 13 && end(); },
-	});
+	inp.addEventListener('blur',end);
+	inp.addEventListener('keyup',e => e.which === 13 && end() );
 
 	Rte.ui.setItem('LinkInput', {
-		el: inp[0],
+		el: inp,
 		enable: 'a, a > *',
 		check(el) {
-			el = $(el).closest('a');
-			var v = el.attr('href');
-			inp.val(v);
+			el = el.closest('a');
+			var v = el.getAttribute('href');
+			if (v) inp.value = v;
 		}
 	});
 
 	Rte.ui.setItem('Link', {
 		click() {
 			var cEl = Rte.element;
-			var exists = cEl && $(cEl).closest('a')[0];
+			var exists = cEl && cEl.closest('a');
 			if (exists) {
 				exists.removeNode();
 			} else {
-				var el = qgSelection.surroundContents( document.createElement('a') );
+				var el = qgSelection.surroundContents(document.createElement('a')); // todo: selection on multiple elements
 				Rte.element = 0; // force rte-event "elementchange"!
-
-				/*set initial value*/
-				var txt = $(el).text().trim();
+				// set initial value
+				const txt = el.textContent.trim();
 				if (txt.match(/^http[^\s]+$/) || txt.match(urlRegexp) || txt.match(mailRegexp)) {
-					inp.val(txt);
-					$(el).attr('href',txt);
+					inp.value = txt;
+					el.setAttribute('href',txt);
 				} else {
 					$fn('cms::searchPagesByTitle')(txt).run(function(res) {
 						if (res[0]) {
-							inp.val(txt);
-							inp[0].dispatchEvent(new Event('input'));
+							inp.value = txt;
+							inp.dispatchEvent(new Event('input'));
 						}
 					});
 				}
-				setTimeout(function() { inp[0].focus(); },1); // todo: why timeout?
+				setTimeout(function() { inp.focus(); },1); // todo: why timeout?
 			}
 		},
-		check(el) { return $(el).is('a, a > *'); },
+		check(el) { return el && el.matches('a, a > *'); },
 		shortcut: 'k'
 	});
 

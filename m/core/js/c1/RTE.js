@@ -1,4 +1,5 @@
 /* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
+setTimeout(functrion(){ throw('used?') })
 
 !function() {
 	'use strict';

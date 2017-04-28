@@ -31,6 +31,7 @@ class Page {
 			$this->id = G()->SET['cms']['pageNotFound']->v;
 			$this->vs = cms::Page($this->id)->vs;
 			$this->is = false;
+			return;
 		}
 		!$this->vs['title_id'] && $this->set('title_id', TextPro::generate()->id);
 	}
@@ -59,7 +60,7 @@ class Page {
 			case 'SET':
 				if ($this->_SET === null) {
 					$this->_SET = G()->SET['cms']['pages'][$this->id];
-					if (!$this->_SET) trigger_error('page set not created');
+					if (!$this->_SET) trigger_error('page SET not created');
 					$this->_SET->getAll();
 				}
 				return $this->_SET;
@@ -74,11 +75,18 @@ class Page {
 			case 'cache':
 				return $this->cache   = unserialize($this->vs['_cache']);
 			default:
+				$GLOBALS['skip_stacks'] += 1;
 				trigger_error('page::__get('.$n.') not implemented');
+				$GLOBALS['skip_stacks'] -= 1;
 		}
 	}
 	function set($data, $value=null) {
-		if (!$this->is) { trigger_error('Page '.$this->id_not_exists.' does not exist! (::set)'); return; }
+		if (!$this->is) {
+			$GLOBALS['skip_stacks'] += 1;
+			trigger_error('Page '.$this->id_not_exists.' does not exist! (::set)');
+			$GLOBALS['skip_stacks'] -= 1;
+			return;
+		}
 		if (is_string($data)) $data = [$data => $value];
 		if ($this->vs === false) trigger_error('vs false?');
 		$this->vs = $data + $this->vs;

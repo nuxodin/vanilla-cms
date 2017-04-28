@@ -41,7 +41,9 @@ class dbEntry {
 		return array_key_exists($n, $this->_vs) ? $this->_vs[$n] : $this->_get($n);
 	}
 	function _get($name){
+		$GLOBALS['skip_stacks'] += 2;
 		trigger_error('_get "'.$this->_T.'::'.$name.'" not implemented');
+		$GLOBALS['skip_stacks'] -= 2;
 	}
 	function _full() {
 		if ($this->_full === false) {

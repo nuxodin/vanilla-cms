@@ -42,17 +42,18 @@
                 div.classList.toggle('-Diffs');
             })
             div.querySelector('.-close').addEventListener('click',this.close);
+
             function initFrame(){
-                // scrollSync
                 let other = this === iframe1 ? iframe2 : iframe1;
-                let doc1 = this.contentWindow.document;
-                this.contentWindow.document.addEventListener('scroll',function(){
-                    let scrollTop1 = doc1.documentElement.scrollTop || doc1.body.scrollTop;
-                    let doc2 = other.contentWindow.document;
-                    doc2.documentElement.scrollTop = doc2.body.scrollTop = scrollTop1;
-                });
-                // mousemove  => opacity
                 let win = this.contentWindow;
+                let doc1 = win.document;
+
+                // scrollSync
+                c1.c1Use('scrollSync',scrollSync=>{
+                    scrollSync.syncWindows(win, other.contentWindow);
+                })
+
+                // mousemove  => opacity
                 doc1.addEventListener('mousemove',function(e){
                     let opacity = e.clientX / win.innerWidth;
                     div.querySelector('.-fade').value = opacity;

@@ -231,10 +231,9 @@ window.$ && $(function(){
 	/* more */
 	var more = $(
 	'<div class=-more>'+
+		'<button class=-compareActive>Mit Aktuell vergleichen</button>'+
 		'<button class=-reactivate>Stand wiederherstellen</button>'+
 		'<div class=-txt></div>'+
-		'<button class=-compareActive>Mit Aktuell vergleichen</button>'+
-		'<button class=-comparePreviews>Änderung sehen</button>'+
 	'</div>');
 	var pointer = $('<i class=-pointer></i>');
 	Viewer.$container.find('.-control').append(more, pointer);
@@ -274,14 +273,6 @@ window.$ && $(function(){
 				toText: 'aktuell',
 				accept(){ more.find('.-reactivate')[0].onclick(); },
 				acceptText:'Stand wiederherstellen',
-			});
-		};
-		more.find('.-comparePreviews')[0].onclick = function(){
-			CmsVersComparer.compare(Viewer.pid, {
-				fromLog:e.vers+1,
-				fromText:$li.find('.-date').html(),
-				toLog:e.vers,
-				toText:$li.next().find('.-date').html()
 			});
 		};
 	});

@@ -27,15 +27,15 @@
 	font-family:Arial;
     background-color:#222;
     color:#fff;
-    max-width:264px;
-    transition:top .14s;
+    max-width:241px;
+    transition:top .1s;
     transition-property:top, left;
     will-change:top, left;
-    padding:1px;
 }
 #qgRteToolbar > div {
     display:flex;
     flex-flow:wrap;
+    padding:0 1px 0 0;
     box-sizing: border-box;
 }
 
@@ -64,13 +64,13 @@ body #qgRteToolbar [hidden] {
 	width:auto;
 }
 #qgRteToolbar table {
-    margin:0;
-    flex: 1 1 100%;
+    margin:-1px -1px 0 0;
+    flex: 1 1 101%;
     border-collapse:collapse;
-    width: 100%;
 }
 
 #qgRteToolbar td {
+    border:1px solid #555;
 	height:31px;
     box-sizing:border-box;
     vertical-align: middle;
@@ -95,12 +95,11 @@ body #qgRteToolbar [hidden] {
 	box-sizing:border-box;
 	cursor:pointer;
 	line-height:1.2;
-    width:32px;
-	height:32px;
+    width:31px;
+	height:31px;
     padding:5px;
-    xpadding:16px;
-    outline:.5px solid #444;
-    margin:.5px;
+    border:1px solid #555;
+    margin:-1px -1px 0 0;
 }
 #qgRteToolbar .-item:hover {
     background:#555;

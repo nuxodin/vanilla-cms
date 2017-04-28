@@ -69,7 +69,6 @@ qgSelection = {
 		s.addRange(r);
 	},
 	toChildren(el) {
-		//getSelection().selectAllChildren(el); // firefox cms->linkDialog->removeLink strange failure!?!?
 		let s = getSelection();
 		let r = document.createRange();
 		r.selectNodeContents(el);
@@ -80,11 +79,6 @@ qgSelection = {
 		let range = getSelection().getRangeAt(0);
 		range.surroundContents(el);
 		qgSelection.toChildren(el);
-		// try{
-		// 	let s = getSelection(); // korrigiere selection in safari
-		// 	s.collapse(false);		//
-		// 	s.extend(el, 1);		//
-		// } catch(e) {}
 		return el;
 	},
 	collapsed() {

@@ -6,13 +6,6 @@
         return document.getElementById(id);
     };
 
-    /* polyfill (test w3c conformance) */
-	if (!Node.prototype.remove) {
-		Node.prototype.remove = function(removeChildren) {
-			this.parentNode && this.parentNode.removeChild( this );
-		};
-	}
-
 	/* contains-bug, textNodes are not containing (ie11, edge ok) */
 	var t = d.createTextNode(''), el = d.createElement('span');
 	el.appendChild(t);

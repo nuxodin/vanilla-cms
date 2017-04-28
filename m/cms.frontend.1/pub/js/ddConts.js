@@ -45,7 +45,6 @@
 			active.c1ZTop();
 			document.body.appendChild(active);
 			e && move(e);
-//			ghost.innerHTML = el.innerHTML; // todo?
 		};
 
 	};
@@ -120,23 +119,22 @@
 		'min-width:0; '+
 		'max-height:none; '+
 		'min-height:0; '+
-		'outline:none; '+
 		'boxSizing:content-box; ';
 		let opacity = active.style.opacity;
-		active.style.opacity = 0;
 		setTimeout(()=>{
-			let duration = 180;
+			let duration = 190;
 			let pos = active.getBoundingClientRect();
 			active.style.opacity = 0;
 			clone.style.cssText +=
 			'transition:all '+duration+'ms; '+
+			'transition-property:width height top left opacity; '+
 			'top:'+pos.top+'px; '+
 			'left:'+pos.left+'px; '+
-			'width:'+active.offsetWidth+'px; '+
-			'height:'+active.offsetHeight+'px; ';
+			'width:'+pos.width+'px; '+
+			'height:'+pos.height+'px; ';
 			setTimeout(()=>{
 				clone.style.cssText +=
-				'transition:all 100ms; '+
+				'transition-duration:100ms; '+
 				'opacity:0; ';
 				setTimeout(()=>clone.remove(),100);
 				active.style.opacity = opacity;
