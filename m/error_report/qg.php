@@ -208,6 +208,7 @@ qg::on('action', function() {
 	if (G()->SET['error_report']['javascript']->v) {
 		if (debug) G()->js_data['error_report_debug'] = 1;
 		html::$optimiseJs = false;
+		html::addJsFile(sysURL.'core/js/c1.js','core');
 		html::addJsFile(sysURL.'error_report/pub/main.js','core');
 	}
 

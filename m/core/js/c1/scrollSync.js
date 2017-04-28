@@ -3,15 +3,16 @@
     c1.scrollSync = {
         config : {},
         _elementConfig(el){
+			let client = clientDim(el);
             return {
-                [getSelector(el)] : {
+                [c1.scrollSync.getSelector(el)] : {
                     // pixel: {
                     //     x: el.scrollLeft,
                     //     y: el.scrollTop,
                     // },
                     percent: {
-                        x: el.scrollLeft / (el.scrollWidth  - el.clientWidth) || 0,
-                        y: el.scrollTop  / (el.scrollHeight - el.clientHeight) || 0,
+                        x: el.scrollLeft / (el.scrollWidth  - client.width) || 0,
+                        y: el.scrollTop  / (el.scrollHeight - client.height) || 0,
                     }
                 }
             }
@@ -28,13 +29,14 @@
                 // }
                 let percent = object[selector].percent;
                 if (percent) {
-                    left = (el.scrollWidth  - el.clientWidth)  * percent.x;
-                    top  = (el.scrollHeight - el.clientHeight) * percent.y;
+					let client = clientDim(el);
+                    left = (el.scrollWidth  - client.width)  * percent.x;
+                    top  = (el.scrollHeight - client.height) * percent.y;
                 }
                 top  = Math.round(top);
                 left = Math.round(left);
 
-                win.c1ScrollSyncPreventFeedback = true;
+				win.c1ScrollSyncPreventFeedback = true;
 
                 if (el.scrollLeft !== left) el.scrollLeft = left;
                 if (el.scrollTop  !== top)  el.scrollTop  = top;
@@ -81,24 +83,36 @@
     // });
 
     /* helper */
-    function getSelector(el){
+    c1.scrollSync.getSelector = function(el){
         let doc = el.ownerDocument;
         let selector = '';
         let root = el.closest('[id]') || doc.body;
         var looped = el;
         while (looped != root) {
-            selector = ' > :nth-child('+countPrevSiblings(looped)+')' + selector;
+            selector = ' > '+looped.tagName.toLowerCase()+':nth-of-type('+countPrevSiblings(looped)+')' + selector;
             looped = looped.parentNode;
         }
         selector = (root === doc.body ? 'body' : '#'+root.id) + selector;
         return selector;
     }
     function countPrevSiblings(el){
-        let i=0, checked = el;
+        let i=0, checked = el, tag = el.tagName;
         while (checked) {
-            i++;
+            if (checked.tagName === tag) i++;
             checked = checked.previousElementSibling;
         }
         return i;
     }
+    function clientDim(el) {
+		if (el = el.ownerDocument.scrollingElement) {
+			return {
+				height:innerHeight,
+				width: innerWidth,
+			}
+		}
+		return {
+			height:el.clientHeight,
+			width: el.clientWidth,
+		}
+	}
 }

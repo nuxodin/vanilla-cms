@@ -50,7 +50,21 @@
 
                 // scrollSync
                 c1.c1Use('scrollSync',scrollSync=>{
+                    // sync scroll
                     scrollSync.syncWindows(win, other.contentWindow);
+                    // sync clicks
+                    win.addEventListener('click',function(e){
+                        if (e.c1Synced) return;
+                        let selector = scrollSync.getSelector(e.target);
+                        let otherEl = other.contentWindow.document.querySelector(selector);
+                        var event = new MouseEvent('click', {
+                            'view': window,
+                            'bubbles': true,
+                            'cancelable': true
+                        });
+                        event.c1Synced = true;
+                        otherEl.dispatchEvent(event);
+                    },true)
                 })
 
                 // mousemove  => opacity

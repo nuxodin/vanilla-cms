@@ -1,4 +1,5 @@
 /* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
+'use strict';
 document.addEventListener('DOMContentLoaded',function(){
 	'use strict';
 
@@ -7,8 +8,7 @@ document.addEventListener('DOMContentLoaded',function(){
 
 	/* sidebar */
 	panel.loadWidget = function(widget, params, cb){
-		var $widget = el.find('[widget="'+widget+'"]');
-		let widgetEl = el[0].c1Find('[widget="'+widget+'"]');
+		const widgetEl = el[0].c1Find('[widget="'+widget+'"]');
 		if (!widgetEl) return;
 		c1Loading.start(widgetEl);
 		if (!params) params = {};
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded',function(){
 		$fn('cms_frontend_1::widget')(widget, params).then(res => {
 			c1Loading.stop(widgetEl);
 			widgetEl.innerHTML = res;
-			cb && cb({target:$widget});
+			cb && cb({target:$(widgetEl)});
 		});
 	}
 	panel.on('set', function(e){
@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded',function(){
 	});
 
 	panel.el.on('mousedown touchstart','> .-sidebar > .-item > .-title', function(e){
-	//panel.el.on('touchstart mouseover','> .-sidebar > .-item > .-title', function(e){
 		if (e.type === 'mousedown' && e.which !== 1) return;
 		cms.cont.active = Page;
 		var sidebar = this.closest('[itemid]').getAttribute('itemid');
@@ -53,13 +52,11 @@ document.addEventListener('DOMContentLoaded',function(){
 
 	/* widgets */
 	panel.get('widget').on('set', function(e) {
-		var $widget = el.find('[widget="'+e.name+'"]');
 		$fn('Setting')(this.data, ['cms.frontend.1','custom','widget']);
 		if (e.value) {
 			panel.loadWidget(e.name, {pid: cms.cont.active || Page});
 		} else {
 			this.innerHTML = '';
-			//$(this).html('');
 		}
     });
 	el.on('mousedown', '.-widgetHead', function(e){
@@ -71,7 +68,6 @@ document.addEventListener('DOMContentLoaded',function(){
 		panel.get('widget').set(widget,value);
 	});
 
-	//el.on('touchstart mouseenter', ()=>{ zzz
 	el.find('> .-sidebar > .-sensor').on('touchstart mouseenter', ()=>{
 		el.addClass('-sidebar-open');
 	});
@@ -104,14 +100,14 @@ document.addEventListener('DOMContentLoaded',function(){
     	}
 		if (e.which == 86) { // v
 			cms.panel.toggle('sidebar','add');
-			setTimeout(()=> $('[widget="add"] .-h1 > input').focus() ,300);
+			setTimeout(()=> $('[widget="add"] .-h1 > input').focus(), 400);
 		}
 		if (e.which == 27) { // esc
 			cms.panel.set('sidebar','');
 		}
 		if (e.which == 78) { // n
 			cms.panel.set('sidebar','tree');
-			setTimeout(()=> $('#cmsPageAddInp').focus() ,300);
+			setTimeout(()=> $('#cmsPageAddInp').focus(), 400);
 		}
     });
 
@@ -128,7 +124,6 @@ document.addEventListener('DOMContentLoaded',function(){
 		});
 		ev.on('complete', e => {
 			cms.console.show('Datei hochgeladen');
-			//cms.cont(ev.pid).showWidget('media_list_trs',true);
 			cms.cont(ev.pid).showWidget('media',true);
 		});
 	})
@@ -217,7 +212,6 @@ c1.onElement('.qgCmsTreeManager',el=>{
 })
 
 c1.onElement('.qgCmsFileManager',el=>{
-	'use strict';
 	var pid = el.getAttribute('pid');
 	var $el = $(el);
 	el.c1Find('.-uploadBtn').addEventListener('click', function(){
