@@ -4,6 +4,7 @@ namespace qg;
 qg::need('cms.installation.default');
 
 // Notify Update
+/*
 qg::on('deliverHtml',function(){
     //if (!debug) return;
     if (!Usr()->superuser) return;
@@ -29,3 +30,4 @@ qg::on('deliverHtml',function(){
     //     }
     // }
 });
+*/
