@@ -8,13 +8,14 @@ document.addEventListener('DOMContentLoaded',function(){
 	/* sidebar */
 	panel.loadWidget = function(widget, params, cb){
 		var $widget = el.find('[widget="'+widget+'"]');
-		//if (!$widget[0]) return; todo?
-		c1Loading.start($widget[0]);
+		let widgetEl = el[0].c1Find('[widget="'+widget+'"]');
+		if (!widgetEl) return;
+		c1Loading.start(widgetEl);
 		if (!params) params = {};
 		params.pid = params.pid || cms.cont.active || Page; // neu
 		$fn('cms_frontend_1::widget')(widget, params).then(res => {
-			c1Loading.stop($widget[0]);
-			$widget.html(res);
+			c1Loading.stop(widgetEl);
+			widgetEl.innerHTML = res;
 			cb && cb({target:$widget});
 		});
 	}

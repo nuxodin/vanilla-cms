@@ -5,10 +5,10 @@
         _elementConfig(el){
             return {
                 [getSelector(el)] : {
-                    pixel: {
-                        x: el.scrollLeft,
-                        y: el.scrollTop,
-                    },
+                    // pixel: {
+                    //     x: el.scrollLeft,
+                    //     y: el.scrollTop,
+                    // },
                     percent: {
                         x: el.scrollLeft / (el.scrollWidth  - el.clientWidth) || 0,
                         y: el.scrollTop  / (el.scrollHeight - el.clientHeight) || 0,
@@ -43,7 +43,6 @@
                 win.c1ScrollSyncPreventFeedbackTimeout = win.setTimeout(function(){
                     win.c1ScrollSyncPreventFeedback = false;
                 },100)
-
             }
         },
         syncWindows(fromWindow, toWindow){
@@ -80,7 +79,6 @@
     // addEventListener('load',function(){
     //     c1.scrollSync.restore(c1.scrollSync.config);
     // });
-
 
     /* helper */
     function getSelector(el){

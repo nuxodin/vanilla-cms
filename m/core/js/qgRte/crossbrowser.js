@@ -1,17 +1,16 @@
 // firefox resize images: enableObjectResizing
-
-qgQueryCommandState = function(cmd) {
+'use strict';
+window.qgQueryCommandState = function(cmd) {
 	try{
 		return document.queryCommandState(cmd);
 	} catch(e) { /*zzz*/ }
 };
-qgQueryCommandValue = function(cmd) {
+window.qgQueryCommandValue = function(cmd) {
 	try{
 		return document.queryCommandValue(cmd);
 	} catch(e) { /*zzz*/ }
 };
-
-qgExecCommand = function(com,x,val) {
+window.qgExecCommand = function(com,x,val) {
 	let _ = qgExecCommand;
 	if (!_.cmdUsed) {
 		try {
@@ -31,7 +30,7 @@ qgExecCommand = function(com,x,val) {
 	}
 };
 
-qgSelection = {
+window.qgSelection = {
 	element() {
 		let el;
 		if (!getSelection().rangeCount) return;
@@ -62,8 +61,8 @@ qgSelection = {
 	},
 	toElement(el) {
 		let s = getSelection();
+		let r = document.createRange();
 		s.removeAllRanges();
-		r = document.createRange();
 		if (!el) throw 'el is required';
 		r.selectNode(el);
 		s.addRange(r);
@@ -116,6 +115,7 @@ document.addEventListener('mousedown', function(e) {
 
 {
 	let checkIntr;
+	let img = null;
 
 	window.qgImageResizeUi = function(e) {
 		//Browser.Engine.name === 'presto' && e.preventDefault(); // disables move in safari
@@ -134,7 +134,7 @@ document.addEventListener('mousedown', function(e) {
 			cont.parentNode && img.offsetHeight ? positionize() : (hide(), clearInterval(checkIntr));
 		}
 		clearInterval(checkIntr);
-		checkIntr = setInterval(check, 500);
+		checkIntr = setInterval(check, 100);
 	};
 	let positionize = function() {
 		let c      = img.getBoundingClientRect(), // todo: fastdom
@@ -152,11 +152,10 @@ document.addEventListener('mousedown', function(e) {
 		let startM   = {x: e.pageX, y: e.pageY};
 		let startDim = {x: img.offsetWidth, y: img.offsetHeight};
 		let dragger = e.target;
-
 		let moveFn = function(e) {
-			let w = dragger === Y[0] ? startDim.x : Math.max(1, startDim.x + e.pageX - startM.x);
-			let h = dragger === X[0] ? startDim.y : Math.max(1, startDim.y + e.pageY - startM.y);
-			if (!e.ctrlKey && dragger === XY[0]) {
+			let w = dragger === Y ? startDim.x : Math.max(1, startDim.x + e.pageX - startM.x);
+			let h = dragger === X ? startDim.y : Math.max(1, startDim.y + e.pageY - startM.y);
+			if (!e.ctrlKey && dragger === XY) {
 				if (startDim.x / startDim.y < w / h) {
 					h = parseInt(startDim.y / startDim.x * w);
 				} else {
@@ -174,7 +173,6 @@ document.addEventListener('mousedown', function(e) {
 			})
 			positionize();
 		};
-
 		let stopFn = function() {
 			img.dispatchEvent(new Event('qgResize',{bubbles:true}));
 			document.removeEventListener('mousemove', moveFn);
@@ -183,28 +181,21 @@ document.addEventListener('mousedown', function(e) {
 		document.addEventListener('mousemove', moveFn);
 		document.addEventListener('mouseup', stopFn);
 		e.preventDefault();
+		e.stopPropagation();
 	};
-
-	let cont = document.createElement('div');
-	let X = document.createElement('div');
-	let Y = document.createElement('div');
-	let XY = document.createElement('div');
-	let info = document.createElement('div');
-	let img = null;
-	cont.addEventListener('mousedown', e=>e.stopPropagation() );
-	cont.style.cssText = 'position:absolute; top:0; left:0; width:100%; height:0';
-	X.style.cursor = 'e-resize';
-	Y.style.cursor = 's-resize';
-	XY.style.cursor = 'se-resize';
-	XY.title = 'press ctrl to disable aspect ratio';
-	info.className = 'q1Rst';
-	info.style.cssText = 'position:absolute; background: #fafafa; box-shadow:0 0 3px; font-size:11px; color:#333; padding:2px 4px; border-radius:2px;';
-	cont.append(info);
-	[X,Y,XY].forEach(el=>{
-		el.style.cssText += 'background-color:#fff; border:1px solid black; height:12px; width:12px; position:absolute; box-sizing:border-box';
-		cont.append(el);
-		el.addEventListener('mousedown', startFn);
-	});
+	let itemCss = ';position:absolute; background-color:#fff; border:1px solid black; height:12px; width:12px; box-sizing:border-box';
+	let cont = c1.dom.fragment(
+	'<div class=q1Rst style="position:absolute; top:0; left:0; width:100%; height:0">'+
+		'<div class=-x  style="cursor:e-resize '+itemCss+'"></div>'+
+		'<div class=-y  style="cursor:s-resize '+itemCss+'"></div>'+
+		'<div class=-xy style="cursor:se-resize'+itemCss+'" title="press ctrl to disable aspect ratio"></div>'+
+		'<div class=-info style="position:absolute; background: #fafafa; box-shadow:0 0 3px; font-size:11px; color:#333; padding:2px 4px; border-radius:2px"></div>'+
+	'</div>').firstChild;
+	let X  = cont.c1Find('>.-x');
+	let Y  = cont.c1Find('>.-y');
+	let XY = cont.c1Find('>.-xy');
+	let info = cont.c1Find('>.-info');
+	cont.addEventListener('mousedown', startFn);
 }
 
 

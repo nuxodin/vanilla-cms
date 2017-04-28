@@ -73,14 +73,15 @@
 		}
 		setTimeout(()=>cms.txtClean(txtEl, tid), 1);
 	};
-	document.addEventListener('dragover', dragOver);
-	document.addEventListener('drop',     drop);
-	document.addEventListener('paste',    paste);
+	const root = document.documentElement;
+	root.addEventListener('dragover', dragOver);
+	root.addEventListener('drop',     drop);
+	root.addEventListener('paste',    paste);
 
-	document.addEventListener('dragstart',  e => window.q9DragInside = true );
-	document.addEventListener('mouseleave', e => window.q9DragInside = false );
+	root.addEventListener('dragstart',  e => window.q9DragInside = true );
+	root.addEventListener('mouseleave', e => window.q9DragInside = false );
 
-	document.addEventListener('input', e => {
+	root.addEventListener('input', e => {
 		if (window.q9DragInside) {
 			// input while drop from drag inside;
 			// chrome dont fire drop if dragover is not canceled
@@ -91,36 +92,36 @@
 		}
 		window.q9DragInside = false;
 	});
-}
 
-// contents
-document.addEventListener('dragover', e=>{
-	const el = e.target.closest('.qgCmsCont');
-	if (!el) return;
-	e.stopPropagation();
-	e.preventDefault();
-});
-document.addEventListener('drop', e=>{
-	const pid = cms.el.pid(e.target);
-	if (!pid) return;
-	e.stopPropagation();
-	e.preventDefault();
-	const dt = new q9DataTransfer(e.dataTransfer);
-	function complete() { $fn('page::reload')(pid).run(); }
-	if (dt.files.length) {
-		for (let i=0, file; file=dt.files[i++];) {
-			cms.cont(pid).upload(file,complete);
-		}
-	} else {
-		const fileUrl = dt.getFileUrl();
-		if (!fileUrl) return;
-		if (fileUrl.match(location.host)) {
-			const intern = fileUrl.match(/dbFile\/([0-9]+)\//)[1];
-			if (intern) {
-				$fn('page::addDbFile')(pid, intern).run(complete);
-				return;
+	// contents
+	root.addEventListener('dragover', e=>{
+		const el = e.target.closest('.qgCmsCont');
+		if (!el) return;
+		e.stopPropagation();
+		e.preventDefault();
+	});
+	root.addEventListener('drop', e=>{
+		const pid = cms.el.pid(e.target);
+		if (!pid) return;
+		e.stopPropagation();
+		e.preventDefault();
+		const dt = new q9DataTransfer(e.dataTransfer);
+		function complete() { $fn('page::reload')(pid).run(); }
+		if (dt.files.length) {
+			for (let i=0, file; file=dt.files[i++];) {
+				cms.cont(pid).upload(file,complete);
 			}
+		} else {
+			const fileUrl = dt.getFileUrl();
+			if (!fileUrl) return;
+			if (fileUrl.match(location.host)) {
+				const intern = fileUrl.match(/dbFile\/([0-9]+)\//)[1];
+				if (intern) {
+					$fn('page::addDbFile')(pid, intern).run(complete);
+					return;
+				}
+			}
+			$fn('page::FileAdd')(pid, fileUrl).run(complete);
 		}
-		$fn('page::FileAdd')(pid, fileUrl).run(complete);
-	}
-});
+	});
+}
