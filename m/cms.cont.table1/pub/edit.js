@@ -1,46 +1,43 @@
 /* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
-$(function() {
-	var handles = new qgTableHandles();
-	var els = handles.els;
-	var active, pid;
-
-	$(document).on('focus','.-m-cms-cont-table1 > table > tbody > tr > td', function(e) {
-		active = this;
+'use strict';
+c1.c1Use('tableHandles',function(){
+	var handles = new c1.tableHandles();
+	var active, pid, doc = document;
+	doc.addEventListener('focus', e=>{
+		let el = e.target.closest('.-m-cms-cont-table1 > table > tbody > tr > td');
+		if (!el) return;
+		active = el;
 		handles.showTd(active);
 		pid = cms.el.pid(active);
-	});
-	$(document).on('blur','.-m-cms-cont-table1 > table > tbody > tr > td', function(e) {
+	},true);
+	doc.addEventListener('blur', e=>{
 		handles.hide();
-	});
-	els.rowRem.on('click', function() {
-		$('#cmsContentWindow').focus(); // to save the text!!
+	},true);
+	handles.rowRemove.addEventListener('click',()=>{
 		var row = active.parentNode.rowIndex;
-		document.activeElement.blur();
-		$fn('page::api')(pid,{do:'rowRem',row:row});
+		doc.activeElement.blur();
+		$fn('page::api')(pid,{do:'rowRem',row});
 	});
-	els.rowAddAfter.on('click', function() {
-		$('#cmsContentWindow').focus();
+	handles.rowAdd.addEventListener('click', ()=>{
 		var row = active.parentNode.rowIndex;
-		document.activeElement.blur();
-		$fn('page::api')(pid,{do:'rowAddAfter',row:row});
+		doc.activeElement.blur();
+		$fn('page::api')(pid,{do:'rowAddAfter',row});
 	});
-	els.colRem.on('click', function() {
-		$('#cmsContentWindow').focus();
+	handles.colRemove.addEventListener('click',()=>{
 		var col = active.cellIndex;
-		document.activeElement.blur();
-		$fn('page::api')(pid,{do:'colRem',col:col});
+		doc.activeElement.blur();
+		$fn('page::api')(pid,{do:'colRem',col});
 	});
-	els.colAddRight.on('click', function() {
-		$('#cmsContentWindow').focus();
+	handles.colAdd.addEventListener('click',()=>{
 		var col = active.cellIndex;
-		document.activeElement.blur();
-		$fn('page::api')(pid,{do:'colAddRight',col:col});
+		doc.activeElement.blur();
+		$fn('page::api')(pid,{do:'colAddRight',col});
 	});
 });
 
 cms.initCont('cms.cont.table1',function(el){
 	// past tables
-	el.addEventListener('paste',function(e){
+	el.addEventListener('paste',e=>{
 		if (e.clipboardData.types.includes('text/html')) {
 			var html = e.clipboardData.getData('text/html');
 			html = html.replace(/([\s\S]*)<body>/,'');
@@ -68,7 +65,7 @@ cms.initCont('cms.cont.table1',function(el){
 						targetTd = targetTr.children[startCellIndex];
 					}
 				}
-			})
+			});
 		}
-	})
-})
+	});
+});

@@ -108,7 +108,6 @@ qg::on('deliverHtml', function(){
 		html::addJSFile( sysURL.'core/js/qgCalendar/qgDateInput.js',     'cms/edit', true, 'defer');
 		html::addJSFile( sysURL.'core/js/qgCalendar/timepicker/nogray_time_picker.js',   'cms/edit', true, 'defer');
 		html::addCSSFile(sysURL.'core/js/qgCalendar/calendar.css',       'cms/edit');
-		html::addJsFile( sysURL.'core/js/qg/tableHandles.js',            'cms/edit', true, 'defer');
 		html::addJSFile( sysURL.'cms/pub/js/rte.js',                     'cms/edit', true, 'defer');
 		html::addJSFile( sysURL.'cms/pub/js/dropPaste.js',               'cms/edit', true, 'defer');
 		html::addJSFile( sysURL.'cms/pub/js/dropPasteHelper.js',         'cms/edit', true, 'defer');

@@ -100,7 +100,7 @@ body #qgRteToolbar [hidden] {
 	line-height:1.2;
     width:32px;
 	height:32px;
-    padding:5px;
+    padding:5px 8px;
     xpadding:16px;
     outline:.5px solid #444;
     margin:.5px;
@@ -110,13 +110,19 @@ body #qgRteToolbar [hidden] {
 }
 
 #qgRteToolbar .-item.-select {
-    width:61px;
+    width:65px;
 	position:relative;
+    padding:5px;
     flex:1 1 auto;
 }
 #qgRteToolbar .-item.-select > div {
 	padding:4px 3px 3px 3px;
 }
+#qgRteToolbar .-item.-button {
+    width:auto;
+    flex:auto;
+}
+
 #qgRteToolbar .-state {
 	max-width:125px;
 	overflow:hidden;

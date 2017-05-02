@@ -1,3 +1,4 @@
+/* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
 'use strict';
 /*
 let x = my.setItem('Bold',
@@ -15,16 +16,16 @@ x.addEventListener('mousedown', function() {
 	});
 });
 */
-Rte.ui.setItem('Bold', 					{cmd:'bold',	shortcut:'b'} );
-Rte.ui.setItem('Italic', 				{cmd:'italic',	shortcut:'i'} );
+Rte.ui.setItem('Bold', 					{cmd:'bold',		shortcut:'b', enable:':not(img)'} );
+Rte.ui.setItem('Italic', 				{cmd:'italic',		shortcut:'i', enable:':not(img)'} );
 Rte.ui.setItem('Insertunorderedlist',	{cmd:'insertunorderedlist',shortcut:'8'});
 Rte.ui.setItem('Insertorderedlist',		{cmd:'insertorderedlist',shortcut:'9'});
-Rte.ui.setItem('Underline', 			{cmd:'underline',shortcut:'u'});
+Rte.ui.setItem('Underline', 			{cmd:'underline',	shortcut:'u', enable:':not(img)'});
 Rte.ui.setItem('Undo', 					{cmd:'undo',	check:false});
 Rte.ui.setItem('Redo', 					{cmd:'redo',	check:false});
 Rte.ui.setItem('Unlink', 				{cmd:'unlink',	check:false});
 Rte.ui.setItem('Hr', 					{cmd:'inserthorizontalrule', check:false});
-Rte.ui.setItem('Strikethrough', 		{cmd:'strikethrough'});
+Rte.ui.setItem('Strikethrough', 		{cmd:'strikethrough', enable:':not(img)'});
 
 /* bred-crumb *
 let list = $('<div style="padding:2px; margin:2px; color:#000; background:linear-gradient(#fff,#ccc); xborder-radius:3px; box-shadow: 0 0 1px #000;">');
@@ -269,7 +270,7 @@ Rte.ui.setItem('LinkTarget', {
 		Rte.active.focus();
 		Rte.fire('elementchange');
 	},
-	el: c1.dom.fragment('<div class=-item style="width:auto">link in neuem Fenster</div>').firstChild
+	el: c1.dom.fragment('<div class="-item -button">Link in neuem Fenster</div>').firstChild
 });
 { /* Titletag */
 	let el = c1.dom.fragment('<table style="clear:both"><tr><td style="width:84px">Titel<td><input>').firstChild;
@@ -318,17 +319,11 @@ Rte.ui.setItem('ImgOriginal', {
 	enable: 'img',
 	click(e) {
 		let img = Rte.element;
-		let url = img.getAttribute('src').replace(/\/(w|h|zoom|vpos|hpos)-[^\/]+/g,'');
-		if (e.target.classList.contains('-ret')) {
-			ImageRealSize(url, function(w,h) {
-				w /= 2; h /= 2;
-				// vorgängig wird dem Server per Cookie mitteilt, dass er er die doppelte Auflösung ausliefern soll
-				new dbFile(Rte.element).set('w',w).set('h',h).set('max',0);
-				make(w,h);
-			});
-		} else {
-			make('auto', 'auto');
-		}
+		let url = img.getAttribute('src').replace(/\/(w|h|zoom|vpos|hpos|dpr)-[^\/]+/g,'');
+		ImageRealSize(url, function(w,h) {
+			w /= 2; h /= 2; // vorgängig wird dem Server per Cookie mitteilt, dass er er die doppelte Auflösung ausliefern soll
+			make(w,h);
+		});
 		function make(w,h) { // todo: c1-ratio
 			img.setAttribute('src',url);
 			img.setAttribute('width',w);
@@ -340,17 +335,13 @@ Rte.ui.setItem('ImgOriginal', {
 			Rte.fire('elementchange');
 		}
 	},
-	el: c1.dom.fragment('<div><div style="display:flex;">'+
-		  '<span class="-item"       style="width:auto" title="Originalgrösse">Original</span> '+
-		  '<span class="-item -ret"  style="width:auto" title="Halbe Grösse">Retina</span> '+
-		'</div><div>').firstChild
+	el: c1.dom.fragment('<span class="-item -button" title="Originalgrösse">Originalbild</span>').firstChild
 });
 
 /* table handles */
-document.addEventListener('DOMContentLoaded',function(){
-//{
+c1.c1Use('tableHandles', tH=>{
 	let td, tr, table, index;
-	let handles = new qgTableHandles();
+	let handles = new tH();
 	Rte.on('deactivate',() => handles.hide() );
 	function positionize() {
 		let e = Rte.element;
@@ -366,33 +357,31 @@ document.addEventListener('DOMContentLoaded',function(){
 		}
 	}
 	Rte.on('elementchange activate', positionize);
-	handles.els.rowRem.on('click', function() {
-		tr.remove();
-		finish();
-	});
-	handles.els.rowAddAfter.on('click', ()=>{
-		let tr2 = tr.cloneNode(true);
-		tr.after(tr2)
-		finish();
-	});
-	handles.els.colRem.on('click', ()=>{
-		let trs = table.c1FindAll('> * > tr');
-		for (let tr of trs) tr.children[index].remove();
-		finish();
-	});
-	handles.els.colAddRight.on('click', ()=>{
-		let trs = table.c1FindAll('> * > tr');
-		for (let tr of trs) {
-			let td = c1.dom.fragment('<td>&nbsp;</td>');
-			tr.children[index].after(td);
+	handles.root.addEventListener('click',e=>{
+		if (e.target.classList.contains('-rowRemove')) {
+			tr.remove();
 		}
+		if (e.target.classList.contains('-rowAdd')) {
+			let tr2 = tr.cloneNode(true);
+			tr.after(tr2)
+		}
+		if (e.target.classList.contains('-colRemove')) {
+			let trs = table.c1FindAll('> * > tr');
+			for (let tr of trs) tr.children[index].remove();
+		}
+		if (e.target.classList.contains('-colAdd')) {
+			let trs = table.c1FindAll('> * > tr');
+			for (let tr of trs) {
+				let td = c1.dom.fragment('<td>&nbsp;</td>');
+				tr.children[index].after(td);
+			}
+		}
+		let hasTds = table.c1FindAll('> * > tr > *').length;
+		!hasTds && table.remove();
+		getSelection().modify('move', 'right', 'character'); // chrome bug
+		getSelection().modify('move', 'left', 'character');
 		Rte.checkSelection();
 	});
-	function finish(){
-		let hasTd = table.c1FindAll('> * > tr > *').length;
-		!hasTd && table.remove();
-		Rte.checkSelection();
-	}
 });
 
 Rte.ui.config = {

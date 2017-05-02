@@ -28,10 +28,9 @@
     vertical-align:middle;
 }
 
-
 /*
 baseline aligning, would be the perfect solution - but...
 ugly hack for ff
-safari 9 unfixable, textarea baseline is at the bottom, newer safari not tested
-http://jsbin.com/zijoqecano/1/edit?html,css,output
+safari works if textarea has content or a placeholder!!
+http://jsbin.com/topobayatu/1/edit?html,css,output
 */

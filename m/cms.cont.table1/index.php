@@ -2,7 +2,6 @@
 namespace qg;
 
 if ($Cont->edit) {
-	html::addJsFile(sysURL.'core/js/qg/tableHandles.js');
 	html::addJsFile($Cont->modUrl.'pub/edit.js');
 }
 
