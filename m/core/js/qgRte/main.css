@@ -42,7 +42,6 @@
     flex-flow:wrap;
     box-sizing: border-box;
 }
-
 #qgRteToolbar .-more {
     color:#fff;
     display:none;

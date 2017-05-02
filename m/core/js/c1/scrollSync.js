@@ -86,13 +86,13 @@
     c1.scrollSync.getSelector = function(el){
         let doc = el.ownerDocument;
         let selector = '';
-        let root = el.closest('[id]') || doc.body;
+        let root = el.closest('[id]') || doc.documentElement;
         var looped = el;
         while (looped != root) {
             selector = ' > '+looped.tagName.toLowerCase()+':nth-of-type('+countPrevSiblings(looped)+')' + selector;
             looped = looped.parentNode;
         }
-        selector = (root === doc.body ? 'body' : '#'+root.id) + selector;
+        selector = (root === doc.documentElement ? 'html' : '#'+root.id) + selector;
         return selector;
     }
     function countPrevSiblings(el){

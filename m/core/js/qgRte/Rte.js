@@ -17,9 +17,9 @@ Rte = {
 
 		/* use compareBoundaryPoints? (god example: http://help.dottoro.com/ljxgoxcb.php) */
 		var same = newRange.startContainer === Rte.rangeStaticValues.startContainer
-					&& newRange.startOffset === Rte.rangeStaticValues.startOffset
-					&& newRange.endContainer === Rte.rangeStaticValues.endContainer
-					&& newRange.endOffset === Rte.rangeStaticValues.endOffset;
+				&& newRange.startOffset === Rte.rangeStaticValues.startOffset
+				&& newRange.endContainer === Rte.rangeStaticValues.endContainer
+				&& newRange.endOffset === Rte.rangeStaticValues.endOffset;
 		if (same) return;
 		Rte.range = newRange;
 		Rte.rangeStaticValues = c1.ext(newRange);
@@ -76,10 +76,10 @@ Rte = {
 		var activate = function() {
 			Rte.dontBlur = true;
 			var gMousedown = function(e) {
-				if (el===e.target || $.contains(el,e.target)) return;
+				if (el.contains(e.target)) return;
 				document.removeEventListener('mousedown',gMousedown);
 				Rte.dontBlur = false;
-				if (Rte.active===e.target || $.contains(Rte.active,e.target)) return;
+				if (Rte.active.contains(e.target)) return;
 				Rte.fire('deactivate');
 	            Rte.active = false;
 			};
@@ -122,20 +122,23 @@ Rte = {
             if (!Rte.isTarget(e.target)) return;
 	        Rte.checkSelection();
 		},true);
-		root.addEventListener('beforeunload',()=>{ // blur before unload (save)
-            //$.ajaxSetup({async:false});
-			Rte.active && $(Rte.active).trigger('blur');
+		root.addEventListener('beforeunload',()=>{ // blur before unload (save), needed?
+			if (Rte.active) {
+				Rte.active.blur();
+				// let event = new Event('blur',{'bubbles': true,'cancelable': true});
+				// Rte.active.dispatchEvent(event);
+			}
 		},true);
 	}
 };
 c1.ext(qg.Eventer,Rte);
 
-Rte.on('activate', function() {
+//Rte.on('activate', function() {
 	//insertBrOnReturn ?
 	//styleWithCSS ?
 	qgExecCommand('enableObjectResizing', false, false);
 	qgExecCommand('enableInlineTableEditing', false, false); // bug: if i first click in the table the nativ handles appear
-});
+//});
 
 //ie: prevent resizable handle bug: if i move the image, it will show the handles
 document.addEventListener('mouseup', e=>{

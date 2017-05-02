@@ -59,9 +59,7 @@ function getPossibleClasses(el) { /* eventuell better performance? */
 		}
 		if (sheet.href === null) {
 			try {
-				if (sheet.ownerNode.innerHTML === '') { // adblock chrome
-					continue;
-				}
+				if (sheet.ownerNode.innerHTML === '') continue; // adblock chrome
 			} catch(e) { }
 		}
         try { // (not same domain) security error in ff

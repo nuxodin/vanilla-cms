@@ -168,7 +168,7 @@ Rte.ui.setItem( 'Tree', {
 			'<textarea spellcheck=false class=c1Rst></textarea>'+
 			'<style>'+
 			'	#qgRteHtml { transition:all .3s; transform:translateY(100%); opacity:0; position:fixed; border:2px solid black; top:40%; left:1%; bottom:1%; right:1%; background:#fff; color:#000; margin:auto; box-shadow:0 0 20px} '+
-			'	#qgRteHtml > textarea { position:absolute; top:0; left:0; right:0; bottom:0; width:100%; font:11px monospace; } '+
+			'	#qgRteHtml > textarea { position:absolute; top:0; left:0; right:0; bottom:0; width:100%; height:100%; font:11px monospace; } '+
 			'	html:hover #qgRteHtml { opacity:1; transform:translateX(0) } '+
 			'</style>'+
 		'</div>'
@@ -317,31 +317,33 @@ Rte.ui.setItem('LinkTarget', {
 Rte.ui.setItem('ImgOriginal', {
 	enable: 'img',
 	click(e) {
-       let $img = $(Rte.element);
-       let url = $img.attr('src').replace(/\/(w|h|zoom|vpos|hpos)-[^\/]+/g,'');
-	   if (e.target.classList.contains('-ret')) {
-          ImageRealSize(url, function(w,h) {
-              w /= 2; h /= 2;
-              // vorgängig wird dem Server per Cookie mitteilt, dass er er die doppelte Auflösung ausliefern soll
-              new dbFile(Rte.element).set('w',w).set('h',h).set('max',0);
-              make(w,h);
-          });
-       } else {
-          make('auto', 'auto');
-       }
-       function make(w,h) { // todo: c1-ratio
-          $img.attr('src',url)
-          .attr({width:w,height:h})
-          .css({width:w,height:h});
-		  Rte.element.dispatchEvent(new Event('qgResize',{bubbles:true})); // new
-          Rte.fire('input');
-		  Rte.fire('elementchange');
-       }
+		let img = Rte.element;
+		let url = img.getAttribute('src').replace(/\/(w|h|zoom|vpos|hpos)-[^\/]+/g,'');
+		if (e.target.classList.contains('-ret')) {
+			ImageRealSize(url, function(w,h) {
+				w /= 2; h /= 2;
+				// vorgängig wird dem Server per Cookie mitteilt, dass er er die doppelte Auflösung ausliefern soll
+				new dbFile(Rte.element).set('w',w).set('h',h).set('max',0);
+				make(w,h);
+			});
+		} else {
+			make('auto', 'auto');
+		}
+		function make(w,h) { // todo: c1-ratio
+			img.setAttribute('src',url);
+			img.setAttribute('width',w);
+			img.setAttribute('height',h);
+			img.style.width  = w+'px';
+			img.style.height = h+'px';
+			Rte.element.dispatchEvent(new Event('qgResize',{bubbles:true})); // new
+			Rte.fire('input');
+			Rte.fire('elementchange');
+		}
 	},
 	el: c1.dom.fragment('<div><div style="display:flex;">'+
-		  '<span class="-item"       style="width:61px" title="Originalgrösse">Original</span> '+
-		  '<span class="-item -ret"  style="width:61px" title="Halbe Grösse">Retina</span> '+
-        '</div><div>').firstChild
+		  '<span class="-item"       style="width:auto" title="Originalgrösse">Original</span> '+
+		  '<span class="-item -ret"  style="width:auto" title="Halbe Grösse">Retina</span> '+
+		'</div><div>').firstChild
 });
 
 /* table handles */
@@ -349,43 +351,48 @@ document.addEventListener('DOMContentLoaded',function(){
 //{
 	let td, tr, table, index;
 	let handles = new qgTableHandles();
-	Rte.on('deactivate',function(){
-		handles.hide();
-	});
-	let positionize = function() {
+	Rte.on('deactivate',() => handles.hide() );
+	function positionize() {
 		let e = Rte.element;
 		if (!e) return;
-		td = $(e).closest('td')[0];
-		if (Rte.active && Rte.active.contains(td)) {
-			tr = $(td).parent();
-			table = $(tr).closest('table');
+		td = e.closest('td');
+		if (Rte.active.contains(td)) {
+			tr = td.parentNode;
+			table = tr.closest('table');
 			index = td.cellIndex;
 			handles.showTd(td);
 		} else {
 			handles.hide();
 		}
-	};
+	}
 	Rte.on('elementchange activate', positionize);
 	handles.els.rowRem.on('click', function() {
 		tr.remove();
+		finish();
+	});
+	handles.els.rowAddAfter.on('click', ()=>{
+		let tr2 = tr.cloneNode(true);
+		tr.after(tr2)
+		finish();
+	});
+	handles.els.colRem.on('click', ()=>{
+		let trs = table.c1FindAll('> * > tr');
+		for (let tr of trs) tr.children[index].remove();
+		finish();
+	});
+	handles.els.colAddRight.on('click', ()=>{
+		let trs = table.c1FindAll('> * > tr');
+		for (let tr of trs) {
+			let td = c1.dom.fragment('<td>&nbsp;</td>');
+			tr.children[index].after(td);
+		}
 		Rte.checkSelection();
 	});
-	handles.els.rowAddAfter.on('click', function() {
-		tr.clone().insertAfter(tr);
+	function finish(){
+		let hasTd = table.c1FindAll('> * > tr > *').length;
+		!hasTd && table.remove();
 		Rte.checkSelection();
-	});
-	handles.els.colRem.on('click', function() {
-		$.each(table.children('tbody')[0].children, function() {
-			$(this.children[index]).remove();
-		});
-		Rte.checkSelection();
-	});
-	handles.els.colAddRight.on('click', function() {
-		$.each(table.children('tbody')[0].children, function() {
-			$('<td>&nbsp;</td>').insertAfter(this.children[index]);
-		});
-		Rte.checkSelection();
-	});
+	}
 });
 
 Rte.ui.config = {
