@@ -49,12 +49,6 @@
     if (!('devicePixelRatio' in window)) window.devicePixelRatio = ('systemXDPI' in screen) ? screen.systemXDPI / screen.logicalXDPI : 1;
     if (window.devicePixelRatio) document.cookie = "q1_dpr=" + devicePixelRatio + "; path=/";
 
-    window.qgReplaceNode = function (el, nel) {
-    	el.parentNode.insertBefore(nel, el);
-    	nel.appendChild(el);
-    	el.removeNode();
-    	return nel;
-    }
     window.ImageRealSize = function() {
         var cache = {}, undef;
         return function (url, cb) {

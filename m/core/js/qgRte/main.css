@@ -29,9 +29,13 @@
     color:#fff;
     max-width:264px;
     transition:top .14s;
-    transition-property:top, left;
+    transition-property:top, left, opacity;
     will-change:top, left;
     padding:1px;
+
+    xtop:0;
+	xleft:0;
+    xtransition-property:transform, opacity;
 }
 #qgRteToolbar > div {
     display:flex;
@@ -141,7 +145,7 @@ body #qgRteToolbar [hidden] {
 	width:auto !important;
 	border-bottom:1px solid #eee;
 }
-#qgRteToolbar .-options > .selected {
+#qgRteToolbar .-options > .-selected {
 	background-color:#49F;
 	color:#fff;
 }

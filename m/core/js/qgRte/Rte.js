@@ -1,7 +1,7 @@
 Rte = {
-	range : {}
-	,rangeStaticValues : {}
-	,checkSelection() {
+	range : {},
+	rangeStaticValues : {},
+	checkSelection() {
 		/*
 		 * Problem:
 		 * Es sollte auch nach neuem element geprüft werden wenn eltern elemente geändert werden
@@ -31,16 +31,14 @@ Rte = {
 			tmp = Rte.range.commonAncestorContainer.data !== undefined ? Rte.range.commonAncestorContainer.parentNode : Rte.range.commonAncestorContainer;
 		}
 		var newElement = tmp;
-		if (newElement === Rte.active) {
-			newElement = false;
-		}
+		if (newElement === Rte.active) newElement = false;
 		if (Rte.element !== newElement) {
 			Rte.element = newElement;
 			Rte.fire('elementchange');
 		}
 		Rte.fire('selectionchange');
-	}
-	,manipulate(fn) {
+	},
+	manipulate(fn) {
 		setTimeout(function() {
 			var s = getSelection(); s.removeAllRanges(); s.addRange(Rte.range);
 			fn && fn();
@@ -48,8 +46,8 @@ Rte = {
 	        Rte.fire('input');
 			Rte.active.focus(); // firefox
 		}, 80);
-	}
-	,modifySelection(fn) {
+	},
+	modifySelection(fn) {
 		var els = [Rte.element];
 		if (!Rte.range.collapsed) {
 			if (rangeIsElement(Rte.range)) {
@@ -73,8 +71,8 @@ Rte = {
 			s.addRange(Rte.range);
 			Rte.checkSelection();
 		},90);
-	}
-	,addUiElement(el) {
+	},
+	addUiElement(el) { // really needed?
 		var activate = function() {
 			Rte.dontBlur = true;
 			var gMousedown = function(e) {
@@ -88,28 +86,28 @@ Rte = {
 			document.addEventListener('mousedown',gMousedown);
 		};
 		el.addEventListener('mousedown',activate);
-	}
-	,isTarget(el) {
+	},
+	isTarget(el) {
 		return el.isContentEditable && el.tagName!=='INPUT' && el.tagName!=='TEXTAREA' && el.tagName!=='SELECT';
-	}
-	,init() {
+	},
+	init() {
 		var root = window;
-		root.addEventListener('focus',function(e) {
+		root.addEventListener('focus',e=>{
 	        if (!Rte.isTarget(e.target)) return;
-	        if (Rte.active!==e.target) {
+	        if (Rte.active !== e.target) {
 		        Rte.active = e.target;
 	            Rte.fire('activate');
 		        Rte.checkSelection();
 	        }
 		},true);
-		root.addEventListener('blur',function(e) {
+		root.addEventListener('blur',e=>{
 	        if (!Rte.isTarget(e.target)) return;
 	        if (!Rte.dontBlur && Rte.active) {
 	            Rte.fire('deactivate');
 	            Rte.active = false;
 	        }
 		},true);
-		root.addEventListener('keyup',function(e) {
+		root.addEventListener('keyup',e=>{
 	        if (!Rte.isTarget(e.target)) return;
 			if (e.which === 27) {
 				document.body.focus();
@@ -120,15 +118,14 @@ Rte = {
 	        Rte.checkSelection();
 	        Rte.fire('input',e);
 		},true);
-		root.addEventListener('mouseup',function(e) {
+		root.addEventListener('mouseup',e=>{
             if (!Rte.isTarget(e.target)) return;
 	        Rte.checkSelection();
 		},true);
-		root.addEventListener('beforeunload',function() { // blur before unload (save)
+		root.addEventListener('beforeunload',()=>{ // blur before unload (save)
             //$.ajaxSetup({async:false});
 			Rte.active && $(Rte.active).trigger('blur');
 		},true);
-		setTimeout(function() { Rte.fire('ready'); },100); // todo
 	}
 };
 c1.ext(qg.Eventer,Rte);
@@ -162,9 +159,9 @@ Rte.init();
 
 
 { // cleaner
-    let Cleaner;
+	let Cleaner;
 	Rte.on('input', function() {
-	    Cleaner = Cleaner || (new c1.NodeCleaner());
+		if (!Cleaner) Cleaner = new c1.NodeCleaner();
 		Cleaner.cleanContents(Rte.active,true);
 	});
 }

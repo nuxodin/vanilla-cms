@@ -125,19 +125,13 @@ c1.Placer = class {
             x += pageXOffset;
             y += pageYOffset;
         }
-        this.el.style.top  = y + 'px';
-        this.el.style.left = x + 'px';
 
-        /* todo if absolute
-        this.el.style.top  = y + pageYOffset + 'px';
-        this.el.style.left = x + pageXOffset + 'px';
-        */
-
-        /* use transform
-        this.el.style.top  = '0';
-        this.el.style.left = '0';
-        this.el.style.transform = 'translate('+x+'px, '+y+'px)';
-        */
+        if (this.options.use === 'transform') {
+            this.el.style.transform  = 'translate('+x+'px,'+y+'px)';
+        } else {
+            this.el.style.top  = y + 'px';
+            this.el.style.left = x + 'px';
+        }
     }
     static offsetParent(el){
         var parent = el.offsetParent;

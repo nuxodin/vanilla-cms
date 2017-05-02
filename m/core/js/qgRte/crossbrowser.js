@@ -91,23 +91,26 @@ window.qgSelection = {
 	rect() {
 		let r = getSelection().getRangeAt(0);
 		let pos = r.getBoundingClientRect();
-		if (pos.top===0 && r.getClientRects) {
-			pos = r.getClientRects()[0];
+		if (r.collapsed && pos.top===0 && pos.left ===0) { // bug in chrome, webkit
+			let tmpNode = document.createTextNode('l');
+			r.insertNode(tmpNode);
+			pos = r.getBoundingClientRect();
+			tmpNode.remove();
 		}
 		return pos;
 	}
 };
 
 // if contenteditable inside a link
-document.addEventListener('click', function(e) {
+document.addEventListener('click', e=>{
 	if (e.button !== 0) return;
 	if (!e.target.isContentEditable) return;
 	e.preventDefault(); // inside links
 });
 // img selectable (webkit,blink) and resize handles
-document.addEventListener('mousedown', function(e) {
-	if (e.button!==0) return;
-	if (e.target.isContentEditable && e.target.tagName==='IMG') {
+document.addEventListener('mousedown', e=>{
+	if (e.button !== 0) return;
+	if (e.target.isContentEditable && e.target.tagName === 'IMG') {
 		qgSelection.toElement(e.target);
 		qgImageResizeUi(e);
 	}

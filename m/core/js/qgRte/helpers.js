@@ -53,25 +53,26 @@ function getPossibleClasses(el) { /* eventuell better performance? */
 			ret[x] = 1;
 		}
 	};
-	$.each(document.styleSheets, function(i, sheet) {
+	for (let sheet of document.styleSheets) {
 		if (sheet.href && sheet.href.indexOf(location.host) === -1) { // only inline and same domain
-			return;
+			continue;
 		}
 		if (sheet.href === null) {
 			try {
 				if (sheet.ownerNode.innerHTML === '') { // adblock chrome
-					return;
+					continue;
 				}
 			} catch(e) { }
 		}
         try { // (not same domain) security error in ff
     		var rules = sheet.rules || sheet.cssRules;
-            rules && $.each(rules, function(i, rule) {
-    			if (!rule.selectorText) return;
-    			rule.selectorText.split(',').forEach(test);
-    		});
+			if (rules)
+				for (let rule of rules) {
+					if (!rule.selectorText) continue;
+	    			rule.selectorText.split(',').forEach(test);
+				}
         } catch(e) { console.log(e); }
-	});
+	}
 	return ret;
 }
 

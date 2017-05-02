@@ -161,16 +161,18 @@ class Page {
 					$class .= ' '.$name;
 
 		if ($this->edit) $class .= ' -e';
-		$id = '';
+		$attr = '';
 		if ($this->vs['type']==='c' && $this->vs['visible']) {
-			$id = ' id="'.hee(substr($this->urlSeo(L()), 1)).'"';
+			$attr = ' id="'.hee(substr($this->urlSeo(L()), 1)).'"';
 		}
+		// $attr .= ' vcms-id='.$this->id; // future
+		// $attr .= ' vcms-mod='.$this->vs['module'];
 		$done = null;
-		$ret = preg_replace('/^<([^>]+)class=("([^"]*)"|([^\s>]*))/','<$1class="$3$4 '.$class.'"'.$id, $str, 1, $done);
+		$ret = preg_replace('/^<([^>]+)class=("([^"]*)"|([^\s>]*))/','<$1class="$3$4 '.$class.'"'.$attr, $str, 1, $done);
 		if ($done) return $ret;
-		$ret = preg_replace('/^<([^\s>]+)([\s]?)/','<$1 class="'.$class.'"'.$id.'$2', $str, 1, $done);
+		$ret = preg_replace('/^<([^\s>]+)([\s]?)/','<$1 class="'.$class.'"'.$attr.'$2', $str, 1, $done);
 		if ($done) return $ret;
-		return '<div class="'.$class.'"'.$id.'>'.$ret.'</div>';
+		return '<div class="'.$class.'"'.$attr.'>'.$ret.'</div>';
 	}
 	function getRaw($vars=[]) {
 	   	if (!$this->is) { trigger_error('Seite existiert nicht!'); return; }

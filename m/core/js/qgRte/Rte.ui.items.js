@@ -1,327 +1,347 @@
-Rte.on('ready', function() {
-	'use strict';
-
-	Rte.ui.setItem('Bold', 					{cmd:'bold',	shortcut:'b'} );
-	/*
-	var x = my.setItem('Bold',
-		{
-			shortcut:'l'
+'use strict';
+/*
+let x = my.setItem('Bold',
+	{
+		shortcut:'l'
+	}
+);
+x.addEventListener('mousedown', function() {
+	Rte.modifySelection(function(els) {
+		let first = $(els[1]||els[0]);
+		let act = first.hasClass('SmallText') ? 'removeClass' : 'addClass';
+		for (let i = els.length, el; el = els[--i];) {
+			$(el)[act]('SmallText');
 		}
-	);
-	x.addEventListener('mousedown', function() {
-		Rte.modifySelection(function(els) {
-			var first = $(els[1]||els[0]);
-			var act = first.hasClass('SmallText') ? 'removeClass' : 'addClass';
-			for (var i = els.length, el; el = els[--i];) {
-				$(el)[act]('SmallText');
-			}
+	});
+});
+*/
+Rte.ui.setItem('Bold', 					{cmd:'bold',	shortcut:'b'} );
+Rte.ui.setItem('Italic', 				{cmd:'italic',	shortcut:'i'} );
+Rte.ui.setItem('Insertunorderedlist',	{cmd:'insertunorderedlist',shortcut:'8'});
+Rte.ui.setItem('Insertorderedlist',		{cmd:'insertorderedlist',shortcut:'9'});
+Rte.ui.setItem('Underline', 			{cmd:'underline',shortcut:'u'});
+Rte.ui.setItem('Undo', 					{cmd:'undo',	check:false});
+Rte.ui.setItem('Redo', 					{cmd:'redo',	check:false});
+Rte.ui.setItem('Unlink', 				{cmd:'unlink',	check:false});
+Rte.ui.setItem('Hr', 					{cmd:'inserthorizontalrule', check:false});
+Rte.ui.setItem('Strikethrough', 		{cmd:'strikethrough'});
+
+/* bred-crumb *
+let list = $('<div style="padding:2px; margin:2px; color:#000; background:linear-gradient(#fff,#ccc); xborder-radius:3px; box-shadow: 0 0 1px #000;">');
+Rte.ui.setItem( 'Tree', {
+	el:list[0],
+	//enable(el) {  },
+	check(el) {
+		list.html('');
+		if (el===Rte.active) return;
+		$(el).parentsUntil(Rte.active).addBack().each(function(i,el) {
+			let btn = $('<span style="border-right:1px solid #bbb; padding:1px 3px; cursor:pointer">'+el.tagName+'</span>')
+			.on({
+				click() {
+					qgSelection.toChildren(el);
+					Rte.checkSelection();
+				},
+				mouseover(e) {
+					$('.tmp-rgRteMarked').removeClass('tmp-rgRteMarked');
+					$(el).addClass('tmp-rgRteMarked');
+					e.stopPropagation();
+				}
+			});
+			list.append(btn);
 		});
-	});
-	*/
-	Rte.ui.setItem('Italic', 				{cmd:'italic',	shortcut:'i'} );
-	Rte.ui.setItem('Insertunorderedlist',	{cmd:'insertunorderedlist',shortcut:'8'});
-	Rte.ui.setItem('Insertorderedlist',		{cmd:'insertorderedlist',shortcut:'9'});
-	Rte.ui.setItem('Underline', 			{cmd:'underline',shortcut:'u'});
-	Rte.ui.setItem('Undo', 					{cmd:'undo',	check:false});
-	Rte.ui.setItem('Redo', 					{cmd:'redo',	check:false});
-	Rte.ui.setItem('Unlink', 				{cmd:'unlink',	check:false});
-	Rte.ui.setItem('Hr', 					{cmd:'inserthorizontalrule', check:false});
-	Rte.ui.setItem('Strikethrough', 		{cmd:'strikethrough'});
-
-	/* bred-crumb *
-	var list = $('<div style="padding:2px; margin:2px; color:#000; background:linear-gradient(#fff,#ccc); xborder-radius:3px; box-shadow: 0 0 1px #000;">');
-	Rte.ui.setItem( 'Tree', {
-		el:list[0],
-		//enable(el) {  },
-		check(el) {
-			list.html('');
-			if (el===Rte.active) return;
-			$(el).parentsUntil(Rte.active).addBack().each(function(i,el) {
-				var btn = $('<span style="border-right:1px solid #bbb; padding:1px 3px; cursor:pointer">'+el.tagName+'</span>')
-				.on({
-					click() {
-						qgSelection.toChildren(el);
-						Rte.checkSelection();
-					},
-					mouseover(e) {
-						$('.tmp-rgRteMarked').removeClass('tmp-rgRteMarked');
-						$(el).addClass('tmp-rgRteMarked');
-						e.stopPropagation();
-					}
-				});
-				list.append(btn);
-			});
-		}
-	});
-
-	/* Headings */
-	var opts = Rte.ui.setSelect('Format',{
+	}
+});
+/* Headings */
+{
+	let opts = Rte.ui.setSelect('Format',{
 		click(e) {
-			var tag = $(e.target).attr('value');
+			let tag = e.target.getAttribute('value');
 			tag && qgExecCommand('formatblock',false,tag);
-			var stat = qgQueryCommandValue('formatblock');
-			opts.children().each(function(i,el) {
-				el.className = el.tagName.toLowerCase()===stat ? 'selected' : '';
-			});
+			let stat = qgQueryCommandValue('formatblock');
+			for (let el of opts.children) {
+				el.className = el.tagName.toLowerCase()===stat ? '-selected' : '';
+			}
 		},
 		check() {
-			var stat = qgQueryCommandValue('formatblock');
-			opts.prev().html( Rte.element ? stat : 'Format' );
+			let stat = qgQueryCommandValue('formatblock');
+			opts.previousElementSibling.innerHTML = Rte.element ? stat : 'Format';
 		}
-	}).html(
-		'<p  value=p >Paragraph</p>'+
-		'<h1 value=h1>Heading 1</h1>'+
-		'<h2 value=h2>Heading 2</h2>'+
-		'<h3 value=h3>Heading 3</h3>'+
-		'<h4 value=h4>Heading 4</h4>'+
-		'<h5 value=h5>Heading 5</h5>'+
-		'<h6 value=h6>Heading 6</h6>'
-	);
+	});
+	opts.innerHTML =
+	'<p  value=p >Paragraph</p>'+
+	'<h1 value=h1>Heading 1</h1>'+
+	'<h2 value=h2>Heading 2</h2>'+
+	'<h3 value=h3>Heading 3</h3>'+
+	'<h4 value=h4>Heading 4</h4>'+
+	'<h5 value=h5>Heading 5</h5>'+
+	'<h6 value=h6>Heading 6</h6>'
+}
+/* CSS classes */
+{
+	function useClass(cl) { return cl.match(/^[A-Z]/); };
+	let hasClasses; /* check if this-handle is used */
+	let check = function(el) {
+		let classes = getPossibleClasses(el);
+		for (let cl of Object.keys(classes)) {
+			hasClasses = hasClasses || useClass(cl);
+		}
+		sopts.parentElement.style.display = hasClasses ? '' : 'none';
+	}.c1Debounce(150);
 
-	/* CSS classes */
-	!function() {
-		var useClass = function(cl) { return cl.match(/^[A-Z]/); };
-		var hasClasses; /* check if this-handle is used */
-		var check = function(el) {
-			var classes = getPossibleClasses(el);
-			$.each(classes,function(cl) {
-				hasClasses = hasClasses || useClass(cl);
-			});
-			sopts.parent()[0].style.display = hasClasses ? '' : 'none';
-		}.c1Debounce(150);
-
-		var sopts = Rte.ui.setSelect('Style', {
-			check() {
-				check();
-				var classes = Rte.element && Rte.element.className.split(' ').filter( useClass ).join(' ') || 'Style';
-				sopts.prev().html( classes );
-			},
-			click() {
-				sopts.empty();
-				var el = qgSelection.isElement() || qgSelection.collapsed() ? Rte.element : null;
-//				if (el === Rte.active) return;
-				$.each(getPossibleClasses(el), function(sty) {
-					if (!useClass(sty)) return;
-					var has = el && $(el).hasClass(sty);
-					var d = $('<div class="option '+sty+'">'+sty+'</div>').appendTo(sopts);
-					has && d.addClass('selected');
-					d[0].onmousedown = function() {
-						Rte.manipulate(function() {
-							if (!el) {
-								el = qgSelection.surroundContents( document.createElement('span') );
-								if ($(el).css('display') === 'block') {
-									el = qgReplaceNode(el,document.createElement('div'));
-									qgSelection.toChildren(el);
-								}
+	let sopts = Rte.ui.setSelect('Style', {
+		check() {
+			check();
+			let classes = Rte.element && Rte.element.className.split(' ').filter(useClass).join(' ') || 'Style';
+			sopts.previousElementSibling.innerHTML = classes;
+		},
+		click() {
+			sopts.innerHTML = '';
+			let el = qgSelection.isElement() || qgSelection.collapsed() ? Rte.element : null;
+			// if (el === Rte.active) return;
+			let classes = getPossibleClasses(el);
+			for (let sty of Object.keys(classes)) {
+				if (!useClass(sty)) return;
+				let has = el && el.classList.contains(sty);
+				let d = c1.dom.fragment('<div class="'+sty+'">'+sty+'</div>').firstChild;
+				sopts.append(d);
+				has && d.classList.add('-selected');
+				d.onmousedown = function() {
+					Rte.manipulate(()=>{
+						if (!el) {
+							el = qgSelection.surroundContents(document.createElement('span'));
+							if (getComputedStyle(el)['display'] === 'block') { // zzz
+								setTimeout(()=>{ throw('used?') })
+								let nEl = document.createElement('div');
+								el.parentNode.replaceChild(nEl, el);
+								qgSelection.toChildren(el);
 							}
-							has ? $(el).removeClass(sty) : el.className += ' '+sty;
-						});
-					};
-					// d.css({
-					// 	fontSize:parseInt(d.css('fontSize')).limit(9,18),
-					// 	margin:parseInt(d.css('margin')).limit(0,4),
-					// 	padding:parseInt(d.css('padding')).limit(0,4),
-					// 	letterSpacing:parseInt(d.css('letterSpacing')).limit(0,11),
-					// 	borderWidth:parseInt(d.css('borderWidth')).limit(0,4)
-					// });
-				});
+						}
+						el.classList.toggle(sty, !has);
+					});
+				};
+				// d.css({
+				// 	fontSize:parseInt(d.css('fontSize')).limit(9,18),
+				// 	margin:parseInt(d.css('margin')).limit(0,4),
+				// 	padding:parseInt(d.css('padding')).limit(0,4),
+				// 	letterSpacing:parseInt(d.css('letterSpacing')).limit(0,11),
+				// 	borderWidth:parseInt(d.css('borderWidth')).limit(0,4)
+				// });
 			}
-		});
-	}();
-
-	/* clean / remove format */
-	function deleteComments(d) {
-	    if (!d) return;
-	    if (d.childNodes) {
-			for (let child of d.childNodes) deleteComments(child);
+		}
+	});
+}
+{ /* clean / remove format */
+	function clean(node) {
+	    if (!node) return;
+	    if (node.childNodes) {
+			for (let child of node.childNodes) clean(child);
 	    }
-	    d.nodeType === 8 && d.remove();
+	    node.nodeType === Node.COMMENT_NODE && node.remove();
+		if (node.nodeType === Node.ELEMENT_NODE) {
+			if (!Rte.active.contains(node)) return;
+			node.removeAttribute('style');
+			node.removeAttribute('class');
+			node.removeAttribute('align');
+			node.removeAttribute('valign');
+			node.removeAttribute('border');
+			node.removeAttribute('cellpadding');
+			node.removeAttribute('cellspacing');
+			node.removeAttribute('bgcolor');
+			['FONT','O:P','SDFIELD','SPAN'].includes(node.tagName) && node.removeNode();
+			if (node.tagName !== 'IMG') {
+				node.removeAttribute('width');
+				node.removeAttribute('height');
+			}
+		}
 	}
 	Rte.ui.setItem('Removeformat', {
 		click(e) {
-			var fn = function(i,el) {
-				if (!$.contains(Rte.active, el)) return;
-				el.removeAttribute('style');
-				el.removeAttribute('class');
-				el.removeAttribute('align');
-				el.removeAttribute('valign');
-				el.removeAttribute('border');
-				el.removeAttribute('cellpadding');
-				el.removeAttribute('cellspacing');
-				el.removeAttribute('bgcolor');
-				['FONT','O:P','SDFIELD','SPAN'].indexOf(el.tagName) !== -1 && el.removeNode();
-				if (el.tagName !== 'IMG') {
-					el.removeAttribute('width');
-					el.removeAttribute('height');
-				}
-			};
-			var root = e.ctrlKey ? Rte.element : Rte.active;
-			fn(0,root);
-			deleteComments(root);
-			$(root).find('*').each(fn);
+			let root = e.ctrlKey ? Rte.element : Rte.active;
+			clean(root);
 		}
 		,shortcut:'space'
 	});
-
-	/* code */
-	{
-		let wrapper = c1.dom.fragment(
-			'<div id=qgRteHtml>'+
-				'<textarea spellcheck=false class=c1Rst></textarea>'+
-				'<style>'+
-				'	#qgRteHtml { transition:all .3s; transform:translateY(100%); opacity:0; position:fixed; border:2px solid black; top:40%; left:1%; bottom:1%; right:1%; background:#fff; color:#000; margin:auto; box-shadow:0 0 20px} '+
-				'	#qgRteHtml > textarea { position:absolute; top:0; left:0; right:0; bottom:0; width:100%; font:11px monospace; } '+
-				'	html:hover #qgRteHtml { opacity:1; transform:translateX(0) } '+
-				'</style>'+
-			'</div>'
-		).firstChild;
-		let html = wrapper.firstChild;
-		let el = Rte.ui.setItem('Code', {
-			click() {
-				let el = Rte.active;
-				let sel = window.getSelection();
-		        if (sel.rangeCount > 0) {
-					var range = sel.getRangeAt(0);
-		            var startTextNode = document.createTextNode('marker_start_so9df8as0f0');
-		            var endTextNode   = document.createTextNode('marker_end_laseg08a0egga');
-					var tmpRange = range.cloneRange();
-		            tmpRange.collapse(false);
-		            tmpRange.insertNode(endTextNode);
-					var tmpRange = range.cloneRange();
-		            tmpRange.collapse(true);
-		            tmpRange.insertNode(startTextNode);
-				}
-				let code = domCodeIndent(el.innerHTML);
-				if (range) {
-					startTextNode.remove();
-					endTextNode.remove();
-
-					let start = code.indexOf('marker_start_so9df8as0f0');
-					code = code.replace('marker_start_so9df8as0f0','');
-					let end = code.indexOf('marker_end_laseg08a0egga');
-					code = code.replace('marker_end_laseg08a0egga','');
-
-					let brsTotal = (code.match(/\n/g)||[]).length;
-					let brs 	 = brsTotal && (code.substr(0,start).match(/\n/g)||[]).length;
-
-					setTimeout(function(){
-						html.focus();
-
-						let y = parseInt((html.scrollHeight / brsTotal)*brs - 250);
-						brs && (html.scrollTop = y);
-
-						html.setSelectionRange(start, end);
-					},10);
-				}
-				html.value = code;
-				html.onkeyup = html.onblur = function(){
-					el.innerHTML = html.value.replace(/\s*\uFEFF\s*/g,'');
-					el.dispatchEvent(new Event('input',{'bubbles':true,'cancelable':true}));
-				}
-				document.body.append(wrapper);
-				wrapper.c1ZTop();
-
-				var hide = function(e) {
-					if (e.which===27 || e.target !== html) {
-						wrapper.remove();
-						document.removeEventListener('keydown',hide);
-						document.removeEventListener('mousedown',hide);
-						el.focus();
-					}
-				};
-				setTimeout(function() {
-					document.addEventListener('keydown',hide);
-					document.addEventListener('mousedown',hide);
-				},3);
-			},
-			shortcut:'h'
-		});
-		el.classList.add('expert');
-	}
-
-	/* insert table */
-	Rte.ui.setItem('Table', {
-		//enable(el) {  },
+}
+{ /* code */
+	let wrapper = c1.dom.fragment(
+		'<div id=qgRteHtml>'+
+			'<textarea spellcheck=false class=c1Rst></textarea>'+
+			'<style>'+
+			'	#qgRteHtml { transition:all .3s; transform:translateY(100%); opacity:0; position:fixed; border:2px solid black; top:40%; left:1%; bottom:1%; right:1%; background:#fff; color:#000; margin:auto; box-shadow:0 0 20px} '+
+			'	#qgRteHtml > textarea { position:absolute; top:0; left:0; right:0; bottom:0; width:100%; font:11px monospace; } '+
+			'	html:hover #qgRteHtml { opacity:1; transform:translateX(0) } '+
+			'</style>'+
+		'</div>'
+	).firstChild;
+	let html = wrapper.firstChild;
+	let el = Rte.ui.setItem('Code', {
 		click() {
-			var table = c1.dom.fragment('<table><tr><td>&nbsp;<td>&nbsp;<tr><td>&nbsp;<td>&nbsp;</table>').firstChild;
-			var r = getSelection().getRangeAt(0);
-			r.deleteContents();
-			r.insertNode(table);
-			getSelection().collapse(table.c1Find('td'),0);
-		}
+			let el = Rte.active;
+			let sel = window.getSelection();
+			let code;
+	        if (sel.rangeCount > 0) {
+				let range = sel.getRangeAt(0);
+	            let startTextNode = document.createTextNode('marker_start_so9df8as0f0');
+	            let endTextNode   = document.createTextNode('marker_end_laseg08a0egga');
+				let tmpRange = range.cloneRange();
+	            tmpRange.collapse(false);
+	            tmpRange.insertNode(endTextNode);
+				tmpRange = range.cloneRange();
+				tmpRange.collapse(true);
+	            tmpRange.insertNode(startTextNode);
+				code = domCodeIndent(el.innerHTML);
+
+				startTextNode.remove();
+				endTextNode.remove();
+
+				let start = code.indexOf('marker_start_so9df8as0f0');
+				code = code.replace('marker_start_so9df8as0f0','');
+				let end = code.indexOf('marker_end_laseg08a0egga');
+				code = code.replace('marker_end_laseg08a0egga','');
+
+				let brsTotal = (code.match(/\n/g)||[]).length;
+				let brs 	 = brsTotal && (code.substr(0,start).match(/\n/g)||[]).length;
+
+				setTimeout(()=>{
+					html.focus();
+
+					let y = parseInt((html.scrollHeight / brsTotal)*brs - 250);
+					brs && (html.scrollTop = y);
+
+					html.setSelectionRange(start, end);
+				},10);
+			} else {
+				code = domCodeIndent(el.innerHTML);
+			}
+			html.value = code;
+			html.onkeyup = html.onblur = function(){
+				el.innerHTML = html.value.replace(/\s*\uFEFF\s*/g,'');
+				el.dispatchEvent(new Event('input',{'bubbles':true,'cancelable':true}));
+			}
+			document.body.append(wrapper);
+			wrapper.c1ZTop();
+
+			function hide(e) {
+				if (e.which===27 || e.target !== html) {
+					wrapper.remove();
+					document.removeEventListener('keydown',hide);
+					document.removeEventListener('mousedown',hide);
+					el.focus();
+				}
+			};
+			setTimeout(()=>{
+				document.addEventListener('keydown',hide);
+				document.addEventListener('mousedown',hide);
+			},3);
+		},
+		shortcut:'h'
 	});
-
-	/* delete Element */
-	Rte.ui.setItem('Del',{
-		//enable(el) {  },
-		click(el) { Rte.element.removeNode(); },
-		el: c1.dom.fragment('<a style="color:red">Element löschen</a>').firstChild
-	});
-
-	/* Target */
-	!function() {
-		Rte.ui.setItem('LinkTarget', {
-			enable:'a, a > *',
-			check(el) {
-				el = el.closest('a');
-				let target = el.getAttribute('target');
-				return target && target !== '_self';
-			},
-			click(){
-				var el = $(Rte.element).closest('a');
-				var active = this.el.classList.contains('active');
-				el.attr('target',active?'_self':'_blank');
-				Rte.fire('input');
-				Rte.active.focus();
-				Rte.fire('elementchange');
-			},
-			el: c1.dom.fragment('<div class=-item style="width:auto">neues Fenster</div>').firstChild
-		});
-	}();
-
-
-	{ /* Titletag */
-		let el = c1.dom.fragment('<table style="clear:both"><tr><td style="width:84px">Titel<td><input>').firstChild;
-		let inp = el.c1Find('input');
-		inp.addEventListener('keyup', function() {
-			Rte.element.setAttribute('title',inp.value);
-			!inp.value && Rte.element.removeAttribute('title');
-			Rte.fire('input');
-		});
-		Rte.ui.setItem('AttributeTitle',{
-			check(el) {
-				inp.value = el ? el.getAttribute('title') : '';
-			},
-			el: el
-		});
+	el.classList.add('expert');
+}
+/* insert table */
+Rte.ui.setItem('Table', {
+	click() {
+		let table = c1.dom.fragment('<table><tr><td>&nbsp;<td>&nbsp;<tr><td>&nbsp;<td>&nbsp;</table>').firstChild;
+		let r = getSelection().getRangeAt(0);
+		r.deleteContents();
+		r.insertNode(table);
+		getSelection().collapse(table.c1Find('td'),0);
 	}
-
-	/* Image Attributes */
-	var inp = $(
+});
+/* delete Element */
+Rte.ui.setItem('Del',{
+	click(el) { Rte.element.removeNode(); },
+	el: c1.dom.fragment('<a style="color:red">Element löschen</a>').firstChild
+});
+/* Target */
+Rte.ui.setItem('LinkTarget', {
+	enable:'a, a > *',
+	check(el) {
+		el = el.closest('a');
+		let target = el.getAttribute('target');
+		return target && target !== '_self';
+	},
+	click(){
+		let el = Rte.element.closest('a');
+		let active = this.el.classList.contains('active');
+		el.setAttribute('target', active?'_self':'_blank');
+		Rte.fire('input');
+		Rte.active.focus();
+		Rte.fire('elementchange');
+	},
+	el: c1.dom.fragment('<div class=-item style="width:auto">link in neuem Fenster</div>').firstChild
+});
+{ /* Titletag */
+	let el = c1.dom.fragment('<table style="clear:both"><tr><td style="width:84px">Titel<td><input>').firstChild;
+	let inp = el.c1Find('input');
+	inp.addEventListener('keyup', function() {
+		Rte.element.setAttribute('title',inp.value);
+		!inp.value && Rte.element.removeAttribute('title');
+		Rte.fire('input');
+	});
+	Rte.ui.setItem('AttributeTitle',{
+		check(el) {
+			inp.value = el ? el.getAttribute('title') : '';
+		},
+		el: el
+	});
+}
+{ /* Image Attributes */
+	let inp = c1.dom.fragment(
 		'<table>'+
-			'<tr><td style="width:84px">Breite:<td><input class="x">'+
-			'<tr><td>Höhe:<td><input class="y">'+
-			'<tr><td title="Alternativer Text">Alt-Text:<td><input class="alt">'+
-		'</table>')
-	.on('keyup',function(e) {
-		var img = $(Rte.element);
-		img.css({width: inp.find('.x').val()+'px' ,height: inp.find('.y').val()+'px' });
-		img.attr('alt', inp.find('.alt').val());
-		if (['x','y'].indexOf(e.target.className) !== -1) {
+			'<tr><td style="width:84px">Breite:<td><input class=-x>'+
+			'<tr><td>Höhe:<td><input class=-y>'+
+			'<tr><td title="Alternativer Text">Alt-Text:<td><input class=-alt>'+
+		'</table>').firstChild;
+	inp.addEventListener('keyup',e=>{
+		let img = Rte.element;
+		img.style.width  = inp.c1Find('.-x').value+'px';
+		img.style.height = inp.c1Find('.-y').value+'px';
+		img.setAttribute('alt', inp.c1Find('.-alt').value);
+		if (e.target.classList.contains('-x') || e.target.classList.contains('-y')) {
 			Rte.element.dispatchEvent(new Event('qgResize',{bubbles:true}));
 		}
 		Rte.fire('input');
-	});
-	Rte.ui.setItem( 'ImageDimension', {
+	})
+	Rte.ui.setItem('ImageDimension', {
 		check(el) {
-			inp.find('.x').val(el.offsetWidth);
-			inp.find('.y').val(el.offsetHeight);
-			inp.find('.alt').val( el.getAttribute('alt') );
+			inp.c1Find('.-x').value = el.offsetWidth;
+			inp.c1Find('.-y').value = el.offsetHeight;
+			inp.c1Find('.-alt').value = el.getAttribute('alt');
 		},
-		el:inp[0],
+		el:inp,
 		enable:'img'
 	});
-
+}
+/* original image */
+Rte.ui.setItem('ImgOriginal', {
+	enable: 'img',
+	click(e) {
+       let $img = $(Rte.element);
+       let url = $img.attr('src').replace(/\/(w|h|zoom|vpos|hpos)-[^\/]+/g,'');
+	   if (e.target.classList.contains('-ret')) {
+          ImageRealSize(url, function(w,h) {
+              w /= 2; h /= 2;
+              // vorgängig wird dem Server per Cookie mitteilt, dass er er die doppelte Auflösung ausliefern soll
+              new dbFile(Rte.element).set('w',w).set('h',h).set('max',0);
+              make(w,h);
+          });
+       } else {
+          make('auto', 'auto');
+       }
+       function make(w,h) { // todo: c1-ratio
+          $img.attr('src',url)
+          .attr({width:w,height:h})
+          .css({width:w,height:h});
+		  Rte.element.dispatchEvent(new Event('qgResize',{bubbles:true})); // new
+          Rte.fire('input');
+		  Rte.fire('elementchange');
+       }
+	},
+	el: c1.dom.fragment('<div><div style="display:flex;">'+
+		  '<span class="-item"       style="width:61px" title="Originalgrösse">Original</span> '+
+		  '<span class="-item -ret"  style="width:61px" title="Halbe Grösse">Retina</span> '+
+        '</div><div>').firstChild
 });
 
 /* table handles */
@@ -366,39 +386,6 @@ document.addEventListener('DOMContentLoaded',function(){
 		});
 		Rte.checkSelection();
 	});
-});
-
-/* original image */
-Rte.ui.setItem('ImgOriginal', {
-	enable(el) {
-		el = $(el);
-		return el.is('img');
-	},
-	click(e) {
-       var $img = $(Rte.element);
-       var url = $img.attr('src').replace(/\/(w|h|zoom|vpos|hpos)-[^\/]+/g,'');
-	   if (e.target.classList.contains('-ret')) {
-          ImageRealSize(url, function(w,h) {
-              w /= 2; h /= 2;
-              // vorgängig wird dem Server per Cookie mitteilt, dass er er die doppelte Auflösung ausliefern soll
-              new dbFile(Rte.element).set('w',w).set('h',h).set('max',0);
-              make(w,h);
-          });
-       } else {
-          make('auto', 'auto');
-       }
-       function make(w,h) { // todo: c1-ratio
-          $img.attr('src',url)
-          .attr({width:w,height:h})
-          .css({width:w,height:h});
-          Rte.fire('input');
-		  Rte.fire('elementchange');
-       }
-	},
-	el: c1.dom.fragment('<div><div style="display:flex;">'+
-		  '<span class="-item"       style="width:61px" title="Originalgrösse">Original</span> '+
-		  '<span class="-item -ret"  style="width:61px" title="Halbe Grösse">Retina</span> '+
-        '</div><div>').firstChild
 });
 
 Rte.ui.config = {

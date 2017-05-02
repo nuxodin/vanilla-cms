@@ -140,7 +140,7 @@ body #qgRteToolbar [hidden] {
 	width:auto !important;
 	border-bottom:1px solid #eee;
 }
-#qgRteToolbar .-options > .selected {
+#qgRteToolbar .-options > .-selected {
 	background-color:#49F;
 	color:#fff;
 }

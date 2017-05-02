@@ -1,21 +1,20 @@
 /* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
 // todo? // externe Seiten http://github.com/codepo8/GooHooBi/blob/master/multisearch.html
 
-Rte.on('ready', ()=>{
-	'use strict';
+'use strict';
+{
+	let urlRegexp = /^[a-zA-Z0-9-]{2,999}\.[a-z0-9]{2,10}/;
+	let mailRegexp = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,10})+$/;
 
-	var urlRegexp = /^[a-zA-Z0-9-]{2,999}\.[a-z0-9]{2,10}/;
-	var mailRegexp = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,10})+$/;
-
-	var inp = c1.dom.fragment('<input placeholder=url spellcheck=false type=qgcms-page>').firstChild;
-	var end = function() {
-		var el = Rte.element.closest('a');
+	let inp = c1.dom.fragment('<input placeholder=url spellcheck=false type=qgcms-page>').firstChild;
+	let end = function() {
+		let el = Rte.element.closest('a');
 		if (!el) return;
 
 		qgSelection.toElement(el);
 		qgSelection.collapse();
 
-		var v = inp.value;
+		let v = inp.value;
 		if (v.trim() === '') {
 			el.removeNode();
 			Rte.fire('input');
@@ -43,19 +42,19 @@ Rte.on('ready', ()=>{
 		enable: 'a, a > *',
 		check(el) {
 			el = el.closest('a');
-			var v = el.getAttribute('href');
+			let v = el.getAttribute('href');
 			if (v) inp.value = v;
 		}
 	});
 
 	Rte.ui.setItem('Link', {
 		click() {
-			var cEl = Rte.element;
-			var exists = cEl && cEl.closest('a');
+			let cEl = Rte.element;
+			let exists = cEl && cEl.closest('a');
 			if (exists) {
 				exists.removeNode();
 			} else {
-				var el = qgSelection.surroundContents(document.createElement('a')); // todo: selection on multiple elements
+				let el = qgSelection.surroundContents(document.createElement('a')); // todo: selection on multiple elements
 				Rte.element = 0; // force rte-event "elementchange"!
 				// set initial value
 				const txt = el.textContent.trim();
@@ -76,76 +75,76 @@ Rte.on('ready', ()=>{
 		check(el) { return el && el.matches('a, a > *'); },
 		shortcut: 'k'
 	});
+}
 
 
-	/* todo
-	var externMediaDialog = function(Rte,medias) {
-		var pid = Rte.getParent('.qgCmsCont').getAttribute('cms:pid');
-		var str =  'Wählen Sie Dateien aus die Sie auf Ihren eigenen Server kopieren möchten.<br><br><div id="cmsDialogExternMedia"></div>';
-		Alert ({title:'Externe Medien',content:str});
-		$each(medias, function(m, uri) {
-			var label = new Element('label').on({
-				mouseover:function() {$$(m.els).setStyle('outline','6px solid #f80'); },
-				mouseleave:function() {$$(m.els).setStyle('outline','none'); }
-			}).set('html',uri.toURI().get('file')).inject('cmsDialogExternMedia').show();
-			$('<input type=checkbox>').prependTo(label).on('change', function() {m.checked=this.checked; });
+/* todo
+let externMediaDialog = function(Rte,medias) {
+	let pid = Rte.getParent('.qgCmsCont').getAttribute('cms:pid');
+	let str =  'Wählen Sie Dateien aus die Sie auf Ihren eigenen Server kopieren möchten.<br><br><div id="cmsDialogExternMedia"></div>';
+	Alert ({title:'Externe Medien',content:str});
+	$each(medias, function(m, uri) {
+		let label = new Element('label').on({
+			mouseover:function() {$$(m.els).setStyle('outline','6px solid #f80'); },
+			mouseleave:function() {$$(m.els).setStyle('outline','none'); }
+		}).set('html',uri.toURI().get('file')).inject('cmsDialogExternMedia').show();
+		$('<input type=checkbox>').prependTo(label).on('change', function() {m.checked=this.checked; });
+	});
+	new Element('input',{type:'submit',value:'fertigstellen'}).on('click', function() {
+		$.each(medias,function(uri,m) {
+			if (m.checked) {
+				$fn('page::FileAdd')(pid,uri).then( function(v) {
+					if (v.url) {
+						m.els.each( function(el) {
+							let att = el.hasAttribute('src') ? 'src' : 'href';
+							el.setAttribute(att, v.url+'/'+uri.toURI().get('file'));
+						});
+					}
+					Rte.focus();
+				});
+			} else {
+				$$(m.els).addClass('externMedia');
+			}
 		});
-		new Element('input',{type:'submit',value:'fertigstellen'}).on('click', function() {
-			$.each(medias,function(uri,m) {
-				if (m.checked) {
-					$fn('page::FileAdd')(pid,uri).then( function(v) {
-						if (v.url) {
-							m.els.each( function(el) {
-								var att = el.hasAttribute('src') ? 'src' : 'href';
-								el.setAttribute(att, v.url+'/'+uri.toURI().get('file'));
-							});
-						}
-						Rte.focus();
-					});
-				} else {
-					$$(m.els).addClass('externMedia');
-				}
-			});
-			this.disabled = true;
-			this.value = '...';
-			$fn.run();
-		}).inject('cmsDialogExternMedia','after');
-	};
-	var checkMedia = function(el) {
-		var medias = {}; var has=0;
-		el.find('*').each( function(i,el) {
-			el = $(el);
-			if (el.hasClass('externMedia')) return;
-			$.each(['src','href'], function(i,att) {
-				if (el.attr(att) !== undefined) {
-					var uri = new URI(el.attr(att));
-					if (!uri.get('file')) return;
-					var ext = uri.get('file').replace(/.*\./,'');
-					if (el.get('tag')!=='img' && !['pdf','doc','xls','jpg','png','gif'].contains(ext)) return;
-					if (location.host===uri.get('host')) return;
-					has=1;
-					if (!medias[uri]) { medias[uri] = {els:[]}; }
-					medias[uri].els.push(el);
-				}
-			});
+		this.disabled = true;
+		this.value = '...';
+		$fn.run();
+	}).inject('cmsDialogExternMedia','after');
+};
+let checkMedia = function(el) {
+	let medias = {}; let has=0;
+	el.find('*').each( function(i,el) {
+		el = $(el);
+		if (el.hasClass('externMedia')) return;
+		$.each(['src','href'], function(i,att) {
+			if (el.attr(att) !== undefined) {
+				let uri = new URI(el.attr(att));
+				if (!uri.get('file')) return;
+				let ext = uri.get('file').replace(/.*\./,'');
+				if (el.get('tag')!=='img' && !['pdf','doc','xls','jpg','png','gif'].contains(ext)) return;
+				if (location.host===uri.get('host')) return;
+				has=1;
+				if (!medias[uri]) { medias[uri] = {els:[]}; }
+				medias[uri].els.push(el);
+			}
 		});
-		has && externMediaDialog(el,medias);
-	};
-	Rte.on('beforeGetContent', checkMedia);
-	Rte.on('paste', checkMedia);
-	*/
-});
+	});
+	has && externMediaDialog(el,medias);
+};
+Rte.on('beforeGetContent', checkMedia);
+Rte.on('paste', checkMedia);
+*/
 
 /* dbfile */
 document.addEventListener('qgResize',e=>{
-	var el = e.target;
+	let el = e.target;
 	if (!el.isContentEditable) return;
 	if (el && el.tagName === 'IMG' && el.src.match(/dbFile\//)) {
-		var width = el.width;
-		var height = el.height;
-		var ratio = width / height;
+		let width = el.width;
+		let height = el.height;
+		let ratio = width / height;
 		el.setAttribute('data-c1-ratio', ratio);
-		el.style['--c1-ratio'] = ratio; // the future
+		el.style.setProperty('--c1-ratio', ratio);
 		el.style.maxWidth = '100%';
 		new dbFile(el).set('w',width).set('h',height).set('max', 0);
 		el.style.width = el.style.height = '';
@@ -177,13 +176,13 @@ document.addEventListener('qgResize',e=>{
     }
 
     addEventListener('dblclick', function(e) {
-        var img = e.target;
+        let img = e.target;
         if (img.isContentEditable && img.tagName === 'IMG' && img.src.match(/\/dbFile/)) {
             e.stopPropagation();
             e.preventDefault();
 
-            var zoomImg = new Image();
-            var clip = {};
+            let zoomImg = new Image();
+            let clip = {};
             zoomImg.src = img.src.replace(/([a-z]+)-([^\/]*)\//g,function(match, name, value) {
                 switch (name) {
                     case 'w': case 'h': case 'vpos': case 'hpos': case 'zoom':
@@ -193,23 +192,23 @@ document.addEventListener('qgResize',e=>{
                 }
             });
             zoomImg.onload = function() {
-                var Zoomer = new ImageZoomer(zoomImg);
+                let Zoomer = new ImageZoomer(zoomImg);
                 Zoomer.activate();
-                var change = function() {
-                    var vpos = Zoomer.y / ( Zoomer.img.height - Zoomer.h ) || 0;
-                    var hpos = Zoomer.x / ( Zoomer.img.width  - Zoomer.w ) || 0;
+                let change = function() {
+                    let vpos = Zoomer.y / ( Zoomer.img.height - Zoomer.h ) || 0;
+                    let hpos = Zoomer.x / ( Zoomer.img.width  - Zoomer.w ) || 0;
                     new dbFile(img).set( 'vpos', vpos*100 ).set( 'hpos', hpos*100 ).set( 'zoom', Zoomer.factor() );
 					img.dispatchEvent(new Event('qgResize',{bubbles:true}));
                 };
                 Zoomer.on('change',change.c1Debounce(500));
-                var pos = img.getBoundingClientRect();
-                var left = pos.left - parseInt($('html').css('marginLeft')) + pageXOffset;
-                var top  = pos.top  - parseInt($('html').css('marginTop'))  + pageYOffset;
+                let pos = img.getBoundingClientRect();
+                let left = pos.left - parseInt($('html').css('marginLeft')) + pageXOffset;
+                let top  = pos.top  - parseInt($('html').css('marginTop'))  + pageYOffset;
                 Zoomer.canvas.style.cssText = 'outline:3px solid red; cursor:move; position:absolute; top:'+top+'px; left:'+left+'px';
                 Zoomer.setDimension( pos.width, pos.height );
 
                 /* set clip */
-                var f = clip.zoom || Math.max( Zoomer.img.height/Zoomer.ctx.height, Zoomer.img.width/Zoomer.ctx.width );
+                let f = clip.zoom || Math.max( Zoomer.img.height/Zoomer.ctx.height, Zoomer.img.width/Zoomer.ctx.width );
                 Zoomer.w = pos.width  * f;
                 Zoomer.h = pos.height * f;
                 Zoomer.x = (clip.hpos/100) * (Zoomer.img.width  - Zoomer.w ) || 0;
@@ -217,7 +216,7 @@ document.addEventListener('qgResize',e=>{
 
                 Zoomer.draw();
 
-                var deactivate = function() {
+                let deactivate = function() {
                     document.body.removeChild(Zoomer.canvas);
                     document.removeEventListener('mousedown', deactivate);
                     change();
@@ -249,15 +248,15 @@ document.addEventListener('qgResize',e=>{
             return this.w / this.ctx.width;
         },
         activate() {
-            var self = this;
+            let self = this;
             self.canvas.addEventListener('wheel', function(e) {
                 eventStop(e);
-                var oldF = self.factor();
-                var f = oldF * wheelIntervalToFaktor(e);
+                let oldF = self.factor();
+                let f = oldF * wheelIntervalToFaktor(e);
                 f = Math.min( self.img.height/self.ctx.height, self.img.width/self.ctx.width,  f ); // limit
                 f = Math.max(1,f);
 
-                var offset = self.mouseOffsetCloserToCenter(e);
+                let offset = self.mouseOffsetCloserToCenter(e);
 
                 /* offset transformed to image */
                 self.x = oldF * offset.x + self.x;
@@ -271,7 +270,7 @@ document.addEventListener('qgResize',e=>{
                 self.draw();
             });
 
-            var mousePos = {};
+            let mousePos = {};
             self.canvas.addEventListener('mousedown', e => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -280,8 +279,8 @@ document.addEventListener('qgResize',e=>{
                 document.addEventListener('mouseup', up);
             });
             function move(e) {
-                var f = self.factor();
-                var diff = {x: mousePos.x - e.pageX, y: mousePos.y - e.pageY};
+                let f = self.factor();
+                let diff = {x: mousePos.x - e.pageX, y: mousePos.y - e.pageY};
                 mousePos = {x: e.pageX, y: e.pageY};
                 self.w = self.ctx.width  * f;
                 self.h = self.ctx.height * f;
@@ -303,8 +302,8 @@ document.addEventListener('qgResize',e=>{
         },
         mouseOffsetCloserToCenter(e) {
             /* real offset on canvas */
-            var x = e.offsetX;
-            var y = e.offsetY;
+            let x = e.offsetX;
+            let y = e.offsetY;
             return {
                 x: ( x + 2*this.ctx.width  ) / 5, //(x+4*xhalbe durch 5)
                 y: ( y + 2*this.ctx.height ) / 5
@@ -320,20 +319,20 @@ document.addEventListener('qgResize',e=>{
     function limit(number, min, max) {
     	return Math.min(max, Math.max(number, min) );
     }
-    var lastTime = 0;
+    let lastTime = 0;
     function wheelIntervalToFaktor(e) {
     	// intervall diff
-        var time = e.timeStamp;
-        var diff = time-lastTime;
+        let time = e.timeStamp;
+        let diff = time-lastTime;
     	if (!e._eventChecked) {
             lastTime = time;
             e._eventChecked = true;
     	}
     	// faktor
-    	var max = 400;
-    	var min = 10;
+    	let max = 400;
+    	let min = 10;
     	diff = limit(diff, min, max+min);
-    	var x = (diff - min) / max; // range from 1 to 0
+    	let x = (diff - min) / max; // range from 1 to 0
     	x = 1-x;
     	x = x*x*x;
     	x = 1-x;
