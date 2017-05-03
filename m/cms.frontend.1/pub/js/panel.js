@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded',function(){
 		params.pid = params.pid || cms.cont.active || Page; // neu
 		$fn('cms_frontend_1::widget')(widget, params).then(res => {
 			c1Loading.stop(widgetEl);
-			widgetEl.innerHTML = res;
+			//widgetEl.innerHTML = res; // scripts are not executed :(
+			$(widgetEl).html(res)
 			cb && cb({target:$(widgetEl)});
 		});
 	}
