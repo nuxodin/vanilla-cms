@@ -24,4 +24,4 @@ if ($LPage->edit && !isset($_GET['qgCmsNoFrontend'])) {
     html::addJsFile( sysURL.$module.'/pub/edit.js','43l5k');
 }
 
-include appPATH.'qg/'.$Cont->vs['module'].'/index.php';
+include appPATH.'qg/'.$module.'/index.php';

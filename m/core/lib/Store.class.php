@@ -29,7 +29,7 @@ class Store {
         return true;
     }
     function download($name) {
-        ini_set('max_execution_time', '600');
+        time_limit(600);
         ignore_user_abort(true);
         // download
 		$data = $this->indexGet($name);
@@ -76,7 +76,7 @@ class Store {
     }
     function upload($name, $version, $notes='') {
         if (!is_dir(sysPATH.$name)) return false;
-        ini_set('max_execution_time', '600');
+        time_limit(600);
 		$tmpFile = appPATH.'cache/tmp/pri/module_export132s.zip';
 		is_file($tmpFile) && unlink($tmpFile);
 		$zip = new Zip;

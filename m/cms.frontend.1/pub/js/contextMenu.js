@@ -37,7 +37,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 			this.disabled = !e.currentTarget.classList.contains('-e');
 		},
 		onclick() {
-			if (!confirm('Möchten Sie den Inhalt wirklich kopieren?')) return;
 			$fn('page::copy')(this.activePid).run(ret=>{
 				cms.cont(ret).addPosition();
 			});

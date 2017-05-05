@@ -10,7 +10,7 @@ if ($init??0) {
 }
 if ($update??0) {
     $ok = qg::Store()->install($update);
-    //module::syncLocal(); // write to db // needed?
+    module::syncLocal(); // write to db // needed?
     G()->Answer['cmsInfo'] = $ok ? L('Das Module wurde aktualisiert') : L('Fehlgeschlagen');
     return !!$ok;
 }

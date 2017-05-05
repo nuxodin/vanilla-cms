@@ -53,7 +53,8 @@ cms.initCont('cms.backend.module',function(el) {
 
     const updateBtn = el.querySelector('.btnUpdateAll');
     updateBtn && updateBtn.addEventListener('click',e=>{
-        if (confirm('Wirklich Alle updaten?')) {
+        if (e.ctrlKey || confirm('Wirklich Alle updaten?')) {
+			updateBtn.style.opacity = .5;
             $fn('page::api')(pid, {updateAll:true}).then(()=>{
                 //$('input[name=search]').trigger('keyup'); // zzz?
             });

@@ -101,7 +101,7 @@ class dbEntry_mail extends dbEntry {
 
 			$sent = false;
 			try {
-				ini_set('max_execution_time', '120');
+				time_limit(120);
 				$sent = $ZendMail->send();
 			} catch (\Exception $e) {
 				trigger_error('mail sending failed :'.$e);

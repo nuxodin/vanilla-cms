@@ -1,5 +1,6 @@
-
-Rte.ui = {
+/* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
+'use strict';
+window.Rte.ui = {
 	init() {
 		var my = this;
 		my.div = document.createElement('div');
@@ -105,6 +106,11 @@ Rte.ui = {
 		var enable = opt.enable;
 		if (enable && enable.toLowerCase) {
 			opt.enable = el => el && el.matches(enable);
+			// opt.enable = el => { // todo?
+			// 	if (!el) return false;
+			// 	let target = el.closest(enable);
+			// 	return Rte.active !== target && Rte.active.contains(target);
+			// }
 		}
 		opt.click && opt.el.addEventListener('mousedown',e=>{
 			Rte.manipulate( ()=>opt.click(e) ); // todo: manipulate schon hier??
@@ -132,7 +138,7 @@ Rte.ui.init();
 Rte.on('selectionchange', ()=>{
 	if (!Rte.active) return;
 	if (Rte.ui.mouseover) return;
-	var distance = getSelection().isCollapsed ? 70 : 20;
+	var distance = getSelection().isCollapsed ? 100 : 20;
 	let Placer = new c1.Placer(Rte.ui.div, {
 		xuse:'transform',
 		x:'center',

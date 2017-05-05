@@ -1,4 +1,7 @@
-domCodeIndent = function(str) {
+/* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
+'use strict';
+
+window.domCodeIndent = function(str) {
 	var res = '';
 	var ind = '';
 	var pre = false;
@@ -43,7 +46,7 @@ domCodeIndent = function(str) {
 
 function getPossibleClasses(el) { /* eventuell better performance? */
 	var ret = {};
-	var test = function(sel) {
+	function test(sel) {
 		sel = sel.trim();
 		if (!~sel.indexOf('.')) return;
 		if (!sel.match(/\.[A-Z]/)) return;
@@ -52,7 +55,7 @@ function getPossibleClasses(el) { /* eventuell better performance? */
 			var x = sel.replace(/^(.*\.)([^: ]*)(.*)$/, function(m, a1, a2) { return a2; });
 			ret[x] = 1;
 		}
-	};
+	}
 	for (let sheet of document.styleSheets) {
 		if (sheet.href && sheet.href.indexOf(location.host) === -1) { // only inline and same domain
 			continue;
@@ -74,7 +77,7 @@ function getPossibleClasses(el) { /* eventuell better performance? */
 	return ret;
 }
 
-rangeExpandToStart = function(range) {
+window.rangeExpandToStart = function(range) {
 	var node = range.startContainer;
 	while (node.previousSibling && node.previousSibling.data) {
 		node = node.previousSibling;
@@ -82,7 +85,7 @@ rangeExpandToStart = function(range) {
 	//range.setStart(node,0);
 	range.setEndBefore(node);
 };
-rangeExpandToEnd = function(range) {
+window.rangeExpandToEnd = function(range) {
 	var node = range.endContainer;
 	while (node.nextSibling && node.nextSibling.data) {
 		node = node.nextSibling;
@@ -90,14 +93,14 @@ rangeExpandToEnd = function(range) {
 	//range.setEnd(node,node.data.length);
 	range.setEndAfter(node);
 };
-rangeExpandToElements = function(range) {
+window.rangeExpandToElements = function(range) {
 	rangeExpandToStart(range);
 	rangeExpandToEnd(range);
 };
-rangeIsElement = function(range) {
+window.rangeIsElement = function(range) {
 	return range.toString() === range.commonAncestorContainer.textContent;
 };
-rangeGetNodes = function(r) {
+window.rangeGetNodes = function(r) {
 	var start = r.startContainer;
 	var end = r.endContainer;
 	if (start === end) {
@@ -145,7 +148,7 @@ rangeGetNodes = function(r) {
 	}
 };
 
-rangeGetElements = function(r) {
+window.rangeGetElements = function(r) {
 	els = rangeGetNodes(r);
 	for (var i = els.length, el; el = els[--i];) {
 		if (el.data && el.data.toString().trim()) {

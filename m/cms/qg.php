@@ -59,7 +59,7 @@ qg::on('action', function(){
 		if ($P->access() < 1) exit('no access');
       	if (!$P->Files())     exit('no files');
 
-		ini_set('max_execution_time', '300');
+		time_limit(300);
 
 		$Zip = new Zip;
 		$tmpfname = appPATH.'cache/tmp/pri/'.randString().'.zip';

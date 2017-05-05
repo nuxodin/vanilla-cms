@@ -3,7 +3,7 @@ namespace qg;
 
 $module = $_GET['module'];
 
-ini_set('max_execution_time', '600');
+time_limit(600);
 // download to temp folder
 $vs = qg::Store()->indexGet($module);
 $zipPath   = appPATH.'cache/tmp/pri/remoteModule.zip';

@@ -16,16 +16,16 @@ x.addEventListener('mousedown', function() {
 	});
 });
 */
-Rte.ui.setItem('Bold', 					{cmd:'bold',		shortcut:'b', enable:':not(img)'} );
-Rte.ui.setItem('Italic', 				{cmd:'italic',		shortcut:'i', enable:':not(img)'} );
+Rte.ui.setItem('Bold', 					{cmd:'bold',		shortcut:'b', xenable:':not(img)'} );
+Rte.ui.setItem('Italic', 				{cmd:'italic',		shortcut:'i', xenable:':not(img)'} );
 Rte.ui.setItem('Insertunorderedlist',	{cmd:'insertunorderedlist',shortcut:'8'});
 Rte.ui.setItem('Insertorderedlist',		{cmd:'insertorderedlist',shortcut:'9'});
-Rte.ui.setItem('Underline', 			{cmd:'underline',	shortcut:'u', enable:':not(img)'});
+Rte.ui.setItem('Underline', 			{cmd:'underline',	shortcut:'u', xenable:':not(img)'});
 Rte.ui.setItem('Undo', 					{cmd:'undo',	check:false});
 Rte.ui.setItem('Redo', 					{cmd:'redo',	check:false});
 Rte.ui.setItem('Unlink', 				{cmd:'unlink',	check:false});
 Rte.ui.setItem('Hr', 					{cmd:'inserthorizontalrule', check:false});
-Rte.ui.setItem('Strikethrough', 		{cmd:'strikethrough', enable:':not(img)'});
+Rte.ui.setItem('Strikethrough', 		{cmd:'strikethrough', xenable:':not(img)'});
 
 /* bred-crumb *
 let list = $('<div style="padding:2px; margin:2px; color:#000; background:linear-gradient(#fff,#ccc); xborder-radius:3px; box-shadow: 0 0 1px #000;">');

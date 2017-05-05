@@ -36,7 +36,7 @@ class qg {
 
 	// install
 	static function install($module) {
-		ini_set('max_execution_time', '600');
+		time_limit(600);
 		$_x_module = $module;
 		$path = sysPATH.$module.'/';
 		is_file($path.'/dbscheme.xml') && dbScheme::check(file_get_contents($path.'dbscheme.xml'));

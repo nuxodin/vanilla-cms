@@ -132,10 +132,11 @@ class dbFile extends File {
 
 		// Header
 		$mime = $File->mime() ?: File::extensionToMime($File->extension());
-		header("Last-Modified: " . gmdate("D, d M Y H:i:s", $File->mtime()) ." GMT");
-		header("Pragma: private");
- 		header("Expires: " . gmdate("D, d M Y H:i:s",(time()+60*60*24*364)) ." GMT");
-		header("Cache-Control: store, cache, max-age=100000, must-revalidate");
+		header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $File->mtime()) .' GMT');
+		header('Pragma: private');
+		$expires = time()+60*60*24*180;
+ 		header('Expires: ' . gmdate('D, d M Y H:i:s', $expires) .' GMT');
+		header('Cache-Control: store, cache, max-age='.$expires.', must-revalidate');
 
 		if (Image::able($File->path)) {
 			if (1 || isset($param['h']) || isset($param['w'])) {

@@ -89,7 +89,6 @@ button {
 [type=checkbox],
 [type=radio] {
 	cursor:pointer;
-	xvertical-align:text-bottom; /* why? zzz */
 }
 [type=number] {
 	text-align:right;

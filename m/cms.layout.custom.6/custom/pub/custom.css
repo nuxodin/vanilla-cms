@@ -28,6 +28,8 @@ a:hover {}
   max-width: 800px;
   xxposition: relative;
   margin: auto;
+  padding-left:2vw;
+  padding-right:2vw;
 }
 #container {
   position: relative;
@@ -49,10 +51,10 @@ a:hover {}
   text-decoration: none;
 }
 #content {
-    flex:1;
+    flex:1 0 auto;
 }
 #main {
-    flex:1;
+    flex:1 0 auto;
 }
 #left {
   padding-right: 10px;
