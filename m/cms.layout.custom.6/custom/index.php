@@ -21,8 +21,8 @@ $Logo = $LPage->File('logo');
 <div id=container>
 	<header id=head>
 		<div class="l1_width l1_cols">
-			<a href="<?=Page(2)->url()?>">
-				<img src="<?=$Logo->url()?>/h-200/logo.png" data-dbfile-editable>
+			<a id=logo href="<?=Page(2)->url()?>">
+				<img src="<?=$Logo->url().'/h-60/'.$Logo->name()?>" data-dbfile-editable>
 			</a>
 			<div id=nav style="flex:1">
 				<?=$LPage->Cont('head')->get()?>

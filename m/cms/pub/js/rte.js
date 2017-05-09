@@ -1,6 +1,5 @@
 /* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
 // todo? // externe Seiten http://github.com/codepo8/GooHooBi/blob/master/multisearch.html
-
 'use strict';
 {
 	let urlRegexp = /^[a-zA-Z0-9-]{2,999}\.[a-z0-9]{2,10}/;
@@ -62,111 +61,122 @@
 					inp.value = txt;
 					el.setAttribute('href',txt);
 				} else {
-					$fn('cms::searchPagesByTitle')(txt).run(function(res) {
-						if (res[0]) {
-							inp.value = txt;
-							inp.dispatchEvent(new Event('input'));
-						}
+					$fn('cms::searchPagesByTitle')(txt).run(res=>{
+						if (!res[0]) return;
+						inp.value = txt;
+						inp.dispatchEvent(new Event('input'));
 					});
 				}
-				setTimeout(function() { inp.focus(); },1); // todo: why timeout?
+				setTimeout(()=>inp.focus(),1); // todo: why timeout?
 			}
 		},
 		check(el) { return el && el.matches('a, a > *'); },
 		shortcut: 'k'
 	});
-}
 
 
-/* todo
-let externMediaDialog = function(Rte,medias) {
-	let pid = Rte.getParent('.qgCmsCont').getAttribute('cms:pid');
-	let str =  'Wählen Sie Dateien aus die Sie auf Ihren eigenen Server kopieren möchten.<br><br><div id="cmsDialogExternMedia"></div>';
-	Alert ({title:'Externe Medien',content:str});
-	$each(medias, function(m, uri) {
-		let label = new Element('label').on({
-			mouseover:function() {$$(m.els).setStyle('outline','6px solid #f80'); },
-			mouseleave:function() {$$(m.els).setStyle('outline','none'); }
-		}).set('html',uri.toURI().get('file')).inject('cmsDialogExternMedia').show();
-		$('<input type=checkbox>').prependTo(label).on('change', function() {m.checked=this.checked; });
-	});
-	new Element('input',{type:'submit',value:'fertigstellen'}).on('click', function() {
-		$.each(medias,function(uri,m) {
-			if (m.checked) {
-				$fn('page::FileAdd')(pid,uri).then( function(v) {
-					if (v.url) {
-						m.els.each( function(el) {
-							let att = el.hasAttribute('src') ? 'src' : 'href';
-							el.setAttribute(att, v.url+'/'+uri.toURI().get('file'));
-						});
-					}
-					Rte.focus();
+	/* todo */
+	let externMediaDialog = function(txtEl,medias) {
+		cms.txtIdToPid(txtEl.getAttribute('cmstxt'), function(pid) {
+
+			c1.c1Use('dialog',function(){
+				let dialog = new c1.dialog({
+					class:'qgCMS',
+					title:'Externe Medien',
+					body: 'Welche Dateien möchtest du auf deinen Server kopieren? <br><br>'+
+							'<div class=-checkkboxes></div>'+
+							'<style>.cmsExtMediaHighlight {outline: 6px solid #fa0} </style>',
+					buttons: [{
+						title:'fertigstellen',then(){
+							for (let [uri,media] of Object.entries(medias)) {
+								if (media.checked) {
+									$fn('page::FileAdd')(pid,uri).run(v=>{
+										if (!v.url) return;
+										for (let el of media.els) {
+											let att = el.hasAttribute('src') ? 'src' : 'href';
+											el.setAttribute(att, v.url+'/'+media.basename);
+										}
+										txtEl.dispatchEvent(new Event('input',{'bubbles':true}));
+										txtEl.focus();
+									});
+								} else {
+									for (let el of media.els) el.classList.add('externMedia')
+								}
+							}
+						}
+					}]
 				});
-			} else {
-				$$(m.els).addClass('externMedia');
+				for (let [uri,media] of Object.entries(medias))  {
+					let file = new URL(uri).pathname.replace(/.*\//,'');
+					let label = c1.dom.fragment('<label style="display:block; padding:2px 6px"><input type=checkbox checked> '+media.basename+'</label>').firstChild;
+					label.addEventListener('mouseover', ()=> media.els.forEach(el=>el.classList.add('cmsExtMediaHighlight')) );
+					label.addEventListener('mouseleave',()=> media.els.forEach(el=>el.classList.remove('cmsExtMediaHighlight')) );
+					label.c1Find('input').addEventListener('change',function(){ media.checked = this.checked; });
+					dialog.element.c1Find('.-checkkboxes').append(label);
+				}
+				dialog.show();
+			});
+
+		})
+	};
+	let checkMedia = function(root) {
+		let medias = {}; let has=0;
+		for (let el of root.c1FindAll('a, img')) {
+			if (el.classList.contains('externMedia')) continue;
+			for (let attr of ['src','href']) {
+				if (!el.hasAttribute(attr)) continue;
+				let uri = new URL(el[attr]);
+				if (location.host === uri.host) continue;
+				let ext = uri.pathname.replace(/.*\./,'');
+				if (!ext) continue;
+				if (el.tagName === 'IMG' || ['pdf','doc','xls','jpg','png','gif'].includes(ext)) {
+					if (!medias[uri]) medias[uri] = {els:[]};
+					medias[uri].els.push(el);
+					medias[uri].basename = uri.pathname.replace(/.*\//,'');
+					medias[uri].checked = true;
+					has=1;
+				}
 			}
-		});
-		this.disabled = true;
-		this.value = '...';
-		$fn.run();
-	}).inject('cmsDialogExternMedia','after');
-};
-let checkMedia = function(el) {
-	let medias = {}; let has=0;
-	el.find('*').each( function(i,el) {
-		el = $(el);
-		if (el.hasClass('externMedia')) return;
-		$.each(['src','href'], function(i,att) {
-			if (el.attr(att) !== undefined) {
-				let uri = new URI(el.attr(att));
-				if (!uri.get('file')) return;
-				let ext = uri.get('file').replace(/.*\./,'');
-				if (el.get('tag')!=='img' && !['pdf','doc','xls','jpg','png','gif'].contains(ext)) return;
-				if (location.host===uri.get('host')) return;
-				has=1;
-				if (!medias[uri]) { medias[uri] = {els:[]}; }
-				medias[uri].els.push(el);
-			}
-		});
+		}
+		has && externMediaDialog(root,medias);
+	};
+	document.addEventListener('paste',function(e){
+		if (!e.target.contentEditable) return;
+		let txtEl = e.target.closest('[cmstxt]');
+		if (!txtEl) return;
+		setTimeout(()=>checkMedia(txtEl));
 	});
-	has && externMediaDialog(el,medias);
-};
-Rte.on('beforeGetContent', checkMedia);
-Rte.on('paste', checkMedia);
-*/
 
-/* dbfile */
-document.addEventListener('qgResize',e=>{
-	let el = e.target;
-	if (!el.isContentEditable) return;
-	if (el && el.tagName === 'IMG' && el.src.match(/dbFile\//)) {
-		let width = el.width;
-		let height = el.height;
-		let ratio = width / height;
-		el.setAttribute('data-c1-ratio', ratio);
-		el.style.setProperty('--c1-ratio', ratio);
-		el.style.maxWidth = '100%';
-		new dbFile(el).set('w',width).set('h',height).set('max', 0);
-		el.style.width = el.style.height = '';
-		el.removeAttribute('height');
-		el.setAttribute('width',width);
-		if (el.style.display === 'inline-block') el.style.display = '';
-		Rte.fire('input');
-		/* problem will save height on unload
-		setTimeout(function(){ // set Height after save
-			el.style.height = height+'px';
-			$(el).one('load', function(){ // after load set height to auto
-				el.style.height = '';
-				$(el).trigger('input'); // save again, needed?
-			})
-		});
-		*/
-	}
-});
+	/* dbfile */
+	document.addEventListener('qgResize',e=>{
+		let el = e.target;
+		if (!el.isContentEditable) return;
+		if (el && el.tagName === 'IMG' && el.src.match(/dbFile\//)) {
+			let width = el.width;
+			let height = el.height;
+			let ratio = width / height;
+			el.setAttribute('data-c1-ratio', ratio);
+			el.style.setProperty('--c1-ratio', ratio);
+			el.style.maxWidth = '100%';
+			new dbFile(el).set('w',width).set('h',height).set('max', 0);
+			el.style.width = el.style.height = '';
+			el.removeAttribute('height');
+			el.setAttribute('width',width);
+			if (el.style.display === 'inline-block') el.style.display = '';
+			Rte.fire('input');
+			/* problem will save height on unload
+			setTimeout(function(){ // set Height after save
+				el.style.height = height+'px';
+				$(el).one('load', function(){ // after load set height to auto
+					el.style.height = '';
+					$(el).trigger('input'); // save again, needed?
+				})
+			});
+			*/
+		}
+	});
 
-/**/
-!function() { 'use strict';
-
+	// dbclick zoomer
     function makeProportional(muster, dim) {
         if ((!dim.h || muster.w/muster.h > dim.h/dim.w) && dim.w != 0) {
             dim.h = Math.round( (muster.h / muster.w) * dim.w );
@@ -174,7 +184,6 @@ document.addEventListener('qgResize',e=>{
             dim.w = Math.round( (muster.w / muster.h) * dim.h );
         }
     }
-
     addEventListener('dblclick', function(e) {
         let img = e.target;
         if (img.isContentEditable && img.tagName === 'IMG' && img.src.match(/\/dbFile/)) {
@@ -201,9 +210,9 @@ document.addEventListener('qgResize',e=>{
 					img.dispatchEvent(new Event('qgResize',{bubbles:true}));
                 };
                 Zoomer.on('change',change.c1Debounce(500));
-                let pos = img.getBoundingClientRect();
-                let left = pos.left - parseInt($('html').css('marginLeft')) + pageXOffset;
-                let top  = pos.top  - parseInt($('html').css('marginTop'))  + pageYOffset;
+				let pos = img.getBoundingClientRect();
+				let left = pos.left + pageXOffset;
+		        let top  = pos.top  + pageYOffset;
                 Zoomer.canvas.style.cssText = 'outline:3px solid red; cursor:move; position:absolute; top:'+top+'px; left:'+left+'px';
                 Zoomer.setDimension( pos.width, pos.height );
 
@@ -346,5 +355,4 @@ document.addEventListener('qgResize',e=>{
     	e.stopPropagation();
     	e.preventDefault();
     }
-
-}();
+}

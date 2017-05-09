@@ -2,7 +2,6 @@
 
 !function() {
 	'use strict';
-
 	c1.focusIn = {};
     var w = window,
         d = w.document;
@@ -27,22 +26,6 @@
     }
     d.addEventListener('focusin' , onIn);
     d.addEventListener('focusout', onOut);
-	/*
-    Element.prototype.c1Focus = function() {
-        var el = this;
-        var els = []
-        do {
-        	if (d.activeElement === el) break;
-        	els.unshift(el);
-            el = el.parentNode;
-        } while (el && el.classList);
-		d.activeElement.blur();
-        for (var i = 0; el=els[i++];) {
-            el.classList.add('c1-focusIn');
-        	el.focus();
-        }
-    };
-	*/
 	Element.prototype.c1Focus = function() {
         var el = this;
         do {

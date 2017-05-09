@@ -89,6 +89,7 @@ qg::on('deliverHtml', function(){
 		html::addJSFile( sysURL.'core/js/c1/onElement.js',               'cms/edit');
 		html::addJSFile( sysURL.'cms/pub/js/cms.js',                     'cms/edit', true, '');
 		html::addJSFile( sysURL.'core/js/c1/NodeCleaner.js',             'cms/edit');
+//		html::addJSFile( sysURL.'core/js/c1/dialog.js',             	 'cms/edit');
 		html::addJSFile( sysURL.'core/js/qg/fakeSelect.js',              'cms/edit');
 		html::addJSFile(sysURL.'core/js/jQuery.js',                      'cms/edit');
 		html::addJSFile( sysURL.'core/js/jQuery/ui.js',                  'cms/edit');
@@ -124,6 +125,7 @@ qg::on('deliverHtml', function(){
 		html::addJSFile( sysURL.'core/js/SettingsEditor.js',             'cms/edit', true, 'async');
 
 		html::addCSSFile(sysURL.'core/css/q1Rst.css',                    'cms/edit');
+		html::addCSSFile(sysURL.'core/css/c1/box.css',                   'cms/edit');
 		html::addCSSFile(sysURL.'cms.frontend.1/pub/css/main.css',       'cms/edit');
 		html::addCSSFile(sysURL.'cms.frontend.1/pub/css/panel.css',      'cms/edit');
 		html::addCSSFile(sysURL.'cms.frontend.1/pub/css/tree.css',       'cms/edit');

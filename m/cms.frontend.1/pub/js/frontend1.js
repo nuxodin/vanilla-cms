@@ -168,39 +168,13 @@
 			document.addEventListener('mouseup', up);
 			e.preventDefault();
 		})
-let Placer = new c1.Placer(menu, {x:'prepend',y:'before', margin:{top:0,left:4,bottom:1,right:0} });
+		let Placer = new c1.Placer(menu, {x:'prepend',y:'before', margin:{top:0,left:4,bottom:1,right:0} });
 		cms.contPos.on('mark', obj=>{
 			let _ = cms.contPos;
 			menu.style.display = 'flex'; // todo
 			let isDraggable = obj.isDraggable(),
 				mod     = obj.el.className.replace(/.*-m-([^\s]+).*/,'$1').replace(/-/g,'.');
-				/* *
-				bodyPos = document.documentElement.getBoundingClientRect(),
-				pos     = obj.el.getBoundingClientRect(),
-				top     = pos.top  - bodyPos.top,
-				left    = pos.left - bodyPos.left;
-			if (pageYOffset > top - 27) {
-				if (pageYOffset + innerHeight > top + pos.height + 27) {
-					top = top + pos.height;
-				} else {
-					top = pageYOffset;
-				}
-			} else {
-				top = top - 27;
-			}
-			if (pageXOffset > left - 4) {
-				if (pageXOffset + innerWidth > left + pos.width + 100) { // todo: test
-					left = left + pos.width;
-				} else {
-					left = pageXOffset;
-				}
-			} else {
-				left = left - 4;
-			}
-			menu.style.top = top+'px';
-			menu.style.left = left+'px';
-/* */
-Placer.follow(obj.el);
+			Placer.follow(obj.el);
 
 			menu.mod.innerHTML = mod.replace(/^cms\.cont\./,'');
 			menu.mod.setAttribute('title',mod+' ('+obj.pid+')');
@@ -252,44 +226,11 @@ Placer.follow(obj.el);
 		}
 	});
 
-
-	cms.frontend1.dialog = function(text,cb){
-		let str =
-		'<form class="qgCMS -Box q1Rst" style="position:fixed; background:#fff" tabindex=0>'+
-		'	<div class=-head>'+
-		'		<div class=-title>'+text+'</div>'+
-		'	</div>'+
-		'	<div class=-foot>'+
-		'	</div>'+
-		'</form>';
-		let form = new DOMParser().parseFromString(str,'text/html').body.firstChild;
-		let foot = form.querySelector('.-foot');
-		function stopPropagation(e){
-			e.stopPropagation();
-			form.c1ZTop();
-		}
-		form.addEventListener('touchstart', stopPropagation);
-		form.addEventListener('mousedown', stopPropagation);
-		form.addEventListener('keydown', stopPropagation);
-		form.addEventListener('keydown', e=> e.which===27 && form.remove());
-		form.addEventListener('submit',  e=> e.preventDefault());
-		document.body.appendChild(form);
-		form.c1ZTop();
-		form.focus();
-		if (Array.isArray(cb)) {
-			for (let i=0,btn; btn=cb[i++];) {
-				const el = document.createElement('button');
-				el.innerHTML = btn.title;
-				el.style.marginRight = '.4em';
-				el.addEventListener('click',function(e){
-					btn.then.call(this,e);
-					form.remove();
-				});
-				foot.appendChild(el);
-				if (i === 1) el.focus();
-			}
-		}
-		return form;
+	cms.frontend1.dialog = function(title,body,buttons){
+		c1.c1Use('dialog',()=>{
+			const dialog = new c1.dialog({title,body,buttons,class:'qgCMS'});
+			dialog.show();
+			return dialog.element;
+		})
 	}
-
-};
+}

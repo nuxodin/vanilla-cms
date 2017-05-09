@@ -1,0 +1,22 @@
+.c1-box {
+    display:flex;
+    flex-flow:column;
+}
+.c1-box.c1-box { /* stronger */
+    padding:0;
+}
+.c1-box > .-head {
+    flex:0 0 auto;
+    display:flex;
+    background:#000;
+    color:#fff;
+    padding:10px 20px;
+}
+.c1-box > .-head > .-title {
+    flex:1;
+}
+.c1-box > .-body {
+    flex:auto;
+    overflow:auto;
+    padding:20px;
+}

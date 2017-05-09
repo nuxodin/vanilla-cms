@@ -72,6 +72,13 @@ class dbFile extends File {
 	}
 	function replace($path) {
 		$F = new File($path);
+ 		if (preg_match('/^https?:\/\//',$path)) {
+			// not very beautiful
+			stream_context_set_default(['ssl'=> ['verify_peer'=>false,'verify_peer_name'=>false]]); // allow files from https
+			$tmp = appPATH.'cache/tmp/'.$F->basename();
+			$F->copy($tmp);
+			$F = new File($tmp);
+		}
 		$md5 = $F->md5();
 		$this->path = appPATH.'qg/file/'.$md5;
 		$F->copy($this->path); // old file is not deleted, maybe use in other workspace!

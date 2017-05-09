@@ -56,7 +56,7 @@
 				}
 			}
 
-			if (this.conf['removeEmptyElements']  && el.textContent === '' && el.tagName !== 'IMG') { el.remove(); return; }
+			if (this.conf['removeEmptyElements']  && el.textContent === '' && el.tagName !== 'IMG' && !el.querySelector('img')) { el.remove(); return; } // removeNode: no text nevertheless can have img!
 			if (this.conf['removeHiddenElements'] && display==='none'                   ) { el.remove(); return; }
 			if (this.conf['tagsRemove']           && this.conf['tagsRemove'][el.tagName]) { el.remove(); return; }
 

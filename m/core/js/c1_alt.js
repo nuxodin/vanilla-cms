@@ -119,7 +119,7 @@
     global.c1Use = function (prop_or_opts, cb) {
 		var scope = this || self;
 		var prop = prop_or_opts.property || prop_or_opts;
-        if (prop in scope && scope[prop] !== void 0) { // loadet? // (test if it is the depencency setter)
+        if (prop in scope) { // loadet?
         	cb && cb.call(scope, scope[prop]);
 			return scope[prop];
         }
@@ -130,27 +130,10 @@
 			var src = (prop_or_opts.from || scope.c1UseSrc) + '/' +prop;
     		callbacks[prop] = [cb];
 			var onload = function(e) {
-                function runCallbacks(){
-                    var fn, object = c1Use.able(scope,prop);
-    				if (e.type === 'error') object.c1UseFailed = true;
-    				//object.c1UseSrc = src; // neu. why? ist von c1Use.able bereits gesetzt !?
-                	while (fn = callbacks[prop].shift()) fn.call(scope, object);
-                }
-                if (prop in scope) {
-                    runCallbacks();
-                } else {
-                    // script geladen, aber darin wurde die property noch nicht gesetzt
-                    Object.defineProperty(scope,prop,{
-                        set: function(value){
-                            delete this[prop];
-                            this[prop] = value;
-                            setTimeout(function(){
-                                runCallbacks();
-                            });
-                        },
-                        configurable: true
-                    });
-                }
+                var fn, object = c1Use.able(scope,prop);
+				if (e.type === 'error') object.c1UseFailed = true;
+				object.c1UseSrc = src; // neu. why? ist von c1Use.able bereits gesetzt !?
+            	while (fn = callbacks[prop].shift()) fn.call(scope, object);
             };
 			(cb ? loadScript : loadScriptSync)(src+'.js?g', onload, onload);
     	}

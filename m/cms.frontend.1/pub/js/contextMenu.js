@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 		},
 		onclick() {
 			var n = cms.Tree.getNodeByKey(this.lastPid);
-			cms.frontend1.dialog('Die Seite "'+n.data.title+'" kopieren?',[
+			cms.frontend1.dialog('Die Seite "'+n.data.title+'" kopieren?','',[
 				{
 					title:'Seite kopieren',then(){
 						$fn('page::copy')(n.data.key).run(ret=>{
@@ -130,9 +130,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 						});
 					}
 				},{
-					title:'Abbrechen',then(){
-						this.closest('.-Box').remove();
-					}
+					title:'Abbrechen'
 				}
 			]);
 		}
