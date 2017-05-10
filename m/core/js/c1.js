@@ -117,7 +117,7 @@
 	'use strict';
 	var CALLBACKS = 'pseudosymbol_&/%f983';
     global.c1Use = function (prop_or_opts, cb) {
-		var scope = this || self;
+		var scope = prop_or_opts.scope || this || self;
 		var prop = prop_or_opts.property || prop_or_opts;
         if (prop in scope && scope[prop] !== void 0) { // loadet? // (test if it is the depencency setter)
         	cb && cb.call(scope, scope[prop]);
@@ -136,7 +136,8 @@
     				//object.c1UseSrc = src; // neu. why? ist von c1Use.able bereits gesetzt !?
                 	while (fn = callbacks[prop].shift()) fn.call(scope, object);
                 }
-                if (prop in scope) {
+                if (prop in scope || prop_or_opts.from) {
+                    // property gesetzt oder per url (from) geladen
                     runCallbacks();
                 } else {
                     // script geladen, aber darin wurde die property noch nicht gesetzt
@@ -192,7 +193,7 @@
 					return use.call(scope, prop, cb);
 				}
 			} else {
-				console.log('todo?', props) // todo?
+				//console.log('todo?', props) // todo?
 				return use.call(scope, props, cb);
 			}
     	};

@@ -1,3 +1,5 @@
+/* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
+// better known as scrollRestoration: https://www.chromestatus.com/feature/5657284784947200
 'use strict';
 {
     c1.scrollSync = {

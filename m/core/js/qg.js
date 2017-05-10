@@ -92,36 +92,62 @@ Ask = function(obj, opt) {
 	http.send(data);
 	return http;
 };
+
 c1.ext(qg.Eventer, Ask);
 Ask.on('complete', function(res) {
 	'use strict';
 	if (!res) return;
+	function executeHTML(html){
+		if (!html.match('<script')) return;
+		var range = document.createRange();
+		var fragment = range.createContextualFragment(html);
+		var div = document.createElement('div');
+		div.append(fragment);
+		document.documentElement.append(div)
+		div.remove();
+		throw('unsave inline script');
+	}
 	if (res.head) {
-		$('head').append( $('<div>'+res.head+'</div>') );
-		//var div = document.createElement('div');
-		//div.innerHTML = res.head;
-		//document.head.append(div);
+		var range = document.createRange();
+		var fragment = range.createContextualFragment('<div>'+res.head+'</div>');
+		document.head.append(fragment);
+
+		// $('head').append( $('<div>'+res.head+'</div>') );
 	}
 	if (res.updateElements) {
 		for (var selector in res.updateElements) {
 			if (!res.updateElements.hasOwnProperty(selector)) continue;
 			var html = res.updateElements[selector];
+
 			var els = document.querySelectorAll(selector);
-//			for (var i=0, el; el=els[i++];) {
-//				el.innerHTML = html; // does not execute script-tags
-//			}
-			$(selector).html(html);
+			for (var i=0, el; el=els[i++];) {
+				// var range = document.createRange();
+				// var fragment = range.createContextualFragment(html);
+				// el.innerHTML = '';
+				// el.append(fragment);
+				el.innerHTML = html;
+				executeHTML(html)
+			}
+
+			//$(selector).html(html);
 		}
 	}
 	if (res.replaceElements) {
 		for (var selector in res.replaceElements) {
 			if (!res.replaceElements.hasOwnProperty(selector)) continue;
 			var html = res.replaceElements[selector];
+
 			var els = document.querySelectorAll(selector);
-//			for (var i=0, el; el=els[i++];) {
-//				el.outerHTML = html; // does not execute script-tags
-//			}
-			$(selector).replaceWith(html);
+			for (var i=0, el; el=els[i++];) {
+				// var range = document.createRange();
+				// var fragment = range.createContextualFragment(html);
+				// el.innerHTML = '';
+				// el.parentNode.replaceChild(fragment, el);
+				el.outerHTML = html;
+				executeHTML(html)
+			}
+
+			//$(selector).replaceWith(html);
 		}
 	}
 });
@@ -152,15 +178,13 @@ $fn.stack = [];
 $fn.run = function(cb) {
 	var fns = $fn.stack;
 	if (!fns.length) return;
-	for (var i=0, data; data = fns[i++];) { // new
-		$fn.fire('before-'+data.fn, data); // needed? can not find some
-	}
+	// for (var i=0, data; data = fns[i++];) { // new
+	// 	$fn.fire('before-'+data.fn, data); // needed? can not find some
+	// }
 	var request = Ask({
 		serverInterface: fns
 	},{
 		url: location.href,
-		evalScripts: true,
-		evalResponse: true,
 		onComplete: function(res) {
 			if (!res) return;
 			var results = res.serverInterface;

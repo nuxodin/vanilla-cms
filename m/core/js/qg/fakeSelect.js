@@ -43,27 +43,14 @@
 				var Placer = new Placer(dialog);
 				Placer.follow(this.input);
 			});
-			// var rect = this.input.getBoundingClientRect();
-			// var Brect = doc.documentElement.getBoundingClientRect();
-			// // todo include margins?
-			// var height = window.innerHeight - 10 - rect.bottom;
-			// if (height > 200) {
-			// 	dialog.style.top  = rect.bottom - Brect.top  + 'px';
-			// 	dialog.style.left = rect.left   - Brect.left + 'px';
-			// } else {
-			// 	dialog.style.top  = rect.top  - Brect.top - dialog.offsetHeight + 'px';
-			// 	dialog.style.left = rect.left - Brect.left + 'px';
-			// 	height = rect.top - 10;
-			// }
-			// dialog.style.maxHeight = height+'px';
 		},
 		hideDialog: function(){
-			//dialog.offsetWidth && doc.body.removeChild(dialog); // zzz
+			// dialog.offsetWidth && doc.body.removeChild(dialog); // zzz
 			dialog.offsetWidth && dialog.remove();
 		},
 		initOptions: function(){
 			this.mark(dialog.firstElementChild);
-//			this.positionize();
+			// this.positionize();
 		},
 		searchOptions: function(){
 			// searchOptions not implemented
@@ -93,9 +80,7 @@
 			this.mark(el);
 			this.selected = el;
 			this.input.value = el.getAttribute('value');
-			//this.input.dispatchEvent(new Event('input'));
-			var e = new Event('change',{bubbles:true});
-			this.input.dispatchEvent(e);
+			this.input.dispatchEvent(new Event('change',{bubbles:true}));
 			if (el.offsetTop + el.offsetHeight > dialog.scrollTop + dialog.offsetHeight - 10) {
 				dialog.scrollTop = el.offsetTop + el.offsetHeight - dialog.offsetHeight + 4;
 			}
@@ -119,7 +104,6 @@
 					var el = e.target.closest('[value]');
 					self.mark(el);
 				};
-				//dialog.onmousedown = function(e){
 				dialog.onmouseup = function(e){
 					var el = e.target.closest('[value]');
 					self.select(el);
@@ -127,21 +111,6 @@
 					self.input.dispatchEvent(new CustomEvent('select_by_pointer')); // new
 				};
 				dialog.c1Combobox = self;
-
-				// var positionize = function(){ // make local function to remove as Eventlistener
-				// 	self.positionize();
-				// };
-				// var int = setInterval(function(){
-				// 	if (!dialog.offsetWidth || dialog.c1Combobox !== self){
-				// 		clearInterval(int);
-				// 		window.removeEventListener('scroll',positionize);
-				// 		window.removeEventListener('resize',positionize);
-				// 	} else {
-				// 		positionize();
-				// 	}
-				// }, 100);
-				// window.addEventListener('scroll',positionize);
-				// window.addEventListener('resize',positionize);
 			});
 		},
 		onblur: function(){
