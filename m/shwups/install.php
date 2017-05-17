@@ -31,10 +31,9 @@ qg::need('cms.image_editor');
 
 if (0) { // todo?
 	qg::need('cms.cont.cols2');
-	qg::need('cms.cont.text.encryptEmails');
 	qg::need('cms.cont.map.google1');
 	qg::need('cms.cont.gallery.fancybox3');
 	qg::need('cms.cont.form1');
-	qg::need('cms.cont.form1.fields1');
+	qg::need('cms.cont.form1.fields2');
 	qg::need('cms.cont.filelist');
 }

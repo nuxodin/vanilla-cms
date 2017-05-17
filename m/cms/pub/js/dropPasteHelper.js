@@ -160,7 +160,7 @@ class q9ClipboardData {
                     getAsString(cb) { cb && cb(url); }
                 });
             }
-            setTimeout(function(){ throw 'used?'; })
+            console.warn('used?')
         }
     }
     q9GetData(type, cb) { // widthout cb usefull as "hasType"

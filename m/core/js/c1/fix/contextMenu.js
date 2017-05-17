@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 				polyChild.append(ul)
 				parse(mChild, ul);
 			}
-		};
+		}
 		if (poly.id === 'contextMenuePolyfill') {
 			var fragment = c1.dom.fragment('<li style="font-size:12px; padding:5px" class=-disabled>shift + rightclick to show the<br> native menu</li>');
 			poly.append(fragment);

@@ -37,7 +37,7 @@ class qgDateInput {
 		});
 
 		var my = this;
-		this.cal = new qgCalendar($(this.calDiv), this.date);
+		this.cal = new qgCalendar(this.calDiv, this.date);
 		this.cal.onChange = function() {
 			my.input.value = my.date.toStr(my.opt.format);
 			my.hidden.value = Math.ceil(my.date.getTime()/1000); // onbeforblur?

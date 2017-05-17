@@ -26,4 +26,7 @@ if (isset(G()->SET)) {
 	G()->SET['qg']['mail']['smtp']['port'];
 	G()->SET['qg']['smalltexts_counter']->setType('bool');
 	G()->SET['qg']['csp']->make('enable','report only')->setHandler('select')->setOptions('','report only','enable');
+	G()->SET['qg']['HSTS']->make('max-age', 60*60);
+	G()->SET['qg']['HSTS']->make('includeSubDomains', true)->setType('bool');
+	G()->SET['qg']['HSTS']->make('preload', false)->setType('bool');
 }

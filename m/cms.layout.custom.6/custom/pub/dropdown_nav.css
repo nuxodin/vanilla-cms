@@ -24,3 +24,24 @@
   min-width: 100%;
   z-index: 1;
 }
+#head li:hover > ul {
+	display:block;
+}
+
+
+#head li > ul {
+	display:block; /* overwrite display */
+
+    transition-property: opacity, visibility;
+    transition-duration: .3s, 0s;
+    transition-delay: 0s, .3s;
+
+	visibility:hidden;
+    opacity:0;
+}
+#head li:hover > ul {
+    transition-delay: 0s, 0s;
+
+	visibility:visible;
+    opacity:1;
+}

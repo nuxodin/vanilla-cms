@@ -111,7 +111,7 @@ Rte.ui.setItem( 'Tree', {
 						if (!el) {
 							el = qgSelection.surroundContents(document.createElement('span'));
 							if (getComputedStyle(el)['display'] === 'block') { // zzz
-								setTimeout(()=>{ throw('used?') })
+								console.warn('used?');
 								let nEl = document.createElement('div');
 								el.parentNode.replaceChild(nEl, el);
 								qgSelection.toChildren(el);

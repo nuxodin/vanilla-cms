@@ -1,4 +1,4 @@
-#qgRteToolbar .-options > h3, #qgRteToolbar .-options > h4, #qgRteToolbar .-options > h5, #qgRteToolbar .-options > h6 {
+#qgRteToolbar .-options > h1, #qgRteToolbar .-options > h4, #qgRteToolbar .-options > h5, #qgRteToolbar .-options > h6 {
   display: none !important;
 }
 html {
@@ -26,7 +26,6 @@ a:hover {}
 
 .l1_width {
   max-width: 800px;
-  xxposition: relative;
   margin: auto;
   padding-left:2vw;
   padding-right:2vw;
@@ -55,10 +54,10 @@ a:hover {}
 	height:60px;
 }
 #content {
-    flex:1 0 auto;
+    flex:1 1 auto;
 }
 #main {
-    flex:1 0 auto;
+    flex:1 1 auto;
 }
 #left {
   padding-right: 10px;
@@ -83,19 +82,20 @@ a:hover {}
 .l1_cols > div {
   box-sizing: border-box;
 }
-#left nav a {
+#main nav a {
   display: block;
+  color:inherit;
 }
-#left nav ul {
+#main nav ul {
   padding-left: 0px;
 }
-#left nav > ul > li > ul > li > a {
+#main nav > ul > li > ul > li > a {
   padding-left: 10px;
 }
-#left nav > ul > li > ul > li > ul > li > a {
+#main nav > ul > li > ul > li > ul > li > a {
   padding-left: 20px;
 }
-#left nav > ul > li > ul > li > ul > li > ul > li > a {
+#main nav > ul > li > ul > li > ul > li > ul > li > a {
   padding-left: 30px;
 }
 .Center {

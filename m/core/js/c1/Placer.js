@@ -12,23 +12,20 @@ c1.Placer = class {
         this.positionize = this.positionize.bind(this);
     }
     follow(el){
-        //console.log('follow',el)
         if (this.following === el) {
             //console.log('again!');
             return;
         }
-
         //let position = getComputedStyle(this.el).getPropertyValue('position');
-        //if (position !== 'fixed') throw('use fixed!');
-        //if (position !== 'fixed') setTimeout(function(){ throw('use fixed!') })
-
+        //if (position !== 'fixed') console.warn('use fixed!')
         this.following = el;
         if (!el) return;
-
-        //interval = setInterval(this.positionize,200);
+        clearInterval(this.followInterval);
+        this.followInterval = setInterval(this.positionize,200);
         addEventListener('resize',this.positionize,{passive:true});
         document.addEventListener('mousemove',this.positionize,{passive:true})
         document.addEventListener('mouseup',this.positionize,{passive:true})
+        document.addEventListener('input',this.positionize,{passive:true, capture:true});
         document.addEventListener('scroll',this.positionize,{passive:true, capture:true});
         this.positionize();
     }
@@ -36,14 +33,13 @@ c1.Placer = class {
         let run = this.following && this.el.parentNode && this.following.parentNode && this.el.offsetWidth && this.following.offsetWidth;
         if (!run) {
             this.following = null;
-            //console.log('unfollow')
-            //clearInterval(interval);
+            clearInterval(this.followInterval);
             removeEventListener('resize',this.positionize,{passive:true});
             document.removeEventListener('mousemove',this.positionize,{passive:true})
             document.removeEventListener('mouseup',this.positionize,{passive:true})
+            document.removeEventListener('input',this.positionize,{passive:true, capture:true});
             document.removeEventListener('scroll',this.positionize,{passive:true, capture:true});
         } else {
-            //if (!/*sichbar*/) return;
             this.toElement(this.following);
         }
     }

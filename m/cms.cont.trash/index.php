@@ -5,7 +5,7 @@ $TrashPage = Page(G()->SET['cms']['pageTrash']->v);
 $Cont->set('sort',9999999999);
 
 html::addJsFile(sysURL.'core/js/c1.js');
-html::addJsFile(sysURL.'core/js/c1/fix/dom.js');
+html::addJsFile(sysURL.'core/js/c1/dom.js');
 html::addJsFile(sysURL.'core/js/c1/onElement.js');
 html::addJsFile(sysURL.'core/js/qg.js');
 html::addJsFile(sysURL.'core/js/jQuery.js');

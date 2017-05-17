@@ -3,7 +3,7 @@ namespace qg;
 
 html::addJSFile(sysURL.'core/js/jQuery.js',      'be-layout');
 html::addJsFile(sysURL.'core/js/c1.js',          'be-layout');
-html::addJsFile(sysURL.'core/js/c1/fix/dom.js',  'be-layout');
+html::addJsFile(sysURL.'core/js/c1/dom.js',  'be-layout');
 html::addJsFile(sysURL.'core/js/c1/onElement.js','be-layout');
 html::addJsFile(sysURL.'core/js/c1/href.js',     'be-layout');
 html::addJsFile(sysURL.'core/js/c1/focusIn.js',  'be-layout');

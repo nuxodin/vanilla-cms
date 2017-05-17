@@ -9,39 +9,24 @@
 		for (var i in styles) {
 			var anim = i;
 			if (styleObj[anim] === undefined) {
-				if (c1.dom.css.hooks[anim]) {
-					anim = c1.dom.css.hooks[i].anim;
-				} else {
-					anim = c1.dom.css.experimental(i);
-				}
+				anim = c1.dom.css.experimental(i);
 			}
 			var value = styles[i];
 			if (value instanceof Array) {
 				stylesBefore[i] = value[0];
 				styles[i] = value[1];
 			}
-			transitions.push( anim+' '+duration+'ms'+' '+easings[easing] );
+			transitions.push(anim+' '+duration+'ms'+' '+easings[easing]);
 		}
 
 		el.style[vendorTransition] = ''; // better "none"?
 
 		c1.dom.css(el,stylesBefore);
 
-		if (!vendorTransition) {
-		    easing = jQuery.easing[easing] ? easing : 'swing';
-		    for (i in styles) {
-		    	if (!styleObj[i] && c1.dom.css.hooks[i]) {
-		    		anim = c1.dom.css.hooks[i].anim;
-		    		styles[anim] = styles[i];
-		    	}
-		    }
-			return $(el).animate( styles,{duration:duration,queue:false,easing:easing} );
-		}
-
 		setTimeout(function() {
 			el.style[vendorTransition] = transitions.join();
 			c1.dom.css(el,styles);
-		}, 20); // firefox (portfolio slider "loading.end");
+		}, 20);
 	};
 
 	var CUBIC_BEZIER_OPEN = 'cubic-bezier(',

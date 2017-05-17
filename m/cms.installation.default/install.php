@@ -120,6 +120,9 @@ qg::need('cms.backend');
 if ($freshInstallation) {
 	qg::need('cms.backend.superuser');
 	qg::need('cms.backend.superuser.db');
+	qg::need('cms.backend.superuser.cd-clean');
+	qg::need('cms.backend.superuser.vers');
+	qg::need('cms.backend.superuser.error_report');
 	qg::need('cms.backend.module');
 	qg::need('cms.backend.settings');
 	qg::need('cms.backend.system');
@@ -129,6 +132,7 @@ if ($freshInstallation) {
 	qg::need('cms.backend.struct');
 	qg::need('cms.backend.struct.grpaccess');
 	qg::need('cms.backend.webmaster');
+	qg::need('cms.backend.app1');
 	qg::need('cms.cont.flexible');
 	qg::need('cms.cont.login4');
 	qg::need('cms.cont.nav2');
@@ -140,4 +144,6 @@ if ($freshInstallation) {
 	qg::need('cms.layout.backend');
 	qg::need('cms.layout.login');
 	qg::need('cms.layout.custom.6');
+	qg::need('cms.encrypt_emails');
+	qg::need('error_report');
 }

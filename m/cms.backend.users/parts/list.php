@@ -36,6 +36,10 @@ foreach ($res as $vs) {
 		<td> <?=hee($vs['company'])?>
 		<td> <?=$vs['active']?'yes':'no'?>
 		<td> <?=hee($stat['sessions'])?>
+		<td> <?php
+			$time = D()->one("SELECT max(log.time) FROM log LEFT JOIN sess ON log.sess_id = sess.id WHERE sess.usr_id = ".$vs['id']);
+			if ($time) echo strftime('%x %H:%M', $time);
+			?>
 		<?php if ($allow_login_as) { ?>
 			<td class=-loginAs>
 				<img src="<?=sysURL?>cms.backend.users/pub/change-user.svg" alt="Login als user">

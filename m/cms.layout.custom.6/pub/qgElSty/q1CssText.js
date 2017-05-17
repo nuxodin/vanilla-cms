@@ -7,30 +7,30 @@ function q1CssText(style) {
 		/* moz */
 		if (r==='padding-right-value') r = 'padding-right';
 		if (r==='padding-left-value')  r = 'padding-left';
-		if (r==='padding-right-ltr-source') return;
-		if (r==='padding-left-ltr-source')  return;
-		if (r==='padding-right-rtl-source') return;
-		if (r==='padding-left-rtl-source')  return;
+		if (r==='padding-right-ltr-source') continue;
+		if (r==='padding-left-ltr-source')  continue;
+		if (r==='padding-right-rtl-source') continue;
+		if (r==='padding-left-rtl-source')  continue;
 		if (r==='margin-right-value') r = 'margin-right';
 		if (r==='margin-left-value')  r = 'margin-left';
-		if (r==='margin-right-ltr-source') return;
-		if (r==='margin-left-ltr-source')  return;
-		if (r==='margin-right-rtl-source') return;
-		if (r==='margin-left-rtl-source')  return;
+		if (r==='margin-right-ltr-source') continue;
+		if (r==='margin-left-ltr-source')  continue;
+		if (r==='margin-right-rtl-source') continue;
+		if (r==='margin-left-rtl-source')  continue;
 		/* chrome */
 		if (r==='background-repeat-x') r = 'background-repeat';
-		if (r==='background-repeat-y') return;
+		if (r==='background-repeat-y') continue;
 		if (r==='background-position-x') r = 'background-position'; /* firefox has no packground-position-x/y */
-		if (r==='background-position-y') return;
+		if (r==='background-position-y') continue;
 
 		var value = style.getPropertyValue(r);
 
         if (value==='initial' && r==='text-decoration') value = 'none';
-		//if (value==='initial') return; // why uncommented?
-        if (value==='initial' && r==='transition-duration'       ) return;
-        if (value==='initial' && r==='transition-delay'          ) return;
-        if (value==='initial' && r==='transition-timing-function') return;
-		if (value==='initial' && r.match(/border-image-/)) return;
+		//if (value==='initial') continue; // why uncommented?
+        if (value==='initial' && r==='transition-duration'       ) continue;
+        if (value==='initial' && r==='transition-delay'          ) continue;
+        if (value==='initial' && r==='transition-timing-function') continue;
+		if (value==='initial' && r.match(/border-image-/)) continue;
 
         if (r==='content') { // buggy chrome
             var nParts = [];
@@ -40,7 +40,7 @@ function q1CssText(style) {
             });
             value = nParts.join(' ');
         }
-		if (value===null) return;
+		if (value===null) continue;
 
         if (r.match(/background/) && value.match(/url\(/)) {
             var regexp = new RegExp('http[s]?:\/\/'+RegExp.escape(location.host));
@@ -64,6 +64,9 @@ function q1CssText(style) {
 		props[r] = value;
 	}
 
+			console.log(props)
+	
+	
 	if (props['overflow-y'] !== undefined && props['overflow-y'] === props['overflow-x']) {
 		props['overflow'] = props['overflow-y'];
 		delete props['overflow-y'];

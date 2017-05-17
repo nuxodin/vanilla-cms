@@ -1,6 +1,6 @@
 window.error_report_count = window.error_report_count || 0; // global: make it possible to stop reporting (eg. browser-warning is shown)
 !function() {
-	var send = function(data){
+	function send(data){
 		if (error_report_count++ > 50) return;
 		if (data.message) {
 			var req = new XMLHttpRequest();   // new HttpRequest instance
@@ -24,26 +24,7 @@ window.error_report_count = window.error_report_count || 0; // global: make it p
 	}
 	window.addEventListener('error', function(e){
 		var error = e.error;
-		var stack = [];
-		if (error && error.stack) { // no error-obj if called throw
-			var parts = error.stack.split('\n');
-			for (var i=0, part; part = parts[i++];) {
-				var x = part.match(/(.*)[\(@](.+)/);
-				if (!x) continue; // first line chrome / ie
-				var fn = x[1].replace(/^ *at /,'').trim();
-				var file = x[2].trim();
-				x = file.match(/:[0-9]+/g);
-				file = file.replace(/:[0-9]+/g, '').replace(/\)$/,'');
-				var line = x ? x[0].replace(':','') : '';
-				var col  = x ? x[1].replace(':','') : ''; // todo
-				stack.push({
-					'function': fn,
-					file: file,
-					line: line,
-					col: col
-				});
-			}
-		}
+		var stack = error && error.stack ? unserializeStack(error.stack) : [];
 		send({
 			message: e.message,
 			file: e.filename,
@@ -51,4 +32,45 @@ window.error_report_count = window.error_report_count || 0; // global: make it p
 			backtrace: stack
 		});
   	});
+	function wrapConsole(method){
+		var original = console[method];
+		console[method] = function(message){
+			var stack = new Error().stack;
+			stack = unserializeStack(stack)
+			stack.shift();
+			var latest = stack[0];
+			var data = {
+				message:message,
+				file: latest ? latest.file : '-1',
+				line: latest ? latest.line : '-1',
+				backtrace: stack,
+			}
+			send(data);
+			return original.apply(console, arguments);
+		}
+	}
+	wrapConsole('error');
+	wrapConsole('warn');
+
+	function unserializeStack(asString){
+		var stack = [];
+		var parts = asString.split('\n');
+		for (var i=0, part; part = parts[i++];) {
+			var x = part.match(/(.*)[\(@](.+)/);
+			if (!x) continue; // first line chrome / ie
+			var fn = x[1].replace(/^ *at /,'').trim();
+			var file = x[2].trim();
+			x = file.match(/:[0-9]+/g);
+			file = file.replace(/:[0-9]+/g, '').replace(/\)$/,'');
+			var line = x ? x[0].replace(':','') : '';
+			var col  = x ? x[1].replace(':','') : ''; // todo
+			stack.push({
+				'function': fn,
+				file: file,
+				line: line,
+				col: col
+			});
+		}
+		return stack;
+	}
 }();

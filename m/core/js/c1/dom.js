@@ -1,15 +1,173 @@
 /* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
-
-setTimeout(function(){alert('used'); throw('c1.dom used?');});
-
-c1.dom = {
-    id: function(id) {
-    	return id.getAttribute ? id : document.getElementById(id+'');
-    }
-};
-
 !function() {
-	/* style */
+	'use strict';
+    if (c1.dom) console.warn('c1.dom loaded?');
+
+    var htmlEl   = document.documentElement,
+		elProto  = Element.prototype,
+		define   = Object.defineProperty;
+
+	if (!window.c1Data) { // needed?
+		define(elProto,'c1Data', {
+			get: function() {
+				var c1Data = {};
+				define(this,'c1Data', {value: c1Data});
+				return c1Data;
+			}
+			,configurable: true
+		});
+		document.c1Data = {};
+		window.c1Data   = {};
+	}
+
+    c1.dom = {}
+	c1.dom.fragment = function(html){
+		var tmpl = document.createElement('template');
+		tmpl.innerHTML = html;
+		if (tmpl.content === void 0){ // ie11
+			var fragment = document.createDocumentFragment();
+			var isTableEl = /^[^\S]*?<(t(?:head|body|foot|r|d|h))/i.test(html);
+			tmpl.innerHTML = isTableEl ? '<table>'+html : html;
+			var els        = isTableEl ? tmpl.querySelector(RegExp.$1).parentNode.childNodes : tmpl.childNodes;
+			while(els[0]) fragment.appendChild(els[0]);
+			return fragment;
+		}
+		return tmpl.content;
+	}
+
+	/* needed polyfills */
+	var poly = {
+		matches: elProto.msMatchesSelector || elProto.webkitMatchesSelector,
+		closest: function(sel) {
+			return this.matches(sel) ? this : (this.parentNode && this.parentNode.closest ? this.parentNode.closest(sel) : null);
+		},
+		prepend: function prepend() {
+			this.insertBefore(mutationMacro(arguments) , this.firstChild);
+		},
+		append: function append() {
+			this.appendChild(mutationMacro(arguments));
+		},
+		before: function before() {
+			var parentNode = this.parentNode;
+			parentNode && parentNode.insertBefore(mutationMacro(arguments), this);
+		},
+		after: function after() {
+			var parentNode = this.parentNode;
+			parentNode && parentNode.insertBefore(mutationMacro(arguments) , this.nextSibling);
+		},
+		replace: function replace() {
+			var parentNode = this.parentNode;
+			parentNode && parentNode.replaceChild(mutationMacro(arguments), this);
+		},
+		remove: function remove() {
+			var parentNode = this.parentNode;
+			parentNode && parentNode.removeChild(this);
+		},
+		c1FindAll: function(selector){
+			if (!this.id) this.id = 'c1-gen-'+(autoId++);
+			var elements = this.querySelectorAll('#'+this.id+' '+selector);
+			//return Array.from(elements); // no ie11
+			return elements;
+		},
+		c1Find: function(selector){
+			if (!this.id) this.id = 'c1-gen-'+(autoId++);
+			return this.querySelector('#'+this.id+' '+selector);
+		},
+		/* (non standard) only ie supports native */
+		removeNode: function(children) {
+			if (children) return this.remove();
+	        var fragment = document.createDocumentFragment();
+	        while (this.firstChild) fragment.appendChild(this.firstChild);
+	        this.parentNode.replaceChild(fragment, this);
+		},
+		/* (non standard) */
+		c1ZTop: function() {
+			var children = this.parentNode.children,
+	            i=children.length,
+	            maxZ=0,
+	            child,
+	            myZ=0;
+	        while (child=children[--i]) {
+	            var childZ = getComputedStyle(child).getPropertyValue('z-index') || 0;
+				if (child.style.zIndex > childZ) childZ = child.style.zIndex; // neu 5.16, computed after paint => check for real
+				if (childZ === 'auto') childZ = 0;
+	            if (child === this) myZ = childZ;
+				else maxZ = Math.max(maxZ, childZ);
+	        }
+			if (myZ <= maxZ) this.style.zIndex = maxZ+1;
+		}
+	};
+
+	var autoId = 0;
+	c1.ext(poly, elProto, false, true);
+	c1.ext(poly, Text.prototype, false, true);
+
+	function textNodeIfString(node) {
+		return typeof node === 'string' ? document.createTextNode(node) : node;
+	}
+	function mutationMacro(nodes) {
+		if (nodes.length === 1) return textNodeIfString(nodes[0]);
+		for (var
+			fragment = document.createDocumentFragment(),
+			list = slice.call(nodes),
+			i = 0;
+			i < nodes.length;
+			i++
+		) {
+			fragment.appendChild(textNodeIfString(list[i]));
+		}
+		return fragment;
+	}
+	// Events
+    try {
+        new window.CustomEvent('?');
+    } catch(o_O) {
+        window.CustomEvent = function() {
+            // (IE11, edge ok) where CustomEvent is there but not usable as construtor.
+            // use the CustomEvent interface in such case otherwise the common compatible one
+            var eventName = window.CustomEvent ? 'CustomEvent' : 'Event',
+                defaultInitDict = {bubbles:false, cancelable:false, detail:null};
+
+            function CustomEvent(type, eventInitDict) {
+                var event = document.createEvent(eventName);
+                if (eventName === 'Event')
+                    event.initCustomEvent = initCustomEvent;
+                if (eventInitDict == null)
+                    eventInitDict = defaultInitDict;
+                event.initCustomEvent(type, eventInitDict.bubbles,eventInitDict.cancelable, eventInitDict.detail);
+                return event;
+            }
+            function initCustomEvent(type, bubbles, cancelable, detail) {
+                this.initEvent(type, bubbles, cancelable);
+                this.detail = detail;
+            }
+            return CustomEvent;
+        }();
+    }
+
+	// NodeLists
+	var proto = NodeList.prototype;
+	if (!proto.forEach) proto.forEach = Array.prototype.forEach;
+	if (window.Symbol && Symbol.iterator && !proto[Symbol.iterator]) proto[Symbol.iterator] = Array.prototype[Symbol.iterator]; // no ie11 :(
+	// HTMLCollection
+	var proto = HTMLCollection.prototype;
+	if (window.Symbol && Symbol.iterator && !proto[Symbol.iterator]) proto[Symbol.iterator] = Array.prototype[Symbol.iterator]; // no ie11 :(
+
+	// divers fix
+    c1Use.able(c1,'fix');
+	function loadFix(lib) {
+        (lib in window) || document.write('<script src="'+c1.c1UseSrc+'/fix/'+lib+'.js"><\/script>');
+    }
+	if (!window.MutationObserver) loadFix('oldies');
+    loadFix('Promise')
+    loadFix('fetch')
+
+}();
+
+
+/*
+!function() {
+	// style
     var styleObj = document.documentElement.style;
     var vendors = {'moz':1,'webkit':1,'ms':1,'o':1};
     c1.dom.css = function(el, style, value) {
@@ -17,7 +175,6 @@ c1.dom = {
             if (typeof style === 'string') {
                 // getter
                 if (styleObj[style] !== undefined) return getComputedStyle(el).getPropertyValue(style);
-                if (c1.dom.css.hooks[style])       return c1.dom.css.hooks[style].get(el);
                 return getComputedStyle(el).getPropertyValue( c1.dom.css.experimental(style) );
             }
             for (var i in style) this.css(el,i,style[i]);
@@ -25,8 +182,6 @@ c1.dom = {
             // setter
             if (styleObj[style] !== undefined) {
                 el.style[style] = value;
-            } else if (c1.dom.css.hooks[style]) {
-                c1.dom.css.hooks[style].set(el,value);
             } else {
                 el.style[c1.dom.css.experimental(style)] = value;
             }
@@ -44,50 +199,5 @@ c1.dom = {
             }
         }
     };
-    c1.dom.css.matrix = function(el) {
-        var val = c1.dom.css(el, this.experimental('transform') );
-        return val.substr(7, val.length - 8).split(', ');
-    };
-
-    var vendorTransform = c1.dom.css.experimental('transform');
-    function setMatrixAtPos(el,pos,value) {
-        value = (''+value).match(/%/) ? (el.parentNode.offsetWidth / 100) * parseInt(value) : value;
-        var mStr = c1.dom.css(el, vendorTransform);
-        var mArr = mStr === 'none' ? [1,0,0,1,0,0] : mStr.substr(7, mStr.length - 8).split(', ');
-        mArr[pos] = value;
-        mStr = 'matrix('+mArr.join(', ')+')';
-        el.style[vendorTransform] = mStr;
-    }
-    function getMatrixAtPos(el,pos) {
-        var mStr = c1.dom.css(el, vendorTransform);
-        if (mStr === 'none') return 0;
-        var mArr = mStr.substr(7, mStr.length - 8).split(', ');
-        return parseInt(mArr[pos]);
-    }
-
-    var useTransf = c1.dom.css.experimental('transition') && vendorTransform;
-    c1.dom.css.hooks = {
-        'c1-x': {
-            set: function(el,v) {
-                if (useTransf)  setMatrixAtPos(el,4,v);
-                else el.style.left = (''+v).match(/[^-0-9\.]/) ? v : v+'px';
-            },
-            get: function(el) {
-                if (useTransf) return getMatrixAtPos(el,4);
-                else return el.style.pixelLeft || parseInt( $(el).css('left'));
-            },
-            anim: useTransf ? vendorTransform : 'left'
-        },
-        'c1-y': {
-            set: function(el, v) {
-                if (useTransf) setMatrixAtPos(el,5,v);
-                else el.style.left = (''+v).match(/[^0-9]/) ? v : v+'px';
-            },
-            get: function(el) {
-                if (useTransf) return getMatrixAtPos(el,5);
-                else return el.style.pixelTop || parseInt( $(el).css('top'));
-            },
-            anim: useTransf ? vendorTransform : 'right'
-        }
-    };
 }();
+*/

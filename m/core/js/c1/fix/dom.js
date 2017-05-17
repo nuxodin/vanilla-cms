@@ -2,6 +2,8 @@
 !function() {
 	'use strict';
 
+	console.warn('c1.fix.dom is deprecated, use c1.dom instead');
+
 	if (!c1.fix) c1.fix = {};
 	c1.fix.dom = {};
 
@@ -90,7 +92,7 @@
 	            maxZ=0,
 	            child,
 	            myZ=0;
-	        for (;child=children[--i];) {
+	        while (child=children[--i]) {
 	            var childZ = getComputedStyle(child).getPropertyValue('z-index') || 0;
 				if (child.style.zIndex > childZ) childZ = child.style.zIndex; // neu 5.16, computed after paint => check for real
 				if (childZ === 'auto') childZ = 0;
@@ -100,19 +102,6 @@
 			if (myZ <= maxZ) this.style.zIndex = maxZ+1;
 		}
 	};
-
-	// Object.defineProperty(elProto,'c1Attr',{
-	// 	get(){
-	// 		return new Proxy(this,{
-	// 			get(target, name){
-	// 				return target.getAttribute(name);
-	// 			},
-	// 			set(target, name, value) {
-	// 				value === null ? target.removeAttribute(name) : target.setAttribute(name, value);
-	// 			}
-	// 		})
-	// 	},
-	// });
 
 	var autoId = 0;
 	c1.ext(poly, elProto, false, true);
@@ -124,11 +113,11 @@
 	function mutationMacro(nodes) {
 		if (nodes.length === 1) return textNodeIfString(nodes[0]);
 		for (var
-				fragment = document.createDocumentFragment(),
-				list = slice.call(nodes),
-				i = 0;
-				i < nodes.length;
-				i++
+			fragment = document.createDocumentFragment(),
+			list = slice.call(nodes),
+			i = 0;
+			i < nodes.length;
+			i++
 		) {
 			fragment.appendChild(textNodeIfString(list[i]));
 		}
@@ -142,7 +131,7 @@
             // (IE11, edge ok) where CustomEvent is there but not usable as construtor.
             // use the CustomEvent interface in such case otherwise the common compatible one
             var eventName = window.CustomEvent ? 'CustomEvent' : 'Event',
-                defaultInitDict = {bubbles : false, cancelable : false, detail : null};
+                defaultInitDict = {bubbles:false, cancelable:false, detail:null};
 
             function CustomEvent(type, eventInitDict) {
                 var event = document.createEvent(eventName);

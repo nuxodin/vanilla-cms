@@ -105,7 +105,7 @@ Ask.on('complete', function(res) {
 		div.append(fragment);
 		document.documentElement.append(div)
 		div.remove();
-		throw('unsave inline script');
+		//throw('unsave inline script');
 	}
 	if (res.head) {
 		var range = document.createRange();

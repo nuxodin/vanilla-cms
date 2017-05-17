@@ -241,19 +241,3 @@ qg::on('action', function() {
 		exit();
 	}
 });
-
-
-/* // custom trigger_error with skip_stacks
-function trigger_error($msg, $typeOrOptions=E_USER_NOTICE){
-	$parent = 0;
-	if (is_array($typeOrOptions)) {
-		$type   = $typeOrOptions['type'] ?? E_USER_NOTICE;
-		$parent = $typeOrOptions['parent'] ?? 0;
-	} else {
-		$type = $typeOrOptions;
-	}
-	$GLOBALS['skip_stacks'] += $parent+1;
-	\trigger_error($msg, $type);
-	$GLOBALS['skip_stacks'] -= $parent+1;
-}
-*/

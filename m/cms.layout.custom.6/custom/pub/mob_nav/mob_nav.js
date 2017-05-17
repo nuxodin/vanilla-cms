@@ -1,4 +1,4 @@
-c1.c1Use('fix.dom',function(){
+c1.c1Use('dom',function(){
 
 	var byTouch = false;
 

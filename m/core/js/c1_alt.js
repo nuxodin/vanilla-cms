@@ -229,7 +229,7 @@
     	} else {
        	 	eb({type:'error'});
     	}
-		setTimeout(function(){ throw('deprecated to load '+path+' sync'); });
+        console.warn('deprecated to load '+path+' sync');
     }
     if (!global.c1UseSrc) {
         var tmp = d.getElementsByTagName('script');

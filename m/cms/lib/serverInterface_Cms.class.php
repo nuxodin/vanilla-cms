@@ -58,7 +58,8 @@ class serverInterface_cms{
 		"	AND ( 											" .
 		"		   f.id = ".D()->quote($s)." 				" .
 		"		OR f.name LIKE ".D()->quote('%'.$s.'%')."	" .
-		"		OR f.text LIKE ".D()->quote('%'.$s.'%')."	" .
+		"		OR f.text LIKE ".D()->quote($s.'%')."	    " .
+		//"		OR f.text LIKE ".D()->quote('%'.$s.'%')."	" .
 		"	)  												" .
 		" GROUP BY f.id 									" .
 		" ORDER BY 											" .
@@ -68,17 +69,20 @@ class serverInterface_cms{
 		"	f.name LIKE ".D()->quote('% '.$s.'%')."	DESC,	" .
 		"	f.text  =   ".D()->quote($s)."			DESC,	" .
 		"	f.text LIKE ".D()->quote($s.'%')."		DESC,	" .
-		"	f.text LIKE ".D()->quote('% '.$s.'%')."	DESC,	" .
+		//"	f.text LIKE ".D()->quote('% '.$s.'%')."	DESC,	" .
 		"	f.name ASC										" .
 		"";
 		$res = [];
 		$i = 0;
+		$used = [];
 		foreach (D()->query($sql) as $vs) {
 			$Page = Page($vs['pid']);
 			if ($Page->access() < 2) continue;
 			$File = dbFile($vs['id'],$vs);
 			if (!$File->exists()) continue;
 			if ($i++ > 10) break;
+			if ($used[$vs['md5']]??false) continue;
+			$used[$vs['md5']] = true;
 			switch ($File->extension()) {
 				case 'jpg' :
 				case 'jpeg' :

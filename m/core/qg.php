@@ -3,16 +3,21 @@ namespace qg;
 
 qg::on('action', function() {
 
+	$SET = G()->SET['qg'];
+
 	if (QG_HTTPS) {
 		if ($_SERVER['SCHEME'] === 'http') {
 			header('HTTP/1.1 301');
 			header('Location: https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 			exit();
 		}
-		header('Strict-Transport-Security:max-age=10800;includeSubDomains;preload'); // 10800 => 3h
+		$header = 'Strict-Transport-Security:max-age='.$SET['HSTS']['max-age']->v;
+		if ($SET['HSTS']['includeSubDomains']->v) $header .= ';includeSubDomains';
+		if ($SET['HSTS']['preload']->v)           $header .= ';preload';
+		header($header);
 	}
 
-	liveSess::$maxpause = G()->SET['qg']['session']['maxpause']->v;
+	liveSess::$maxpause = $SET['session']['maxpause']->v;
 	liveSess::init();
 	L::init();
 	liveLog::init();

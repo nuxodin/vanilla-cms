@@ -32,11 +32,9 @@
 	background-color:#fff;
 	border: 1px outset #444;
 	overflow: auto;
-	position: absolute;
 	left: 0px;
 	white-space:nowrap;
 	z-index:10;
-	display:none;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size:11px;
 	width: 180px;

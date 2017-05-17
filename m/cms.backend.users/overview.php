@@ -63,6 +63,7 @@ $allow_login_as = $Cont->SET['allow_login_as']->setType('bool')->v || Usr()->sup
 					<th> Firma
 					<th> Active
 					<th> Sessions
+					<th> zuletzt online
 					<?php if ($allow_login_as) { ?>
 						<th width=20>
 					<?php } ?>
