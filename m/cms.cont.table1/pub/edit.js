@@ -3,7 +3,7 @@
 c1.c1Use('tableHandles',function(){
 	var handles = new c1.tableHandles();
 	var active, pid, doc = document;
-	doc.addEventListener('focus', e=>{
+	doc.documentElement.addEventListener('focus', e=>{
 		let el = e.target.closest('.-m-cms-cont-table1 > table > tbody > tr > td');
 		if (!el) return;
 		active = el;

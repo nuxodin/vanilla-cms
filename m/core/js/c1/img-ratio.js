@@ -15,15 +15,15 @@
         el.c1RealSrc = el.src;
         el.addEventListener('load',listener);
         el.addEventListener('error',listener); // not working in ie 11, bad browser
-        el.src = 'data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="'+ratio*1024+'" height="1024" style="background:rgba(222,222,222,.1);"></svg>');
+        el.src = 'data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="'+ratio*1024+'" height="1024" style="background:rgba(200,200,200,.1);"></svg>');
     }
-    function renderAll(){
-        var all = document.querySelectorAll('[data-c1-ratio]'),
-            i = 0, el, ratio;
-        while (el=all[i++]) render(el);
-    }
-    requestAnimationFrame(renderAll);
-    document.addEventListener('DOMContentLoaded',renderAll);
+    // function renderAll(){
+    //     var all = document.querySelectorAll('[data-c1-ratio]'),
+    //         i = 0, el, ratio;
+    //     while (el=all[i++]) render(el);
+    // }
+    // requestAnimationFrame(renderAll);
+    // document.addEventListener('DOMContentLoaded',renderAll);
 
-    //c1.onElement('[data-c1-ratio]',render); todo
+    c1.onElement('[data-c1-ratio]',render) // requestAnimationFrame?
 })();

@@ -1,6 +1,5 @@
 !function(){
     var w = window;
-
     // date
     if (!Date.now) Date.now = function() { return new Date().getTime(); };
     // requestAnimationFrame
@@ -24,8 +23,5 @@
     if (!w.MutationObserver) {
         MutationObserver = w.WebKitMutationObserver;
     }
-
-
-
 
 }();

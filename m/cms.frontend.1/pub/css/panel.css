@@ -36,19 +36,9 @@
 	align-items: center;
 	color:#fff;
 }
-/* icons
-#qgCmsFrontend1 > .-sidebar > .-item > .-title:after {
-	display:none;
-	font-family: 'qg_cms';
-	line-height: 1;
-	font-size:36px;
-	text-align: center;
-	padding:15px 10px 15px 10px;
-	order:-1;
-}
-*/
 #qgCmsFrontend1 > .-sidebar > .-item > .-title > .-text {
 	writing-mode: vertical-lr;
+	display:table; /* ugly, ff */
 	font-size:1.3em;
 	font-weight:bold;
 	letter-spacing: .06em;
@@ -319,12 +309,6 @@
 	#qgCmsFrontend1 > .-sidebar > .-item > .-title > .-text {
 		font-size:1em;
 	}
-	/* icons
-	#qgCmsFrontend1 > .-sidebar > .-item > .-title:after {
-		padding: 10px 5px 12px 5px;
-		font-size:22px;
-	}
-	*/
 	#qgCmsFrontend1 .-module-boxes > div {
 		flex-basis:100px;
 	}

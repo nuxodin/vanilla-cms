@@ -2,7 +2,6 @@
 
 (function(){
 	'use strict';
-	c1.c1Use('onElement');
 
 	if (window.cms) throw('cms.js already loaded!');
 
@@ -61,8 +60,9 @@
 			cms.el.module(el) === module && fn(el);
 		});
 	};
-	cms.contInit = function(module, fn) { // old, uses jQuery
-		cms.initCont(module,function(el){ fn($(el)); }); throw('deprecated');
+	cms.contInit = function(module, fn) { // deprecated, uses jQuery
+		cms.initCont(module,function(el){ fn($(el)); });
+		console.warn('deprecated');
 	};
 
 	document.addEventListener('qgCmsCont.ready', function(e) {
@@ -106,7 +106,6 @@
 			this.el.setAttribute('src', src);
 		}
 	}
-
 
 	document.addEventListener('focus', function(e) {
 		var input = e.target,
@@ -190,35 +189,38 @@
 
 	  	/* listen for new contents */
 		function trigger(el){
-			var event = d.createEvent('Event');
-			event.initEvent('qgCmsCont.ready', true, false);
-			el.dispatchEvent(event);
-			// el.dispatchEvent(new CustomEvent('qgCmsCont.ready', {bubbles:true})); new way
-		}
-		function triggerInside(root){
-			var contents = root.querySelectorAll('.qgCmsCont'), i=0, content;
-			while (content = contents[i++]) trigger(content);
+			// var event = d.createEvent('Event');
+			// event.initEvent('qgCmsCont.ready', true, false);
+			// el.dispatchEvent(event);
+			el.dispatchEvent(new CustomEvent('qgCmsCont.ready', {bubbles:true}));
 		}
 
-		var root = d.querySelector('.qgCmsPage') || d.body;
-		triggerInside(root);
+		c1.onElement('.qgCmsPage .qgCmsCont',trigger); // inside qgCmsPage ok?
 
-		var observer = new MutationObserver(function(mutations) {
-			var j=0, i=0, mutation, nodes, className, el;
-			while (mutation = mutations[j++]) {
-				nodes = mutation.addedNodes;
-				for (i=0; el=nodes[i++];) {
-					if (el.qgCmsCont_initialized) return;
-					if (!el.className) return;
-					className = typeof el.className === 'string' ? el.className : el.className.baseVal;  // svg
-					if (!className.match(/qgCmsCont/)) return;
-					//if (!el.classList.contains('qgCmsCont')) return; // not on svg on ie11, edge yes
-					trigger(el)
-					triggerInside(el);
-				}
-			}
-		});
-		observer.observe(root, {childList: true, subtree:true});
+		// function triggerInside(root){
+		// 	var contents = root.querySelectorAll('.qgCmsCont'), i=0, content;
+		// 	while (content = contents[i++]) trigger(content);
+		// }
+		//
+		// var root = d.querySelector('.qgCmsPage') || d.body;
+		// triggerInside(root);
+		//
+		// var observer = new MutationObserver(function(mutations) {
+		// 	var j=0, i=0, mutation, nodes, className, el;
+		// 	while (mutation = mutations[j++]) {
+		// 		nodes = mutation.addedNodes;
+		// 		for (i=0; el=nodes[i++];) {
+		// 			if (el.qgCmsCont_initialized) return;
+		// 			if (!el.className) return;
+		// 			className = typeof el.className === 'string' ? el.className : el.className.baseVal;  // svg
+		// 			if (!className.match(/qgCmsCont/)) return;
+		// 			//if (!el.classList.contains('qgCmsCont')) return; // not on svg on ie11, edge yes
+		// 			trigger(el)
+		// 			triggerInside(el);
+		// 		}
+		// 	}
+		// });
+		// observer.observe(root, {childList: true, subtree:true});
 	});
 
 })();

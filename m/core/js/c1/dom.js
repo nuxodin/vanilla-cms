@@ -3,11 +3,13 @@
 	'use strict';
     if (c1.dom) console.warn('c1.dom loaded?');
 
-    var htmlEl   = document.documentElement,
+    var w = window,
+		d = document,
+		htmlEl   = d.documentElement,
 		elProto  = Element.prototype,
 		define   = Object.defineProperty;
 
-	if (!window.c1Data) { // needed?
+	if (!w.c1Data) { // needed?
 		define(elProto,'c1Data', {
 			get: function() {
 				var c1Data = {};
@@ -16,16 +18,16 @@
 			}
 			,configurable: true
 		});
-		document.c1Data = {};
-		window.c1Data   = {};
+		d.c1Data = {};
+		w.c1Data   = {};
 	}
 
     c1.dom = {}
 	c1.dom.fragment = function(html){
-		var tmpl = document.createElement('template');
+		var tmpl = d.createElement('template');
 		tmpl.innerHTML = html;
 		if (tmpl.content === void 0){ // ie11
-			var fragment = document.createDocumentFragment();
+			var fragment = d.createDocumentFragment();
 			var isTableEl = /^[^\S]*?<(t(?:head|body|foot|r|d|h))/i.test(html);
 			tmpl.innerHTML = isTableEl ? '<table>'+html : html;
 			var els        = isTableEl ? tmpl.querySelector(RegExp.$1).parentNode.childNodes : tmpl.childNodes;
@@ -76,7 +78,7 @@
 		/* (non standard) only ie supports native */
 		removeNode: function(children) {
 			if (children) return this.remove();
-	        var fragment = document.createDocumentFragment();
+	        var fragment = d.createDocumentFragment();
 	        while (this.firstChild) fragment.appendChild(this.firstChild);
 	        this.parentNode.replaceChild(fragment, this);
 		},
@@ -103,12 +105,12 @@
 	c1.ext(poly, Text.prototype, false, true);
 
 	function textNodeIfString(node) {
-		return typeof node === 'string' ? document.createTextNode(node) : node;
+		return typeof node === 'string' ? d.createTextNode(node) : node;
 	}
 	function mutationMacro(nodes) {
 		if (nodes.length === 1) return textNodeIfString(nodes[0]);
 		for (var
-			fragment = document.createDocumentFragment(),
+			fragment = d.createDocumentFragment(),
 			list = slice.call(nodes),
 			i = 0;
 			i < nodes.length;
@@ -120,16 +122,16 @@
 	}
 	// Events
     try {
-        new window.CustomEvent('?');
+        new w.CustomEvent('?');
     } catch(o_O) {
-        window.CustomEvent = function() {
+        w.CustomEvent = function() {
             // (IE11, edge ok) where CustomEvent is there but not usable as construtor.
             // use the CustomEvent interface in such case otherwise the common compatible one
-            var eventName = window.CustomEvent ? 'CustomEvent' : 'Event',
+            var eventName = w.CustomEvent ? 'CustomEvent' : 'Event',
                 defaultInitDict = {bubbles:false, cancelable:false, detail:null};
 
             function CustomEvent(type, eventInitDict) {
-                var event = document.createEvent(eventName);
+                var event = d.createEvent(eventName);
                 if (eventName === 'Event')
                     event.initCustomEvent = initCustomEvent;
                 if (eventInitDict == null)
@@ -148,17 +150,17 @@
 	// NodeLists
 	var proto = NodeList.prototype;
 	if (!proto.forEach) proto.forEach = Array.prototype.forEach;
-	if (window.Symbol && Symbol.iterator && !proto[Symbol.iterator]) proto[Symbol.iterator] = Array.prototype[Symbol.iterator]; // no ie11 :(
+	if (w.Symbol && Symbol.iterator && !proto[Symbol.iterator]) proto[Symbol.iterator] = Array.prototype[Symbol.iterator]; // no ie11 :(
 	// HTMLCollection
 	var proto = HTMLCollection.prototype;
-	if (window.Symbol && Symbol.iterator && !proto[Symbol.iterator]) proto[Symbol.iterator] = Array.prototype[Symbol.iterator]; // no ie11 :(
+	if (w.Symbol && Symbol.iterator && !proto[Symbol.iterator]) proto[Symbol.iterator] = Array.prototype[Symbol.iterator]; // no ie11 :(
 
 	// divers fix
     c1Use.able(c1,'fix');
 	function loadFix(lib) {
-        (lib in window) || document.write('<script src="'+c1.c1UseSrc+'/fix/'+lib+'.js"><\/script>');
+        (lib in w) || d.write('<script src="'+c1.c1UseSrc+'/fix/'+lib+'.js"><\/script>');
     }
-	if (!window.MutationObserver) loadFix('oldies');
+	if (!w.MutationObserver || !w.requestAnimationFrame) loadFix('oldies');
     loadFix('Promise')
     loadFix('fetch')
 
@@ -168,7 +170,7 @@
 /*
 !function() {
 	// style
-    var styleObj = document.documentElement.style;
+    var styleObj = d.documentElement.style;
     var vendors = {'moz':1,'webkit':1,'ms':1,'o':1};
     c1.dom.css = function(el, style, value) {
         if (value === undefined) {

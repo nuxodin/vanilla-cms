@@ -25,12 +25,24 @@ class File {
 	function basename($suffix = null) {
 		return basename($this->path, $suffix);
 	}
-	function copy($dest) {
+	function copyTo($dest) {
 		$r = copy($this->path, $dest);
 		$F = new File($dest);
 		return $r;
 	}
+	function copy($dest){
+		$GLOBALS['skip_stacks'] += 1;
+		trigger_error('deprecated, use copyTo');
+		$GLOBALS['skip_stacks'] -= 1;
+		return $this->copyTo($dest);
+	}
 	function replace($path) {
+		$GLOBALS['skip_stacks'] += 1;
+		trigger_error('deprecated, use replaceBy');
+		$GLOBALS['skip_stacks'] -= 1;
+		return $this->replaceBy($path);
+	}
+	function replaceBy($path) {
 		$path = is_object($path) ? $path->path : (string)$path;
 		$r = copy($path, $this->path);
 		$this->csh = null;
@@ -379,6 +391,8 @@ class File {
 				return 'image/jpeg';
 			case 'png':
 				return 'image/png';
+			case 'svg':
+				return 'image/svg+xml';
 			case 'tiff':
 			case 'tif':
 				return 'image/tiff';

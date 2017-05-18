@@ -55,7 +55,6 @@ qg::on('cms-ready', function(){
 	if (isset($_GET['qgCmsNoFrontend'])) return;
 	if (cms::$MainPage->access() < 2) return;
 
-	//if (isset($_GET['qgCmsNoFrontend'])) return; zzz
 	G()->csp['img-src']['blob:'] = true;
 	G()->csp['default-src']["'self'"] = true; /* as of firefox 50, svgs loaded via "use" are blocked */
 	$Cont = Page();
@@ -74,7 +73,6 @@ qg::on('cms-ready', function(){
 	if (!$edit) return;
 	G()->js_data['cmsClipboard'] = (int)$cmsSET['clipboard']->v;
 	html::addBodyFile(sysPATH.'cms.frontend.1/view/panel.php');
-	//html::addBodyFile(sysPATH.'cms.frontend.1/view/frontend.php');
 });
 qg::on('deliverHtml', function(){
 	if (isset($_GET['qgCmsNoFrontend'])) return;

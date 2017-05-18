@@ -71,6 +71,12 @@ class dbFile extends File {
 		!D()->one("SELECT id FROM file WHERE md5 = ".D()->quote($this->vs['md5'])) && unlink($this->path); // better in db-delete-event
 	}
 	function replace($path) {
+		$GLOBALS['skip_stacks'] += 1;
+		trigger_error('deprecated, use replaceBy');
+		$GLOBALS['skip_stacks'] -= 1;
+		return $this->replaceBy($path);
+	}
+	function replaceBy($path) {
 		$F = new File($path);
  		if (preg_match('/^https?:\/\//',$path)) {
 			// not very beautiful
@@ -81,7 +87,7 @@ class dbFile extends File {
 		}
 		$md5 = $F->md5();
 		$this->path = appPATH.'qg/file/'.$md5;
-		$F->copy($this->path); // old file is not deleted, maybe use in other workspace!
+		$F->copyTo($this->path); // old file is not deleted, maybe use in other workspace!
 		$this->setVs([
 			'name' => $F->basename(),
 			'mime' => $F->mime(),

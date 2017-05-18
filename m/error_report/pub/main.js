@@ -54,6 +54,7 @@ window.error_report_count = window.error_report_count || 0; // global: make it p
 
 	function unserializeStack(asString){
 		var stack = [];
+		if (!asString) return stack; // ie11
 		var parts = asString.split('\n');
 		for (var i=0, part; part = parts[i++];) {
 			var x = part.match(/(.*)[\(@](.+)/);
