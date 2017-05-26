@@ -16,20 +16,44 @@ class module {
 		return D()->module->selectEntries("ORDER BY name");
 	}
 	static function syncLocal() {
-		D()->query("UPDATE module SET local_time = 0");
-		foreach (self::all() as $M) $M->local_time = '';
+		// neu
+		$file = sysPATH.'module.json'; // neu
+		touch($file); // neu
+	 	$data = json_decode(file_get_contents($file), true) ?: []; // neu
+		foreach ($data as &$module) $module['local_time'] = ''; // neu
+
+		// old
+		D()->query("UPDATE module SET local_time = 0"); // old
+		foreach (self::all() as $M) $M->local_time = ''; // old
+
 		$d = opendir(sysPATH);
 		$module_changed = 0;
 		while ($m = readdir($d)) {
-			if (preg_match('/^\./', $m) || !is_dir(sysPATH.$m)) continue;
+			if ($m[0] === '.' || !is_dir(sysPATH.$m)) continue;
+
+			// old
 			$M = D()->module->Entry($m)->makeIfNot();
 			$M->local_time = dir_mtime(sysPATH.$M->name);
 			$M->local_version = $M->local_version ?: '0.0.0';
 			if ($module_changed < $M->local_time) $module_changed = $M->local_time;
 			$M->save();
+
+			// neu
+			$module =& $data[$m];
+			$module['local_time']    = $M->local_time; // zzz
+			$module['local_version'] = $M->local_version ?: '0.0.0'; // zzz
+			//$module['local_time'] = dir_mtime(sysPATH.$m); // todo
+			//$M['local_version']   = $M['local_version'] ?: '0.0.0'; // todo
+			if ($module_changed < $module['local_time']) $module_changed = $module['local_time'];
 		}
 		G()->SET['qg']['module_changed'] = $module_changed;
+
+		// old
 		foreach (self::all() as $M) if (!$M->local_time) $M->local_version = '';
+
+		// neu
+		foreach ($data as $name => $module) if (!$module['local_time']) unset($data[$name]);
+		file_put_contents($file, json_encode($data,JSON_PRETTY_PRINT));
 	}
 	static function syncRemote() { // deprecated
 		//trigger_error('deprecated');

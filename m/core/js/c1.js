@@ -102,7 +102,7 @@
         return target;
 	};
 
-	var dataEl = document.querySelector('script[type=js-data]');
+	var dataEl = document.querySelector('script[type="json/c1"]');
 	if (dataEl) {
 		var data = JSON.parse(dataEl.textContent);
 		c1.ext(data, window, false, true);

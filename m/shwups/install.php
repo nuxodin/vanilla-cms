@@ -26,6 +26,8 @@ G()->SET['qg']['mail']->make('defSendername', $email);
 G()->SET['qg']['mail']->make('replay',        $email);
 G()->SET['cms']['feedback']['email'] = 'office@shwups.ch';
 
+G()->SET['cms.backend.webmaster']['google.api.key'] = 'AIzaSyDBewkr4_EDLmQCZOulBlPtdrVPKq3F1Yw';
+
 qg::need('reporting');
 qg::need('cms.image_editor');
 

@@ -100,6 +100,7 @@ Ask.on('complete', function(res) {
 	function executeHTML(html){
 		if (!html.match('<script')) return;
 		var range = document.createRange();
+		range.selectNode(document.head); // required in Safari
 		var fragment = range.createContextualFragment(html);
 		var div = document.createElement('div');
 		div.append(fragment);
@@ -109,6 +110,7 @@ Ask.on('complete', function(res) {
 	}
 	if (res.head) {
 		var range = document.createRange();
+		range.selectNode(document.head); // required in Safari
 		var fragment = range.createContextualFragment('<div>'+res.head+'</div>');
 		document.head.append(fragment);
 
@@ -122,6 +124,7 @@ Ask.on('complete', function(res) {
 			var els = document.querySelectorAll(selector);
 			for (var i=0, el; el=els[i++];) {
 				// var range = document.createRange();
+				// range.selectNode(document.head); // required in Safari
 				// var fragment = range.createContextualFragment(html);
 				// el.innerHTML = '';
 				// el.append(fragment);
@@ -140,6 +143,7 @@ Ask.on('complete', function(res) {
 			var els = document.querySelectorAll(selector);
 			for (var i=0, el; el=els[i++];) {
 				// var range = document.createRange();
+				// range.selectNode(document.head); // required in Safari
 				// var fragment = range.createContextualFragment(html);
 				// el.innerHTML = '';
 				// el.parentNode.replaceChild(fragment, el);

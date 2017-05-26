@@ -82,7 +82,7 @@ class dbFile extends File {
 			// not very beautiful
 			stream_context_set_default(['ssl'=> ['verify_peer'=>false,'verify_peer_name'=>false]]); // allow files from https
 			$tmp = appPATH.'cache/tmp/'.$F->basename();
-			$F->copy($tmp);
+			$F->copyTo($tmp);
 			$F = new File($tmp);
 		}
 		$md5 = $F->md5();
@@ -119,7 +119,7 @@ class dbFile extends File {
 
 	static function add($path=null) {
 		$dbFile = dbFile(D()->file->insert());
-		$path && $dbFile->replace($path);
+		$path && $dbFile->replaceBy($path);
 		return $dbFile;
 	}
 	static function output($request) {

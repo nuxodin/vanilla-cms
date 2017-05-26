@@ -160,7 +160,7 @@
 	function loadFix(lib) {
         (lib in w) || d.write('<script src="'+c1.c1UseSrc+'/fix/'+lib+'.js"><\/script>');
     }
-	if (!w.MutationObserver || !w.requestAnimationFrame) loadFix('oldies');
+	if (!w.MutationObserver || !w.requestAnimationFrame || !w.WeakMap) loadFix('oldies');
     loadFix('Promise')
     loadFix('fetch')
 

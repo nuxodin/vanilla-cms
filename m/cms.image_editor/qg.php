@@ -4,6 +4,7 @@ namespace qg;
 
 qg::on('cms-ready', function(){
     if (!Page()->edit) return;
+    if (isset($_GET['qgCmsNoFrontend'])) return;
     html::addJsFile(sysURL.'cms.image_editor/pub/init.js');
 });
 

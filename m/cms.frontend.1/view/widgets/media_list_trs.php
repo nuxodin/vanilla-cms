@@ -13,7 +13,10 @@ foreach ($Cont->_FilesAll as $name => $F) { ?>
 				case 'gif' :
 				case 'png' :
 				case 'svg' :
-					echo '<img src="'.$F->url().'/w-60/h-40/dpr-0/max/'.hee($F->name()).'" '.($ext==='svg'?'height=40':'').' alt="">';
+					echo '<img src="'.$F->url().'/w-60/h-40/dpr-0/max/'.hee($F->name()).'" '.($ext==='svg'?'height=40':'').' alt="" draggable=true>';
+					break;
+				case 'mp3' :
+					echo '<audio src="'.$F->url().'/'.hee($F->name()).'" controls style="min-width:70px; width:100%" draggable=true>';
 					break;
 				default:
 					$text = $F->exists() ? $ext : 'upload';

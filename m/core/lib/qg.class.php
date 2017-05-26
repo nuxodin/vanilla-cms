@@ -64,18 +64,36 @@ class qg {
 		$data = &self::getInstalledData();
 		if ($do) $data[$m] = 1;
 		else unset($data[$m]);
+
+		// old
 		$file = appPATH.'qg/qgInstalled.txt';
 		!is_dir(appPATH.'qg') && mkdir(appPATH.'qg');
 		file_put_contents($file, serialize($data));
+
+		// todo
+		$file = appPATH.'qg/module_initialized.json';
+		!is_dir(appPATH.'qg') && mkdir(appPATH.'qg');
+		file_put_contents($file, json_encode($data,JSON_PRETTY_PRINT));
 	}
 	static function &getInstalledData() {
+
+		// old
 		if (self::$installedData === null) {
 			$file = appPATH.'qg/qgInstalled.txt';
 			if (is_file($file))
 				self::$installedData = unserialize(file_get_contents($file));
 		}
 		return self::$installedData;
+
+		// todo
+		if (self::$installedData === null) {
+			$file = appPATH.'qg/module_initialized.json';
+			if (is_file($file))
+				self::$installedData = json_decode(file_get_contents($file), true);
+		}
+		return self::$installedData;
 	}
+	/* token */
 	static function token(){
 		return $_SESSION['qgToken'] ?? ($_SESSION['qgToken'] = randString(12));
 	}

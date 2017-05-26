@@ -99,18 +99,19 @@ function scrollOffset(){
     window.addEventListener('scroll',listen);
     window.addEventListener('resize',listen);
 
-	var latestWinner;
+	var lastWinner;
 	function markLinksActivated(id){
-		if (latestWinner === id) return;
-		latestWinner = id;
-		var el = $(id);
-		$('.c1-source').removeClass('c1-source');
+		if (lastWinner === id) return;
+		lastWinner = id;
+		document.querySelectorAll('.c1-scrollSectionActive').forEach(function(el){
+			el.classList.remove('.c1-scrollSectionActive');
+		})
 		var els = document.querySelectorAll('a[href]');
 		for (var i=0,el; el=els[i++];) {
 			var elHash = el.href.match(/#.*/);
 			if (!elHash) continue;
 			if (elHash[0] !== id) continue;
-			$(el).addClass('c1-source')
+			el.classList.add('c1-scrollSectionActive');
 		}
 	}
     /* */

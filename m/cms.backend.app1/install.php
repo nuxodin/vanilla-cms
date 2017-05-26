@@ -2,6 +2,7 @@
 namespace qg;
 
 $P = cmsBackend::install($module);
+$P->Title('en', 'App-Configuration');
 $P->Title('de', 'App-Konfiguration');
 
 

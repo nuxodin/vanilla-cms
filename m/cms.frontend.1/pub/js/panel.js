@@ -240,50 +240,57 @@ c1.onElement('.qgCmsFileManager',el=>{
 		this.nextElementSibling.click();
 	})
 	var tbody = $el.find('tbody');
-	tbody.children().each(function(i, tr) {
-		var name = tr.getAttribute('itemid'),
-			img  = tr.querySelector('.-preview > img'),
-			f = 1, oW, oH;
-		if (!img) return;
-		img.parentNode.addEventListener('wheel',function(e){
-			if (f===1) {
-				oW = img.offsetWidth;
-				oH = img.offsetHeight;
-			}
-			e.preventDefault();
-			var newf = e.wheelDelta < 0 ? f / 0.6666 : f * 0.6666;
-			if (newf >= 1 && newf <= 15) {
-				f = newf;
-				var w = parseInt(f * oW);
-				var h = parseInt(f * oH);
-				new dbFile(img).set('h', h).set('w', w).write();
-				img.height = h;
-				img.width  = w;
+	if (tbody[0]) {
+		tbody.children().each(function(i, tr) {
+			var name = tr.getAttribute('itemid'),
+				img  = tr.querySelector('.-preview > img'),
+				f = 1, oW, oH;
+			if (!img) return;
+			img.parentNode.addEventListener('wheel',function(e){
+				if (f===1) {
+					oW = img.offsetWidth;
+					oH = img.offsetHeight;
+				}
+				e.preventDefault();
+				var newf = e.wheelDelta < 0 ? f / 0.6666 : f * 0.6666;
+				if (newf >= 1 && newf <= 15) {
+					f = newf;
+					var w = parseInt(f * oW);
+					var h = parseInt(f * oH);
+					new dbFile(img).set('h', h).set('w', w).write();
+					img.height = h;
+					img.width  = w;
+				}
+			});
+		});
+		tbody.sortable({
+			handle:'.-handle',
+			axis: 'y',
+			stop(x) {
+				var sort = [];
+				tbody.children().each((i, el) => sort.push(el.getAttribute('itemid')) );
+				$fn('page::FilesSort')(pid, sort).run();
 			}
 		});
-	});
-	tbody.sortable({
-		handle:'.-handle',
-		axis: 'y',
-		stop(x) {
-			var sort = [];
-			tbody.children().each((i, el) => sort.push(el.getAttribute('itemid')) );
-			$fn('page::FilesSort')(pid, sort).run();
-		}
-	});
-	tbody.on('click','.-delete',function(){
-		var tr = this.closest('tr');
-		confirm('Möchten Sie die Datei wirklich löschen?') && $fn('page::FileDelete')(pid, tr.getAttribute('itemid')).run( () => tr.remove() );
-	});
-	tbody.on('click','.-preview', function(e) {
-		var replaces = this.closest('tr').getAttribute('itemid');
-		$('<input type=file>').on('change', function(){
-			upload(this.files, replaces);
-		})[0].click();
-	});
-	tbody.on('dragstart','.-preview > img', function(e) {
-		cms.panel.set('sidebar','');
-	});
+		tbody.on('click','.-delete',function(){
+			var tr = this.closest('tr');
+			confirm('Möchten Sie die Datei wirklich löschen?') && $fn('page::FileDelete')(pid, tr.getAttribute('itemid')).run( () => tr.remove() );
+		});
+		tbody.on('click','.-preview', function(e) {
+			var replaces = this.closest('tr').getAttribute('itemid');
+			$('<input type=file>').on('change', function(){
+				upload(this.files, replaces);
+			})[0].click();
+		});
+		tbody.on('dragstart','.-preview > [draggable]', function(e) {
+			cms.panel.set('sidebar','');
+		});
+		tbody[0].addEventListener('dragstart',e=>{
+			if (!e.target.matches('audio')) return;
+			e.dataTransfer.effectAllowed = 'copy';
+			e.dataTransfer.setData('text/html', e.target.outerHTML);
+		});
+	}
 
 	var upload = function(files, replaces) {
 		for (let i=0, file; file=files[i++];) {

@@ -50,7 +50,7 @@ class html {
 		}
 		$return .= self::_getHeaderCSSFiles();
 		if (isset(G()->js_data)) {
-			$return .= '<script type=js-data>'.json_encode(G()->js_data, JSON_HEX_QUOT|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS).'</script>'."\n";
+			$return .= '<script type=json/c1>'.json_encode(G()->js_data, JSON_HEX_QUOT|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS).'</script>'."\n";
 		}
 		$return .= self::_getHeaderJSFiles();
 		return $return;

@@ -2,6 +2,7 @@
 namespace qg;
 
 $P = cmsBackend::install($module);
+$P->Title('en','Webmaster');
 $P->Title('de','Webmaster');
 
 G()->SET['cms.backend.webmaster']->make('robots.txt',

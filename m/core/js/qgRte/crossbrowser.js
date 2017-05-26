@@ -111,7 +111,8 @@ document.addEventListener('click', e=>{
 // img selectable (webkit,blink) and resize handles
 document.addEventListener('mousedown', e=>{
 	if (e.button !== 0) return;
-	if (e.target.isContentEditable && e.target.tagName === 'IMG') {
+	if (!e.target.isContentEditable) return;
+	if (e.target.tagName === 'IMG') {
 		qgSelection.toElement(e.target);
 		qgImageResizeUi(e);
 	}

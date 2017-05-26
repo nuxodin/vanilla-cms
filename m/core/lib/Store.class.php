@@ -48,21 +48,23 @@ class Store {
         if (is_dir(sysPATH.$name)) return;
 		if (!$zip->extractTo(sysPATH)) return;
         $zip->close(); // todo: needed?
+
+        // old
         if (function_exists('qg\D')) {
 			$E = D()->module->Entry($name)->makeIfNot();
 			$E->server        = $this->host;
 			$E->local_version = $data['version'];
 			$E->local_updated = time();
-			//$E->local_time = time();
-
-			//D()->module->ensure([
-            //    'server'        => $this->host,
-            //    'name'          => $name,
-            //    'local_version' => $data['version'],
-        	//	//'local_time'    => time(),
-        	//	'local_updated' => time(),
-            //]);
         }
+
+        // neu
+        $file = sysPATH.'module.json';
+        $localdata = json_decode(file_get_contents($file), true) ?: [];
+        $localdata[$name]['server'] = $this->host;
+        $localdata[$name]['local_version'] = $data['version'];
+        $localdata[$name]['local_updated'] = time();
+        file_put_contents($file, json_encode($localdata,JSON_PRETTY_PRINT));
+
 		return $data;
     }
 
