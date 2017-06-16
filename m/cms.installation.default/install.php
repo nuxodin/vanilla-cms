@@ -117,7 +117,10 @@ qg::need('cms.frontend.1');
 qg::need('cms.versions');
 qg::need('cms.backend');
 
+
 if ($freshInstallation) {
+	qg::need('cms.cont.phpfile');
+	qg::need('cms.cont.notFound1');
 	qg::need('cms.backend.superuser');
 	qg::need('cms.backend.superuser.db');
 	qg::need('cms.backend.superuser.cd-clean');
@@ -145,5 +148,7 @@ if ($freshInstallation) {
 	qg::need('cms.layout.login');
 	qg::need('cms.layout.custom.6');
 	qg::need('cms.encrypt_emails');
+	qg::need('cms.image_editor');
 	qg::need('error_report');
+	qg::need('reporting');
 }

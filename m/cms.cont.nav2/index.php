@@ -24,7 +24,6 @@ $getUl = function ($Page) use ($Cont, &$level, &$getUl) {
 	if ($Cont->SET['include contents']->v) {
 		$Contents = [];
 		foreach ($Page->Conts() as $FirstLevelCont) {
-			$Contents[] = $FirstLevelCont;
 			foreach ($FirstLevelCont->Bough(['readable','type'=>'c']) as $Content) {
 				$Contents[] = $Content;
 			}

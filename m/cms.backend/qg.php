@@ -8,7 +8,7 @@ class cmsBackend {
 			$P->changeGroup(1, 0);
 			$P->changeGroup(2, 0);
 			$P->changeGroup(3, 0);
-			$P->Cont(1)->set(['module'=>'cms.backend']);
+			$P->Cont(1)->set('module','cms.backend');
 			$P->Title('de','Backend');
 			$P->SET['childXML'] = '<page visible="1"></page>';
 			G()->SET['cms']['backend']->setDefault((string)$P);

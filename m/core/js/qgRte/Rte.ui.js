@@ -139,14 +139,16 @@ Rte.on('selectionchange', ()=>{
 	if (!Rte.active) return;
 	if (Rte.ui.mouseover) return;
 	var distance = getSelection().isCollapsed ? 100 : 20;
-	let Placer = new c1.Placer(Rte.ui.div, {
-		xuse:'transform',
-		x:'center',
-		y:'after',
-		margin:distance,
+	c1.c1Use('Placer',function(){
+		let Placer = new c1.Placer(Rte.ui.div, {
+			xuse:'transform',
+			x:'center',
+			y:'after',
+			margin:distance,
+		});
+		var pos = qgSelection.rect();
+		Placer.toClientRect(pos);
 	});
-	var pos = qgSelection.rect();
-	Placer.toClientRect(pos);
 });
 
 // Rte.on('selectionchange', function() {

@@ -1,0 +1,223 @@
+{
+    "cms": {
+        "time": 1496213662,
+        "version": "5.65.0",
+        "changed": 1496213662,
+        "server": "v5.shwups-cms.ch",
+        "updated": 1497603045
+    },
+    "cms.backend": {
+        "time": 1492606527,
+        "version": "5.5.0",
+        "changed": 1492606527,
+        "server": "v5.shwups-cms.ch",
+        "updated": 1497603046
+    },
+    "cms.backend.app1": {
+        "time": 1495838195,
+        "version": "5.8.0",
+        "changed": 1495838195
+    },
+    "cms.backend.groups": {
+        "time": 1495838196,
+        "version": "5.11.0",
+        "changed": 1495838196
+    },
+    "cms.backend.mails": {
+        "time": 1495838196,
+        "version": "5.19.0",
+        "changed": 1495838196
+    },
+    "cms.backend.module": {
+        "time": 1495838197,
+        "version": "5.30.0",
+        "changed": 1495838197
+    },
+    "cms.backend.settings": {
+        "time": 1495838197,
+        "version": "5.2.0",
+        "changed": 1495838197
+    },
+    "cms.backend.struct": {
+        "time": 1495838197,
+        "version": "5.8.0",
+        "changed": 1495838197
+    },
+    "cms.backend.struct.grpaccess": {
+        "time": 1495838198,
+        "version": "5.6.0",
+        "changed": 1495838198
+    },
+    "cms.backend.superuser": {
+        "time": 1495838198,
+        "version": "5.3.0",
+        "changed": 1495838198
+    },
+    "cms.backend.superuser.db": {
+        "time": 1495838198,
+        "version": "5.9.0",
+        "changed": 1495838198
+    },
+    "cms.backend.superuser.error_report": {
+        "time": 1495838199,
+        "version": "5.3.0",
+        "changed": 1495838199
+    },
+    "cms.backend.superuser.vers": {
+        "time": 1495838199,
+        "version": "5.1.0",
+        "changed": 1495838199
+    },
+    "cms.backend.system": {
+        "time": 1495838199,
+        "version": "5.10.0",
+        "changed": 1495838199
+    },
+    "cms.backend.users": {
+        "time": 1495838200,
+        "version": "5.16.0",
+        "changed": 1495838200
+    },
+    "cms.backend.webmaster": {
+        "time": 1495838200,
+        "version": "5.16.0",
+        "changed": 1495838200
+    },
+    "cms.cont.flexible": {
+        "time": 1492606523,
+        "version": "5.1.0",
+        "changed": 1492606523
+    },
+    "cms.cont.impressum2": {
+        "time": 1492606534,
+        "version": "5.3.0",
+        "changed": 1492606534,
+        "server": "v5.shwups-cms.ch",
+        "updated": 1497603046
+    },
+    "cms.cont.login4": {
+        "time": 1492606532,
+        "version": "5.4.0",
+        "changed": 1492606532
+    },
+    "cms.cont.nav2": {
+        "time": 1492606532,
+        "version": "5.6.0",
+        "server": "v5.shwups-cms.ch",
+        "updated": 1496994281,
+        "changed": 1496994281
+    },
+    "cms.cont.notFound1": {
+        "time": 1492606524,
+        "version": "5.1.0",
+        "changed": 1492606524
+    },
+    "cms.cont.phpfile": {
+        "time": 1493810706,
+        "version": "5.2.0",
+        "changed": 1493810706
+    },
+    "cms.cont.redirect": {
+        "time": 1492606533,
+        "version": "5.4.0",
+        "changed": 1492606533,
+        "server": "v5.shwups-cms.ch",
+        "updated": 1497603047
+    },
+    "cms.cont.search1": {
+        "time": 1492606533,
+        "version": "5.6.0",
+        "changed": 1492606533
+    },
+    "cms.cont.table1": {
+        "time": 1495146593,
+        "version": "5.4.0",
+        "changed": 1495146593,
+        "server": "v5.shwups-cms.ch",
+        "updated": 1497603047
+    },
+    "cms.cont.text": {
+        "time": 1492606524,
+        "version": "5.0.0",
+        "changed": 1492606524
+    },
+    "cms.cont.trash": {
+        "time": 1494504448,
+        "version": "5.10.0",
+        "changed": 1494504448
+    },
+    "cms.frontend.1": {
+        "time": 1496046651,
+        "version": "5.134.0",
+        "changed": 1496046651
+    },
+    "cms.image_editor": {
+        "time": 1495838201,
+        "version": "5.26.0",
+        "changed": 1495838201
+    },
+    "cms.installation.default": {
+        "time": 1496213663,
+        "version": "5.15.0",
+        "changed": 1496213663
+    },
+    "cms.layout.backend": {
+        "time": 1494504449,
+        "version": "5.16.0",
+        "changed": 1494504449
+    },
+    "cms.layout.custom.6": {
+        "time": 1495838202,
+        "version": "5.57.0",
+        "changed": 1495838202,
+        "server": "v5.shwups-cms.ch",
+        "updated": 1497603047
+    },
+    "cms.layout.login": {
+        "time": 1492606535,
+        "version": "5.10.0",
+        "changed": 1492606535
+    },
+    "cms.layouter3": {
+        "time": 1492692924,
+        "version": "5.14.0",
+        "changed": 1492692924
+    },
+    "cms.versions": {
+        "time": 1493393761,
+        "version": "5.17.0",
+        "changed": 1493393761
+    },
+    "core": {
+        "time": 1496213662,
+        "version": "5.277.0",
+        "server": "v5.shwups-cms.ch",
+        "updated": 1497603044,
+        "changed": 1496994280
+    },
+    "error_report": {
+        "time": 1495146594,
+        "version": "5.39.0",
+        "changed": 1495146594
+    },
+    "fileEditor": {
+        "time": 1492606523,
+        "version": "5.6.0",
+        "changed": 1492606523
+    },
+    "reporting": {
+        "time": 1492606536,
+        "version": "5.3.0",
+        "changed": 1492606536
+    },
+    "shwups": {
+        "time": 1496213663,
+        "version": "5.20.0",
+        "changed": 1496213663
+    },
+    "Zend": {
+        "time": 1496213663,
+        "version": "5.20.0",
+        "changed": 1496213663
+    }
+}

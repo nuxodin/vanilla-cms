@@ -5,20 +5,20 @@
     if (!Date.now) Date.now = function() { return new Date().getTime(); };
     // requestAnimationFrame
     if (!w.requestAnimationFrame) {
-        requestAnimationFrame = w.webkitRequestAnimationFrame || w.mozRequestAnimationFrame || (function () {
-    		var clock = Date.now();
-    		return function (callback) {
-    			var currentTime = Date.now();
-    			if (currentTime - clock > 16) {
-    				clock = currentTime;
-    				callback(currentTime);
-    			} else {
-    				setTimeout(function () {
-    					polyfill(callback);
-    				}, 0);
-    			}
-    		};
-    	})();
+        var last_RAF_Time = 0;
+        requestAnimationFrame = w.webkitRequestAnimationFrame || w.mozRequestAnimationFrame || function(callback) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - last_RAF_Time));
+            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
+              timeToCall);
+            last_RAF_Time = currTime + timeToCall;
+            return id;
+        };
+    }
+    if (!w.cancelAnimationFrame) {
+        cancelAnimationFrame = w.webkitCancelAnimationFrame || w.mozCancelAnimationFrame || function(id) {
+            clearTimeout(id);
+        };
     }
     // MutationObserver
     if (!w.MutationObserver) {

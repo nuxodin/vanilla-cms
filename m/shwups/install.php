@@ -27,15 +27,3 @@ G()->SET['qg']['mail']->make('replay',        $email);
 G()->SET['cms']['feedback']['email'] = 'office@shwups.ch';
 
 G()->SET['cms.backend.webmaster']['google.api.key'] = 'AIzaSyDBewkr4_EDLmQCZOulBlPtdrVPKq3F1Yw';
-
-qg::need('reporting');
-qg::need('cms.image_editor');
-
-if (0) { // todo?
-	qg::need('cms.cont.cols2');
-	qg::need('cms.cont.map.google1');
-	qg::need('cms.cont.gallery.fancybox3');
-	qg::need('cms.cont.form1');
-	qg::need('cms.cont.form1.fields2');
-	qg::need('cms.cont.filelist');
-}

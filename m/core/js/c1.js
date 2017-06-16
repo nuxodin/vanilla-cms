@@ -153,7 +153,7 @@
                     });
                 }
             };
-			(cb ? loadScript : loadScriptSync)(src+'.js?g', onload, onload);
+			(cb ? loadScript : loadScriptSync)(src+'.js?c1Use_'+moduleAge, onload, onload);
     	}
     	return cb ? null : scope[prop];
     };

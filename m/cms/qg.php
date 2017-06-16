@@ -58,9 +58,7 @@ qg::on('action', function(){
 		$P = Page($_GET['qgCms_page_files_as_zip']);
 		if ($P->access() < 1) exit('no access');
       	if (!$P->Files())     exit('no files');
-
 		time_limit(300);
-
 		$Zip = new Zip;
 		$tmpfname = appPATH.'cache/tmp/pri/'.randString().'.zip';
 		$Zip->open($tmpfname, Zip::CREATE);

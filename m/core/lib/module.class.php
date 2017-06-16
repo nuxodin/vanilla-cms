@@ -17,10 +17,10 @@ class module {
 	}
 	static function syncLocal() {
 		// neu
-		$file = sysPATH.'module.json'; // neu
+		$file = sysPATH.'index.json'; // neu
 		touch($file); // neu
 	 	$data = json_decode(file_get_contents($file), true) ?: []; // neu
-		foreach ($data as &$module) $module['local_time'] = ''; // neu
+		foreach ($data as &$module) $module['changed'] = ''; // neu
 
 		// old
 		D()->query("UPDATE module SET local_time = 0"); // old
@@ -40,11 +40,11 @@ class module {
 
 			// neu
 			$module =& $data[$m];
-			$module['local_time']    = $M->local_time; // zzz
-			$module['local_version'] = $M->local_version ?: '0.0.0'; // zzz
+			$module['changed']    = $M->local_time; // zzz
+			$module['version'] = $M->local_version ?: '0.0.0'; // zzz
 			//$module['local_time'] = dir_mtime(sysPATH.$m); // todo
 			//$M['local_version']   = $M['local_version'] ?: '0.0.0'; // todo
-			if ($module_changed < $module['local_time']) $module_changed = $module['local_time'];
+			//if ($module_changed < $module['time']) $module_changed = $module['time'];  // todo
 		}
 		G()->SET['qg']['module_changed'] = $module_changed;
 
@@ -52,7 +52,7 @@ class module {
 		foreach (self::all() as $M) if (!$M->local_time) $M->local_version = '';
 
 		// neu
-		foreach ($data as $name => $module) if (!$module['local_time']) unset($data[$name]);
+		foreach ($data as $name => $module) if (!$module['changed']) unset($data[$name]);
 		file_put_contents($file, json_encode($data,JSON_PRETTY_PRINT));
 	}
 	static function syncRemote() { // deprecated

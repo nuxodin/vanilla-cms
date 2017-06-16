@@ -58,11 +58,11 @@ class Store {
         }
 
         // neu
-        $file = sysPATH.'module.json';
+        $file = sysPATH.'index.json';
         $localdata = json_decode(file_get_contents($file), true) ?: [];
         $localdata[$name]['server'] = $this->host;
-        $localdata[$name]['local_version'] = $data['version'];
-        $localdata[$name]['local_updated'] = time();
+        $localdata[$name]['version'] = $data['version'];
+        $localdata[$name]['updated'] = time();
         file_put_contents($file, json_encode($localdata,JSON_PRETTY_PRINT));
 
 		return $data;

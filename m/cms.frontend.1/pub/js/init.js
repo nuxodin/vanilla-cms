@@ -3,7 +3,12 @@ document.addEventListener('keydown', function(e) {
 	if (e.shiftKey || e.metaKey || e.altKey || e.ctrlKey) return;
 	switch (e.which) {
 	case 69: //e
-		location.href = window.cmsToggleEditUrl;
+		c1.c1Use('scrollSync',function(scrollSync){
+			scrollSync.reevaluate(window);
+			var config = scrollSync.getConfig(window);
+			localStorage.setItem('cmsLastScrollPosition', JSON.stringify(config));
+			location.href = window.cmsToggleEditUrl;
+		});
 		break;
 	case 68: //d
         if (window.cmsToggleDebugUrl) location.href = cmsToggleDebugUrl;
@@ -13,6 +18,18 @@ document.addEventListener('keydown', function(e) {
 		break;
 	}
 });
+!function(){
+	var config = localStorage.getItem('cmsLastScrollPosition');
+	if (config) {
+		config = JSON.parse(config);
+		c1.c1Use('scrollSync',function(scrollSync){
+			scrollSync.restoreIn(config, window);
+		})
+		localStorage.removeItem('cmsLastScrollPosition');
+	}
+}();
+
+
 document.addEventListener('DOMContentLoaded',function(){
 	var editToggle = document.createElement('a');
 	editToggle.style.cssText = 'position:fixed; z-index:3';

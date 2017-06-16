@@ -6,18 +6,21 @@
         config : {},
         _elementConfig(el){
 			let client = clientDim(el);
-            return {
-                [c1.scrollSync.getSelector(el)] : {
-                    // pixel: {
-                    //     x: el.scrollLeft,
-                    //     y: el.scrollTop,
-                    // },
-                    percent: {
-                        x: el.scrollLeft / (el.scrollWidth  - client.width) || 0,
-                        y: el.scrollTop  / (el.scrollHeight - client.height) || 0,
-                    }
+            let selector = c1.scrollSync.getSelector(el);
+            let config = {
+                // pixel: {
+                //     x: el.scrollLeft,
+                //     y: el.scrollTop,
+                // },
+                percent: {
+                    x: el.scrollLeft / (el.scrollWidth  - client.width) || 0,
+                    y: el.scrollTop  / (el.scrollHeight - client.height) || 0,
                 }
-            }
+            };
+            let doc = el.ownerDocument;
+            if (!doc.c1ScrollSyncConfig) doc.c1ScrollSyncConfig = {};
+            doc.c1ScrollSyncConfig[selector] = config;
+            return { [selector] : config }
         },
         restoreIn(object, win){
             for (let selector in object) {
@@ -54,6 +57,19 @@
             if (!doc.c1ScrollSyncTargetWindows) doc.c1ScrollSyncTargetWindows = [];
             doc.c1ScrollSyncTargetWindows.push(toWindow); // massive memory leak? use weekmap?
             fromWindow.addEventListener('scroll',scrollListener,true);
+        },
+        reevaluate(win){
+            var all = win.document.querySelectorAll('*')
+            for (var i=0, el; el=all[i++];) {
+                if (el.scrollTop || el.scrollLeft) {
+                    this._elementConfig(el)
+                }
+            }
+        },
+        getConfig(win){
+            var doc = win.document;
+            if (!doc.c1ScrollSyncConfig) doc.c1ScrollSyncConfig = {};
+            return doc.c1ScrollSyncConfig;
         }
     }
     function scrollListener(e) {
@@ -68,10 +84,8 @@
                 c1.scrollSync.restoreIn(config, win);
             })
         }
-        if (!doc.c1ScrollSyncConfig) doc.c1ScrollSyncConfig = {};
-        for (let selector in config) {
-            doc.c1ScrollSyncConfig[selector] = config[selector];
-        }
+
+        // localStorage
         //localStorage.setItem('c1.scrollSync', JSON.stringify(c1.scrollSync.config));
     }
     addEventListener('scroll', scrollListener, true)

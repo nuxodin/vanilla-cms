@@ -3,7 +3,7 @@ namespace qg;
 
 qg::need('cms.layouter3');
 
-if (!D()->one("SELECT id FROM module WHERE name = 'cms.layout.custom.6'")) {
+if (!D()->one("SELECT name FROM module WHERE name = 'cms.layout.custom.6'")) {
 	D()->query("INSERT INTO module SET access = '1', name = 'cms.layout.custom.6'");
 }
 

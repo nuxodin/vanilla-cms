@@ -20,8 +20,13 @@ function q1CssText(style) {
 		/* chrome */
 		if (r==='background-repeat-x') r = 'background-repeat';
 		if (r==='background-repeat-y') continue;
+		/* ff */
 		if (r==='background-position-x') r = 'background-position'; /* firefox has no packground-position-x/y */
 		if (r==='background-position-y') continue;
+		/* safari */
+		if (r==='text-decoration-line') r = 'text-decoration';
+		if (r==='text-decoration-style') continue;
+		if (r==='text-decoration-color') continue;
 
 		var value = style.getPropertyValue(r);
 
@@ -64,9 +69,6 @@ function q1CssText(style) {
 		props[r] = value;
 	}
 
-			console.log(props)
-	
-	
 	if (props['overflow-y'] !== undefined && props['overflow-y'] === props['overflow-x']) {
 		props['overflow'] = props['overflow-y'];
 		delete props['overflow-y'];

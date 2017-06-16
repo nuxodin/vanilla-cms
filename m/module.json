@@ -1,0 +1,178 @@
+{
+    "cms": {
+        "local_time": 1495146593,
+        "local_version": "5.64.0",
+        "server": "v5.shwups-cms.ch",
+        "local_updated": 1496213662
+    },
+    "cms.backend": {
+        "local_time": 1492606527,
+        "local_version": "5.4.0"
+    },
+    "cms.backend.app1": {
+        "local_time": 1495838195,
+        "local_version": "5.8.0"
+    },
+    "cms.backend.groups": {
+        "local_time": 1495838196,
+        "local_version": "5.11.0"
+    },
+    "cms.backend.mails": {
+        "local_time": 1495838196,
+        "local_version": "5.19.0"
+    },
+    "cms.backend.module": {
+        "local_time": 1495838197,
+        "local_version": "5.30.0"
+    },
+    "cms.backend.settings": {
+        "local_time": 1495838197,
+        "local_version": "5.2.0"
+    },
+    "cms.backend.struct": {
+        "local_time": 1495838197,
+        "local_version": "5.8.0"
+    },
+    "cms.backend.struct.grpaccess": {
+        "local_time": 1495838198,
+        "local_version": "5.6.0"
+    },
+    "cms.backend.superuser": {
+        "local_time": 1495838198,
+        "local_version": "5.3.0"
+    },
+    "cms.backend.superuser.db": {
+        "local_time": 1495838198,
+        "local_version": "5.9.0"
+    },
+    "cms.backend.superuser.error_report": {
+        "local_time": 1495838199,
+        "local_version": "5.3.0"
+    },
+    "cms.backend.superuser.vers": {
+        "local_time": 1495838199,
+        "local_version": "5.1.0"
+    },
+    "cms.backend.system": {
+        "local_time": 1495838199,
+        "local_version": "5.10.0"
+    },
+    "cms.backend.users": {
+        "local_time": 1495838200,
+        "local_version": "5.16.0"
+    },
+    "cms.backend.webmaster": {
+        "local_time": 1495838200,
+        "local_version": "5.16.0"
+    },
+    "cms.cont.flexible": {
+        "local_time": 1492606523,
+        "local_version": "5.1.0"
+    },
+    "cms.cont.impressum2": {
+        "local_time": 1492606534,
+        "local_version": "5.2.0"
+    },
+    "cms.cont.login4": {
+        "local_time": 1492606532,
+        "local_version": "5.4.0"
+    },
+    "cms.cont.nav2": {
+        "local_time": 1492606532,
+        "local_version": "5.5.0"
+    },
+    "cms.cont.notFound1": {
+        "local_time": 1492606524,
+        "local_version": "5.1.0"
+    },
+    "cms.cont.phpfile": {
+        "local_time": 1493810706,
+        "local_version": "5.2.0"
+    },
+    "cms.cont.redirect": {
+        "local_time": 1492606533,
+        "local_version": "5.3.0"
+    },
+    "cms.cont.search1": {
+        "local_time": 1492606533,
+        "local_version": "5.6.0"
+    },
+    "cms.cont.table1": {
+        "local_time": 1495146593,
+        "local_version": "5.3.0"
+    },
+    "cms.cont.text": {
+        "local_time": 1492606524,
+        "local_version": "5.0.0"
+    },
+    "cms.cont.trash": {
+        "local_time": 1494504448,
+        "local_version": "5.10.0"
+    },
+    "cms.frontend.1": {
+        "local_time": 1496046651,
+        "local_version": "5.134.0",
+        "server": "v5.shwups-cms.ch",
+        "local_updated": 1496046651
+    },
+    "cms.image_editor": {
+        "local_time": 1495838201,
+        "local_version": "5.26.0"
+    },
+    "cms.installation.default": {
+        "local_time": 1495998682,
+        "local_version": "5.15.0",
+        "server": "v5.shwups-cms.ch",
+        "local_updated": 1496213663
+    },
+    "cms.layout.backend": {
+        "local_time": 1494504449,
+        "local_version": "5.16.0"
+    },
+    "cms.layout.custom.6": {
+        "local_time": 1495838202,
+        "local_version": "5.55.0"
+    },
+    "cms.layout.login": {
+        "local_time": 1492606535,
+        "local_version": "5.10.0"
+    },
+    "cms.layouter3": {
+        "local_time": 1492692924,
+        "local_version": "5.14.0"
+    },
+    "cms.versions": {
+        "local_time": 1493393761,
+        "local_version": "5.17.0"
+    },
+    "core": {
+        "local_time": 1496046650,
+        "local_version": "5.274.0",
+        "server": "v5.shwups-cms.ch",
+        "local_updated": 1496213662
+    },
+    "error_report": {
+        "local_time": 1495146594,
+        "local_version": "5.39.0"
+    },
+    "fileEditor": {
+        "local_time": 1492606523,
+        "local_version": "5.6.0"
+    },
+    "reporting": {
+        "local_time": 1492606536,
+        "local_version": "5.3.0"
+    },
+    "shwups": {
+        "local_time": 1495998682,
+        "local_version": "5.20.0",
+        "server": "v5.shwups-cms.ch",
+        "local_updated": 1496213663
+    },
+    "Zend": {
+        "local_time": 1495998682,
+        "local_version": "5.18.0",
+        "server": "v5.shwups-cms.ch",
+        "local_updated": 1495998682
+    }
+}

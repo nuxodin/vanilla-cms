@@ -71,7 +71,7 @@ class qg {
 		file_put_contents($file, serialize($data));
 
 		// todo
-		$file = appPATH.'qg/module_initialized.json';
+		$file = appPATH.'qg/module_installed.json';
 		!is_dir(appPATH.'qg') && mkdir(appPATH.'qg');
 		file_put_contents($file, json_encode($data,JSON_PRETTY_PRINT));
 	}
@@ -87,7 +87,7 @@ class qg {
 
 		// todo
 		if (self::$installedData === null) {
-			$file = appPATH.'qg/module_initialized.json';
+			$file = appPATH.'qg/module_installed.json';
 			if (is_file($file))
 				self::$installedData = json_decode(file_get_contents($file), true);
 		}
