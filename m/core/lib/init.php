@@ -14,7 +14,7 @@ class liveClient {
 	static function register() {
 		//$hash = mt_rand(1,9999999).mt_rand(1,9999999).mt_rand(1,9999999).mt_rand(1,9999999); // duplicate entry errors!!? WHY!?!?!?
 		$hash = randstring(32); // better?
-	setcookie('cid', $hash, 2004929530, appURL, false /*domain*/, QG_HTTPS /*secure*/, true /*http*/);
+	setcookie('cid', $hash, 2004929530, appURL, false, QG_HTTPS, true);
 		$_COOKIE['cid'] = $hash;
 		$_SESSION['liveClient'] = D()->client->insert([
 			'hash'    => $hash,

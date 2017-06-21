@@ -19,7 +19,7 @@ if (isset($_GET['export'])) {
   	}
 
 	/* only custom module:
-	foreach (module::all() as $M) {
+	foreach (module::all() as $M) { // will not work anymore
 		If ($M->server_time) continue;
 		$zip->addDir(sysPATH.$name, 'm/'.$M->name, '/(\.svn)/');
 	}

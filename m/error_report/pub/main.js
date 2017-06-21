@@ -29,6 +29,7 @@ window.error_report_count = window.error_report_count || 0; // global: make it p
 			message: e.message,
 			file: e.filename,
 			line: e.lineno,
+			col:  e.colno,
 			backtrace: stack
 		});
   	});
@@ -41,8 +42,10 @@ window.error_report_count = window.error_report_count || 0; // global: make it p
 			var latest = stack[0];
 			var data = {
 				message:message,
-				file: latest ? latest.file : '-1',
-				line: latest ? latest.line : '-1',
+				function: latest ? latest.function : '-1',
+				file:     latest ? latest.file : '-1',
+				line:     latest ? latest.line : '-1',
+				col:      latest ? latest.col  : '-1',
 				backtrace: stack,
 			}
 			send(data);

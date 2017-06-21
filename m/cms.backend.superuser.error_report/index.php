@@ -40,7 +40,7 @@
 							<td>
 								<?=hee($row['source'])?>
 							<td>
-								<a target=_blank href="<?=appURL.'editor/?file='.urlencode($row['file']).'&line='.$row['line']?>"><?=hee($row['message'])?></a>
+								<a target=_blank href="<?=appURL.'editor/?file='.urlencode($row['file']).'&line='.$row['line'].'&col='.$row['col']?>"><?=hee($row['message'])?></a>
 							<td>
 								<img
 									onclick="$fn('page::reload')(<?=$Cont?>,{deleteByMessage:this.getAttribute('value')})"
@@ -68,7 +68,7 @@
 					<?php foreach ($rows as $row) { ?>
 						<tr style="white-space:nowrap">
 							<td> <?=$row['time']?> <br> <?=$row['log_id']?>
-							<td> <a href="<?=hee(appURL.'editor/?file='.urlencode($row['file']).'&line='.$row['line'])?>" target=_blank title="<?=hee($row['file'])?>">goto</a>
+							<td> <a href="<?=hee(appURL.'editor/?file='.urlencode($row['file']).'&line='.$row['line'].'&col='.$row['col'])?>" target=_blank title="<?=hee($row['file'])?>">goto</a>
 							<td> <a href="<?=hee($row['request'])?>" target=_blank>
 									<?=$row['request']?>
 								 </a><br>
@@ -85,7 +85,7 @@
 									echo '<td>';
 
 									$fileShow = substr($item['file'],strlen(sysPATH)-2);
-									echo '<a href="'.hee(appURL.'editor/?file='.urlencode($item['file']).'&line='.$item['line']).'" target=_blank>'.hee($fileShow).'</a>';
+									echo '<a href="'.hee(appURL.'editor/?file='.urlencode($item['file']).'&line='.$item['line'].'&col='.$item['col']).'" target=_blank>'.hee($fileShow).'</a>';
 
 									echo '<td>';
 									echo hee($item['function']);

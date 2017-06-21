@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded',function(){
     var editorEl = document.getElementById('editor');
     var mime   = editorEl.getAttribute('mime');
     var cmLine = editorEl.getAttribute('line')-1;
+    var cmCol  = editorEl.getAttribute('col')-1;
 
     function saveFile(content){
         btn.style.backgroundColor = '#fea';
@@ -54,7 +55,7 @@ document.addEventListener('DOMContentLoaded',function(){
     if (cmLine !== '') {
         cmLine = parseInt(cmLine);
         setTimeout(function() {
-            editor.setCursor(cmLine);
+            editor.setCursor(cmLine, cmCol);
             editor.addLineClass(cmLine, null, "markLine");
             var line = $('.CodeMirror-lines .markLine');
             if (!line.offset()) return;

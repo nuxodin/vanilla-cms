@@ -9,10 +9,10 @@ class cmsBackend {
 			$P->changeGroup(2, 0);
 			$P->changeGroup(3, 0);
 			$P->Cont(1)->set('module','cms.backend');
-			$P->Title('de','Backend');
 			$P->SET['childXML'] = '<page visible="1"></page>';
 			G()->SET['cms']['backend']->setDefault((string)$P);
 		}
+		return cms::PageByModule('cms.backend')->Page;
 	}
 	static function install($module) {
 		self::checkInstalled();
@@ -29,7 +29,7 @@ class cmsBackend {
 					'access'  => 0,
 					'offline' => 0
 				])->Cont(1);
-				$Page->set(['module'=>$m]);
+				$Page->set('module',$m);
 			}
 			$parentModule = $m;
 		}

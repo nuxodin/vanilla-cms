@@ -29,15 +29,15 @@ function reporting_send() {
     ];
     // module data
     $sql =
-    " SELECT  module.*, count(page.module) as num ".
+    " SELECT module.*, count(page.module) as num ".
     " FROM ".
     "   module ".
     "   LEFT JOIN page on page.module = module.name ".
-    " WHERE local_version ".
+    //" WHERE local_version ".
     " GROUP BY module.name ";
     foreach (D()->query($sql) as $row) {
         $report['modules'][$row['name']] = [
-            'version' => $row['local_version'],
+            'version' => module::index()[$row['name']]['version'],
             'num_as_cont' => $row['num'],
         ];
     }
@@ -51,12 +51,9 @@ function reporting_send() {
             if (strpos($filePATH, $sysPATH) === 0) {
                 $path = substr($filePATH, strlen($sysPATH));
                 list($module, $path) = explode('/',$path,2);
-                $Module = D()->module->Entry($module);
-                if ($Module->is()) {
-                    $row['module']         = $Module->name;
-                    $row['module_version'] = $Module->local_version;
-                    $row['module_path']    = $path;
-                }
+				$row['module']         = $module;
+				$row['module_version'] = module::index()[$module]['version'];
+				$row['module_path']    = $path;
             }
             $file = $filePATH;
             $row['file'] = $file;

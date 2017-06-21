@@ -15,12 +15,15 @@ if (isset($vars['delModuleFile'])) {
 }
 
 $mTime         = dir_mtime(sysPATH.$name)-1;
-$tmp           = qg::Store()->indexAll();
+$tmp           = qg::Store()->index();
 $storeData     = $tmp[$name] ?? false;
+
+$localData     = module::index()[$name];
+
 //$storeData     = qg::Store()->indexGet($name);
-$changed       = $mTime > $Module->local_updated;
+$changed       = $mTime > $localData['updated'];
 $localAge      = time() - $mTime;
-$hasNewVersion = $storeData && $storeData['version'] > $Module->local_version;
+$hasNewVersion = $storeData && $storeData['version'] > $localData['version'];
 ?>
 <div class=beBoxCont>
 
@@ -41,9 +44,9 @@ $hasNewVersion = $storeData && $storeData['version'] > $Module->local_version;
 	<div class=beBox style="flex:320px">
 		<div class=-head>Manage</div>
 		<table class=c1-style>
-			<tr> <td> Lokale Version : <td> <?=$Module->local_version?>
+			<tr> <td> Lokale Version : <td> <?=$localData['version']?>
 			<tr> <td> Server Version : <td> <?=$storeData['version']?>
-			<tr> <td> Geupdated : <td> <?=strftime('%x %H:%M',$Module->local_updated)?>
+			<tr> <td> Geupdated : <td> <?=strftime('%x %H:%M',$localData['updated'])?>
 			<?php
 			$color = '';
 			if ($changed) {
@@ -84,11 +87,17 @@ $hasNewVersion = $storeData && $storeData['version'] > $Module->local_version;
 				list($v1,$v2,$v3) = explode('.', $storeData['version'].'.0.0.0');
 				$v1 = (int)$v1;
 				?>
-				<select name=inc>
+				<!--select name=inc>
 					<option value=1>          <?=$v1+1?>.0.0
 					<option value=2 selected> <?=$v1?>.<?=$v2+1?>.0
 					<option value=3>          <?=$v1?>.<?=$v2?>.<?=$v3+1?>
-				</select>
+				</select-->
+				<input name=version list=nextVersions value="<?=$v1?>.<?=$v2+1?>.0" style="width:70px" required>
+				<datalist id=nextVersions>
+					<option> <?=$v1+1?>.0.0
+					<option selected> <?=$v1?>.<?=$v2+1?>.0
+					<option> <?=$v1?>.<?=$v2?>.<?=$v3+1?>
+				</datalist>
 				<button>Release</button>
 			</form>
 			<script>
@@ -98,9 +107,11 @@ $hasNewVersion = $storeData && $storeData['version'] > $Module->local_version;
 					e.preventDefault();
 			        if (!confirm('Achtung! Module wird auf dem Server überschrieben!\nwirklich hochladen?')) return false;
 			        let notes = form.querySelector('[name=notes]').value;
-					let select = form.querySelector('[name=inc]');
-					let inc = select.options[select.selectedIndex].value;
-                    $fn('page::api')(<?=$Cont?>, {upload:'<?=$name?>', incVersion:inc, notes}).run(done=>{
+					//let select = form.querySelector('[name=inc]');
+					//let inc = select.options[select.selectedIndex].value;
+                    //$fn('page::api')(<?=$Cont?>, {upload:'<?=$name?>', incVersion:inc, notes}).run(done=>{
+			        let version = form.querySelector('[name=version]').value;
+                    $fn('page::api')(<?=$Cont?>, {upload:'<?=$name?>', version, notes}).run(done=>{
 			            !done && alert('hat nicht funktioniert!');
 						location.href = location.href.replace(/#.*$/,'');
 			        });
@@ -129,13 +140,6 @@ $hasNewVersion = $storeData && $storeData['version'] > $Module->local_version;
 				foreach ($verzeichnis as $datei) {
 					$show = substr($datei, $startOffset);
 					$search = str_replace('\\', '/', $datei);
-					if (preg_match('/\.svn/', $search)) continue;
-					if (preg_match('/\.settings/', $search)) continue;
-					if (preg_match('/\.project/', $search)) continue;
-					if (preg_match('/org\.eclipse/', $search)) continue;
-					if (preg_match('/qg\/file\//', $search)) continue;
-					if (preg_match('/\/Zend\//', $search)) continue;
-					if (preg_match('/\/cache\//', $search)) continue;
 					if (!is_file($datei)) continue;
 
 					$file = realpath($datei);
@@ -143,7 +147,7 @@ $hasNewVersion = $storeData && $storeData['version'] > $Module->local_version;
 					$src = appURL.'editor?file='.urlencode($file);
 
 					$fMtime   = filemtime($file);
-					$fChanged = $fMtime > $Module->local_updated;
+					$fChanged = $fMtime > $localData['updated'];
 					$fAge     = time() - $fMtime;
 					?><tr><?php
 						?><td><a href="<?=hee($src)?>" target=<?=md5($file)?>><?=$show?></a><?php
@@ -191,7 +195,7 @@ $hasNewVersion = $storeData && $storeData['version'] > $Module->local_version;
 				$changes = array_reverse($changes);
 				?>
 				<?php foreach ($changes as $change) {
-					$installed = @$change['version'] === $Module->local_version;
+					$installed = @$change['version'] === $localData['version'];
 					?>
 					<tr style="vertical-align:top; <?=$installed?'color:var(--cms-color);':''?>">
 						<td> <b><?=@$change['version']?></b>   <?=isset($change['time']) ? strftime('%x %H:%M',$change['time']) : ''?> <br><?=@$change['user']?>
@@ -206,7 +210,7 @@ $hasNewVersion = $storeData && $storeData['version'] > $Module->local_version;
 		</div>
 	</div>
 
-	<?php if ($Module->server_time && $Module->local_version) { ?>
+	<?php if ($storeData['time'] && $localData['updated']) { ?>
 		<div class=beBox style="flex:100%">
 			<div class=-head>Mit Server vergleichen</div>
 			<div class=-body style="max-height:90vh; overflow:auto;" data-part="diff">

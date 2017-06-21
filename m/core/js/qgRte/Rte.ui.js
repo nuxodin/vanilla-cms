@@ -139,15 +139,15 @@ Rte.on('selectionchange', ()=>{
 	if (!Rte.active) return;
 	if (Rte.ui.mouseover) return;
 	var distance = getSelection().isCollapsed ? 100 : 20;
-	c1.c1Use('Placer',function(){
-		let Placer = new c1.Placer(Rte.ui.div, {
-			xuse:'transform',
+	c1.c1Use('Placer',Placer=>{
+		let placer = new Placer(Rte.ui.div, {
+			zzz_use:'transform',
 			x:'center',
 			y:'after',
 			margin:distance,
 		});
 		var pos = qgSelection.rect();
-		Placer.toClientRect(pos);
+		placer.toClientRect(pos);
 	});
 });
 

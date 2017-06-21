@@ -1,7 +1,8 @@
 <?php
 namespace qg;
 
-qg::need('Zend');
+file_put_contents(sysPATH.'.htaccess', 'deny from all');
+touch(sysPATH.'index.json');
 
 copy(sysPATH.'core/util/app.htaccess',appPATH.'.htaccess');
 copy(sysPATH.'core/util/app.user.ini',appPATH.'.user.ini');
@@ -29,4 +30,9 @@ if (isset(G()->SET)) {
 	G()->SET['qg']['HSTS']->make('max-age', 60*60);
 	G()->SET['qg']['HSTS']->make('includeSubDomains', true)->setType('bool');
 	G()->SET['qg']['HSTS']->make('preload', false)->setType('bool');
+} else {
+	echo 'has no settings-array';
 }
+
+// at the bottom
+qg::need('Zend');

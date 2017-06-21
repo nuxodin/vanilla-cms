@@ -5,7 +5,7 @@ extract($vars, EXTR_REFS | EXTR_SKIP);
 if (!Usr()->superuser) return false;
 
 if ($init??0) {
-    qg::install($init);
+    qg::initialize($init);
     G()->Answer['cmsInfo'] = 'Das Module wurde neu initialisiert';
 }
 if ($update??0) {
@@ -15,7 +15,9 @@ if ($update??0) {
     return !!$ok;
 }
 if ($upload??0) {
-    $vs = qg::Store()->release($upload, $incVersion, $notes);
+	$vs = isset($version)
+		? qg::Store()->upload($upload, $version, $notes)
+		: qg::Store()->release($upload, $incVersion, $notes);
     G()->Answer['cmsInfo'] = $vs ? L('Das Module wurde exportiert') : L('Fehlgeschlagen');
     return $vs ? $vs['version'] : false;
 }
@@ -26,11 +28,11 @@ if ($uninstall??0) {
     return 1;
 }
 if ($remoteDelete??0) {
-    return qg::Store()->serverDelete($remoteDelete);
+    return qg::Store()->delete($remoteDelete);
 }
-if (isset($title)) {
-    D()->module->Entry($module)->Title()->set($title);
-}
+// if (isset($title)) {
+//     D()->module->Entry($module)->Title()->set($title);
+// }
 if (isset($access)) {
     D()->module->Entry($module)->access = (int)$access;
 }

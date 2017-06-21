@@ -9,6 +9,7 @@ function error_report($vs) {
 
 	$vs['file']    = $vs['file'] ?? '';
 	$vs['line']    = $vs['line'] ?? '';
+	$vs['col']     = $vs['col'] ?? '';
 	$vs['request'] = $vs['request'] ?? preg_replace('/\?$/','', 'http://'.trim($_SERVER['HTTP_HOST']).trim($_SERVER['REQUEST_URI']) );
 	$vs['referer'] = $vs['referer'] ?? $_SERVER['HTTP_REFERER'];
 	$vs['browser'] = $_SERVER['HTTP_USER_AGENT'];
@@ -18,9 +19,9 @@ function error_report($vs) {
 	$vs['ip']      = $_SERVER['REMOTE_ADDR'];
 	$vs['time']    = strftime('%Y-%m-%d %H:%M:%S');
 
-	$editUrl = function($file, $line) {
+	$editUrl = function($file, $line, $col) {
 		return realpath($file)
-			? Url(appURL).'editor/index.php?file='.realpath($file).'&line='.$line
+			? Url(appURL).'editor/index.php?file='.realpath($file).'&line='.$line.'&col='.$col
 			: 'view-source:'.$file;//.'#'.$vs['line'];
 	};
 	$path = function($file) {
@@ -42,12 +43,9 @@ function error_report($vs) {
 	}
 	foreach ($vs['backtrace'] as $key => $backtrace) {
 		$backtrace = [
-			//'file'     => isset($backtrace['url']) && $backtrace['url'] ? $backtrace['url'] : ($backtrace['file']??''),
 			'file'     => ($backtrace['url']??'')?:($backtrace['file']??''),
 			'line'     => $backtrace['line'] ?? '',
-			// 'function' => isset($backtrace['func']) && $backtrace['func']
-			// 				? $backtrace['func']
-			// 				: ($backtrace['class']??'').($backtrace['type']??'').$backtrace['function'],
+			'col'      => $backtrace['col'] ?? '',
 			'function' => ($backtrace['func']??'')?:($backtrace['class']??'').($backtrace['type']??'').$backtrace['function'],
 			'args'     => $backtrace['args']??null,
 		];
@@ -73,7 +71,7 @@ function error_report($vs) {
 	/* print */
 	if (debug && $vs['source'] !== 'js') {
 		echo "\n\n".
-		'<a target=_blank href="'.appURL.'editor?file='.urlencode($vs['file']).'&line='.$vs['line'].'">'."\n".
+		'<a target=_blank href="'.appURL.'editor?file='.urlencode($vs['file']).'&line='.$vs['line'].'&col='.$vs['col'].'">'."\n".
 		'  '.$vs['message'].' <br> '."\n".
 		'  <b>'.$fileDisplay($vs['file']).':'.$vs['line']."</b>\n".
 		'</a>';
@@ -82,7 +80,7 @@ function error_report($vs) {
 		foreach ($vs['backtrace'] as $data) {
 			++$i;
 			if ($i > 10) break;
-			echo '<a href="'.appURL.'editor?file='.urlencode($data['file']).'&line='.$data['line'].'" target=_blank>&gt; </a>';
+			echo '<a href="'.appURL.'editor?file='.urlencode($data['file']).'&line='.$data['line'].'&col='.$data['col'].'" target=_blank>&gt; </a>';
 			echo "\n";
 		}
 		echo "<br>\n\n";
@@ -99,7 +97,7 @@ function error_report($vs) {
 	$body =
 	'<table '.$tSty.'>'.
 	'<tr><td '.$tdSty.'> Message <td '.$tdSty.'> '.$vs['message'].
-	'<tr><td '.$tdSty.'> File    <td '.$tdSty.'> <a target=_blank href="'.$editUrl($vs['file'],$vs['line']).'">'.$fileDisplay($vs['file']).'</a>'.
+	'<tr><td '.$tdSty.'> File    <td '.$tdSty.'> <a target=_blank href="'.$editUrl($vs['file'],$vs['line'],$vs['col']).'">'.$fileDisplay($vs['file']).'</a>'.
 	'<tr><td '.$tdSty.'> Line    <td '.$tdSty.'> '.$vs['line'].
 	'<tr><td '.$tdSty.'> Trace   <td '.$tdSty.'> '.
 		'<table '.$tSty.'>';
@@ -107,7 +105,7 @@ function error_report($vs) {
 			$f = $path($trace['file']);
 			$body .=
 			'<tr>'.
-				'<td '.$tdSty.'> <a target=_blank href="'.$editUrl($f,$trace['line']).'">'.$fileDisplay($trace['file']).'</a>'.
+				'<td '.$tdSty.'> <a target=_blank href="'.$editUrl($f,$trace['line'], $trace['col']).'">'.$fileDisplay($trace['file']).'</a>'.
 				'<td '.$tdSty.'> '.$trace['line'].
 				'<td '.$tdSty.'> '.$trace['function'].
 				'<td '.$tdSty.'> '.$trace['args'];

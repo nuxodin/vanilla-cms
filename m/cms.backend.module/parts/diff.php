@@ -35,9 +35,9 @@ $verzeichnis = new \RecursiveIteratorIterator( new \RecursiveDirectoryIterator($
 $startOffset = strlen( realpath($dir) )+1;
 foreach ($verzeichnis as $datei) {
     if (!is_file($datei)) continue;
+    $datei = realpath($datei);
     $show = substr($datei, $startOffset);
-    $file = realpath($datei);
-    $files[$show]['remote'] = $file;
+    $files[$show]['remote'] = $datei;
 }
 
 $dir = sysPATH.$module;
@@ -45,9 +45,9 @@ $verzeichnis = new \RecursiveIteratorIterator( new \RecursiveDirectoryIterator($
 $startOffset = strlen( realpath($dir) )+1;
 foreach ($verzeichnis as $datei) {
     if (!is_file($datei)) continue;
+    $datei = realpath($datei);
     $show = substr($datei, $startOffset);
-    $file = realpath($datei);
-    $files[$show]['local'] = $file;
+    $files[$show]['local'] = $datei;
 }
 
 foreach ($files as $show => $both) {

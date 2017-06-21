@@ -2,7 +2,7 @@
 namespace qg;
 
 html::addJsFile(sysURL.'core/js/c1.js');
-html::addJsFile(sysURL.'core/js/c1/fix/dom.js');
+html::addJsFile(sysURL.'core/js/c1/dom.js');
 html::addJsFile(sysURL.'core/js/c1/onElement.js');
 html::addJsFile(sysURL.'core/js/c1/img-ratio.js');
 //html::addJsFile(sysURL.'core/js/jQuery.js');

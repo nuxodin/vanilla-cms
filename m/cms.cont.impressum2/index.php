@@ -23,15 +23,15 @@ $cmsContImpressum2 = [
 $superSET = G()->SET['cms.cont.impressum2'][$Cont->id];
 
 $printData = function($data) {
-	echo '<div class=-name>'.$data['Firmenname'].'</div>';
-	echo $data['Adresse'] ? '<div class=-address>'.$data['Adresse'].'</div>' : '';
-	echo $data['PLZ/Ort'] ? '<div class=-city>'   .$data['PLZ/Ort'].'</div>' : '';
-	echo $data['Telefon'] ? '<div class=-phone>'  .$data['Telefon'].'</div>' : '';
-	echo $data['Mail']    ? '<div class=-mail><a href="mailto:'.$data['Mail'].'">'.$data['Mail'].'</a></div>' : '';
-	echo $data['Website'] ? '<div class=-web> <a href="'.$data['Website'].'" target="_blank" title="'.$data['title-tag'].'">'.$data['Website'].'</a></div>' : '';
+	echo '<div class=-name>'.($data['Firmenname']??'').'</div>';
+	echo $data['Adresse']??0 ? '<div class=-address>'.$data['Adresse'].'</div>' : '';
+	echo $data['PLZ/Ort']??0 ? '<div class=-city>'   .$data['PLZ/Ort'].'</div>' : '';
+	echo $data['Telefon']??0 ? '<div class=-phone>'  .$data['Telefon'].'</div>' : '';
+	echo $data['Mail']??0    ? '<div class=-mail><a href="mailto:'.$data['Mail'].'">'.$data['Mail'].'</a></div>' : '';
+	echo $data['Website']??0 ? '<div class=-web> <a href="'.$data['Website'].'" target="_blank" title="'.$data['title-tag'].'">'.$data['Website'].'</a></div>' : '';
 };
 
-$tag = $Cont->SET->make('Heading', 'h2')->setHandler('select')->setOptions('h1', 'h2', 'h3', 'h4')->v;
+$tag = $Cont->SET['Heading']->v;
 ?>
 <div>
 	<?php if ($Cont->SET['Unternehmen']['Firmenname']->v && $Cont->SET['Unternehmen']['PLZ/Ort']->v && $Cont->SET['Unternehmen']['PLZ/Ort']->v && $Cont->SET['Unternehmen']['Telefon']->v) {
@@ -41,7 +41,7 @@ $tag = $Cont->SET->make('Heading', 'h2')->setHandler('select')->setOptions('h1',
 		$T = $Cont->Text('title_Unternehmen');
 		if (!trim($T)) $T->get('de')->set('Kontaktadresse'); ?>
 		<div class="-contact -owner">
-			<<?=$tag.' '.($Cont->edit? 'contenteditable cmstxt='.$T->id : '')?>><?=$T?></<?=$tag?>>
+			<h<?=$tag.' '.($Cont->edit? 'contenteditable cmstxt='.$T->id : '')?>><?=$T?></h<?=$tag?>>
 			<?php $printData($data); ?>
 		</div>
 	<?php } ?>
@@ -52,7 +52,7 @@ $tag = $Cont->SET->make('Heading', 'h2')->setHandler('select')->setOptions('h1',
 		$T = $Cont->Text('title_Konzept');
 		if (!trim($T)) $T->get('de')->set('Konzept'); ?>
 		<div class="-contact -concept">
-			<<?=$tag.' '.($Cont->edit? 'contenteditable cmstxt='.$T->id : '')?>><?=$T?></<?=$tag?>>
+			<h<?=$tag.' '.($Cont->edit? 'contenteditable cmstxt='.$T->id : '')?>><?=$T?></h<?=$tag?>>
 			<?php $printData($data); ?>
 		</div>
 	<?php } ?>
@@ -67,7 +67,7 @@ $tag = $Cont->SET->make('Heading', 'h2')->setHandler('select')->setOptions('h1',
 		$T = $Cont->Text('title_Design');
 		if (!trim($T)) $T->get('de')->set('Design'); ?>
 		<div class="-contact -design">
-			<<?=$tag.' '.($Cont->edit? 'contenteditable cmstxt='.$T->id : '')?>><?=$T?></<?=$tag?>>
+			<h<?=$tag.' '.($Cont->edit? 'contenteditable cmstxt='.$T->id : '')?>><?=$T?></h<?=$tag?>>
 			<?php $printData($data); ?>
 		</div>
 	<?php } ?>
@@ -82,7 +82,7 @@ $tag = $Cont->SET->make('Heading', 'h2')->setHandler('select')->setOptions('h1',
 		$T = $Cont->Text('title_Fotografie');
 		if (!trim($T)) $T->get('de')->set('Fotografie'); ?>
 		<div class="-contact -photos">
-			<<?=$tag.' '.($Cont->edit? 'contenteditable cmstxt='.$T->id : '')?>><?=$T?></<?=$tag?>>
+			<h<?=$tag.' '.($Cont->edit? 'contenteditable cmstxt='.$T->id : '')?>><?=$T?></h<?=$tag?>>
 			<?php $printData($data); ?>
 		</div>
 	<?php } ?>
@@ -92,7 +92,7 @@ $tag = $Cont->SET->make('Heading', 'h2')->setHandler('select')->setOptions('h1',
 		$T = $Cont->Text('title_TechnischeUmsetzung');
 		if (!trim($T)) $T->get('de')->set('Technische Umsetzung / CMS'); ?>
 		<div class="-contact -development">
-			<<?=$tag.' '.($Cont->edit? 'contenteditable cmstxt='.$T->id : '')?>><?=$T?></<?=$tag?>>
+			<h<?=$tag.' '.($Cont->edit? 'contenteditable cmstxt='.$T->id : '')?>><?=$T?></h<?=$tag?>>
 			<?php $printData($data); ?>
 		</div>
 	<?php } ?>
@@ -101,7 +101,7 @@ $tag = $Cont->SET->make('Heading', 'h2')->setHandler('select')->setOptions('h1',
 		$T = $Cont->Text('title_Handelsregistereintrag');
 		if (!trim($T)) $T->get('de')->set('Handelsregistereintrag'); ?>
 		<div class="-contact -traderegister">
-			<<?=$tag.' '.($Cont->edit? 'contenteditable cmstxt='.$T->id : '')?>><?=$T?></<?=$tag?>>
+			<h<?=$tag.' '.($Cont->edit? 'contenteditable cmstxt='.$T->id : '')?>><?=$T?></h<?=$tag?>>
 			<table border="0">
 			    <tr>
 					<td style="width:200px">Eingetragener Firmenname:

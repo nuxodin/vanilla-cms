@@ -60,10 +60,6 @@
 			cms.el.module(el) === module && fn(el);
 		});
 	};
-	cms.contInit = function(module, fn) { // deprecated, uses jQuery
-		cms.initCont(module,function(el){ fn($(el)); });
-		console.warn('deprecated');
-	};
 
 	document.addEventListener('qgCmsCont.ready', function(e) {
 		e.target.qgCmsCont_initialized = 1;

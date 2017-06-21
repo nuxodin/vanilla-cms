@@ -3,9 +3,11 @@ namespace qg;
 
 require_once sysPATH.'core/lib/path.php';
 
-!defined('sysURL') && define('sysURL', path2uri(sysPATH));
-!defined('appURL') && define('appURL', path2uri(appPATH));
-
+//if (defined('appPATH')) trigger_error('dont define appPATH in your index.php');
+!defined('appPATH')  && define('appPATH', dirname($_SERVER['SCRIPT_FILENAME']).'/');
+!defined('sysPATH')  && define('sysPATH', appPATH.'m/');
+!defined('sysURL')   && define('sysURL', path2uri(sysPATH));
+!defined('appURL')   && define('appURL', path2uri(appPATH));
 !defined('QG_HTTPS') && define('QG_HTTPS', false);
 
 error_reporting(E_ALL);
@@ -19,7 +21,6 @@ if (isset($_SESSION['liveUser']) && isset($_GET['debugmode'])) {
 }
 define('debug', $debug??false || $_SESSION['qg']['debug']);
 ini_set('display_errors', debug);
-
 $skip_stacks = 0; // error_report
 
 set_include_path(sysPATH); // zend
@@ -72,7 +73,7 @@ $x = preg_replace('/\?.*/', '', $x);
 $x = preg_replace('/\/$/', '', $x);
 define('appRequestUri', urldecode($x));
 
-!D()->qg_setting && qg::install('core'); // todo, better solution?
+!D()->qg_setting && qg::initialize('core'); // todo, better solution?
 
 G()->SET = new settingArray();
 

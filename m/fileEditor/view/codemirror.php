@@ -66,7 +66,7 @@ G()->js_data['qgToken'] = qg::token();
 		$mime = str_replace('application/x-javascript','text/javascript', $mime);
 		?>
 		<div style="height:100%; width:100%">
-			<textarea id=editor mime="<?=$mime?>" line="<?=$_GET['line']??''?>" style="width:100%; height:100%;"><?=hee(file_get_contents($file))?></textarea>
+			<textarea id=editor mime="<?=$mime?>" line="<?=$_GET['line']??''?>" col="<?=$_GET['col']??''?>" style="width:100%; height:100%;"><?=hee(file_get_contents($file))?></textarea>
 		</div>
 	</body>
 </html>

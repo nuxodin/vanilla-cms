@@ -8,14 +8,13 @@ define('qg_dbname', 'vanilla_cms');
 define('qg_dbuser', 'root');
 define('qg_dbpass', '');
 
-define('appPATH', __DIR__.'/');
-define('sysPATH', appPATH.'m/');
+define('sysPATH', __DIR__.'/m/');
 
-define('qg_host', 'v5.shwups-cms.ch');
+define('qg_host', 'v6.vanilla-cms.org');
 
 $initFile = sysPATH.'core/sysinit.php';
 if (!( is_file($initFile) && include($initFile) )) {
-    !is_writable(appPATH) && die('Failed, '.appPATH.' is not writable!');
+    !is_writable(__DIR__) && die('Failed, '.__DIR__.' is not writable!');
     copy('http://'.qg_host.'/install', 'tmp') ? include('tmp') : die('Failed');
 }
 

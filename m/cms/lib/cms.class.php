@@ -71,7 +71,7 @@ class cms {
 			$sql =
 			" SELECT m.name, count(page.id) as num 					" .
 			" FROM module m LEFT JOIN page ON m.name = page.module	" .
-			" WHERE local_time AND m.name LIKE 'cms.cont.%'			" .
+			" WHERE m.name LIKE 'cms.cont.%'			" .
 			" GROUP BY m.name										" .
 			" ORDER BY count(page.id) DESC							";
 			foreach (D()->query($sql) as $vs) {
@@ -86,7 +86,7 @@ class cms {
 			$sql =
 			" SELECT m.name, count(page.id) as num 					" .
 			" FROM module m LEFT JOIN page ON m.name = page.module	" .
-			" WHERE local_time AND m.name LIKE 'cms.layout.%'		" .
+			" WHERE m.name LIKE 'cms.layout.%'		" .
 			" GROUP BY m.name										" .
 			" ORDER BY count(page.id) DESC							";
 			foreach (D()->query($sql) as $vs) {

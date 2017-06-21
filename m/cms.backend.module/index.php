@@ -3,7 +3,7 @@ namespace qg;
 
 if (isset($_GET['module'])) return include 'module.php';
 
-module::sync();
+module::syncLocal();
 
 ?>
 <div class=beBox>

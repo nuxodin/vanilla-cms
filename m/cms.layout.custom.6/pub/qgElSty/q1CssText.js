@@ -30,33 +30,33 @@ function q1CssText(style) {
 
 		var value = style.getPropertyValue(r);
 
-        if (value==='initial' && r==='text-decoration') value = 'none';
+		if (value==='initial' && r==='text-decoration') value = 'none';
 		//if (value==='initial') continue; // why uncommented?
-        if (value==='initial' && r==='transition-duration'       ) continue;
-        if (value==='initial' && r==='transition-delay'          ) continue;
-        if (value==='initial' && r==='transition-timing-function') continue;
+		if (value==='initial' && r==='transition-duration'       ) continue;
+		if (value==='initial' && r==='transition-delay'          ) continue;
+		if (value==='initial' && r==='transition-timing-function') continue;
 		if (value==='initial' && r.match(/border-image-/)) continue;
 
-        if (r==='content') { // buggy chrome
-            var nParts = [];
-            value.split(/,/).forEach(function(part) {
-                part = part.trim();
-                nParts.push( part.match(/^('|"|attr|url)/) ? part : "'"+part+"'" );
-            });
-            value = nParts.join(' ');
-        }
+		if (r==='content') { // buggy chrome
+		    var nParts = [];
+		    value.split(/,/).forEach(function(part) {
+		        part = part.trim();
+		        nParts.push( part.match(/^('|"|attr|url)/) ? part : "'"+part+"'" );
+		    });
+		    value = nParts.join(' ');
+		}
 		if (value===null) continue;
 
-        if (r.match(/background/) && value.match(/url\(/)) {
-            var regexp = new RegExp('http[s]?:\/\/'+RegExp.escape(location.host));
-            if (value.match(regexp)) value = value.replace(regexp,'');
-        }
-        if (value.match(/rgba\(/)) {
-            value = value.replace(/(rgba\([^,]+,[^,]+,[^,]+,)([^)]+\))/g,function(o,m1,m2) {
-                var alpha = Math.round( 1000*parseFloat(m2) ) / 1000;
-                return m1+alpha+')';
-            });
-        }
+		if (r.match(/background/) && value.match(/url\(/)) {
+		    var regexp = new RegExp('http[s]?:\/\/'+RegExp.escape(location.host));
+		    if (value.match(regexp)) value = value.replace(regexp,'');
+		}
+		if (value.match(/rgba\(/)) {
+		    value = value.replace(/(rgba\([^,]+,[^,]+,[^,]+,)([^)]+\))/g,function(o,m1,m2) {
+		        var alpha = Math.round( 1000*parseFloat(m2) ) / 1000;
+		        return m1+alpha+')';
+		    });
+		}
 
 		var camelCase = camelCased(r);
 		var def = qgCssProps[camelCase];
@@ -75,9 +75,9 @@ function q1CssText(style) {
 		delete props['overflow-x'];
 	}
 
-    if (props['background-repeat'] === 'no-repeat no-repeat') props['background-repeat'] = 'no-repeat';
-    if (props['background-repeat'] === 'no-repeat repeat'   ) props['background-repeat'] = 'repeat-y';
-    if (props['background-repeat'] === 'repeat no-repeat'   ) props['background-repeat'] = 'repeat-x';
+	if (props['background-repeat'] === 'no-repeat no-repeat') props['background-repeat'] = 'no-repeat';
+	if (props['background-repeat'] === 'no-repeat repeat'   ) props['background-repeat'] = 'repeat-y';
+	if (props['background-repeat'] === 'repeat no-repeat'   ) props['background-repeat'] = 'repeat-x';
 
 	if (
 		props['padding-top'] !== undefined

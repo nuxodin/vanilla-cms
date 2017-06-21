@@ -707,11 +707,4 @@ class Page {
 		}
 		return $Next;
 	}
-
-	function Childs(){
-		$GLOBALS['skip_stacks'] += 1;
-		trigger_error('Page::Childs() deprecated, use Page::Children()');
-		$GLOBALS['skip_stacks'] -= 1;
-		return $this->Children();
-	}
 }

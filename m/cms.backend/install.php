@@ -1,4 +1,7 @@
 <?php
 namespace qg;
 
-cmsBackend::checkInstalled();
+$P = cmsBackend::checkInstalled();
+
+$P->Title('en','Backend');
+$P->Title('de','Backend');

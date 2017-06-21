@@ -70,12 +70,6 @@ class dbFile extends File {
 		if ($prevent) return;
 		!D()->one("SELECT id FROM file WHERE md5 = ".D()->quote($this->vs['md5'])) && unlink($this->path); // better in db-delete-event
 	}
-	function replace($path) {
-		$GLOBALS['skip_stacks'] += 1;
-		trigger_error('deprecated, use replaceBy');
-		$GLOBALS['skip_stacks'] -= 1;
-		return $this->replaceBy($path);
-	}
 	function replaceBy($path) {
 		$F = new File($path);
  		if (preg_match('/^https?:\/\//',$path)) {

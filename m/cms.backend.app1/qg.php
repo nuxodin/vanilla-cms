@@ -47,10 +47,6 @@ qg::on('action', function() {
 	$SET = G()->SET['m']['cms.app1'];
 	$SET->getAll();
 
-	if ($SET->has('https only') && $SET['https only']->v) { // zzz deprecated
-		trigger_error("deprecated, add define('QG_HTTPS',true); to your index.php");
-	}
-
 	/****************************************
 	/****  icons
 	/***************************************/

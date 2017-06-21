@@ -200,7 +200,7 @@ function sqlSearchHelper($search, $fields) {
 }
 
 function copyDir($src, $dest) {
-	mkdir($dest);
+	!is_dir($dest) && mkdir($dest);
 	foreach (scandir($src) as $file) {
 		$df = $dest.'/'.$file;
 		$sf = $src.'/'.$file;
@@ -264,7 +264,7 @@ function urlize($str) {
 			'∏' => 'pi',
 			'π' => 'pi',
 			'Π' => 'pi',
-			'&amp;' => 'and',
+			'&' => 'and',
 			'&' => 'and',
 	]);
 	$str = iconv('UTF-8', 'ASCII//TRANSLIT', $str);

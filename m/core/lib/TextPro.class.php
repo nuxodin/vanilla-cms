@@ -59,19 +59,12 @@ class TextPro {
 	}
 }
 
-class TextPro_lang{
+class TextPro_lang {
 	var $Text;
 	var $value = null;
 	function __construct($Text, $lang) {
-		/* very very strange php? bug! *
-		bug nachstellen: php 5.3
-		echo '<pre>';
-		$T = $Cont->Text('user');
-		!trim($T) && $T->get('de')->set('E-Mail:');
-		$T->get('de')->set('E-Mail:');
-		echo '</pre>';
-		*/
-		$this->Text =& $Text; // < bug fix
+		//$this->Text =& $Text; // < bug fix php 5.3?
+		$this->Text = $Text; // < bug fix
 		$this->lang = $lang;
 	}
 	function get() {

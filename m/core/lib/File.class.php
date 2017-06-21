@@ -30,18 +30,6 @@ class File {
 		$F = new File($dest);
 		return $r;
 	}
-	function copy($dest){
-		$GLOBALS['skip_stacks'] += 1;
-		trigger_error('deprecated, use copyTo');
-		$GLOBALS['skip_stacks'] -= 1;
-		return $this->copyTo($dest);
-	}
-	function replace($path) {
-		$GLOBALS['skip_stacks'] += 1;
-		trigger_error('deprecated, use replaceBy');
-		$GLOBALS['skip_stacks'] -= 1;
-		return $this->replaceBy($path);
-	}
 	function replaceBy($path) {
 		$path = is_object($path) ? $path->path : (string)$path;
 		$r = copy($path, $this->path);

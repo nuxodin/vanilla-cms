@@ -37,11 +37,11 @@ if ($developer) {
 	$superSET['Konzept']->make('title-tag',  $developer['title-tag']);
 }
 
-$Cont->SET['Unternehmen']->make('Firmenname', 'Firmenname');
-$Cont->SET['Unternehmen']->make('Adresse',	  'Strasse XXX');
-$Cont->SET['Unternehmen']->make('PLZ/Ort',	  'CH-XXXX Ort');
-$Cont->SET['Unternehmen']->make('Telefon',	  '+41 XX XXX XX XX');
-$Cont->SET['Unternehmen']->make('Mail',		  'adresse@host.ch');
+$Cont->SET['Unternehmen']->make('Firmenname', '');
+$Cont->SET['Unternehmen']->make('Adresse',	  '');
+$Cont->SET['Unternehmen']->make('PLZ/Ort',	  '');
+$Cont->SET['Unternehmen']->make('Telefon',	  '');
+$Cont->SET['Unternehmen']->make('Mail',		  '');
 $Cont->SET['Unternehmen']->make('Website',	  'auto');
 $Cont->SET['Unternehmen']['title-tag'];
 
@@ -49,18 +49,17 @@ $Cont->SET['Anderes']['HR-Firmenbezeichnung'];
 $Cont->SET['Anderes']['UID'];
 $Cont->SET['Anderes']['Handelsregisteramt'];
 
-$Cont->SET['Einblenden']->make('Haftungsausschluss', 				1)->setType('bool');
-$Cont->SET['Einblenden']->make('Haftungsausschluss Inhalte, Links', 1)->setType('bool');
-$Cont->SET['Einblenden']->make('Urheberrecht', 						1)->setType('bool');
-$Cont->SET['Einblenden']->make('Datenschutzerklärung', 				1)->setType('bool');
+$Cont->SET['Einblenden']->make('Haftungsausschluss',    			1)->setType('bool');
+$Cont->SET['Einblenden']->make('Haftung für Links',     			1)->setType('bool');
+$Cont->SET['Einblenden']->make('Urheberrecht',						1)->setType('bool');
+$Cont->SET['Einblenden']->make('Datenschutzerklärung',				1)->setType('bool');
 $Cont->SET['Einblenden']->make('Cookies', 							1)->setType('bool');
-
-$Cont->SET['Einblenden']->make('Datenschutzerklärung Facebook', 			   0)->setType('bool');
-$Cont->SET['Einblenden']->make('Datenschutzerklärung Twitter', 				   0)->setType('bool');
-$Cont->SET['Einblenden']->make('Datenschutzerklärung Google Adsense', 		   0)->setType('bool');
-$Cont->SET['Einblenden']->make('Datenschutzerklärung Google Analytics', 	   0)->setType('bool');
-$Cont->SET['Einblenden']->make('Datenschutzerklärung Google +1 (Google Plus)', 0)->setType('bool');
-$Cont->SET['Einblenden']->make('Datenschutzerklärung Google Remarketing',      0)->setType('bool');
+$Cont->SET['Einblenden']->make('Datenschutz: Facebook', 			0)->setType('bool');
+$Cont->SET['Einblenden']->make('Datenschutz: Twitter', 				0)->setType('bool');
+$Cont->SET['Einblenden']->make('Datenschutz: Google Adsense', 		0)->setType('bool');
+$Cont->SET['Einblenden']->make('Datenschutz: Google Analytics', 	0)->setType('bool');
+$Cont->SET['Einblenden']->make('Datenschutz: Google Plus', 			0)->setType('bool');
+$Cont->SET['Einblenden']->make('Datenschutz: Google Remarketing',   0)->setType('bool');
 
 $superSET['Design']['Andere']['Firmenname'];
 $superSET['Design']['Andere']['Adresse'];

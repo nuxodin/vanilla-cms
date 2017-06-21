@@ -41,7 +41,7 @@ class html {
 		self::$bodyFiles[$v] = $v;
 	}
 	static function getHeader() {
-		$return  = '<meta charset=utf-8>'."\n";
+		$return  = '<meta charset="utf-8">'."\n";
 		$return .= '<title>'.hee(self::$titlePrefix.self::$title.self::$titleSuffix).'</title>'."\n";
 		$return .= self::$head;
 		foreach (self::$meta as $name => $value) {

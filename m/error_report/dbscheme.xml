@@ -7,6 +7,7 @@
 		<field name="message"   type="varchar"  length="255" key="MUL" />
 		<field name="file"      type="varchar"  length="255" key="MUL" />
 		<field name="line"      type="int"      length="8"   key="MUL" />
+		<field name="col"       type="int"      length="8"   key="MUL" />
 		<field name="backtrace" type="text" />
 		<field name="browser"   type="varchar"  length="255" key="MUL" />
 		<field name="request"   type="varchar"  length="255" key="MUL" />

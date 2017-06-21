@@ -219,7 +219,4 @@ class dbField {
 		}
 		isset($Auto) && $Auto->setAutoincrement(1);
 	}
-	// deprecated (leave in v5 for update-compatibility?)
-	function getTyp(){ trigger_error('deprecated'); return $this->getType(); }
-	function setTyp($v) { trigger_error('deprecated'); return $this->setType($v); }
 }

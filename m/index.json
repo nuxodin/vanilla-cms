@@ -1,223 +1,289 @@
 {
     "cms": {
         "time": 1496213662,
-        "version": "5.65.0",
-        "changed": 1496213662,
-        "server": "v5.shwups-cms.ch",
-        "updated": 1497603045
+        "version": "6.6.0",
+        "changed": 1498044076,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044076
     },
     "cms.backend": {
         "time": 1492606527,
-        "version": "5.5.0",
-        "changed": 1492606527,
-        "server": "v5.shwups-cms.ch",
-        "updated": 1497603046
+        "version": "6.1.0",
+        "changed": 1498044079,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044079
     },
     "cms.backend.app1": {
         "time": 1495838195,
-        "version": "5.8.0",
-        "changed": 1495838195
+        "version": "6.1.0",
+        "changed": 1498044079,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044079
     },
     "cms.backend.groups": {
         "time": 1495838196,
-        "version": "5.11.0",
-        "changed": 1495838196
+        "version": "6.0.0",
+        "changed": 1498044079,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044079
     },
     "cms.backend.mails": {
         "time": 1495838196,
-        "version": "5.19.0",
-        "changed": 1495838196
+        "version": "6.0.0",
+        "changed": 1498044080,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044080
     },
     "cms.backend.module": {
         "time": 1495838197,
-        "version": "5.30.0",
-        "changed": 1495838197
+        "version": "6.17.0",
+        "changed": 1498044080,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044080
     },
     "cms.backend.settings": {
         "time": 1495838197,
-        "version": "5.2.0",
-        "changed": 1495838197
+        "version": "6.0.0",
+        "changed": 1498044081,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044081
     },
     "cms.backend.struct": {
         "time": 1495838197,
-        "version": "5.8.0",
-        "changed": 1495838197
+        "version": "6.0.0",
+        "changed": 1498044081,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044081
     },
     "cms.backend.struct.grpaccess": {
         "time": 1495838198,
-        "version": "5.6.0",
-        "changed": 1495838198
+        "version": "6.0.0",
+        "changed": 1498044081,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044081
     },
     "cms.backend.superuser": {
         "time": 1495838198,
-        "version": "5.3.0",
-        "changed": 1495838198
+        "version": "6.1.0",
+        "changed": 1498044082,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044082
     },
     "cms.backend.superuser.db": {
         "time": 1495838198,
-        "version": "5.9.0",
-        "changed": 1495838198
+        "version": "6.0.0",
+        "changed": 1498044083,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044083
     },
     "cms.backend.superuser.error_report": {
         "time": 1495838199,
-        "version": "5.3.0",
-        "changed": 1495838199
+        "version": "6.1.0",
+        "changed": 1498044083,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044083
     },
     "cms.backend.superuser.vers": {
         "time": 1495838199,
-        "version": "5.1.0",
-        "changed": 1495838199
+        "version": "6.0.0",
+        "changed": 1498044083,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044083
     },
     "cms.backend.system": {
         "time": 1495838199,
-        "version": "5.10.0",
-        "changed": 1495838199
+        "version": "6.0.0",
+        "changed": 1498044084,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044084
     },
     "cms.backend.users": {
         "time": 1495838200,
-        "version": "5.16.0",
-        "changed": 1495838200
+        "version": "6.0.0",
+        "changed": 1498044084,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044084
     },
     "cms.backend.webmaster": {
         "time": 1495838200,
-        "version": "5.16.0",
-        "changed": 1495838200
+        "version": "6.0.0",
+        "changed": 1498044085,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044085
     },
     "cms.cont.flexible": {
         "time": 1492606523,
-        "version": "5.1.0",
-        "changed": 1492606523
+        "version": "6.0.0",
+        "changed": 1498044085,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044085
     },
     "cms.cont.impressum2": {
         "time": 1492606534,
-        "version": "5.3.0",
-        "changed": 1492606534,
-        "server": "v5.shwups-cms.ch",
-        "updated": 1497603046
+        "version": "6.2.0",
+        "changed": 1498044085,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044085
     },
     "cms.cont.login4": {
         "time": 1492606532,
-        "version": "5.4.0",
-        "changed": 1492606532
+        "version": "6.0.0",
+        "changed": 1498044086,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044086
     },
     "cms.cont.nav2": {
         "time": 1492606532,
-        "version": "5.6.0",
-        "server": "v5.shwups-cms.ch",
-        "updated": 1496994281,
-        "changed": 1496994281
+        "version": "6.1.0",
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044086,
+        "changed": 1498044086
     },
     "cms.cont.notFound1": {
         "time": 1492606524,
-        "version": "5.1.0",
-        "changed": 1492606524
+        "version": "6.0.0",
+        "changed": 1498044087,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044087
     },
     "cms.cont.phpfile": {
         "time": 1493810706,
-        "version": "5.2.0",
-        "changed": 1493810706
+        "version": "6.0.0",
+        "changed": 1498044087,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044087
     },
     "cms.cont.redirect": {
         "time": 1492606533,
-        "version": "5.4.0",
-        "changed": 1492606533,
-        "server": "v5.shwups-cms.ch",
-        "updated": 1497603047
+        "version": "6.1.0",
+        "changed": 1498044087,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044087
     },
     "cms.cont.search1": {
         "time": 1492606533,
-        "version": "5.6.0",
-        "changed": 1492606533
+        "version": "6.0.0",
+        "changed": 1498044088,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044088
     },
     "cms.cont.table1": {
         "time": 1495146593,
-        "version": "5.4.0",
-        "changed": 1495146593,
-        "server": "v5.shwups-cms.ch",
-        "updated": 1497603047
+        "version": "6.1.0",
+        "changed": 1498044088,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044088
     },
     "cms.cont.text": {
         "time": 1492606524,
-        "version": "5.0.0",
-        "changed": 1492606524
+        "version": "6.0.0",
+        "changed": 1498044088,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044088
     },
     "cms.cont.trash": {
         "time": 1494504448,
-        "version": "5.10.0",
-        "changed": 1494504448
+        "version": "6.0.0",
+        "changed": 1498044089,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044089
     },
     "cms.frontend.1": {
         "time": 1496046651,
-        "version": "5.134.0",
-        "changed": 1496046651
+        "version": "6.0.0",
+        "changed": 1498044090,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044090
     },
     "cms.image_editor": {
         "time": 1495838201,
-        "version": "5.26.0",
-        "changed": 1495838201
+        "version": "6.0.0",
+        "changed": 1498044091,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044091
     },
     "cms.installation.default": {
         "time": 1496213663,
-        "version": "5.15.0",
-        "changed": 1496213663
+        "version": "6.0.0",
+        "changed": 1498044077,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044077
     },
     "cms.layout.backend": {
         "time": 1494504449,
-        "version": "5.16.0",
-        "changed": 1494504449
+        "version": "6.0.0",
+        "changed": 1498044091,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044091
     },
     "cms.layout.custom.6": {
         "time": 1495838202,
-        "version": "5.57.0",
-        "changed": 1495838202,
-        "server": "v5.shwups-cms.ch",
-        "updated": 1497603047
+        "version": "6.3.0",
+        "changed": 1498044091,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044092
     },
     "cms.layout.login": {
         "time": 1492606535,
-        "version": "5.10.0",
-        "changed": 1492606535
+        "version": "6.0.0",
+        "changed": 1498044092,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044092
     },
     "cms.layouter3": {
         "time": 1492692924,
-        "version": "5.14.0",
-        "changed": 1492692924
+        "version": "6.0.0",
+        "changed": 1498044093,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044093
     },
     "cms.versions": {
         "time": 1493393761,
-        "version": "5.17.0",
-        "changed": 1493393761
+        "version": "6.0.0",
+        "changed": 1498044093,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044093
     },
     "core": {
         "time": 1496213662,
-        "version": "5.277.0",
-        "server": "v5.shwups-cms.ch",
-        "updated": 1497603044,
-        "changed": 1496994280
+        "version": "6.48.0",
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044075,
+        "changed": 1498044075
     },
     "error_report": {
         "time": 1495146594,
-        "version": "5.39.0",
-        "changed": 1495146594
+        "version": "6.2.0",
+        "changed": 1498044094,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044094
     },
     "fileEditor": {
         "time": 1492606523,
-        "version": "5.6.0",
-        "changed": 1492606523
+        "version": "6.1.0",
+        "changed": 1498044094,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044094
     },
     "reporting": {
         "time": 1492606536,
-        "version": "5.3.0",
-        "changed": 1492606536
+        "version": "6.4.0",
+        "changed": 1498044095,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044095
     },
     "shwups": {
         "time": 1496213663,
-        "version": "5.20.0",
-        "changed": 1496213663
+        "version": "6.0.0",
+        "changed": 1498044077,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044077
     },
     "Zend": {
         "time": 1496213663,
-        "version": "5.20.0",
-        "changed": 1496213663
+        "version": "6.1.0",
+        "changed": 1498044078,
+        "server": "v6.vanilla-cms.org",
+        "updated": 1498044078
     }
 }
