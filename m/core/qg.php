@@ -11,10 +11,12 @@ qg::on('action', function() {
 			header('Location: https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 			exit();
 		}
-		$header = 'Strict-Transport-Security:max-age='.$SET['HSTS']['max-age']->v;
-		if ($SET['HSTS']['includeSubDomains']->v) $header .= ';includeSubDomains';
-		if ($SET['HSTS']['preload']->v)           $header .= ';preload';
-		header($header);
+		if ($SET['HSTS']['max-age']->v) {
+			$header = 'Strict-Transport-Security:max-age='.$SET['HSTS']['max-age']->v;
+			if ($SET['HSTS']['includeSubDomains']->v) $header .= ';includeSubDomains';
+			if ($SET['HSTS']['preload']->v)           $header .= ';preload';
+			header($header);
+		}
 	}
 
 	liveSess::$maxpause = $SET['session']['maxpause']->v;

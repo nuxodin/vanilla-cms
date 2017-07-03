@@ -81,10 +81,6 @@
 	</table>
 	<table name="module">
 		<field name="name"           type="varchar" length="127" key="PRI" null=""/>
-		<field name="server"         type="varchar" length="127" key="MUL" null=""/>
-		<field name="server_time"    type="int"     length="10"  key="" null=""/>
-		<field name="server_version" type="varchar" length="32"  key="" null=""/>
-		<field name="server_size"    type="int"     length="10"  key="" null=""/>
 		<field name="access"         type="tinyint" length="1"   key="" null=""/>
 		<field name="title_id"       type="int"     length="10"  key="MUL" parent="txt" on_parent_delete="setnull" null=""/>
 	</table>

@@ -4,7 +4,7 @@ namespace qg;
 qg::on('action',function(){
     $SET = G()->SET['reporting'];
     $timeWaiting = 60*60*12;
-    if (isset($_GET['reporting_request'])) $timeWaiting = 60*5;
+    if (isset($_GET['reporting_request'])) $timeWaiting = 60*2;
     if ($SET['time']->v < time() - $timeWaiting) {
         //qg::on('background',function() use($SET) { // can not always save "time" in background...?!?!
             reporting_send();

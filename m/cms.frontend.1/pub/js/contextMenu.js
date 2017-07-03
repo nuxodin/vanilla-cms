@@ -5,15 +5,16 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 	let Menu = cms.contextMenueContent = c1.globalContextMenu.addMenu('CMS Inhalt',{
 		icon: sysURL+'cms.frontend.1/pub/img/contextmenu/settings.png',
-		selector: '.qgCmsCont',
+		selector: '.qgCmsCont, #qgCmsContPosMenu',
 	});
 
 	Menu.addItem('Einstellungen', {
 		icon: sysURL+'cms.frontend.1/pub/img/contextmenu/settings.png',
-		selector: '.qgCmsCont',
+		selector: '.qgCmsCont, #qgCmsContPosMenu',
 		onshow(e) {
 			this.activePid = cms.contPos.active.pid;
-			this.disabled = !e.currentTarget.classList.contains('-e');
+			//this.disabled = !e.currentTarget.classList.contains('-e');
+			this.disabled = !cms.contPos.active.el.classList.contains('-e');
 		},
 		onclick() {
 			cms.cont.active = this.activePid;
@@ -22,19 +23,19 @@ document.addEventListener('DOMContentLoaded',()=>{
 	});
 	Menu.addItem('Verschieben', {
 		icon: sysURL+'cms.frontend.1/pub/img/contextmenu/move.png',
-		selector: '.qgCmsCont',
+		selector: '.qgCmsCont, #qgCmsContPosMenu',
 		onshow(e) {
-			this.activeEl = e.currentTarget;
-			this.disabled = !cms.contPos(this.activeEl).isDraggable();
+			this.activeEl = cms.contPos.active.el;
+			this.disabled = !cms.contPos.active.isDraggable();
 		},
 		onclick() { cms.contPos.dd.start(this.activeEl);  }
 	});
 	Menu.addItem('Kopieren', {
-		selector: '.qgCmsCont',
 		icon: sysURL+'cms.frontend.1/pub/img/contextmenu/copy.png',
+		selector: '.qgCmsCont, #qgCmsContPosMenu',
 		onshow(e) {
 			this.activePid = cms.contPos.active.pid;
-			this.disabled = !e.currentTarget.classList.contains('-e');
+			this.disabled = !cms.contPos.active.el.classList.contains('-e');
 		},
 		onclick() {
 			$fn('page::copy')(this.activePid).run(ret=>{
@@ -43,11 +44,11 @@ document.addEventListener('DOMContentLoaded',()=>{
 		}
 	});
 	Menu.addItem('Ausschneiden', {
-		selector: '.qgCmsCont',
 		icon: sysURL+'cms.frontend.1/pub/img/contextmenu/cut.png',
+		selector: '.qgCmsCont, #qgCmsContPosMenu',
 		onshow(e) {
 			this.activePid = cms.contPos.active.pid;
-			this.disabled = !e.currentTarget.classList.contains('-e');
+			this.disabled = !cms.contPos.active.el.classList.contains('-e');
 		},
 		onclick() {
 			var pid = this.activePid;
@@ -59,10 +60,10 @@ document.addEventListener('DOMContentLoaded',()=>{
 	});
 	Menu.addItem('Löschen', {
 		icon: sysURL+'cms.frontend.1/pub/img/contextmenu/delete.png',
-		selector: '.qgCmsCont',
+		selector: '.qgCmsCont, #qgCmsContPosMenu',
 		onshow(e) {
-			this.activeEl = e.currentTarget;
-			this.disabled = !cms.contPos(this.activeEl).isDraggable();
+			this.activeEl = cms.contPos.active.el;
+			this.disabled = !cms.contPos.active.isDraggable();
 		},
 		onclick() {
 			var el = this.activeEl;
@@ -76,8 +77,8 @@ document.addEventListener('DOMContentLoaded',()=>{
 	let TreeMenu = c1.globalContextMenu;
 
 	TreeMenu.addItem('Einstellungen', {
-		selector: '#qgCmsFrontend1 .dynatree-node',
 		icon: sysURL+'cms.frontend.1/pub/img/contextmenu/settings.png',
+		selector: '#qgCmsFrontend1 .dynatree-node',
 		onshow(e) {
 			this.contextTarget = e.currentTarget;
 			this.lastPid = this.contextTarget.parentNode.title.replace('ID ','');
@@ -92,8 +93,8 @@ document.addEventListener('DOMContentLoaded',()=>{
 		}
 	});
 	TreeMenu.addItem('Umbenennen', {
-		selector:'#qgCmsFrontend1 .dynatree-node',
 		icon: sysURL+'cms.frontend.1/pub/img/contextmenu/edit.png',
+		selector:'#qgCmsFrontend1 .dynatree-node',
 		onshow(e) {
 			var el = e.currentTarget;
 			this.lastPid = el.parentNode.title.replace('ID ','');
@@ -106,8 +107,8 @@ document.addEventListener('DOMContentLoaded',()=>{
 		}
 	});
 	TreeMenu.addItem('Kopieren', {
-		selector:'#qgCmsFrontend1 .dynatree-node',
 		icon: sysURL+'cms.frontend.1/pub/img/contextmenu/copy.png',
+		selector:'#qgCmsFrontend1 .dynatree-node',
 		onshow(e) {
 			var el = e.currentTarget;
 			this.lastPid = el.parentNode.title.replace('ID ','');
@@ -136,8 +137,8 @@ document.addEventListener('DOMContentLoaded',()=>{
 		}
 	});
 	TreeMenu.addItem('Löschen', {
-		selector: '#qgCmsFrontend1 .dynatree-node',
 		icon: sysURL+'cms.frontend.1/pub/img/contextmenu/delete.png',
+		selector: '#qgCmsFrontend1 .dynatree-node',
 		onshow(e) {
 			var el = e.currentTarget;
 			this.lastPid = el.parentNode.title.replace('ID ','');

@@ -104,7 +104,7 @@
 				if (!allowed) { el.removeAttribute(name); continue; }
 				if (allowed === true || allowed === 1) continue;
 				// values allowed
-				if (allowed[value] || allowed.indexOf(value) !== -1) {
+				if (allowed[value] || allowed.includes(value)) {
 					continue;
 				} else {
 					el.removetAttribute(name);
@@ -122,8 +122,8 @@
 				// values allowed
 				var value = el.style.getPropertyValue(style);
 				if (style === 'font-family') value = value.replace(/^["']/,'').replace(/["']$/,'');
-				//if (allowed.indexOf) { // isArray (array with allowed values)
-					if (allowed[value] || allowed.indexOf(value) !== -1) {
+				//if (allowed.includes) { // isArray (array with allowed values)
+					if (allowed[value] || allowed.includes(value)) {
 						continue;
 					} else {
 						el.style.removeProperty(style);
@@ -143,7 +143,7 @@
 			var classes = el.className.split(' ');
 			var nClasses = [];
 			for (var i=0, cl; cl=classes[i++];) {
-				~allowed.indexOf(cl) && nClasses.push(cl);
+				allowed.includes(cl) && nClasses.push(cl);
 			}
 			el.className = nClasses.join(' ');
 		}

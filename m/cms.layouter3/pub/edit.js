@@ -9,7 +9,7 @@ $(function() {
             ss.rules && $.each(ss.rules, function(i,rule) {
                 if (rule instanceof CSSFontFaceRule) {
                     var name = rule.style.fontFamily;
-                    if (!~qgCssProps.fontFamily.options.indexOf(name)) {
+                    if (!qgCssProps.fontFamily.options.includes(name)) {
         				qgCssProps.fontFamily.options.push(name);
                     }
                 }

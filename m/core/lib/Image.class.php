@@ -17,7 +17,8 @@ class Image {
 			$this->from($path);
 		}
 	}
-	function fromjpeg($path)	{ $this->Img = imagecreatefromjpeg($path); }
+	// ignore warnings like "gd-jpeg, libjpeg: recoverable error: Invalid SOS parameters for sequential JPEG" and "gd-jpeg, libjpeg: recoverable error: Invalid SOS parameters for sequential JPEG"
+	function fromjpeg($path)	{ $this->Img = @imagecreatefromjpeg($path); }
 	function fromgif($path)		{ $this->Img = imagecreatefromgif($path); }
 	function frompng($path)		{ $this->Img = imagecreatefrompng($path); }
 	function fromstring($str)	{ $this->Img = imagecreatefromstring($str); }

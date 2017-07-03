@@ -59,7 +59,6 @@ class Store {
         // old, zzz?
         if (function_exists('qg\D')) {
             $E = D()->module->Entry($module)->makeIfNot();
-            $E->server        = $this->host;
         }
 
         $localdata =& module::index()[$module];

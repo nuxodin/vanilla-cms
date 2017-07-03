@@ -41,9 +41,27 @@ if ($LPage->access() < 2) return;
 	<div id=mCmsLayouter3_container>
 		<h3>Bilder <button id=mCmsLayouter3_pickfiles>hochladen</button></h3>
 		<script>
-		setTimeout(function() {
-			mCmsLayouter3_initUploader(<?=$Cont?>);
-		}, 700);
+		{
+			let btn = document.getElementById('mCmsLayouter3_pickfiles');
+			btn.addEventListener('click',()=>{
+				let fileInp = document.createElement('input');
+				fileInp.type = 'file';
+				fileInp.click();
+				fileInp.addEventListener('change',()=>{
+					for (file of fileInp.files) {
+						let data = new FormData();
+						data.append('file', file);
+						fetch(appURL+'?mLayoutCustom6_upload', {
+						  method: 'POST',
+						  credentials: 'same-origin',
+						  body: data
+						}).then(()=>{
+							cms.panel.tabs.show('options');
+						});
+					}
+				})
+			})
+		}
 		</script>
 		<?php
 		$path = appPATH.'qg/'.$module.'/pub/img/';
@@ -59,7 +77,7 @@ if ($LPage->access() < 2) return;
 			<?php foreach ($images as $url) { ?>
 				<?php $file = preg_replace('/.*\/([^\/]+)/','$1',$url); ?>
 				<tr>
-					<td style="width:50px"> <img src="<?=$url?>" style="min-height:20px; max-height:35px; max-width:300px; box-shadow:0 0 5px rgba(0,0,0,.5); background:linear-gradient(45deg,#f3f3f3 50%,#fff 50%); background-size:8px 8px;" />
+					<td style="width:50px"> <img src="<?=$url?>" style="min-height:20px; max-height:35px; max-width:160px; box-shadow:0 0 5px rgba(0,0,0,.5); background:linear-gradient(45deg,#f3f3f3 50%,#fff 50%); background-size:8px 8px;" />
 					<td> <?=$file?>
 					<td onclick="var el = this; confirm('Möchten Sie die Datei wirklich löschen?') && $fn('page::api')(<?=$Cont?>,{deleteImg:'<?=$file?>'}).run(function() { cms.panel.tabs.show('options'); })" style="width:20px; padding-right:6px">
 						<img src="<?=sysURL?>cms.frontend.1/pub/img/delete.svg" alt="löschen">

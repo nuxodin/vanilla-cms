@@ -57,6 +57,14 @@ class cms {
 			header("HTTP/1.1 401 Unauthorized");
 			self::$MainPage = Page(G()->SET['cms']['pageOffline']->v);
 		}
+
+		$Page = Page()->Page;
+		$title = strip_tags($Page->Text('_title'));
+		html::$title = trim($title) ? $title : strip_tags($Page->Title());
+		html::$meta['description'] = strip_tags($Page->text('_meta_description'));
+		html::$meta['keywords']    = strip_tags($Page->text('_meta_keywords'));
+		html::$meta['generator']   = 'Vanilla CMS 5.0';
+
 		qg::fire('deliverHtml'); // deprecated
 		//qg::fire('cms::output-before'); // todo
 		html::$content .= self::$MainPage->get();

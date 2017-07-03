@@ -4,7 +4,30 @@
     'use strict';
 
 	/* Frequently used and small polyfills */
-	//if (!w.MutationObserver) w.MutationObserver = w.WebKitMutationObserver; // android 4.3
+
+    if (!Array.prototype.includes) {
+        Array.prototype.includes = function(search /*, fromIndex*/) {
+            if (this == null) throw new TypeError('Array.prototype.includes called on null or undefined');
+            var O = Object(this);
+            var len = parseInt(O.length, 10) || 0;
+            if (len === 0) return false;
+            var n = parseInt(arguments[1], 10) || 0;
+            var k;
+            if (n >= 0) {
+                k = n;
+            } else {
+                k = len + n;
+                if (k < 0) k = 0;
+            }
+            var current;
+            while (k < len) {
+                current = O[k];
+                if (search === current || (search !== search && current !== current)) return true;
+                k++;
+            }
+            return false;
+        };
+    }
 
 	if (!HTMLFormElement.prototype.reportValidity) { // ie 11, edge 14, safari 10
 	    HTMLFormElement.prototype.reportValidity = function() {

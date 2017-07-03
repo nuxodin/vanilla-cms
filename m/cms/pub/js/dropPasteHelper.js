@@ -116,7 +116,10 @@ class q9DataTransfer {
         if (this.types===undefined) this.types = ['url','text'];
     }
     contains(type) {
-        return [].slice.call(this.types).indexOf(type)!==-1;
+        console.warn('used?');
+        //console.log(type);
+        //console.log(this.types);
+        return [].slice.call(this.types).includes(type);
     }
     getData(type) {
         return this.dt.getData(type);

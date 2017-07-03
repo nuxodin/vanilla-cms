@@ -1,10 +1,10 @@
 {
     "cms": {
         "time": 1496213662,
-        "version": "6.6.0",
-        "changed": 1498044076,
+        "version": "6.8.0",
+        "changed": 1499074618,
         "server": "v6.vanilla-cms.org",
-        "updated": 1498044076
+        "updated": 1499074618
     },
     "cms.backend": {
         "time": 1492606527,
@@ -50,10 +50,10 @@
     },
     "cms.backend.struct": {
         "time": 1495838197,
-        "version": "6.0.0",
-        "changed": 1498044081,
+        "version": "6.1.0",
+        "changed": 1498553726,
         "server": "v6.vanilla-cms.org",
-        "updated": 1498044081
+        "updated": 1498553726
     },
     "cms.backend.struct.grpaccess": {
         "time": 1495838198,
@@ -64,10 +64,10 @@
     },
     "cms.backend.superuser": {
         "time": 1495838198,
-        "version": "6.1.0",
-        "changed": 1498044082,
+        "version": "6.2.0",
+        "changed": 1498311888,
         "server": "v6.vanilla-cms.org",
-        "updated": 1498044082
+        "updated": 1498311888
     },
     "cms.backend.superuser.db": {
         "time": 1495838198,
@@ -92,10 +92,10 @@
     },
     "cms.backend.system": {
         "time": 1495838199,
-        "version": "6.0.0",
-        "changed": 1498044084,
+        "version": "6.2.0",
+        "changed": 1498210383,
         "server": "v6.vanilla-cms.org",
-        "updated": 1498044084
+        "updated": 1498210383
     },
     "cms.backend.users": {
         "time": 1495838200,
@@ -190,10 +190,10 @@
     },
     "cms.frontend.1": {
         "time": 1496046651,
-        "version": "6.0.0",
-        "changed": 1498044090,
+        "version": "6.2.0",
+        "changed": 1498553727,
         "server": "v6.vanilla-cms.org",
-        "updated": 1498044090
+        "updated": 1498553727
     },
     "cms.image_editor": {
         "time": 1495838201,
@@ -204,10 +204,10 @@
     },
     "cms.installation.default": {
         "time": 1496213663,
-        "version": "6.0.0",
-        "changed": 1498044077,
+        "version": "6.2.0",
+        "changed": 1499074619,
         "server": "v6.vanilla-cms.org",
-        "updated": 1498044077
+        "updated": 1499074619
     },
     "cms.layout.backend": {
         "time": 1494504449,
@@ -218,10 +218,10 @@
     },
     "cms.layout.custom.6": {
         "time": 1495838202,
-        "version": "6.3.0",
-        "changed": 1498044091,
+        "version": "6.4.0",
+        "changed": 1498553728,
         "server": "v6.vanilla-cms.org",
-        "updated": 1498044092
+        "updated": 1498553728
     },
     "cms.layout.login": {
         "time": 1492606535,
@@ -232,24 +232,24 @@
     },
     "cms.layouter3": {
         "time": 1492692924,
-        "version": "6.0.0",
-        "changed": 1498044093,
+        "version": "6.1.0",
+        "changed": 1498553728,
         "server": "v6.vanilla-cms.org",
-        "updated": 1498044093
+        "updated": 1498553728
     },
     "cms.versions": {
         "time": 1493393761,
-        "version": "6.0.0",
-        "changed": 1498044093,
+        "version": "6.1.0",
+        "changed": 1498081776,
         "server": "v6.vanilla-cms.org",
-        "updated": 1498044093
+        "updated": 1498081776
     },
     "core": {
         "time": 1496213662,
-        "version": "6.48.0",
+        "version": "6.57.0",
         "server": "v6.vanilla-cms.org",
-        "updated": 1498044075,
-        "changed": 1498044075
+        "updated": 1499074617,
+        "changed": 1499074617
     },
     "error_report": {
         "time": 1495146594,
@@ -267,17 +267,17 @@
     },
     "reporting": {
         "time": 1492606536,
-        "version": "6.4.0",
-        "changed": 1498044095,
+        "version": "6.5.0",
+        "changed": 1498210384,
         "server": "v6.vanilla-cms.org",
-        "updated": 1498044095
+        "updated": 1498210384
     },
     "shwups": {
         "time": 1496213663,
-        "version": "6.0.0",
-        "changed": 1498044077,
+        "version": "6.2.0",
+        "changed": 1499074619,
         "server": "v6.vanilla-cms.org",
-        "updated": 1498044077
+        "updated": 1499074619
     },
     "Zend": {
         "time": 1496213663,

@@ -163,7 +163,7 @@ class dbTable {
 	}
 	function ensure($values = []) {
 		$set = $this->valuesToSet($values);
-		$where = $this->entryId2where($values);
+		$where = $this->entryId2where($values); // use $this->valuesToWhere todo ???
 		if ($where && $this->Db->row("SELECT * FROM ".table($this)." WHERE ".$where))
 			return $this->update($values);
 		else

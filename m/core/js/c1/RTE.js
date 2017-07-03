@@ -22,7 +22,7 @@ setTimeout(functrion(){ throw('used?') })
 					break;
 				}
 				var parentDisplay = cssDisplay(el.parentNode);
-				if (parentDisplay !== 'block' && ~blockLikes.indexOf(parentDisplay)) {
+				if (parentDisplay !== 'block' && blockLikes.includes(parentDisplay)) {
 					rangeWrap(rangeFromInlineSiblings(el) , newElement);
 					break;
 				}
@@ -31,7 +31,7 @@ setTimeout(functrion(){ throw('used?') })
 		} else {
 			var el = q1.selection().container();
 			do {
-				if (~blockLikes.indexOf( cssDisplay(el) )) {
+				if (blockLikes.includes( cssDisplay(el) )) {
 					return el.tagName;
 				}
 				if (!el.parentNode.parentNode.isContentEditable) {
@@ -86,7 +86,7 @@ setTimeout(functrion(){ throw('used?') })
 		while (current.previousSibling) {
 			next = current.previousSibling;
 			display = cssDisplay(next);
-			if (~blockLikes.indexOf(display)) { // allow float:left and right?
+			if (blockLikes.includes(display)) { // allow float:left and right?
 				break;
 			}
 			current = next;
@@ -97,9 +97,7 @@ setTimeout(functrion(){ throw('used?') })
 		while (current.nextSibling) {
 			next = current.nextSibling;
 			display = cssDisplay(next);
-			if (blockLikes.indexOf(display) !== -1) {
-				break;
-			}
+			if (blockLikes.includes(display)) break;
 			current = next;
 		}
 		range.setEndAfter(current);

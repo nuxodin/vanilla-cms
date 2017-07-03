@@ -374,10 +374,10 @@ window.$ && $(function(){
 
 	cms.contextMenueContent.addItem('Verlauf', {
 		icon: sysURL+'cms.frontend.1/pub/img/contextmenu/undo.png',
-		selector: '.qgCmsCont',
+		selector: '.qgCmsCont, #qgCmsContPosMenu',
 		onshow(e) {
 			this.activePid = cms.contPos.active.pid;
-			this.disabled = !$(e.currentTarget).hasClass('-e'); // todo!!
+			this.disabled = !cms.contPos.active.el.classList.contains('-e');
 		},
 		onclick() {
 			Viewer.show(this.activePid);

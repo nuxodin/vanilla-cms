@@ -75,6 +75,12 @@ if (!isset($_GET['open'])) $_GET['open'] = null;
 				'</div>';
 			}
 
+
+			echo 'php timezone offset = '.date('P');
+			echo '<br>';
+			echo 'db timezone offset = '.D()->one("SELECT TIMEDIFF(NOW(), UTC_TIMESTAMP);");
+
+
 			global $debug;
 			if ($debug) {
 				echo '<div  class="warning">Debugmode is active!</div>';

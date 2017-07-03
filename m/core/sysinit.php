@@ -54,7 +54,7 @@ ini_set('max_execution_time', '9');
 ini_set('memory_limit', '512M');
 
 mb_internal_encoding('UTF-8');
-date_default_timezone_set('Europe/Paris');
+date_default_timezone_set('Europe/Paris'); // todo
 
 $_SERVER['DOCUMENT_ROOT'] = realpath($_SERVER['DOCUMENT_ROOT']);
 $_SERVER['SCHEME']        = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http';

@@ -12,6 +12,7 @@ class db {
 		$this->PDO->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
 		$this->PDO->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
 		$this->PDO->exec('SET NAMES utf8');
+		$this->PDO->exec('SET time_zone = "'.date('P').'"');
 		$this->Cache = cache($conn.'_dbTables');
 	}
 	function __get($n) {
@@ -204,7 +205,7 @@ class db {
 
 		$length = $data['length'] ? '('.$data['length'].')' : ''; // sql injection?
 
-		if (in_array($data['type'], ['DATE','DATETIME','FLOAT','TINYTEXT','MEDIUMTEXT','LONGTEXT'])) $length = '';
+		if (in_array($data['type'], ['DATE','DATETIME','FLOAT','TEXT','TINYTEXT','MEDIUMTEXT','LONGTEXT'])) $length = '';
 		if ($data['type'] === 'VARCHAR' && !$length)             $length = '(255)';
 		if ($data['type'] === 'DECIMAL' && $data['length'] > 65) $length = '(12,8)';
 
