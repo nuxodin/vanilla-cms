@@ -109,7 +109,7 @@ Rte = {
 	            Rte.active = false;
 	        }
 		},true);
-		root.addEventListener('keyup',e=>{
+		root.addEventListener('keyup',e=>{ // use selectionchange?
 	        if (!Rte.isTarget(e.target)) return;
 			if (e.which === 27) {
 				document.body.focus();
@@ -120,7 +120,8 @@ Rte = {
 	        Rte.checkSelection();
 	        Rte.trigger('input',e);
 		},true);
-		root.addEventListener('mouseup',e=>{
+		root.addEventListener('mouseup',e=>{ // use selectionchange?
+			if (!Rte.active) return; // new 15.7.17 // zzz, if used: "root.addEventListener('selectionchange',e=>{"
             if (!Rte.isTarget(e.target)) return;
 	        Rte.checkSelection();
 		},true);

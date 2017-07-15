@@ -246,10 +246,10 @@
     },
     "core": {
         "time": 1496213662,
-        "version": "6.86.0",
+        "version": "6.87.0",
         "server": "v6.vanilla-cms.org",
-        "updated": 1500077348,
-        "changed": 1500077348
+        "updated": 1500078985,
+        "changed": 1500078985
     },
     "error_report": {
         "time": 1495146594,
