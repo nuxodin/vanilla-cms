@@ -4,8 +4,8 @@ User friendly content management
 # Install:
 - move files to your host
 - create a db
-- customize db connection in: project/index.php
-- go to yourdomain.com/project
+- customize db connection in the index.php
+- go to yourdomain.com
 - login as "su" / "su"
 
 Feel free to contact me!
