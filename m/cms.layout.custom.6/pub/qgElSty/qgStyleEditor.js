@@ -1,7 +1,7 @@
 qgStyleEditor = function() {
 	'use strict';
 
-	c1.ext(qg.Eventer,this);
+	c1.ext(c1.Eventer,this);
 	var my = this;
 	this.el = $('<div class="qgStyleEditor q1Rst">');
 	this.ul = $('<ul class=-nav>').appendTo(this.el);
@@ -28,12 +28,12 @@ qgStyleEditor = function() {
 		$('<a class="-sys">default</a>').on('click', function() {
 			my.active[prop] = '';
 			showHandler(node);
-			my.fire('change');
+			my.trigger('change');
 		}).appendTo(el);
 		$('<a class=-sys>inherit</a>').on('click', function() {
 			my.active[prop] = 'inherit';
 			showHandler(node);
-			my.fire('change');
+			my.trigger('change');
 		}).appendTo(el);
 
 		el.css({left:0,opacity:0}).animate({left:'100%',opacity:1});
@@ -140,7 +140,7 @@ qgStyleEditor = function() {
 			//if (e.type=='change') {
 				e.target === rawInp[0] ? inp && inp.val(v) : rawInp.val(v);
 			//}
-			my.fire('change');
+			my.trigger('change');
 		};
 		inp && inp.on('change input',change);
 		rawInp.on('change input',change);

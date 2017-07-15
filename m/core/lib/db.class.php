@@ -111,8 +111,8 @@ class db {
 // $diff = (microtime(1) - $start)*1000-0.0015;
 // echo number_format($diff, 2)."\n\n";
 // static $sum = 0;
-// $sum += $diff;
-// echo number_format($sum, 2)."\n";
+// // $sum += $diff;
+// // echo number_format($sum, 2)."\n";
 
 		if ($this->PDO->errorCode() !== "00000") {
 			$x = $this->PDO->errorInfo();

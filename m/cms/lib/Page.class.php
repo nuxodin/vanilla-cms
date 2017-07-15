@@ -542,6 +542,10 @@ class Page {
 		}
 		return $this->_Files;
 	}
+	function FilesAndPlaceholders(){
+		$this->Files();
+		return $this->_FilesAll;
+	}
 	function File($name) {
 		$this->Files();
 		if (!isset($this->_FilesAll[$name])) return $this->FileAdd(null, $name);
@@ -573,7 +577,7 @@ class Page {
 		$this->Files();
 		return $this->_Files[$name] ?? false;
 	}
-	function FilesSort($sort) {
+	function FilesSort($sort) { // todo: security!
 		$i = 1;
 		foreach ($sort as $file) {
 			D()->page_file->update([

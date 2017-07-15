@@ -266,9 +266,9 @@ Rte.ui.setItem('LinkTarget', {
 		let el = Rte.element.closest('a');
 		let active = this.el.classList.contains('active');
 		el.setAttribute('target', active?'_self':'_blank');
-		Rte.fire('input');
+		Rte.trigger('input');
 		Rte.active.focus();
-		Rte.fire('elementchange');
+		Rte.trigger('elementchange');
 	},
 	el: c1.dom.fragment('<div class="-item -button">Link in neuem Fenster</div>').firstChild
 });
@@ -278,7 +278,7 @@ Rte.ui.setItem('LinkTarget', {
 	inp.addEventListener('keyup', function() {
 		Rte.element.setAttribute('title',inp.value);
 		!inp.value && Rte.element.removeAttribute('title');
-		Rte.fire('input');
+		Rte.trigger('input');
 	});
 	Rte.ui.setItem('AttributeTitle',{
 		check(el) {
@@ -302,7 +302,7 @@ Rte.ui.setItem('LinkTarget', {
 		if (e.target.classList.contains('-x') || e.target.classList.contains('-y')) {
 			Rte.element.dispatchEvent(new Event('qgResize',{bubbles:true}));
 		}
-		Rte.fire('input');
+		Rte.trigger('input');
 	})
 	Rte.ui.setItem('ImageDimension', {
 		check(el) {
@@ -331,8 +331,8 @@ Rte.ui.setItem('ImgOriginal', {
 			img.style.width  = w+'px';
 			img.style.height = h+'px';
 			Rte.element.dispatchEvent(new Event('qgResize',{bubbles:true})); // new
-			Rte.fire('input');
-			Rte.fire('elementchange');
+			Rte.trigger('input');
+			Rte.trigger('elementchange');
 		}
 	},
 	el: c1.dom.fragment('<span class="-item -button" title="Originalgrösse">Originalbild</span>').firstChild
@@ -347,7 +347,7 @@ c1.c1Use('tableHandles', tH=>{
 		let e = Rte.element;
 		if (!e) return;
 		td = e.closest('td');
-		if (Rte.active.contains(td)) {
+		if (Rte.active && Rte.active.contains(td)) {
 			tr = td.parentNode;
 			table = tr.closest('table');
 			index = td.cellIndex;

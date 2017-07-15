@@ -74,6 +74,7 @@
 								 </a><br>
 								 <?=$row['browser']?><br>
 								 <?=$row['ip']?>
+							<td> <pre style="font-size:10px; box-shadow:0 0 5px; padding:4px"><?=hee($row['sample'])?></pre>
 							<td>
 								<?php
 								if (!$row['backtrace']) continue;

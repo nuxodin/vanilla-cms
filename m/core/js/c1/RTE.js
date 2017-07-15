@@ -1,5 +1,5 @@
 /* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
-setTimeout(functrion(){ throw('used?') })
+console.warn('used?');
 
 !function() {
 	'use strict';
@@ -12,13 +12,12 @@ setTimeout(functrion(){ throw('used?') })
 			var savedRange = q1.selection().save();
 			do {
 				if (isRoot(el)) return false;
-				var display = cssDisplay(el);
-				if (display === 'block') {
+				if (display === cssDisplay(el)) {
 					newElement.replace(el);
 					break;
 				}
 				if (isRoot(el.parentNode)) {
-					rangeWrap(rangeFromInlineSiblings(el) , newElement);
+					rangeWrap(rangeFromInlineSiblings(el), newElement);
 					break;
 				}
 				var parentDisplay = cssDisplay(el.parentNode);
@@ -61,7 +60,7 @@ setTimeout(functrion(){ throw('used?') })
         newDiv.style.cssText = oldCss;
         newDiv.className = oldCLassName;
 
-        if (newDiv.innerHTML==='') { newDiv.innerHTML = '\u00A0'; }
+        if (newDiv.innerHTML==='') newDiv.innerHTML = '\u00A0';
         getSelection().collapse(newDiv, 0);
 	};
 
@@ -81,21 +80,17 @@ setTimeout(functrion(){ throw('used?') })
 	function rangeFromInlineSiblings(el) {
 		var current = el;
 		var range = document.createRange();
-		var next,display = null;
+		var next, display = null;
 
-		while (current.previousSibling) {
-			next = current.previousSibling;
+		while (next = current.previousSibling) {
 			display = cssDisplay(next);
-			if (blockLikes.includes(display)) { // allow float:left and right?
-				break;
-			}
+			if (blockLikes.includes(display)) break; // allow float:left and right?
 			current = next;
 		}
 		range.setStartBefore(current);
 
 		current = el;
-		while (current.nextSibling) {
-			next = current.nextSibling;
+		while (next = current.nextSibling) {
 			display = cssDisplay(next);
 			if (blockLikes.includes(display)) break;
 			current = next;

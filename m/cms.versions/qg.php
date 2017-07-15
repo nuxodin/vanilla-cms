@@ -249,7 +249,7 @@ qg::on('action', function(){
 	$pid = $_GET['qgCmsVersPage'];
 	// if (Page($pid)->access() < 2) return; // needed?
 	cms_vers::preventDbManipulations();
-	cms_vers::$log && cms_vers::cacheHeaders();
+	cms_vers::cacheHeaders();
 	G()->SET['cms']['editmode']->setUser(0); qg::on('background',function(){ G()->SET['cms']['editmode']->setUser(1); }); // disable editmode
 
 	$generate = null;

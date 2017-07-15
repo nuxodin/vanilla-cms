@@ -11,7 +11,7 @@ class html {
 	static $meta        = [];
 	static $jsFiles 	= [];
 	static $cssFiles 	= [];
-	static $bodyFiles 	= [];
+	//static $bodyFiles 	= [];
 	static $optimiseJs  = true;
 	// static function addJsFiles($files, $mode='defer') { // todo?
 	// 	static $all = [];
@@ -36,9 +36,6 @@ class html {
 	static function addCSSFile($v, $group=null, $compress=true) {
 		if (isset( self::$cssFiles[$v] )) return;
 		self::$cssFiles[$v] = ['group'=>$group, 'file'=>$v, 'compress'=>$compress];
-	}
-	static function addBodyFile($v) {
-		self::$bodyFiles[$v] = $v;
 	}
 	static function getHeader() {
 		$return  = '<meta charset="utf-8">'."\n";
@@ -180,10 +177,32 @@ class html {
 		}, $str);
 	}
 
-	static function getBody() {
-		ob_start();
-		foreach (self::$bodyFiles AS $file) include $file;
-		$obc = ob_get_clean();
-		return self::$content.$obc;
+	// static function addBodyFile($v) {
+	// 	self::$bodyFiles[$v] = $v;
+	// }
+	//static function getBody() {
+		// ob_start();
+		// foreach (self::$bodyFiles AS $file) include $file;
+		// $obc = ob_get_clean();
+		// return self::$content.$obc;
+		// return self::$content;
+	//}
+	private static function render(){
+		G()->js_data['qgToken']   = qg::token();
+		G()->js_data['appURL']    = appURL;
+		G()->js_data['sysURL']    = sysURL;
+		G()->js_data['c1UseSrc']  = sysURL.'core/js';
+		G()->js_data['moduleAge'] = G()->SET['qg']['module_changed']->v;
+		//$body = html::getBody();
+		return
+		"<!DOCTYPE HTML>\n".
+		"<html lang=".L().">\n".
+		"	<head>".html::getHeader()."\n".
+		"	<body>\n".self::$content."\n";
+		//"	<body>\n".$body."\n";
+	}
+	static function output(){
+		header('content-type: text/html; charset=utf-8');
+		echo self::render();
 	}
 }

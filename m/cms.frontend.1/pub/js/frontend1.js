@@ -17,7 +17,7 @@
 		this.pid = el.className.replace(/.*-pid([0-9]+).*/, '$1'); // used
 		el.addEventListener('mouseleave',this.unmarkDelay.bind(this));
 	}
-	Object.assign(cms.contPos, qg.Eventer);
+	Object.assign(cms.contPos, c1.Eventer);
 
 	cms.contPos.prototype = {
 		isDraggable() {
@@ -32,14 +32,14 @@
 			if (_.moving || _.active === this /*|| this.el.classList.contains('-m-cms-cont-flexible')*/) { _.active = false; return; }
 			_.active = this;
 			this.el.classList.add('qgCmsMarked');
-			cms.contPos.fire('mark', this);
+			cms.contPos.trigger('mark', this);
 		},
 		unmark() {
 			clearTimeout(cms.contPos.outTimer);
 			if (!cms.contPos.active) return;
 			cms.contPos.active.el.classList.remove('qgCmsMarked');
 			cms.contPos.active = false;
-			cms.contPos.fire('unmark', this);
+			cms.contPos.trigger('unmark', this);
 		},
 		unmarkDelay() {
 			clearTimeout(cms.contPos.outTimer);
@@ -58,7 +58,7 @@
 	document.addEventListener('dragenter',contMarkListener);
 	document.addEventListener('mousedown',contMarkListener);
 
-	cms.cont.loadCallback = function(res) {
+	cms.cont.loadCallback = res=>{
 		setTimeout(()=>{ // html possibility has content-script that needs header-script to be executed first
 			let el = new DOMParser().parseFromString(res.html, 'text/html').body.firstChild;
 			cms.contPos(el);
@@ -114,6 +114,32 @@
 		/* drag drop */
 		let dd = new cms.contDrag();
 		cms.contPos.dd = dd;
+		dd.on('start',e=>{
+			const el = e.target;
+			dd.targets = document.querySelectorAll('.-m-cms-cont-flexible.-e, #qgCmsContTrash');
+			Array.from(document.querySelectorAll('.-m-cms-cont-flexible')).forEach(el=>el.classList.add('dropTarget'))
+			p.moving = true;
+			menu.style.display = 'none';
+			el.classList.add('-moving');
+			trash.classList.add('-dropTarget');
+			trash.c1ZTop();
+		})
+		dd.on('change',e=>{
+			trash.classList[[(e.target.id==='qgCmsContTrash'?'add':'remove')]]('-full');
+		})
+		dd.on('stop',el=>{
+			Array.from(document.querySelectorAll('.-m-cms-cont-flexible')).forEach(el=>el.classList.remove('dropTarget'))
+			p.moving = false;
+			el.classList.remove('-moving');
+			if (!cms.el.pid(el.parentNode)) { // trash
+				$fn('page::remove')(cms.el.pid(el));
+			} else {
+				let next = el.nextElementSibling ? cms.el.pid(el.nextElementSibling) : null; // next '.qgCmsCont'?
+				$fn('page::insertBefore')(cms.el.pid(el.parentNode), cms.el.pid(el), next).setInitiator('cms.dnd');
+			}
+			trash.classList.remove('-dropTarget');
+		})
+		/*
 		dd.on({
 			start(e) {
 				const el = e.target;
@@ -141,7 +167,7 @@
 				trash.classList.remove('-dropTarget');
 			}
 		});
-
+		*/
 		let startX, startY, ddEl;
 		function move(e) {
 			if (e.ctrlKey) {
@@ -215,7 +241,7 @@
 			return el;
 		}
 	};
-	Ask.on('complete', function(res) {
+	Ask.on('complete', res=>{
 		if (!res) return;
 		if (res.cmsInfo) {
 			cms.console.show(res.cmsInfo,'info');
@@ -226,7 +252,7 @@
 		}
 	});
 
-	cms.frontend1.dialog = function(title,body,buttons){
+	cms.frontend1.dialog = (title,body,buttons)=>{
 		c1.c1Use('dialog',()=>{
 			const dialog = new c1.dialog({title,body,buttons,class:'qgCMS'});
 			dialog.show();

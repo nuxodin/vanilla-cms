@@ -1,8 +1,7 @@
 <?php
 namespace qg;
 
-$Cont->Files();
-foreach ($Cont->_FilesAll as $name => $F) { ?>
+foreach ($Cont->FilesAndPlaceholders() as $name => $F) { ?>
 	<tr itemid="<?=hee($name)?>">
 		<td class=-preview title="<?=hee(L('Klicken um die Datei zu ersetzen'))?>">
 			<?php

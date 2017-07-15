@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 			this.disabled = !cms.contPos.active.el.classList.contains('-e');
 		},
 		onclick() {
-			var pid = this.activePid;
+			const pid = this.activePid;
 			$fn('cms::clipboardSet')(pid).run(()=>{
 				let els = document.querySelectorAll('.-pid'+pid);
 				for (let el of els) el.style.opacity = .3;
@@ -66,9 +66,9 @@ document.addEventListener('DOMContentLoaded',()=>{
 			this.disabled = !cms.contPos.active.isDraggable();
 		},
 		onclick() {
-			var el = this.activeEl;
+			const el = this.activeEl;
 			if (!confirm('Möchten Sie den Inhalt wirklich löschen?')) return;
-			var pid = cms.el.pid(el);
+			const pid = cms.el.pid(el);
 			el.remove();
 			$fn('page::remove')(pid).run();
 		}
@@ -82,9 +82,9 @@ document.addEventListener('DOMContentLoaded',()=>{
 		onshow(e) {
 			this.contextTarget = e.currentTarget;
 			this.lastPid = this.contextTarget.parentNode.title.replace('ID ','');
-			var access = e.currentTarget.className.match(/-access-([0-9])/)[1];
+			const access = e.currentTarget.className.match(/-access-([0-9])/)[1];
 			this.disabled = access < 2;
-			var n = cms.Tree.getNodeByKey(this.lastPid);
+			const n = cms.Tree.getNodeByKey(this.lastPid);
 			n.activate();
 		},
 		onclick() {
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 			this.disabled = access < 2;
 		},
 		onclick() {
-			var node = cms.Tree.getNodeByKey(this.lastPid);
+			const node = cms.Tree.getNodeByKey(this.lastPid);
 			cms.Tree.editNode(node);
 		}
 	});
@@ -110,24 +110,24 @@ document.addEventListener('DOMContentLoaded',()=>{
 		icon: sysURL+'cms.frontend.1/pub/img/contextmenu/copy.png',
 		selector:'#qgCmsFrontend1 .dynatree-node',
 		onshow(e) {
-			var el = e.currentTarget;
+			const el = e.currentTarget;
 			this.lastPid = el.parentNode.title.replace('ID ','');
-			var access = el.className.match(/-access-([0-9])/)[1];
+			const access = el.className.match(/-access-([0-9])/)[1];
 			this.disabled = access < 2;
 		},
 		onclick() {
-			var n = cms.Tree.getNodeByKey(this.lastPid);
-			cms.frontend1.dialog('Die Seite "'+n.data.title+'" kopieren?','',[
+			const node = cms.Tree.getNodeByKey(this.lastPid);
+			cms.frontend1.dialog('Die Seite "'+node.data.title+'" kopieren?','',[
 				{
 					title:'Seite kopieren',then(){
-						$fn('page::copy')(n.data.key).run(ret=>{
-							n.parent.reloadChildren();
+						$fn('page::copy')(node.data.key).run(ret=>{
+							node.parent.reloadChildren();
 						});
 					}
 				},{
 					title:'inklusiv Unterseiten',then(){
-						$fn('page::copy')(n.data.key,true).run(ret=>{
-							n.parent.reloadChildren();
+						$fn('page::copy')(node.data.key,true).run(ret=>{
+							node.parent.reloadChildren();
 						});
 					}
 				},{
@@ -140,12 +140,12 @@ document.addEventListener('DOMContentLoaded',()=>{
 		icon: sysURL+'cms.frontend.1/pub/img/contextmenu/delete.png',
 		selector: '#qgCmsFrontend1 .dynatree-node',
 		onshow(e) {
-			var el = e.currentTarget;
+			const el = e.currentTarget;
 			this.lastPid = el.parentNode.title.replace('ID ','');
 			this.disabled = !el.classList.contains('-access-3');
 		},
 		onclick() {
-			var n = cms.Tree.getNodeByKey(this.lastPid);
+			const n = cms.Tree.getNodeByKey(this.lastPid);
 			if (!confirm('Möchten Sie die Seite "'+n.data.title+'" wirklich löschen?')) return;
 			$fn('page::remove')(n.data.key).run(ret=>{
 				if (ret.parent_id && n.data.key==Page) {
@@ -163,11 +163,11 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 // on contextmenu stop marking other contents. Also for native contextmenu (firefox)
 !function(){
-	var ignoreMouse = function(e){
+	const ignoreMouse = e=>{
 		e.stopPropagation();
 		e.preventDefault();
 	}
-	var ignoreMouseEnd = function(){
+	const ignoreMouseEnd = ()=>{
 		document.removeEventListener('mouseover',ignoreMouse,true);
 		document.removeEventListener('mouseleave',ignoreMouse,true);
 		document.removeEventListener('mousedown',ignoreMouseEnd,true);

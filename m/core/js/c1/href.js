@@ -4,6 +4,7 @@ c1.href = {
     ignoreSelector:'[onmousedown]'
 };
 document.addEventListener('click',function(e){
+	if (!e.target.closest) return;
     var A = e.target.closest('[data-c1-href]');
     if (!A) return;
     if (e.target.closest('a,input,textarea,select,button')) return;

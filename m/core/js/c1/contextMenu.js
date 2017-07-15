@@ -25,7 +25,7 @@
                 opt.onshow && opt.onshow.bind(item)({currentTarget:target});
                 menu.append(item);
                 setTimeout(()=>item.remove(),10);
-            });
+            },true);
             return new MenuItem(item);
         }
     }

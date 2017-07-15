@@ -72,7 +72,12 @@ qg::on('cms-ready', function(){
 	G()->js_data['qgCmsEditmode'] = (int)$edit;
 	if (!$edit) return;
 	G()->js_data['cmsClipboard'] = (int)$cmsSET['clipboard']->v;
-	html::addBodyFile(sysPATH.'cms.frontend.1/view/panel.php');
+
+
+	ob_start();
+	include sysPATH.'cms.frontend.1/view/panel.php';
+	//html::$content .= ob_get_clean();
+	html::$content = ob_get_clean().html::$content;
 });
 qg::on('deliverHtml', function(){
 	if (isset($_GET['qgCmsNoFrontend'])) return;

@@ -11,7 +11,6 @@ class qg {
 			$GLOBALS['skip_stacks'] += 1; trigger_error($mName.' can not be downloaded'); $GLOBALS['skip_stacks'] -= 1;
 			return;
 		}
-		!file_exists($path) && self::Store()->download($mName);
 		is_file($path.'qg.php') && require_once $path.'qg.php';
 		!self::initialized($mName) && self::initialize($mName);
 		self::$modules[$mName] = 1;

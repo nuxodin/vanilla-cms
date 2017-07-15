@@ -1,12 +1,12 @@
 'use strict';
 {
-    cms.frontend1.clipboard = function(pid){
+    cms.frontend1.clipboard = pid=>{
         function close() {
             $fn('cms::clipboardSet')(0);
             $('.-pid'+pid).css({opacity: 1});
         }
         $('.-pid'+pid).css({opacity:0.4});
-        $fn('cms::toJson')(pid).then(function(res){
+        $fn('cms::toJson')(pid).then(res=>{
             let div = cms.frontend1.dialog(
                 'Aus der Zwischenablage einfügen',
                 '<table>'+

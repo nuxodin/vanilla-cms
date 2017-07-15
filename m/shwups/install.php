@@ -1,7 +1,9 @@
 <?php
 namespace qg;
 
-copy(sysPATH.'shwups/util/html-template.php', appPATH.'qg/html-template.php');
+qg::need('cms.installation.default');
+
+is_file(appPATH.'qg/html-template.php') && unlink(appPATH.'qg/html-template.php'); // cleanup old, zzz
 
 // Benutzer
 if (!D()->one("SELECT id FROM usr WHERE superuser = '1'")) {
@@ -13,8 +15,6 @@ if (!D()->one("SELECT id FROM usr WHERE email = 't@shwups.ch'")) {
 if (!D()->one("SELECT id FROM usr WHERE email = 'bolligab@gmail.com'")) {
 	D()->query("INSERT INTO usr SET email = 'bolligab@gmail.com', pw = '$2y$10$.L1ZjvctQ2wJNpY6wNu/lOEhMrGY5aIrjBEfMr7DrmAc8VBZZo01q', superuser=1, active=1, firstname='Gabriel', lastname='Bolliger' ");
 }
-
-/* email */
 $host = preg_replace('/\.shwups-cms\.ch/','',$_SERVER['HTTP_HOST']);
 if (preg_match('/\./',$host)) {
 	$email = 'info@'.$host;
@@ -25,5 +25,4 @@ G()->SET['qg']['mail']->make('defSender',     $email);
 G()->SET['qg']['mail']->make('defSendername', $email);
 G()->SET['qg']['mail']->make('replay',        $email);
 G()->SET['cms']['feedback']['email'] = 'office@shwups.ch';
-
 G()->SET['cms.backend.webmaster']['google.api.key'] = 'AIzaSyDBewkr4_EDLmQCZOulBlPtdrVPKq3F1Yw';

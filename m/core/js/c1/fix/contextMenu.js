@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 	c1.c1Use('focusIn',()=>{});
 
-	document.addEventListener('contextmenu',function(e){
+	document.documentElement.addEventListener('contextmenu',function(e){
 		if (e.shiftKey) return;
 		var base = e.target.closest('[contextmenu]');
 		if (base) {
@@ -59,15 +59,15 @@ document.addEventListener('DOMContentLoaded',()=>{
 				polyChild.classList.add('-disabled');
 				polyChild.disabled = true;
 			}
+			polyChild.addEventListener('mouseenter',e=>{
+				clearTimeout(openTimeout);
+				openTimeout = setTimeout(()=>{
+					open(polyChild)
+				}, 250)
+			})
 			polyChild.addEventListener('click', e=>{
 				if (e.target !== polyChild) return;
-				let ul = polyChild.c1Find('>ul');
-				if (ul) {
-					ul.c1Focus();
-					ul.c1ZTop();
-					Placer.follow(polyChild);
-					return;
-				}
+				if (open(polyChild)) return;
 				if (!disabled) {
 					mChild.dispatchEvent(new Event('click'));
 					poly.style.display = 'none';
@@ -78,11 +78,10 @@ document.addEventListener('DOMContentLoaded',()=>{
 			polyChild.addEventListener('touchstart', e=>e.stopPropagation())
 			poly.append(polyChild);
 			mChild.c1RealElement = polyChild;
-			let Placer = null;
 			if (mChild.children.length) {
 				polyChild.classList.add('-sub');
 				let ul = c1.dom.fragment('<ul tabindex=0>').firstChild;
-				Placer = new c1.Placer(ul, {x:'after',y:'prepend',margin:{top:1,right:-3,bottom:1,left:-3}});
+				ul.c1Placer = new c1.Placer(ul, {x:'after',y:'prepend',margin:{top:1,right:-3,bottom:1,left:-3}});
 				polyChild.append(ul)
 				parse(mChild, ul);
 			}
@@ -92,7 +91,18 @@ document.addEventListener('DOMContentLoaded',()=>{
 			poly.append(fragment);
 		}
 	}
-
+	let openTimeout;
+	function open(polyChild){
+		clearTimeout(openTimeout);
+		polyChild.parentNode.c1Focus();
+		let ul = polyChild.c1Find('>ul');
+		if (ul) {
+			ul.c1Focus();
+			ul.c1ZTop();
+			ul.c1Placer.follow(polyChild);
+			return true;
+		}
+	}
 	var arrow = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="32" fill="none" viewBox="0 0 16 32"><path stroke="#000" stroke-width="2" d="M2 2l12 12L2 26" stroke-linecap="round"/></svg>';
 
 	var css =

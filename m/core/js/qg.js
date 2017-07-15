@@ -1,6 +1,9 @@
 /* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
 !function(undf, k) { // old stuff
 	'use strict';
+
+	window.qg = {};
+	/*
     Function.prototype.c1Multi = function() {
 	    var fn = this;
 	    return function(a,b) {
@@ -13,7 +16,6 @@
 	        return fn.apply(this,arguments);
 	    };
     };
-	window.qg = {};
     qg.Eventer = {
 		initEvent: function(n) {
 		    !this._Es && (this._Es={});
@@ -44,6 +46,7 @@
 		    }
 		}
     };
+	*/
 
     /* devicePixelRatio polyfill */
     if (!('devicePixelRatio' in window)) window.devicePixelRatio = ('systemXDPI' in screen) ? screen.systemXDPI / screen.logicalXDPI : 1;
@@ -74,7 +77,7 @@ addEventListener('beforeunload',function() { // blur before unload (save)
 });
 Ask = function(obj, opt) {
 	opt = opt || {};
-	Ask.fire('start', obj);
+	Ask.trigger('start', obj);
 	var data = new FormData();
 	data.append('qgToken', qgToken);
 	data.append('askJSON', JSON.stringify(obj));
@@ -84,7 +87,7 @@ Ask = function(obj, opt) {
 	http.onreadystatechange = function() {
 	    if (http.readyState == 4 && http.status == 200) {
 			var res = JSON.parse(http.responseText);
-			Ask.fire('complete', res); // first! loads head
+			Ask.trigger('complete', res); // first! loads head
 			res && res.script && eval(res.script); // todo
 			opt.onComplete && opt.onComplete(res);
 	    }
@@ -93,7 +96,7 @@ Ask = function(obj, opt) {
 	return http;
 };
 
-c1.ext(qg.Eventer, Ask);
+c1.ext(c1.Eventer, Ask);
 Ask.on('complete', function(res) {
 	'use strict';
 	if (!res) return;
@@ -183,7 +186,7 @@ $fn.run = function(cb) {
 	var fns = $fn.stack;
 	if (!fns.length) return;
 	// for (var i=0, data; data = fns[i++];) { // new
-	// 	$fn.fire('before-'+data.fn, data); // needed? can not find some
+	// 	$fn.trigger('before-'+data.fn, data); // needed? can not find some
 	// }
 	var request = Ask({
 		serverInterface: fns
@@ -196,9 +199,9 @@ $fn.run = function(cb) {
 				var value = results.shift();
 				var data  = fns.shift();
 				data.callb && data.callb(value);
-				$fn.fire(data.fn, {arguments:data.args, returnValue:value, initiator:data.initiator});
+				$fn.trigger(data.fn, {arguments:data.args, returnValue:value, initiator:data.initiator});
 				//data.value = value;
-				//$fn.fire('after-'+data.fn, data); // new?
+				//$fn.trigger('after-'+data.fn, data); // new?
 			}
 			cb && cb(res.serverInterface);
 		},
@@ -206,4 +209,4 @@ $fn.run = function(cb) {
 	$fn.stack = [];
 	return request;
 };
-c1.ext(qg.Eventer, $fn);
+c1.ext(c1.Eventer, $fn);

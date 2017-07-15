@@ -79,8 +79,25 @@
 
 	w.c1 = w.c1 || {};
 	/* eventer */
+
+    Function.prototype.xMulti = function() { /// zzz
+	    var fn = this;
+	    return function(a,b) {
+	        if (b === undf && typeof a === 'object') {
+
+                console.error('no object as first argument');
+
+	            for (var i in a)
+	                if (a.hasOwnProperty(i))
+	                    fn.call(this, i, a[i]);
+	            return;
+	        }
+	        return fn.apply(this,arguments);
+	    };
+    };
+
 	c1.Eventer = {
-	    initEvent : function(n) {
+	    _getEvents : function(n) {
 	        !this._Es && (this._Es={});
 	        !this._Es[n] && (this._Es[n]=[]);
 	        return this._Es[n];
@@ -88,26 +105,32 @@
 		on: function(ns, fn) {
 	    	ns = ns.split(' ');
 	    	for (var i=0, n; n = ns[i++];) {
-		        this.initEvent(n).push(fn);
+		        this._getEvents(n).push(fn);
 	    	}
-	    },
+	    }.xMulti(),
 		off: function(ns, fn) {
 	    	ns = ns.split(' ');
 	    	for (var i=0, n; n = ns[i++];) {
-		        var Events = this.initEvent(n);
-		        Events.splice( Events.indexOf(fn) ,1);
+		        var Events = this._getEvents(n);
+		        Events.splice(Events.indexOf(fn) ,1);
+	    	}
+	    }.xMulti(),
+		trigger: function(ns, e) {
+	        var self = this, n, i=0, ns = ns.split(' ');
+	    	while (n = ns[i++]) {
+		    	this._getEvents(n).forEach(function(Event) {
+		            Event.call(self,e);
+		        });
 	    	}
 	    },
-		trigger: function(ns, e) {
-	        var self = this, n, i, j, Events, Event;
-	    	ns = ns.split(' ');
-	    	for (i=0, n; n = ns[i++];) {
-		    	Events = this.initEvent(n);
-		    	for (j=0, Event; Event = Events[j++];) {
-		            Event.call(self,e);
-		    	}
-	    	}
-	    }
+        no: function() {
+            console.warn('deprecated ".no()", use ".off()"');
+            return this.off.call(this, arguments);
+        },
+        fire: function() {
+            console.warn('deprecated ".fire()", use ".trigger()"');
+            return this.off.call(this, arguments);
+        }
 	};
 	/* ext */
 	c1.ext = function (src, target, force, deep) {
@@ -218,6 +241,23 @@
 				//console.log('todo?', props) // todo?
 				return use.call(scope, props, cb);
 			}
+    	};
+    	return fn;
+    } (c1Use);
+
+    /* return Promise */
+    c1Use = function (use) {
+    	var fn = function (props,cb) {
+            var scope = this;
+            if (!cb) return use.call(scope, props);
+            var p = new Promise(function(resolve, reject) {
+                use.call(scope, props, function(returns){
+                    cb.apply && cb.apply(scope, arguments);
+                    resolve(arguments);
+                    //reject('todo');
+                });
+            });
+            return p;
     	};
     	return fn;
     } (c1Use);

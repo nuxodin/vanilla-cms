@@ -35,16 +35,16 @@ Rte = {
 		if (newElement === Rte.active) newElement = false;
 		if (Rte.element !== newElement) {
 			Rte.element = newElement;
-			Rte.fire('elementchange');
+			Rte.trigger('elementchange');
 		}
-		Rte.fire('selectionchange');
+		Rte.trigger('selectionchange');
 	},
 	manipulate(fn) {
 		setTimeout(function() {
 			var s = getSelection(); s.removeAllRanges(); s.addRange(Rte.range);
 			fn && fn();
 			Rte.checkSelection();
-	        Rte.fire('input');
+	        Rte.trigger('input');
 			Rte.active.focus(); // firefox
 		}, 80);
 	},
@@ -64,7 +64,7 @@ Rte = {
 		}
 		fn(els);
 
-		Rte.fire('input');
+		Rte.trigger('input');
 
 		setTimeout(function() {
 			var s = getSelection();
@@ -80,8 +80,9 @@ Rte = {
 				if (el.contains(e.target)) return;
 				document.removeEventListener('mousedown',gMousedown);
 				Rte.dontBlur = false;
+				if (!Rte.active) return;
 				if (Rte.active.contains(e.target)) return;
-				Rte.fire('deactivate');
+				Rte.trigger('deactivate');
 	            Rte.active = false;
 			};
 			document.addEventListener('mousedown',gMousedown);
@@ -97,14 +98,14 @@ Rte = {
 	        if (!Rte.isTarget(e.target)) return;
 	        if (Rte.active !== e.target) {
 		        Rte.active = e.target;
-	            Rte.fire('activate');
+	            Rte.trigger('activate');
 		        Rte.checkSelection();
 	        }
 		},true);
 		root.addEventListener('blur',e=>{
 	        if (!Rte.isTarget(e.target)) return;
 	        if (!Rte.dontBlur && Rte.active) {
-	            Rte.fire('deactivate');
+	            Rte.trigger('deactivate');
 	            Rte.active = false;
 	        }
 		},true);
@@ -117,7 +118,7 @@ Rte = {
 				return;
 			}
 	        Rte.checkSelection();
-	        Rte.fire('input',e);
+	        Rte.trigger('input',e);
 		},true);
 		root.addEventListener('mouseup',e=>{
             if (!Rte.isTarget(e.target)) return;
@@ -132,7 +133,7 @@ Rte = {
 		},true);
 	}
 };
-c1.ext(qg.Eventer,Rte);
+c1.ext(c1.Eventer,Rte);
 
 //Rte.on('activate', function() {
 	//insertBrOnReturn ?

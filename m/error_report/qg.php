@@ -37,6 +37,22 @@ function error_report($vs) {
 
 	$vs['file'] = $path($vs['file']);
 
+	// get sample content
+	if (!isset($vs['sample'])) {
+		if (is_file($vs['file'])) {
+			$position = 0;
+			$lines = file($vs['file']);
+			foreach ($lines as $lineNr => $line) {
+				foreach (str_split($line) as $colNr => $char) {
+					if ($lineNr >= $vs['line']-1 && $colNr >= $vs['col']-1) break 2;
+					$position++;
+				}
+			}
+			$content = implode('', $lines);
+			$vs['sample'] = substr($content, max($position - 60,0), 120);
+		}
+	}
+
 	if (!isset($vs['backtrace'])) {
 		$vs['backtrace'] = debug_backtrace(0);
 		array_shift($vs['backtrace']);

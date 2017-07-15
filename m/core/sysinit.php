@@ -99,14 +99,6 @@ qg::on('output-before',function(){
 		$str .= $type.' '.implode(' ', array_keys($allowed)).'; ';
 	}
 	if (G()->csp_report_uri) $str .= ' report-uri '.G()->csp_report_uri;
-	// $isHtml = false;
-	// foreach(headers_list() as $header) {
-	// 	if ($header === 'content-type: text/html; charset=utf-8') {
-	// 		$isHtml = true;
-	// 		break;
-	// 	}
-	// }
-	// if (!$isHtml) return;
 	header('Content-Security-Policy'.($enable==='report only'?'-Report-Only':'').': '.$str);
 });
 

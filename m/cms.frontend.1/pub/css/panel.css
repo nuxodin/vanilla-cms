@@ -141,7 +141,7 @@
 	display:flex;
 	padding:.6em .8em .5em .8em;
 	cursor:pointer;
-	margin-top:4px;
+	margin-top:3px;
 	transition:all .1s;
 	font-size:16px;
 	background-color:var(--cms-light);
@@ -217,7 +217,7 @@
 }
 #qgCmsFrontend1 .-module-boxes {
 	display: grid;
-	grid-gap: 4px;
+	grid-gap: 3px;
 	grid-template-columns: repeat(auto-fill, minmax(140px, 1fr) ) ;
 }
 #qgCmsFrontend1 .-module-boxes > div {

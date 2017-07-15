@@ -116,7 +116,7 @@ class Store {
         return $data;
     }
     function delete($module) {
-        D()->query("UPDATE module SET server = '' WHERE name = ".D()->quote($module)." AND server = ".D()->quote($this));
+        //D()->query("UPDATE module SET server = '' WHERE name = ".D()->quote($module)." AND server = ".D()->quote($this));
         $this->Ftp()->mkdir('/module_deleted');
         @$this->Ftp()->rmdir('/module_deleted/'.$module); // Directory not empty
         $this->Ftp()->rename('/module/'.$module, '/module_deleted/'.$module);

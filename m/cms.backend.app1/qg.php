@@ -44,7 +44,7 @@ class cms_app1 {
 }
 
 qg::on('action', function() {
-	$SET = G()->SET['m']['cms.app1'];
+	$SET = G()->SET['app1'];
 	$SET->getAll();
 
 	/****************************************
@@ -140,7 +140,7 @@ qg::on('action', function() {
 	/***************************************/
 	if ($SET['use icon']->setType('bool')->v) {
 		foreach ([192,160,96,32,16] as $size) {
-			html::$head .= '<link rel=icon type=image/png href=/app-icon-'.$size.'.png sizes='.$size.'x'.$size.">\n";
+			html::$head .= '<link rel=icon type=image/png href='.appURL.'app-icon-'.$size.'.png sizes='.$size.'x'.$size.">\n";
 		}
 	}
 	/****************************************
@@ -159,8 +159,7 @@ qg::on('action', function() {
 	/***************************************/
 	$arr = [];
 	foreach ($SET['viewport'] as $k => $S) {
-		if (!$S->v) continue;
-		$arr[] = $k.'='.$S;
+		if ($S->v) $arr[] = $k.'='.$S;
 	}
 	if ($arr) html::$meta['viewport'] = implode(', ', $arr);
 	/****************************************
@@ -180,14 +179,14 @@ qg::on('action', function() {
 	// ios add to homescreen
 	// http://cubiq.org/add-to-home-screen
 
-	//apple-touch-startup-image
+	// apple-touch-startup-image
 
 	if ($v = $SET['name']->v) {
 		html::$meta['apple-mobile-web-app-title'] = $SET['name']->v;
 		html::$meta['application-name'] = $SET['name']->v; // ie tile
 	}
-	if ($v = $SET['theme-color']->v) {
-		html::$meta['theme-color'] = $SET['theme-color']->v;
+	if ($v = $SET['theme_color']->v) {
+		html::$meta['theme-color'] = $SET['theme_color']->v;
 	}
 
 	/****************************************
@@ -214,17 +213,12 @@ qg::on('action', function() {
 			'icons'            => $icons,
 			'scope'            => (string)Url(appURL),
 			'start_url'        => (string)Url(appURL)->addParam('c1Standalone',1),
-			'display'          => $SET['display']->setHandler('select')->setOptions('','fullscreen','standalone','minimal-ui','browser')->v,
-			'orientation'      => $SET->make('orientation','any')->setHandler('select')->setOptions('any','natural','landscape','portrait','portrait-primary','portrait-secondary','landscape-primary','landscape-secondary')->v,
-			'theme_color'      => $SET['theme-color']->v,
+			'display'          => $SET['display']->v,
+			'orientation'      => $SET['orientation']->v,
+			'theme_color'      => $SET['theme_color']->v,
 			'background_color' => $SET['background_color']->v,
-			//'version'          => $SET['version']->v, // not standard
-			/*, 'developer'	=> [
-				'name'	=> $SET['developer']['name']->v,
-				'url'	=> $SET['developer']['url']->v
-			], */
 		];
-		if (G()->SET['m']['cms.app1']['service-worker']->setType('bool')->v) {
+		if ($SET['service-worker']->v) {
 			$app['serviceworker'] = [
 				'src'       => (string)Url(appURL.'cms.app1.service-worker.js'),
 				'scope'     => (string)Url(appURL),
@@ -234,15 +228,14 @@ qg::on('action', function() {
 		echo json_encode($app,JSON_PRETTY_PRINT);
 		exit();
 	}
-
 	/****************************************
 	/******  firefox-app
 	/****************************************/
 	if (appRequestUri === 'manifest.webapp') {
 		header('Content-Type: application/x-web-app-manifest+json');
 		$app = [
-			'name'				=> $SET['short_name']->v,
-			'description'		=> $SET['name']->v,
+			'name'				=> $SET['name']->v ?: $SET['short_name']->v,
+			'description'		=> $SET['description']->v,
 			'launch_path'		=> appURL.'?c1Standalone=1',
 			'default_locale'	=> L::$def,
 			'icons' 			=> [
@@ -258,18 +251,16 @@ qg::on('action', function() {
 				'256' => appURL.'app-icon-256.png',
 			],
 			'version' 		=> $SET['version']->v,
-			'orientation' 	=> $SET->make('orientation','portrait')->v,
-			'fullscreen'	=> (bool)$SET['fullscreen']->v,
-			'appcache_path'	=> $SET->make('appcache_path','')->v,
+			'orientation' 	=> $SET['orientation']->v,
+			'fullscreen'	=> isset(['fullscreen'=>1,'standalone'=>1,'minimal-ui'=>1][$SET['display']->v]),
+			//'appcache_path'	=> $SET->make('appcache_path','')->v,
 			'developer'	=> [
 				'name'	=> $SET['developer']['name']->v,
 				'url'	=> $SET['developer']['url']->v
 			],
 		];
 		foreach ($SET['firefox_permissions'] as $k => $S) {
-			if ($S['description']->v) {
-				$app['permissions'][$k] = $S->get();
-			}
+			if ($S['description']->v) $app['permissions'][$k] = $S->get();
 		}
 		echo json_encode($app,JSON_PRETTY_PRINT);
 		exit();
@@ -279,19 +270,19 @@ qg::on('action', function() {
 	/****  chrome crx https://developer.chrome.com/webstore/hosted_apps
 	/***************************************/
 	if (appRequestUri === 'app.crx') {
-		$app = [		/* manifest generieren */
-			'name'				=> $SET['short_name']->v,
-			'description'		=> $SET['name']->v,
-			'version'			=> $SET['version']->v,
+		$app = [
+			'name'			=> $SET['short_name']->v,
+			'description'	=> $SET['name']->v,
+			'version'		=> $SET['version']->v,
 			'app' => [
-				'launch'	=> [
+				'launch' => [
 					'web_url' => (string)Url(appURL)->addParam('c1Standalone',1),
 				]
 			],
-			'icons' 			=> [
+			'icons' => [
 				'128' => appURL.'app-icon-128.png',
 			],
-			'manifest_version'  => 2
+			'manifest_version' => 2
 		];
 		foreach ($SET['chrome_permissions'] as $k => $S) {
 			if ($S->v) $app['permissions'][] = $k;
@@ -312,35 +303,35 @@ qg::on('action', function() {
 	/***************************************/
 	if ($SET['use ie10 tile']->setType('bool')->v) {
 		html::$meta['msapplication-TileImage'] = appURL.'mstile-144x144.png';
-		html::$meta['msapplication-TileColor'] = $SET['tile color']->v ?: $SET['theme-color']->v;
+		html::$meta['msapplication-TileColor'] = $SET['tile color']->v ?: $SET['background_color']->v;
 		html::$meta['msapplication-starturl']  = appURL.'?c1Standalone=1';
 		//html::$meta['msapplication-window']  = 'width=1024;height=768';
 		//html::$meta['msapplication-task']    = 'name=Blog;action-uri=http://app.com/blog;icon-uri=http://app.com/blog.ico';
-	}
-	html::$meta['msapplication-config'] = appURL.'browserconfig.xml';
-	if (appRequestUri === 'browserconfig.xml') {
-		$cont =
-		'<?xml version="1.0" encoding="utf-8"?>'."\n".
-		'<browserconfig>'."\n".
-		'    <msapplication>'."\n".
-		'        <tile>'."\n".
-		'            <square70x70logo   src="'.appURL.'mstile-70x70.png"/>'."\n".
-		'            <square150x150logo src="'.appURL.'mstile-150x150.png"/>'."\n".
-		'            <wide310x150logo   src="'.Page(1)->File('app558')->url().'/w-558/h-270/img.png"/>'."\n". // todo
-		'            <square310x310logo src="'.appURL.'mstile-310x310.png"/>'."\n".
-		'            <TileColor>'.$SET['tile color'].'</TileColor>'."\n".
-		'        </tile>'."\n".
-		//'        <notification>'."\n".
-		//'            <polling-uri  src="http://notifications.buildmypinnedsite.com/?feed=http://www.schweizerbauer.ch/rss/vermischtes-p-63.xml&id=1"/>'."\n".
-		//'            <polling-uri2 src="http://notifications.buildmypinnedsite.com/?feed=http://www.schweizerbauer.ch/rss/vermischtes-p-63.xml&id=2"/>'."\n".
-		//'            <frequency>30</frequency>'."\n".
-		//'            <cycle>1</cycle>'."\n".
-		//'        </notification>'."\n".
-		'    </msapplication>'."\n".
-		'</browserconfig>';
-		header('Content-Type: text/xml');
-		echo $cont;
-		exit();
+		html::$meta['msapplication-config'] = appURL.'browserconfig.xml';
+		if (appRequestUri === 'browserconfig.xml') {
+			$cont =
+			'<?xml version="1.0" encoding="utf-8"?>'."\n".
+			'<browserconfig>'."\n".
+			'    <msapplication>'."\n".
+			'        <tile>'."\n".
+			'            <square70x70logo   src="'.appURL.'mstile-70x70.png"/>'."\n".
+			'            <square150x150logo src="'.appURL.'mstile-150x150.png"/>'."\n".
+			'            <wide310x150logo   src="'.Page(1)->File('app558')->url().'/w-558/h-270/img.png"/>'."\n". // todo
+			'            <square310x310logo src="'.appURL.'mstile-310x310.png"/>'."\n".
+			'            <TileColor>'.($SET['tile color']->v ?: $SET['background_color']->v).'</TileColor>'."\n".
+			'        </tile>'."\n".
+			//'        <notification>'."\n".
+			//'            <polling-uri  src="http://notifications.buildmypinnedsite.com/?feed=http://www.schweizerbauer.ch/rss/vermischtes-p-63.xml&id=1"/>'."\n".
+			//'            <polling-uri2 src="http://notifications.buildmypinnedsite.com/?feed=http://www.schweizerbauer.ch/rss/vermischtes-p-63.xml&id=2"/>'."\n".
+			//'            <frequency>30</frequency>'."\n".
+			//'            <cycle>1</cycle>'."\n".
+			//'        </notification>'."\n".
+			'    </msapplication>'."\n".
+			'</browserconfig>';
+			header('Content-Type: text/xml');
+			echo $cont;
+			exit();
+		}
 	}
 
 	if (appRequestUri === 'cms.app1.service-worker.js') {
@@ -351,7 +342,7 @@ qg::on('action', function() {
 	}
 	if (appRequestUri === 'cms.app1.offline.html') {
 		header('content-type: text/html');
-		$SET = G()->SET['m']['cms.app1'];
+		$SET = G()->SET['app1'];
 		$file = cms_app1::filledIcon(256);
 		if ($file) {
 			$type = pathinfo($file, PATHINFO_EXTENSION);
@@ -376,7 +367,7 @@ qg::on('action', function() {
 });
 
 qg::on('deliverHtml', function(){
-	if (G()->SET['m']['cms.app1']['service-worker']->setType('bool')->v) {
+	if (G()->SET['app1']['service-worker']->setType('bool')->v) {
 		G()->csp['worker-src']["'self'"] = 1;
 		html::addJsfile(sysURL.'core/js/c1.js');
 		html::addJsfile(sysURL.'cms.backend.app1/pub/sw-register.js');

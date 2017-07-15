@@ -1,8 +1,7 @@
 <?php
 namespace qg;
 
-$Cont->Files();
-if (!count($Cont->_FilesAll)) {
+if (!count($Cont->FilesAndPlaceholders())) {
 	echo L('Es sind keine Dateien vorhanden');
 	return;
 }

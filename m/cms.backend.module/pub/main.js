@@ -1,5 +1,4 @@
 /* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
-
 cms.initCont('cms.backend.module',function(el) {
     const pid = cms.el.pid(el);
 
@@ -7,7 +6,7 @@ cms.initCont('cms.backend.module',function(el) {
     const search = function(){
         const search = this.elements.search.value;
         const installed = this.elements.installed.checked;
-        $fn('page::loadPart')(pid, 'list', {search, installed}).run();
+        $fn('page::loadPart')(pid, 'list', {search, installed}).run( c1.loading.mark(list) );
     }.c1Debounce(200);
     searchInp && searchInp.addEventListener('input', search);
     searchInp && searchInp.addEventListener('change', search);
@@ -47,9 +46,9 @@ cms.initCont('cms.backend.module',function(el) {
         el && e.stopPropagation();
     })
 
-    moduleSetTitle = function(el, module) {
-        $fn('page::api')(pid, {module, title:el.value});
-    };
+    // moduleSetTitle = function(el, module) {
+    //     $fn('page::api')(pid, {module, title:el.value});
+    // };
 
     const updateBtn = el.querySelector('.btnUpdateAll');
     updateBtn && updateBtn.addEventListener('click',e=>{

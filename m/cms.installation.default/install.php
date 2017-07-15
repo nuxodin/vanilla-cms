@@ -1,10 +1,7 @@
 <?php
 namespace qg;
 
-if (!is_file(appPATH.'qg/html-template.php')) {
-	touch(appPATH.'qg/html-template.php');
-	copy(sysPATH.'cms.installation.default/view/html-template.php', appPATH.'qg/html-template.php');
-}
+qg::need('cms');
 
 $freshInstallation = false;
 if (!G()->SET['qg']['langs']->v) {

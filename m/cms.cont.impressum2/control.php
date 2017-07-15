@@ -2,8 +2,6 @@
 namespace qg;
 global $cmsContImpressum2;
 
-$superSET = G()->SET['cms.cont.impressum2'][$Cont->id];
-
 $designer     = ['ausblenden', 'andere'];
 $photographer = ['ausblenden', 'andere'];
 $developer    = null;
@@ -16,34 +14,17 @@ if (is_array($cmsContImpressum2)) {
 	}
 }
 
-call_user_func_array(array($superSET['Design']['Designer']->setHandler('select'),'setOptions'), $designer);
-call_user_func_array(array($superSET['Fotografie']['Fotograf']->setHandler('select'),'setOptions'), $photographer);
-
-if ($developer) {
-	$superSET['Technische Umsetzung']->make('Firmenname', $developer['Firmenname']);
-	$superSET['Technische Umsetzung']->make('Adresse', 	  $developer['Adresse']);
-	$superSET['Technische Umsetzung']->make('PLZ/Ort', 	  $developer['PLZ/Ort']);
-	$superSET['Technische Umsetzung']->make('Telefon', 	  $developer['Telefon']);
-	$superSET['Technische Umsetzung']->make('Mail', 	  $developer['Mail']);
-	$superSET['Technische Umsetzung']->make('Website', 	  $developer['Website']);
-	$superSET['Technische Umsetzung']->make('title-tag',  $developer['title-tag']);
-
-	$superSET['Konzept']->make('Firmenname', $developer['Firmenname']);
-	$superSET['Konzept']->make('Adresse', 	 $developer['Adresse']);
-	$superSET['Konzept']->make('PLZ/Ort', 	 $developer['PLZ/Ort']);
-	$superSET['Konzept']->make('Telefon', 	 $developer['Telefon']);
-	$superSET['Konzept']->make('Mail', 	  	 $developer['Mail']);
-	$superSET['Konzept']->make('Website', 	 $developer['Website']);
-	$superSET['Konzept']->make('title-tag',  $developer['title-tag']);
+foreach (['Kontaktadresse', 'Technische Umsetzung', 'Konzept', 'Design', 'Fotografie'] as $worker) {
+	$Cont->SET[$worker]->make('company',   '');
+	$Cont->SET[$worker]->make('name',	  '');
+	$Cont->SET[$worker]->make('address',	  '');
+	$Cont->SET[$worker]->make('zip',	  '');
+	$Cont->SET[$worker]->make('city',	  '');
+	$Cont->SET[$worker]->make('phone',	  '');
+	$Cont->SET[$worker]->make('email',		  '');
+	$Cont->SET[$worker]->make('website',	  '');
+	$Cont->SET[$worker]->make('website-title','');
 }
-
-$Cont->SET['Unternehmen']->make('Firmenname', '');
-$Cont->SET['Unternehmen']->make('Adresse',	  '');
-$Cont->SET['Unternehmen']->make('PLZ/Ort',	  '');
-$Cont->SET['Unternehmen']->make('Telefon',	  '');
-$Cont->SET['Unternehmen']->make('Mail',		  '');
-$Cont->SET['Unternehmen']->make('Website',	  'auto');
-$Cont->SET['Unternehmen']['title-tag'];
 
 $Cont->SET['Anderes']['HR-Firmenbezeichnung'];
 $Cont->SET['Anderes']['UID'];
@@ -60,20 +41,3 @@ $Cont->SET['Einblenden']->make('Datenschutz: Google Adsense', 		0)->setType('boo
 $Cont->SET['Einblenden']->make('Datenschutz: Google Analytics', 	0)->setType('bool');
 $Cont->SET['Einblenden']->make('Datenschutz: Google Plus', 			0)->setType('bool');
 $Cont->SET['Einblenden']->make('Datenschutz: Google Remarketing',   0)->setType('bool');
-
-$superSET['Design']['Andere']['Firmenname'];
-$superSET['Design']['Andere']['Adresse'];
-$superSET['Design']['Andere']['PLZ/Ort'];
-$superSET['Design']['Andere']['Telefon'];
-$superSET['Design']['Andere']['Mail'];
-$superSET['Design']['Andere']['Website'];
-
-$superSET['Fotografie']['Andere']['Firmenname'];
-$superSET['Fotografie']['Andere']['Adresse'];
-$superSET['Fotografie']['Andere']['PLZ/Ort'];
-$superSET['Fotografie']['Andere']['Telefon'];
-$superSET['Fotografie']['Andere']['Mail'];
-$superSET['Fotografie']['Andere']['Website'];
-
-$superSET['Technische Umsetzung']->make('Einblenden', 1)->setType('bool');
-$superSET['Konzept']             ->make('Einblenden', 0)->setType('bool');

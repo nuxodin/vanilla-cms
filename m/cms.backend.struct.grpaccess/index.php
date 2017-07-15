@@ -28,26 +28,32 @@ html::addCssFile(sysURL.'cms.backend.struct/pub/main.css');
 					<div><?=$vs['name']?></div>
 					<?php } ?>
 		<tbody>
-			<?php rec_createStruct(Page($rootPageNode)) ?>
+			<?php rec_createStruct(Page($rootPageNode), ['type'=>'*']) ?>
 	</table>
 	<?php
-	function rec_createStruct($Page) {
+	function rec_createStruct($Page, $filter) {
 		static $level = -1;
 		global $openPageNodes;
-		foreach ($Page->Children() AS $id => $SubPage) {
+		foreach ($Page->Children($filter) AS $id => $SubPage) {
 			$level++;
+			$nextFilter = $level === -1 || $SubPage->vs['type'] === 'c' ? ['type'=>'*'] : [];
+
 			$AccessP = $SubPage->accessInheritParent();
 			$open = isset($openPageNodes[$SubPage->id]);
-			echo '<tr pid='.$SubPage.' class="'.($SubPage->vs['access']===null?'-inherited':'').'" data-inherited="'.$SubPage->accessInheritParent().'">';
+			echo '<tr pid='.$SubPage.' class="'.($SubPage->vs['access']===null?'-inherited':'').($SubPage->vs['type']=='c'?' -isCont':'').'" data-inherited="'.$SubPage->accessInheritParent().'">';
 				echo '<td style="text-align:right; font-weigth:bold">';
 					echo '<a title="als Startpunkt setzen" href="'.Url()->addParam('rp',$id).'">'.$SubPage.'</a>';
 				echo '<td style="padding-left:'.($level*15).'px; white-space:nowrap">';
-					if ($SubPage->Children()) {
+					if ($SubPage->Children($nextFilter)) {
 						echo '<a class="-toggle '.($open?'-minus':'-plus').'" href="'.URL()->addParam('opns['.$SubPage.']', ($open?0:1)).'"></a>';
 					} else {
 						echo '<span class=-toggle></span>';
 					}
-					echo '<a style="vertical-align:middle" href="'.$SubPage->url().'" title="'.(string)$SubPage->title().'">'.((string)$SubPage->title()?cutText($SubPage->title(),50):'(kein Text)').'</a>';
+					echo '<a style="vertical-align:middle" href="'.$SubPage->url().'" title="'.$SubPage->Title().'">'.
+							((string)$SubPage->Title()?cutText($SubPage->Title(),50):'(kein Text)').
+							' <span style="color:#888">'.$SubPage->vs['name'].'</span>'.
+							' <span style="color:#bbb">'.$SubPage->vs['module'].'</span>'.
+						'</a>';
 				if ($SubPage->access() > 2) {
 					echo '<td v="'.$AccessP->vs['access'].'" class=-all>';
 				} else {
@@ -55,12 +61,12 @@ html::addCssFile(sysURL.'cms.backend.struct/pub/main.css');
 				}
 				foreach (D()->query("SELECT grp.id, grp.name, pg.access AS access FROM grp LEFT JOIN page_access_grp pg ON grp.id = pg.grp_id AND pg.page_id = '".$AccessP."' WHERE grp.page_access") AS $vs) {
 					if ($SubPage->access() > 2) {
-						echo 	'<td gid='.$vs['id'].' v="'.$vs['access'].'" title="'.$vs['name'].' ('.$vs['id'].')">';
+						echo '<td gid='.$vs['id'].' v="'.$vs['access'].'" title="'.$vs['name'].' ('.$vs['id'].')">';
 					} else {
 						echo '<td>';
 					}
 				}
-			if ($open) rec_createStruct($SubPage);
+			if ($open) rec_createStruct($SubPage, $nextFilter);
 			$level--;
 		}
 	}

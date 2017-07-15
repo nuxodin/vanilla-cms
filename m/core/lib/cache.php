@@ -3,7 +3,7 @@
 namespace qg;
 
 class cache {
-	static $rate = 0.5;
+	static $rate = .2; // access rate to cache value, 0 => cache everything, 1 => cache if used on every request
 	static $enabled = 1;
 	function __construct($path){
 		$this->path =& $path;
@@ -43,7 +43,7 @@ class cache {
 		if (self::$counters !== null && self::$counters['counter']) {
 			$this->counter++;
 			$this->_createItem();
-			if (($this->counter / self::$counters['counter']) > self::$rate) { // 90 prozent von allen zugriffen
+			if (($this->counter / self::$counters['counter']) > self::$rate) {
 				$this->parent[$this->index] =& $data;
 			} else {
 				unset($this->parent[$this->index]);

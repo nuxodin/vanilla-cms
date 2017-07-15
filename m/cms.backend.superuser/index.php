@@ -35,10 +35,7 @@ if (!Usr()->superuser) return;
     </div>
 
     <div class=beBox>
-    	<div class=-head>Cleanup Settings</div>
-    	<div class=-body>
-			Mehrfach vorhanden:
-		</div>
+    	<div class=-head>Settings Mehrfach vorhanden</div>
         <div style="overflow:auto; max-height:80vh">
 			<?php
 			$all = D()->all("SELECT offset, basis, count(id) as count FROM qg_setting GROUP BY basis, offset HAVING count(id) > 1");
@@ -59,12 +56,16 @@ if (!Usr()->superuser) return;
 			</table>
         </div>
 
-    	<div class=-body>
-			Ohne basis:
+    	<div class=-head>
+			Settings ohne basis:
 		</div>
         <div style="overflow:auto; max-height:80vh">
 			<?php
-			$all = D()->all("SELECT s1.* FROM qg_setting s1 LEFT JOIN qg_setting s2 ON s1.basis = s2.id WHERE s2.id IS NULL AND s1.basis != 0");
+			if (isset($vars['cleanNoBase'])) {
+				D()->query("DELETE FROM qg_setting WHERE basis != 0 AND basis NOT IN(SELECT * FROM (SELECT id FROM qg_setting) AS t)");
+			}
+			//$all = D()->all("SELECT s1.* FROM qg_setting s1 LEFT JOIN qg_setting s2 ON s1.basis = s2.id WHERE s2.id IS NULL AND s1.basis != 0");
+			$all = D()->all("SELECT * FROM qg_setting s WHERE s.basis != 0 AND s.basis NOT IN(SELECT id FROM qg_setting)");
 			?>
           	<table class="c1-style">
 				<thead>
@@ -72,15 +73,20 @@ if (!Usr()->superuser) return;
 						<td> ID
 						<td> Basis
 						<td> Offset
+						<td> Value
 				<tbody>
 				<?php foreach ($all as $row) { ?>
 				<tr>
 					<td><?=$row['id']?>
 					<td><?=$row['basis']?>
-					<td><?=$row['offset']?>
+					<td><?=hee($row['offset'])?>
+					<td><?=hee($row['value'])?>
 				<?php } ?>
 			</table>
         </div>
+    	<div class=-body>
+			<button onclick="$fn('page::reload')(<?=$Cont?>,{cleanNoBase:1})">alle löschen</button>
+		</div>
     </div>
 
 </div>

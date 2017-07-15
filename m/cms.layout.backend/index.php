@@ -11,6 +11,10 @@ html::addJsFile(sysURL.'core/js/c1/css/theme.js','be-layout');
 html::addJSFile(sysURL.'core/js/qg.js',          'be-layout');
 html::addJSFile(sysURL.'cms/pub/js/cms.js',      'be-layout');
 
+html::addJsFile(sysURL.'core/js/c1/loading.js',     'be-layout', true, 'defer');
+//html::addJSFile( sysURL.'cms.frontend.1/pub/js/frontend1.js',    'cms/edit', true, 'defer');
+
+
 html::addCssFile(sysURL.'core/js/c1/css/normalize.css',    'be-layout');
 html::addCssFile(sysURL.'core/js/c1/css/recommend.css',    'be-layout');
 html::addCssFile(sysURL.'core/js/c1/css/theme1.css',       'be-layout');

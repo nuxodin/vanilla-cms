@@ -1,9 +1,8 @@
 /* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
-window.cmsTreeInit = function(json) {
+window.cmsTreeInit = json=>{
 	'use strict';
-
-//	var dblClick = false;
-	cms.Tree = $("#cmsTreeContainer").dynatree({
+	//	var dblClick = false;
+	cms.Tree = $('#cmsTreeContainer').dynatree({
 		debugLevel: 0,
         activeVisible: true,
         onActivate(node) {
@@ -12,12 +11,12 @@ window.cmsTreeInit = function(json) {
 			} else {
 				$('#cmsPageAddInp').css({opacity: 1}).attr('disabled',false);
 			}
-			var el = $('.-pid'+node.data.key)[0];
+			const el = $('.-pid'+node.data.key)[0];
 			if (!el) return;
 			cms.contPos(el).mark();
         },
         onLazyRead(node) {
-        	var id = node.data.key;
+        	const id = node.data.key;
 			$fn('cms::getTree')(id, {level:1, filter:cms.panel.data.tree_show_c ? '*' : 'p'}).then(res => {
 				node.addChild(res);
 				node.setLazyNodeStatus(DTNodeStatus_Ok);
@@ -32,7 +31,8 @@ window.cmsTreeInit = function(json) {
 				return false;
 			}
 			if (e.target.closest('a')) {
-				location.href = node.data.url;
+				if (e.ctrlKey) open(node.data.url, '_blank');
+				else location.href = node.data.url;
 			}
         },
 		onKeydown(node, e) {
@@ -51,7 +51,7 @@ window.cmsTreeInit = function(json) {
 			}
 		},
         onCreate(node, span) {
-        	var d = node.data;
+        	const d = node.data;
         	node.li.title = 'ID '+d.key;
         },
         onCustomRender(node) {
@@ -79,22 +79,22 @@ window.cmsTreeInit = function(json) {
                 return true;
             },
             onDragEnter(target, source) {
-				var access = [];
+				const access = [];
 				if (target.data.type === 'c' && source.data.type === 'p') return access;
 				target.data.myaccess > 1  && access.push('over');
 				target.parent.data.myaccess > 1 && access.push('before','after');
                 return access;
             },
             onDrop(target, source, where, ui, draggable) {
-            	var parent = where === 'over' ? target.data.key : target.getParent().data.key;
-            	var before = null;
+            	const parent = where === 'over' ? target.data.key : target.getParent().data.key;
+            	let before = null;
             	if (where==='after') {
-            		var next = target.getNextSibling();
+            		const next = target.getNextSibling();
             		before = next ? next.data.key : null;
             	} else if (where==='before') {
             		before = target.data.key;
             	}
-            	$fn('page::insertBefore')(parent, source.data.key, before ).run(() => {
+            	$fn('page::insertBefore')(parent, source.data.key, before).run(() => {
                     source.move(target, where);
             	});
             },
@@ -102,7 +102,7 @@ window.cmsTreeInit = function(json) {
         }
     }).dynatree("getTree");
 
-	cms.Tree.addPage = function(name) {
+	cms.Tree.addPage = name=>{
 		let parent = cms.Tree.activeNode;
 		parent.expand(1);
 		$fn('page::createChild')(parent.data.key, name).run(child=>{
@@ -115,7 +115,7 @@ window.cmsTreeInit = function(json) {
 	};
 
 	/* init */
-	var root = cms.Tree.getRoot();
+	const root = cms.Tree.getRoot();
 	root.addChild(json);
 
 	setTimeout(()=>{
@@ -128,20 +128,20 @@ window.cmsTreeInit = function(json) {
 
     /*edit*/
     var editInput = $('<input style="width:220px; margin:-3px; padding:2px; border:none; background:#fff; font-size:inherit; color:#444">');
-    var mousedownOutside = function(e) {
+    var mousedownOutside = e=>{
         e.target !== editInput[0] && editInput.trigger('blur');
     };
-    cms.Tree.editNode = function(node) {
+    cms.Tree.editNode = node=>{
         var $widget = node.tree.$widget;
         $widget.unbind(); // Disable dynatree mouse- and key handling
         $widget.element.on('mousedown',mousedownOutside);
         $(".dynatree-title", node.span ).removeAttr('href').html(editInput);
         editInput.val( node.data.title ).focus();
-        editInput[0].onkeyup = function(e) {
+        editInput[0].onkeyup = e=>{
             e.which == 27 && editInput.val(node.data.title) && editInput.trigger('blur');
             e.which == 13 && editInput.trigger('blur');
         };
-        editInput[0].onblur = function(e) {
+        editInput[0].onblur = e=>{
             var title = editInput.val();
             $fn('cms::setTxt')( node.data.title_id, title ).run(() => {
                 node.setTitle(title);
@@ -151,7 +151,7 @@ window.cmsTreeInit = function(json) {
             node.focus();
         };
     };
-	cms.Tree.goTo = function(pid) {
+	cms.Tree.goTo = pid=>{
 		pid = pid+'';
 		//var node = cms.Tree.getNodeByKey(pid);
 		$fn('cms::getTree')(0, {'in':pid, filter:cms.panel.data.tree_show_c ? '*' : 'p'}).then(json=>{

@@ -40,7 +40,7 @@ class qgDbFileImageEditor extends c1ImageEditor {
                 //setTimeout(renderHotspot);
             }),
             onerror:()=>{
-                c1Loading.stop(this.el('.-tools'));
+                c1.c1Use('loading',loading=>loading.done(this.el('.-tools')));
             },
             onsave: ()=>{
                 this.upload(this.loading(()=>{
@@ -146,9 +146,9 @@ class qgDbFileImageEditor extends c1ImageEditor {
     }
     loading(fn){
         const sidebar = this.el('.-sidebar');
-        sidebar && c1Loading.start(sidebar);
+        c1.c1Use('loading',loading=>sidebar && loading.mark(sidebar));
         return ()=>{
-            sidebar && c1Loading.stop(sidebar);
+            c1.c1Use('loading',loading=>sidebar && loading.done(sidebar));
             return fn ? fn() : null;
         }
     }

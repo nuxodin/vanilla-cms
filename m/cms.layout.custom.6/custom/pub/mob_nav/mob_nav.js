@@ -5,7 +5,7 @@ c1.c1Use('dom',function(){
     function listen(e){
 
 		if (e.type === 'mousedown' && byTouch) return;
-
+		if (!e.target.closest) return; // scrollbar => target is document
 		var nav_root = e.target.closest('#nav');
         if (nav_root) return;
         var btn = e.target.closest('.mob_nav_btn');

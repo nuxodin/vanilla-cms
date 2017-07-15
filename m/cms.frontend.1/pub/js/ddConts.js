@@ -26,19 +26,19 @@
 			active.style.opacity = 0; // moveToTargetEffect!!
 			document.removeEventListener('mousemove',move);
 			document.removeEventListener('mouseup',up);
-			self.fire('stop',active);
+			self.trigger('stop',active);
 			dropCont   = 0;
 			dropBefore = 0;
 		}
 		function change() {
             dropCont.insertBefore(ghost,dropBefore);
-			self.fire('change',{target:dropCont,before:dropBefore});
+			self.trigger('change',{target:dropCont,before:dropBefore});
 		}
 
-		this.start = function(el, e) {
+		this.start = (el, e)=>{
 			document.addEventListener('mousemove',move);
 			document.addEventListener('mouseup',up);
-			self.fire('start',{target:el, originalEvent:e});
+			self.trigger('start',{target:el, originalEvent:e});
 			active = el;
 			oldCss = active.style.cssText;
 			active.style.position  = 'fixed';
@@ -48,7 +48,7 @@
 		};
 
 	};
-	cms.contDrag.prototype = qg.Eventer;
+	cms.contDrag.prototype = c1.Eventer;
 
 	function getNearestElement(e, els, notInside) {
 		let winner, winner2, min=null;

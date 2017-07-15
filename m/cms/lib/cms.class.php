@@ -70,8 +70,7 @@ class cms {
 		html::$content .= self::$MainPage->get();
 		qg::fire('cms-ready'); // deprecated
 		//qg::fire('cms::output-after'); // todo
-		$tpl = new template();
-		echo $tpl->get(appPATH.'qg/html-template.php');
+		html::output();
 	}
 	static function getModules() {
 		if (self::$modules === null) {

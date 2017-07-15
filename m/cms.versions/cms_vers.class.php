@@ -85,7 +85,7 @@ class cms_vers {
 	static function cacheHeaders() {
 		header("Cache-Control: max-age=2592000");
 		header("Expires: Thu, 01 Dec 2035 16:00:00 GMT");
-		header("Cache-Control: store, cache, max-age=100000, must-revalidate");
+		header("Cache-Control: store, cache, max-age=2592000, must-revalidate");
 		header("Pragma: cache");
 	}
 }

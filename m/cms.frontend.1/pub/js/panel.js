@@ -6,18 +6,20 @@ document.addEventListener('DOMContentLoaded',function(){
     let el = document.getElementById('qgCmsFrontend1');
 
 	/* sidebar */
-	panel.loadWidget = function(widget, params, cb){
+	panel.loadWidget = (widget, params, cb)=>{
 		const widgetEl = el.c1Find('[widget="'+widget+'"]');
 		if (!widgetEl) return;
-		c1Loading.start(widgetEl);
-		if (!params) params = {};
-		params.pid = params.pid || cms.cont.active || Page; // neu
-		$fn('cms_frontend_1::widget')(widget, params).then(res => {
-			c1Loading.stop(widgetEl);
-			//widgetEl.innerHTML = res; // scripts are not executed :(
-			$(widgetEl).html(res)
-			cb && cb({target:$(widgetEl)});
-		});
+		c1.c1Use('loading',loading=>{
+			loading.mark(widgetEl);
+			if (!params) params = {};
+			params.pid = params.pid || cms.cont.active || Page; // neu
+			$fn('cms_frontend_1::widget')(widget, params).then(res => {
+				loading.done(widgetEl)
+				//widgetEl.innerHTML = res; // scripts are not executed :(
+				$(widgetEl).html(res)
+				cb && cb({target:$(widgetEl)});
+			});
+		})
 	}
 	panel.on('set', function(e){
 		e.old !== e.value && $fn('Setting')(this.data, ['cms.frontend.1','custom']);
@@ -36,7 +38,7 @@ document.addEventListener('DOMContentLoaded',function(){
 				const switches = document.querySelectorAll('.qgCMS_editmode_switch');
 				for (let i=0,item; item=switches[i++];) item.c1ZTop();
 				el.classList.add('-open');
-				var load = el.c1Find('> .-sidebar > [itemid="'+e.value+'"] > .-content').getAttribute('widget');
+				const load = el.c1Find('> .-sidebar > [itemid="'+e.value+'"] > .-content').getAttribute('widget');
 				load && panel.loadWidget(e.value, {pid: cms.cont.active || Page});
 			} else {
 				el.classList.remove('-open');
@@ -49,7 +51,7 @@ document.addEventListener('DOMContentLoaded',function(){
 		let titelEl = e.target.closest('.-sidebar > .-item > .-title');
 		if (!titelEl) return;
 		cms.cont.active = Page;
-		var sidebar = titelEl.closest('[itemid]').getAttribute('itemid');
+		const sidebar = titelEl.closest('[itemid]').getAttribute('itemid');
 		panel.set('sidebar',sidebar);
 		//e.preventDefault(); zzz need to scroll on mobile
 	}
@@ -70,8 +72,8 @@ document.addEventListener('DOMContentLoaded',function(){
 		let wHead = e.target.closest('.-widgetHead');
 		if (!wHead) return;
 		e.preventDefault();
-		var value = wHead.classList.toggle('-open');
-		var widget = wHead.nextElementSibling.getAttribute('widget');
+		const value = wHead.classList.toggle('-open');
+		const widget = wHead.nextElementSibling.getAttribute('widget');
 		if (!widget) return;
 		panel.get('widget').set(widget,value);
 	})
@@ -95,14 +97,12 @@ document.addEventListener('DOMContentLoaded',function(){
     	if (e.shiftKey || e.metaKey || e.altKey || e.ctrlKey) return;
 
 		if (e.which == 84) { // t
-			var id = cms.contPos.active.pid;
-			cms.cont.active = id;
+			cms.cont.active = cms.contPos.active.pid;
 			cms.panel.set('sidebar', 'tree');
     		e.preventDefault();
     	}
 		if (e.which == 32) { // space
-			var id = cms.contPos.active.pid;
-			cms.cont.active = id;
+			cms.cont.active = cms.contPos.active.pid;
 			cms.panel.set('sidebar', 'settings');
     		e.preventDefault();
     	}
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded',function(){
 		if (e.which == 78) { // n
 			cms.panel.set('sidebar','tree');
 			setTimeout(()=>{
-				let inp = el.c1Find('#cmsPageAddInp')
+				const inp = el.c1Find('#cmsPageAddInp')
 				inp && inp.focus()
 			}, 400);
 		}
@@ -129,10 +129,10 @@ document.addEventListener('DOMContentLoaded',function(){
 
 	cms.cont.on('upload', ev => {
 		cms.cont(ev.pid).showWidget('media');
-		var File = ev.File;
+		//var File = ev.File; zzz
 		ev.on('progress', e => {
-			var percent = Math.round(e.loaded * 100 / e.total);
-			let button = el.c1Find('[cmsconf="contMedia_overview"] button');
+			const percent = Math.round(e.loaded * 100 / e.total);
+			const button = el.c1Find('[cmsconf="contMedia_overview"] button');
 			if (button) {
 				button.innerHTML = percent+'%';
 				button.style.minWidth = '150px';
@@ -190,20 +190,18 @@ document.addEventListener('DOMContentLoaded',function(){
 	// });
 	// panel.set('crowd out', panel.get('crowd out'));
 
-
-
 	// deprecated, frontend.0 compatibility
 	cms.panel.tabs = {};
-	cms.panel.tabs.show = function(what) {
+	cms.panel.tabs.show = what=>{
 		cms.cont(cms.cont.active).showWidget(what);
 	};
 });
 
 c1.onElement('.qgCmsTreeManager',el=>{
 	// add Page
-	var inp = document.getElementById('cmsPageAddInp');
+	const inp = document.getElementById('cmsPageAddInp');
 	function add() {
-		var v = inp.value.trim();
+		const v = inp.value.trim();
 		v && cms.Tree.addPage(v);
 		inp.value = '';
 	}
@@ -217,10 +215,10 @@ c1.onElement('.qgCmsTreeManager',el=>{
 			this.blur();
 		}
 	});
-	var tree = JSON.parse(el.getAttribute('data'));
+	const tree = JSON.parse(el.getAttribute('data'));
 	cmsTreeInit(tree);
 	// change placeholder
-	var old = cms.Tree.options.onActivate
+	const old = cms.Tree.options.onActivate
 	cms.Tree.options.onActivate = function(node){
 		inp.placeholder = inp.placeholder.replace(/"([^"]*)"/, '"'+node.data.title+'"');
 		old.apply(this, arguments);
@@ -282,7 +280,7 @@ c1.onElement('.qgCmsFileManager',el=>{
 				upload(this.files, replaces);
 			})[0].click();
 		});
-		tbody.on('dragstart','.-preview > [draggable]', function(e) {
+		tbody.on('dragstart','.-preview > [draggable], .-link > a', e=>{
 			cms.panel.set('sidebar','');
 		});
 		tbody[0].addEventListener('dragstart',e=>{
@@ -292,12 +290,12 @@ c1.onElement('.qgCmsFileManager',el=>{
 		});
 	}
 
-	var upload = function(files, replaces) {
+	var upload = (files, replaces)=>{
 		for (let i=0, file; file=files[i++];) {
 			cms.cont(pid).upload(file, reload, replaces);
 		}
 	}
-	var reload = function() {
+	var reload = ()=>{
 		$fn('page::reload')(pid);
 		cms.panel.get('widget').set('media',1);
 	}
@@ -309,13 +307,13 @@ c1.onElement('.qgCmsFileManager',el=>{
 	})
 	if (el.c1Find('.-sortFilesSelect')) {
 		el.c1Find('.-sortFilesSelect').addEventListener('change',function(){
-			var val = this.options[this.selectedIndex].value;
+			const val = this.options[this.selectedIndex].value;
 			val === 'name'    && $fn('page::filesSetOrder')(pid,'name','asc') && reload();
 			val === 'date'    && $fn('page::filesSetOrder')(pid,'date','asc') && reload();
 			val === 'reverse' && $fn('page::filesSetOrder')(pid,'reverse') && reload();
 		});
 		el.c1Find('.-deleteFilesSelect').addEventListener('change',function(){
-			var val = this.options[this.selectedIndex].value;
+			const val = this.options[this.selectedIndex].value;
 			val === 'double' && $fn('page::filesDeleteDouble')(pid) && reload();
 			val === 'all'    && confirm('Möchten Sie die Dateien wirklich löschen?') && $fn('page::filesDeleteAll')(pid) && reload();
 		});
@@ -334,24 +332,25 @@ c1.onElement('.qgCmsFront1ModuleManager',el=>{
 		if (e.which !== 1) return;
 		const box = e.target.closest('.-module-boxes > [itemid]');
 		if (!box) return;
-        var itemid = box.getAttribute('itemid');
-		c1Loading.start(box);
-		if (box.closest('.cmsAddModels')) {
-			$fn('page::copy')(itemid).run(function(ret) {
-				c1Loading.stop(box);
-				cms.panel.set('sidebar','');
-				cms.cont(ret).addPosition();
-			});
-		} else {
-			cms.cont.add(itemid);
-		}
+        const itemid = box.getAttribute('itemid');
+		c1.c1Use('loading',loading=>{
+			loading.mark(box);
+			if (box.closest('.cmsAddModels')) {
+				$fn('page::copy')(itemid).run(ret=>{
+					cms.panel.set('sidebar','');
+					cms.cont(ret).addPosition();
+				});
+			} else {
+				cms.cont.add(itemid);
+			}
+		});
         e.preventDefault();
 	});
 });
 c1.onElement('.qgCmsFront1AccessGrpManager',el=>{
 	const pid = el.getAttribute('pid');
 	el.c1Find('.-inherit').addEventListener('change',function(){
-		var value = this.checked ? null : this.value; // not inherit ? set it to what it was inherited
+		const value = this.checked ? null : this.value; // not inherit ? set it to what it was inherited
 		$fn('page::setPublic')(pid, value); cms.panel.get('widget').set('access.grp',1);
 	});
 	const searchInp = el.c1Find('.-search');
@@ -550,7 +549,7 @@ c1.onElement('.qgCmsFront1MoreManager',el=>{
 		var n2  = this.c1Find('[name=new2]').value;
 		if (n!==n2) alert('Die Passwörter stimmen nicht überein');
 		else {
-			$fn('core::changePw')(old, n).run(function(res) {
+			$fn('core::changePw')(old, n).run(res=>{
 				switch (res) {
 					case  1: alert('Das Passwort wurde erfolgreicht geändert.'); break;
 					case -1: alert('Das alte Passwort ist nicht korrekt.'); break;
@@ -562,21 +561,21 @@ c1.onElement('.qgCmsFront1MoreManager',el=>{
 	el.c1Find('.-changelang').addEventListener('change', function(e) {
 		var val = this.options[this.selectedIndex].value;
 		var SET_id = this.name;
-		$fn('Setting')(val, SET_id).run(function() {
+		$fn('Setting')(val, SET_id).run(()=>{
 			location.href = location.href.replace(/#.*$/,'');
 		});
 	});
 	el.c1Find('.-tree-show-c').addEventListener('change', function(e) {
 		var SET_id = this.name;
-		$fn('Setting')(this.checked, SET_id).run(function() {
+		$fn('Setting')(this.checked, SET_id).run(()=>{
 			location.href = location.href.replace(/#.*$/,'');
 		});
 	});
 	// show editables
-	el.c1Find('.-showEditables').addEventListener('mouseenter', function(e) {
+	el.c1Find('.-showEditables').addEventListener('mouseenter', e=>{
 		document.documentElement.classList.add('cmsShowEditables');
 	});
-	el.c1Find('.-showEditables').addEventListener('mouseleave', function(e) {
+	el.c1Find('.-showEditables').addEventListener('mouseleave', e=>{
 		document.documentElement.classList.remove('cmsShowEditables');
 	});
 });
@@ -587,7 +586,7 @@ c1.onElement('.qgCMSFron1ContManager',el=>{
 	el.c1Find('.-changemodule').addEventListener('change', function(e) {
 		const val = this.options[this.selectedIndex].value;
 		const type = el.getAttribute('page-type');
-		$fn('page::setModule')(pid, val).then(function(){
+		$fn('page::setModule')(pid, val).then(()=>{
 			if (type === 'p') location.href = location.href.replace(/#.*$/,'');
 		});
 		if (type !== 'p') {
@@ -609,7 +608,7 @@ c1.onElement('.qgCMSFron1ContManager',el=>{
 });
 c1.onElement('.qgCmsFront1SuperuserManager',el=>{
 	const pid = el.getAttribute('pid');
-	el.addEventListener('keyup',function(e){
+	el.addEventListener('keyup',e=>{
 		if (e.which !== 13 ) return;
 		const create = e.target.closest('.-create');
 		if (!create) return;
@@ -617,10 +616,10 @@ c1.onElement('.qgCmsFront1SuperuserManager',el=>{
 		cms.panel.loadWidget('superuser', {pid, create:create.value, in:scope});
 	})
 	el.addEventListener('click', e=>{
-		var scopeEl = e.target.closest('[scope]');
+		const scopeEl = e.target.closest('[scope]');
 		if (!scopeEl) return;
-		var scope = scopeEl.getAttribute('scope');
-		var remove = e.target.closest('.-remove');
+		//const scope = scopeEl.getAttribute('scope');
+		const remove = e.target.closest('.-remove');
 		if (remove) {
 			const file = remove.parentNode.getAttribute('itemid');
 			confirm('Möchten Sie die Datei löschen?') && cms.panel.loadWidget('superuser', {pid,delete:file});
@@ -640,7 +639,7 @@ var xCollection = function(obj) {
 };
 c1.ext(c1.Eventer, xCollection.prototype);
 c1.ext({
-	set: function(n, v) {
+	set(n, v) {
 		if (typeof n === 'object') {
 			for (var key in n) {
 				n.hasOwnProperty(key) && this.set(key, n[key]);
@@ -655,16 +654,16 @@ c1.ext({
 		}
 		this.trigger('set', {name:n, value:v, old:old_value});
 	},
-	get: function(n) {
+	get(n) {
 		return this.data[n];
 	},
-	toggle: function(n, v1, v2) {
+	toggle(n, v1, v2) {
 		if (v2 === undefined) v2 = '';
 		this.set(n, this.data[n] === v1 ? v2 : v1);
 	},
-	getAll: function() {
-		var ret = {};
-		for (var key in this.data) {
+	getAll() {
+		const ret = {};
+		for (const key in this.data) {
 			if (this.data[key] instanceof xCollection) {
 				ret[key] = this.data[key].getAll();
 			} else {
@@ -676,43 +675,7 @@ c1.ext({
 }
 ,xCollection.prototype);
 
-/* c1Loading */
-!function(){
-	window.c1Loading = {
-		start(el) {
-			clearTimeout(el.c1ShowLoadingTO);
-			el.c1ShowLoadingTO = setTimeout(()=>{
-				el.classList.add('c1Loading');
-				if (!el.offsetHeight) el.style.minHeight = '30px';
-				if (!el.offsetWidth)  el.style.minWidth = '30px';
-				if (!el.offsetHeight) el.style.display = 'block';
-				if (el.offsetHeight <= 30) el.style.backgroundSize = '28px';
-			},300);
-		},
-		stop(el) {
-			clearTimeout(el.c1ShowLoadingTO);
-			el.classList.remove('c1Loading');
-		},
-	}
-	var css =
-	'.c1Loading { '+
-	'  pointer-events: none !important; ' +
-	'  transition: opacity .2s !important;' +
-	'  background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48c3ZnIHdpZHRoPSc2NHB4JyBoZWlnaHQ9JzY0cHgnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIiBjbGFzcz0idWlsLXNwaW4iPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSJub25lIiBjbGFzcz0iYmsiPjwvcmVjdD48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg1MCA1MCkiPjxnIHRyYW5zZm9ybT0icm90YXRlKDApIHRyYW5zbGF0ZSgzNCAwKSI+PGNpcmNsZSBjeD0iMCIgY3k9IjAiIHI9IjgiIGZpbGw9IiMwMDAiPjxhbmltYXRlIGF0dHJpYnV0ZU5hbWU9Im9wYWNpdHkiIGZyb209IjEiIHRvPSIwLjEiIGJlZ2luPSIwcyIgZHVyPSIxLjRzIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSI+PC9hbmltYXRlPjxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0ic2NhbGUiIGZyb209IjEuNSIgdG89IjEiIGJlZ2luPSIwcyIgZHVyPSIxLjRzIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSI+PC9hbmltYXRlVHJhbnNmb3JtPjwvY2lyY2xlPjwvZz48ZyB0cmFuc2Zvcm09InJvdGF0ZSg0NSkgdHJhbnNsYXRlKDM0IDApIj48Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iOCIgZmlsbD0iIzAwMCI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0ib3BhY2l0eSIgZnJvbT0iMSIgdG89IjAuMSIgYmVnaW49IjAuMTdzIiBkdXI9IjEuNHMiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIj48L2FuaW1hdGU+PGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJzY2FsZSIgZnJvbT0iMS41IiB0bz0iMSIgYmVnaW49IjAuMTdzIiBkdXI9IjEuNHMiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIj48L2FuaW1hdGVUcmFuc2Zvcm0+PC9jaXJjbGU+PC9nPjxnIHRyYW5zZm9ybT0icm90YXRlKDkwKSB0cmFuc2xhdGUoMzQgMCkiPjxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSI4IiBmaWxsPSIjMDAwIj48YW5pbWF0ZSBhdHRyaWJ1dGVOYW1lPSJvcGFjaXR5IiBmcm9tPSIxIiB0bz0iMC4xIiBiZWdpbj0iMC4zNXMiIGR1cj0iMS40cyIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiPjwvYW5pbWF0ZT48YW5pbWF0ZVRyYW5zZm9ybSBhdHRyaWJ1dGVOYW1lPSJ0cmFuc2Zvcm0iIHR5cGU9InNjYWxlIiBmcm9tPSIxLjUiIHRvPSIxIiBiZWdpbj0iMC4zNXMiIGR1cj0iMS40cyIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiPjwvYW5pbWF0ZVRyYW5zZm9ybT48L2NpcmNsZT48L2c+PGcgdHJhbnNmb3JtPSJyb3RhdGUoMTM1KSB0cmFuc2xhdGUoMzQgMCkiPjxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSI4IiBmaWxsPSIjMDAwIj48YW5pbWF0ZSBhdHRyaWJ1dGVOYW1lPSJvcGFjaXR5IiBmcm9tPSIxIiB0bz0iMC4xIiBiZWdpbj0iMC41MnMiIGR1cj0iMS40cyIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiPjwvYW5pbWF0ZT48YW5pbWF0ZVRyYW5zZm9ybSBhdHRyaWJ1dGVOYW1lPSJ0cmFuc2Zvcm0iIHR5cGU9InNjYWxlIiBmcm9tPSIxLjUiIHRvPSIxIiBiZWdpbj0iMC41MnMiIGR1cj0iMS40cyIgcmVwZWF0Q291bnQ9ImluZGVmaW5pdGUiPjwvYW5pbWF0ZVRyYW5zZm9ybT48L2NpcmNsZT48L2c+PGcgdHJhbnNmb3JtPSJyb3RhdGUoMTgwKSB0cmFuc2xhdGUoMzQgMCkiPjxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSI4IiBmaWxsPSIjMDAwIj48YW5pbWF0ZSBhdHRyaWJ1dGVOYW1lPSJvcGFjaXR5IiBmcm9tPSIxIiB0bz0iMC4xIiBiZWdpbj0iMC43cyIgZHVyPSIxLjRzIiByZXBlYXRDb3VudD0iaW5kZWZpbml0ZSI+PC9hbmltYXRlPjxhbmltYXRlVHJhbnNmb3JtIGF0dHJpYnV0ZU5hbWU9InRyYW5zZm9ybSIgdHlwZT0ic2NhbGUiIGZyb209IjEuNSIgdG89IjEiIGJlZ2luPSIwLjdzIiBkdXI9IjEuNHMiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIj48L2FuaW1hdGVUcmFuc2Zvcm0+PC9jaXJjbGU+PC9nPjxnIHRyYW5zZm9ybT0icm90YXRlKDIyNSkgdHJhbnNsYXRlKDM0IDApIj48Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iOCIgZmlsbD0iIzAwMCI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0ib3BhY2l0eSIgZnJvbT0iMSIgdG89IjAuMSIgYmVnaW49IjAuODdzIiBkdXI9IjEuNHMiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIj48L2FuaW1hdGU+PGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJzY2FsZSIgZnJvbT0iMS41IiB0bz0iMSIgYmVnaW49IjAuODdzIiBkdXI9IjEuNHMiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIj48L2FuaW1hdGVUcmFuc2Zvcm0+PC9jaXJjbGU+PC9nPjxnIHRyYW5zZm9ybT0icm90YXRlKDI3MCkgdHJhbnNsYXRlKDM0IDApIj48Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iOCIgZmlsbD0iIzAwMCI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0ib3BhY2l0eSIgZnJvbT0iMSIgdG89IjAuMSIgYmVnaW49IjEuMDRzIiBkdXI9IjEuNHMiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIj48L2FuaW1hdGU+PGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJzY2FsZSIgZnJvbT0iMS41IiB0bz0iMSIgYmVnaW49IjEuMDRzIiBkdXI9IjEuNHMiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIj48L2FuaW1hdGVUcmFuc2Zvcm0+PC9jaXJjbGU+PC9nPjxnIHRyYW5zZm9ybT0icm90YXRlKDMxNSkgdHJhbnNsYXRlKDM0IDApIj48Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iOCIgZmlsbD0iIzAwMCI+PGFuaW1hdGUgYXR0cmlidXRlTmFtZT0ib3BhY2l0eSIgZnJvbT0iMSIgdG89IjAuMSIgYmVnaW49IjEuMjJzIiBkdXI9IjEuNHMiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIj48L2FuaW1hdGU+PGFuaW1hdGVUcmFuc2Zvcm0gYXR0cmlidXRlTmFtZT0idHJhbnNmb3JtIiB0eXBlPSJzY2FsZSIgZnJvbT0iMS41IiB0bz0iMSIgYmVnaW49IjEuMjJzIiBkdXI9IjEuNHMiIHJlcGVhdENvdW50PSJpbmRlZmluaXRlIj48L2FuaW1hdGVUcmFuc2Zvcm0+PC9jaXJjbGU+PC9nPjwvZz48L3N2Zz4="); ' +
-	'  background-repeat: no-repeat !important; ' +
-	'  background-position: 50% !important; ' +
-	'  background-size: 32px !important; ' +
-	'} ' +
-	'.c1Loading * { ' +
-	'  opacity:0.2; ' +
-	'} ' +
-	' ';
-	var sEl = document.createElement('style');
-	sEl.appendChild(document.createTextNode(css));
-	document.head.append(sEl);
-}();
 
-/* */
 c1.onElement('#qgCmsFrontend1 .-widgetHead', el=>{
 	el.addEventListener('mousedown',e=>el.focus());
 	el.addEventListener('keydown',e=>{

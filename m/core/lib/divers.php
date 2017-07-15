@@ -102,24 +102,32 @@ $str = ob_get_clean();
 ob_start();
 echo $str;
 register_shutdown_function(function(){
+    //if (ob_get_level() < 1) trigger_error('no output buffer '.ob_get_level());
+    //if (ob_get_level() > 1) trigger_error('more than one output buffer '.ob_get_level());
 
-    !headers_sent() && qg::fire('output-before');
+    //!headers_sent() && qg::fire('output-before');
+
+    $content = '';
+    while (ob_get_level()) $content .= ob_get_clean();
+    !headers_sent() && qg::fire('output-before',['content'=>&$content]);
 
     $hasBgEvent = isset(qg::$events['background']) && qg::$events['background'];
-    //$hasBgEvent = qg::$events['background'] ?: false; test
 	if ($hasBgEvent) {
         if (!headers_sent()) {
             function_exists('apache_setenv') && apache_setenv('no-gzip', 1); // neu test existence
             ini_set('zlib.output_compression', 0);
             ini_set('implicit_flush', 1);
-            header("Content-Length: ".ob_get_length());
+            header("Content-Length: ".strlen($content));
     		header("Content-Encoding: none");
     		header("Connection: close");
         } else {
             trigger_error('can not run background-events in background, headers sent!');
         }
 	}
-    if (ob_get_length() > 0) ob_end_flush();
+
+    echo $content;
+
+    //if (ob_get_length() > 0) ob_end_flush();
 	if ($hasBgEvent) {
         flush();
 		ignore_user_abort(true);

@@ -214,7 +214,7 @@ $hasNewVersion = $storeData && $storeData['version'] > $localData['version'];
 		<div class=beBox style="flex:100%">
 			<div class=-head>Mit Server vergleichen</div>
 			<div class=-body style="max-height:90vh; overflow:auto;" data-part="diff">
-				<button onclick="$fn('page::loadPart')(<?=$Cont?>,'diff')">laden</button>
+				<button onclick="$fn('page::loadPart')(<?=$Cont?>,'diff').run(c1.loading.mark(this))">laden</button>
 			</div>
 		</div>
 	<?php } ?>

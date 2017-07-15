@@ -16,7 +16,7 @@
 		let v = inp.value;
 		if (v.trim() === '') {
 			el.removeNode();
-			Rte.fire('input');
+			Rte.trigger('input');
 			return;
 		} else if (!isNaN(v)) {
 			v = 'cmspid://'+v;
@@ -31,7 +31,7 @@
 			el.setAttribute('target', v.match(/^(cmspid|mailto)/) ? '_self' : '_blank');
 		}
 		Rte.active && Rte.active.focus(); // always false? needed?
-		Rte.fire('input');
+		Rte.trigger('input');
 	};
 	inp.addEventListener('blur',end);
 	inp.addEventListener('keyup',e => e.which === 13 && end() );
@@ -163,7 +163,7 @@
 			el.removeAttribute('height');
 			el.setAttribute('width',width);
 			if (el.style.display === 'inline-block') el.style.display = '';
-			Rte.fire('input');
+			Rte.trigger('input');
 			/* problem will save height on unload
 			setTimeout(function(){ // set Height after save
 				el.style.height = height+'px';
@@ -307,7 +307,7 @@
             this.y = limit(this.y, 0, this.img.height - this.h );
             this.ctx.clearRect(0, 0, this.ctx.width, this.ctx.height);
             this.ctx.drawImage(this.img, this.x, this.y, this.w, this.h, 0, 0, this.ctx.width, this.ctx.height);
-            this.fire('change');
+            this.trigger('change');
         },
         mouseOffsetCloserToCenter(e) {
             /* real offset on canvas */
@@ -319,7 +319,7 @@
             };
         }
     };
-    c1.ext(qg.Eventer, ImageZoomer.prototype);
+    c1.ext(c1.Eventer, ImageZoomer.prototype);
 
     /*******************************/
     /* helpers *********************/

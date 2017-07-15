@@ -2,7 +2,7 @@ qgStyleSheetEditor = function() {
 	'use strict';
 
 	var my = this;
-	c1.ext(qg.Eventer,this);
+	c1.ext(c1.Eventer,this);
 
 	my.div = $('<div class="q1Rst qgStyleSheetEditor"></div>').appendTo(document.body).draggable({handle:'.-title'});
 
@@ -95,7 +95,7 @@ qgStyleSheetEditor = function() {
 	my.sEditor.el.appendTo(styleBox).hide();
 	my.sEditor.on('change', function() {
 		my.sEditor.colorPalette = my.getColors();
-		my.fire('change');
+		my.trigger('change');
 	});
 	!function() {
 		var close = function() {
@@ -119,7 +119,7 @@ qgStyleSheetEditor = function() {
 		var redefineBox = $('<div style="display:none;"><div class="-title"><b>redefine selector</b><span class="-close">x</span></div><input style="width:300px; margin:2px 0; box-sizing:border-box"></div>').appendTo(my.div);
 		var set = function(v) {
 			activeRule.selectorText = v;
-			my.fire('change');
+			my.trigger('change');
 			close();
 		};
 		var close = function() {
@@ -283,7 +283,7 @@ qgStyleSheetEditor.prototype = {
 	},
 	deleteRule: function(index) {
 		this.active.deleteRule(index);
-		this.fire('change');
+		this.trigger('change');
 	},
 	moveRule: function(index, toPos) {
 		var cssText = this.active.cssRules.item(index).cssText;
@@ -291,7 +291,7 @@ qgStyleSheetEditor.prototype = {
 		this.active.insertRule(cssText,toPos);
 		toPos < index && ++index;
 		this.active.deleteRule( index );
-		this.fire('change');
+		this.trigger('change');
 		this.show(this.active); // the moved item as not saveable / hack?
 	},
 	show: function(ss) {
@@ -320,11 +320,11 @@ qgStyleSheetEditor.prototype = {
 		});
 		var fileName = my.active.href.replace(/.*\/([^\/?]+).*/,'$1');
 		my.sheetBox.children('.-title').find('b').html(fileName+' | stylesheet editor');
-		this.fire('show');
+		this.trigger('show');
 	},
 	close: function(){
 		this.div.hide();
-		this.fire('close');
+		this.trigger('close');
 	},
 	getColors:function() {
 		var content = q_CSSStyleSheetContents(this.active);

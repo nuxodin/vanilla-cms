@@ -6,7 +6,7 @@
 	if (window.cms) throw('cms.js already loaded!');
 
 	window.cms = {};
-	c1.ext(qg.Eventer, cms);
+	c1.ext(c1.Eventer, cms);
 
 	cms.cont = function(id) {
 		if (cms.cont.all[id]) return cms.cont.all[id];
@@ -14,27 +14,27 @@
 		cms.cont.all[id] = this;
 		this.id = id;
 	};
-	c1.ext(qg.Eventer, cms.cont);
+	c1.ext(c1.Eventer, cms.cont);
 	cms.cont.prototype = {
 		upload: function(File, complete, replace) {
-			var event = c1.ext(qg.Eventer);
+			var event = c1.ext(c1.Eventer);
 			event.pid = this.id;
 			event.File = File;
 			var progress = function(e) {
-				event.fire('progress', e);
+				event.trigger('progress', e);
 			};
 			var wrapComplete = function(res) {
 				res = JSON.parse(res);
 				res.error && alert(res.error);
 				complete && setTimeout(function(){ complete(res); }, 700); // firefox problem?
-				event.fire('complete', res);
+				event.trigger('complete', res);
 			};
 			qgfileUpload(File, 'cmsPageFile', {
 				url: location.pathname+'?cmspid='+this.id+'&replace='+(replace||''),
 				progress: progress,
 				complete: wrapComplete
 			});
-			cms.cont.fire('upload', event);
+			cms.cont.trigger('upload', event);
 		}
 	}
 	cms.cont.all = {};
@@ -63,7 +63,7 @@
 
 	document.addEventListener('qgCmsCont.ready', function(e) {
 		e.target.qgCmsCont_initialized = 1;
-		cms.fire('contentReady', e.target);
+		cms.trigger('contentReady', e.target);
 	});
 
 	window.dbFile = function(el) {
@@ -116,7 +116,7 @@
 			};
 		}
 		if (input.getAttribute('type') === 'qgcms-file') {
-			var box = new c1Combobox(input);
+			box = new c1Combobox(input);
 			box.searchOptions = function(){
 				lastRequest && lastRequest.abort();
 				lastRequest = $fn('cms::searchFile')(input.value).run(box.setOptions.bind(box));
@@ -142,18 +142,7 @@
 	document.addEventListener('DOMContentLoaded',function(){
 	  	var w = window,
 	        d = document;
-		/* sync / save txts */
-	    function isFormEl(el) {
-	    	return el.value !== undefined && el.tagName !== 'BUTTON';
-	    }
-	  	function cleanUpEl(el) {
-	        if (isFormEl(el)) return;
-	        var els = el.querySelectorAll('img'), i=0, el;
-	        while (el=els[i++]) {
-	            var src = el.getAttribute('src');
-	            src.indexOf(location.origin) === 0 && el.setAttribute('src', src.replace(location.origin,''));
-	        }
-	    }
+		// sync txts
 		d.body.addEventListener('keyup', function(e) {
 			if (!e.target.hasAttribute('cmstxt')) return;
 			var el = e.target,
@@ -170,9 +159,21 @@
 				}
 			}
 		}.c1Debounce(50));
+		// save txts
 		d.body.addEventListener('blur', saveTxt, true);
 		d.body.addEventListener('input', saveTxt.c1Debounce(1600));
 
+		function isFormEl(el) {
+	    	return el.value !== undefined && el.tagName !== 'BUTTON';
+	    }
+		function cleanUpEl(el) {
+	        if (isFormEl(el)) return;
+	        var els = el.querySelectorAll('img'), i=0, el;
+	        while (el=els[i++]) {
+	            var src = el.getAttribute('src');
+	            src.indexOf(location.origin) === 0 && el.setAttribute('src', src.replace(location.origin,''));
+	        }
+	    }
 		function saveTxt(e) {
 			if (!e.target.hasAttribute('cmstxt')) return;
 			var el  = e.target;
@@ -184,39 +185,10 @@
 		}
 
 	  	/* listen for new contents */
-		function trigger(el){
-			// var event = d.createEvent('Event');
-			// event.initEvent('qgCmsCont.ready', true, false);
-			// el.dispatchEvent(event);
+		c1.onElement('.qgCmsPage .qgCmsCont',function(el){  // inside qgCmsPage ok?
 			el.dispatchEvent(new CustomEvent('qgCmsCont.ready', {bubbles:true}));
-		}
+		});
 
-		c1.onElement('.qgCmsPage .qgCmsCont',trigger); // inside qgCmsPage ok?
-
-		// function triggerInside(root){
-		// 	var contents = root.querySelectorAll('.qgCmsCont'), i=0, content;
-		// 	while (content = contents[i++]) trigger(content);
-		// }
-		//
-		// var root = d.querySelector('.qgCmsPage') || d.body;
-		// triggerInside(root);
-		//
-		// var observer = new MutationObserver(function(mutations) {
-		// 	var j=0, i=0, mutation, nodes, className, el;
-		// 	while (mutation = mutations[j++]) {
-		// 		nodes = mutation.addedNodes;
-		// 		for (i=0; el=nodes[i++];) {
-		// 			if (el.qgCmsCont_initialized) return;
-		// 			if (!el.className) return;
-		// 			className = typeof el.className === 'string' ? el.className : el.className.baseVal;  // svg
-		// 			if (!className.match(/qgCmsCont/)) return;
-		// 			//if (!el.classList.contains('qgCmsCont')) return; // not on svg on ie11, edge yes
-		// 			trigger(el)
-		// 			triggerInside(el);
-		// 		}
-		// 	}
-		// });
-		// observer.observe(root, {childList: true, subtree:true});
 	});
 
 })();

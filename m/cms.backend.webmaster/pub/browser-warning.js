@@ -38,14 +38,14 @@
                 '<tr>'+
                     '<td style="width:80%">'+
                         '<b>Ihr Browser wird von uns nicht unterstützt</b><br>'+
-                        'Um eine Zeitgemässe Darstellung zu gewährleisten und zu Ihrer eigenen Sicherheit, empfehlen wir <b>dringend</b> einen aktuellen Browser zu verwenden.'+
+                        'Um eine zeitgemässe Darstellung zu gewährleisten und zu Ihrer eigenen Sicherheit, empfehlen wir <b>dringend</b> einen aktuellen Browser zu verwenden.'+
                     // '<td style="text-align:right">'+
                     //     '<button>nicht mehr anzeigen</button>'+
             '</table>'
         for (var i=0,browser; browser = browsers[i++];) {
             html +=
             '<a href="'+(browser.link)+'" style="display:inline-block; margin-right:20px" target="install_'+browser.name+'">'+
-                '<img alt="'+browser.name+'" title="download '+browser.name+'" src="'+sysURL+'/cms.backend.webmaster/pub/browsers/'+(browser.name)+'.png" style="height:34px">'+
+                '<img alt="'+browser.name+'" title="download '+browser.name+'" src="/m/cms.backend.webmaster/pub/browsers/'+(browser.name)+'.png" style="height:34px">'+
             '</a>';
         }
         html += '</div>';
