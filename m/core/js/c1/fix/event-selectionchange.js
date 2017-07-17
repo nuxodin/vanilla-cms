@@ -1,6 +1,6 @@
 /* selectionchange event polyfill */
 // ie and webkit has native selectionchange...
-// zzz from ff52? ie bug? https://developer.mozilla.org/en-US/docs/Web/Events/selectionchange
+// ff52 fixed this? ie bug? https://developer.mozilla.org/en-US/docs/Web/Events/selectionchange
 // bug: ie native dont change on keyevents ??? test!
 !function() {
 	if (document.onselectionchange !== undefined) return;

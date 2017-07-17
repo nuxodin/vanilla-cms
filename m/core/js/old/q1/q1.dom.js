@@ -6,19 +6,6 @@
         return document.getElementById(id);
     };
 
-	/* contains-bug, textNodes are not containing (ie11, edge ok) */
-	var t = d.createTextNode(''), el = d.createElement('span');
-	el.appendChild(t);
-	if (!el.contains(t)) {
-		HTMLElement.prototype.contains = function(contains) {
-			return function(el) {
-				return el.parentNode === this ? true : contains.call(this,el); // wrong?
-			};
-		}(HTMLElement.prototype.contains);
-	}
-	t.remove();
-	el.remove();
-
 	/* usefull */
 	Node.prototype.q1RemoveNode = function(removeChildren) {
 		if (removeChildren) return this.remove();
@@ -47,7 +34,7 @@
 	        });
 		}
 	};
-	Node.prototype.q1Position = function( rct) {
+	Node.prototype.q1Position = function(rct) {
 		if (rct) {
 			this.style.top = rct.y+'px';
 			this.style.left = rct.x+'px';

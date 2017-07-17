@@ -246,17 +246,17 @@
     },
     "core": {
         "time": 1496213662,
-        "version": "6.87.0",
+        "version": "6.90.0",
         "server": "v6.vanilla-cms.org",
-        "updated": 1500078985,
-        "changed": 1500078985
+        "updated": 1500328627,
+        "changed": 1500328627
     },
     "error_report": {
         "time": 1495146594,
-        "version": "6.4.0",
-        "changed": 1499468079,
+        "version": "6.5.0",
+        "changed": 1500328628,
         "server": "v6.vanilla-cms.org",
-        "updated": 1499468079
+        "updated": 1500328628
     },
     "fileEditor": {
         "time": 1492606523,

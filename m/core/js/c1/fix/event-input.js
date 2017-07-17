@@ -1,5 +1,4 @@
-/* input event polyfill */
-// try this input workaround? http://whattheheadsaid.com/projects/input-special-event
+/* input event polyfill, ie 11 only? */
 !function() {
 	var d = document
 	,hasNativeOnContenteditable

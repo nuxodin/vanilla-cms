@@ -39,7 +39,7 @@ function error_report($vs) {
 
 	// get sample content
 	if (!isset($vs['sample'])) {
-		if (is_file($vs['file'])) {
+		if (is_file($vs['file']) && $vs['line']) {
 			$position = 0;
 			$lines = file($vs['file']);
 			foreach ($lines as $lineNr => $line) {
