@@ -40,6 +40,9 @@ c1.c1Use(['focusIn','onElement'],function(){
     .c1-dialog:focus-within { \
         display:block; \
     } \
+    .c1-dialog.c1-box:focus-within { \
+        display:flex; \
+    } \
     </style>'));
 
     function open(el){
@@ -131,6 +134,9 @@ c1.c1Use(['focusIn','onElement'],function(){
                     resolve(dialog.value);
                 })
             });
+        },
+        hide:function(){
+    		this.element.dispatchEvent(new CustomEvent('c1-close',{bubbles:true,cancelable:true}));
         }
     }
 

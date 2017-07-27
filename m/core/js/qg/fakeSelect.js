@@ -12,13 +12,16 @@
 	dialog.addEventListener('touchstart', function(e){
 		e.stopPropagation(); // prevent closing cms-panel
 	});
-	dialog.addEventListener('wheel', function(e){
-		if (e.wheelDelta > 0 && this.scrollTop === 0) {
-			e.preventDefault();
-		} else if (e.wheelDelta < 0 && this.scrollHeight < this.scrollTop + this.offsetHeight) {
-			e.preventDefault();
-		}
-	});
+
+	if (!CSS.supports('scroll-boundary-behavior','none')) { // zzz if supports
+		dialog.addEventListener('wheel', function(e){
+			if (e.wheelDelta > 0 && this.scrollTop === 0) {
+				e.preventDefault();
+			} else if (e.wheelDelta < 0 && this.scrollHeight < this.scrollTop + this.offsetHeight) {
+				e.preventDefault();
+			}
+		});
+	}
 
 	window.c1Combobox = function(input){
 		if (input.c1Combobox) return input.c1Combobox;
@@ -151,6 +154,7 @@
 		background-color:#fff; \
 		border: 1px solid #aaa; \
 		overflow: auto; \
+		scroll-boundary-behavior:none; \
 		left: 0px; \
 		white-space:nowrap; \
 		line-height:1.2; \

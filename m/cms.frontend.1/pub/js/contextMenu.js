@@ -111,8 +111,8 @@ document.addEventListener('DOMContentLoaded',()=>{
 		selector:'#qgCmsFrontend1 .dynatree-node',
 		onshow(e) {
 			const el = e.currentTarget;
-			this.lastPid = el.parentNode.title.replace('ID ','');
 			const access = el.className.match(/-access-([0-9])/)[1];
+			this.lastPid = el.parentNode.title.replace('ID ','');
 			this.disabled = access < 2;
 		},
 		onclick() {
@@ -141,8 +141,9 @@ document.addEventListener('DOMContentLoaded',()=>{
 		selector: '#qgCmsFrontend1 .dynatree-node',
 		onshow(e) {
 			const el = e.currentTarget;
+			const access = el.className.match(/-access-([0-9])/)[1];
 			this.lastPid = el.parentNode.title.replace('ID ','');
-			this.disabled = !el.classList.contains('-access-3');
+			this.disabled = access < 2;
 		},
 		onclick() {
 			const n = cms.Tree.getNodeByKey(this.lastPid);

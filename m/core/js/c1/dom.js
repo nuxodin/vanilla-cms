@@ -102,6 +102,8 @@
 
 	var autoId = 0;
 	c1.ext(poly, elProto, false, true);
+
+	poly.closest = function(sel){ return this.parentNode.closest(sel); }
 	c1.ext(poly, Text.prototype, false, true);
 
 	function textNodeIfString(node) {
@@ -164,10 +166,19 @@
 	// NodeLists
 	var proto = NodeList.prototype;
 	if (!proto.forEach) proto.forEach = Array.prototype.forEach;
-	if (w.Symbol && Symbol.iterator && !proto[Symbol.iterator]) proto[Symbol.iterator] = Array.prototype[Symbol.iterator]; // no ie11 :(
+	//if (w.Symbol && Symbol.iterator && !proto[Symbol.iterator]) proto[Symbol.iterator] = Array.prototype[Symbol.iterator]; // no ie11 :(
 	// HTMLCollection
-	var proto = HTMLCollection.prototype;
-	if (w.Symbol && Symbol.iterator && !proto[Symbol.iterator]) proto[Symbol.iterator] = Array.prototype[Symbol.iterator]; // no ie11 :(
+	//var proto = HTMLCollection.prototype;
+	//if (w.Symbol && Symbol.iterator && !proto[Symbol.iterator]) proto[Symbol.iterator] = Array.prototype[Symbol.iterator]; // no ie11 :(
+
+	// iterators
+	if (w.Symbol && Symbol.iterator) {  // no ie11 :(
+		for (var Interface of [HTMLCollection,NodeList,StyleSheetList,CSSRuleList]) {
+			var proto = Interface.prototype;
+			if (proto[Symbol.iterator]) continue;
+			proto[Symbol.iterator] = Array.prototype[Symbol.iterator];
+		}
+	}
 
 	// divers fix
     c1Use.able(c1,'fix');

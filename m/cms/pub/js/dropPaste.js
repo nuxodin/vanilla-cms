@@ -55,12 +55,14 @@
 		const addHtml = function(html) {
 			const s = getSelection();
 			const r = s.getRangeAt(0);
-			html = html.replace(/<\/body>[\s\S]*$/, '</body>');
+			html = html.replace(/[^]*<!--StartFragment-->/i, '');
+			html = html.replace(/<!--EndFragment-->[^]*/i, '');
+			html = html.replace(/<\/body>[\s\S]*$/i, '</body>'); // needed?
 			const fragment = r.createContextualFragment(html);
 			onPasteFormatNode(fragment);
 			r.deleteContents();
 			r.insertNode(fragment);
-			r.collapse(false); // curser at the end
+			r.collapse(false); // curser at the end, (todo: not working...)
 			s.removeAllRanges();
 			s.addRange(r);
 		};
@@ -115,9 +117,9 @@
 			const fileUrl = dt.getFileUrl();
 			if (!fileUrl) return;
 			if (fileUrl.match(location.host)) {
-				const intern = fileUrl.match(/dbFile\/([0-9]+)\//)[1];
-				if (intern) {
-					$fn('page::addDbFile')(pid, intern).run(complete);
+				const match = fileUrl.match(/dbFile\/([0-9]+)\//);
+				if (match) {
+					$fn('page::addDbFile')(pid, match[1]).run(complete);
 					return;
 				}
 			}

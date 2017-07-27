@@ -335,3 +335,4 @@ $('#text').c1Use('myplugin', function() {
 
 
 c1Use.able(window,'c1');
+if (!('Promise' in window)) document.write('<script src="'+c1.c1UseSrc+'/fix/Promise.js"><\/script>');

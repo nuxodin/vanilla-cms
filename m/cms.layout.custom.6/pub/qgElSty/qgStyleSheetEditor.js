@@ -50,7 +50,7 @@ qgStyleSheetEditor = function() {
 	};
 
 	/* sheet box */
-	my.sheetBox = $('<div><div class="-title"><b>Bitte wählen<span></b><span class="-close">x</span></div><div class="-contents"><table><tbody class="-rules"></tbody></div></div>').appendTo(my.div);
+	my.sheetBox = $('<div><div class="-title"><b>Bitte wählen<span></b><span class=-close></span></div><div class=-contents><table><tbody class=-rules></tbody></div></div>').appendTo(my.div);
 	my.sheetBox.find('.-close').on('click', my.close.bind(this));
 	my.sheetBox.find('.-rules')
 	.on(hoverMarkEvents,'tr')
@@ -82,18 +82,8 @@ qgStyleSheetEditor = function() {
 		}
 	});
 
-	/* stop scrolling on parent */
-	my.div.find('.-contents').on('wheel', function(e) {
-		e = e.originalEvent;
-		if (e.wheelDelta > 0 && this.scrollTop === 0) {
-			e.preventDefault();
-		} else if (e.wheelDelta < 0 && this.scrollHeight === this.scrollTop + this.offsetHeight) {
-			e.preventDefault();
-		}
-	});
-
 	/* style box */
-	var styleBox = $('<div style="display:none"><div class="-title"><b>selector</b><span class="-close">x</span></div></div>').appendTo(my.div).on(hoverMarkEvents,'.-title');
+	var styleBox = $('<div style="display:none"><div class=-title><b>selector</b><span class=-close></span></div></div>').appendTo(my.div).on(hoverMarkEvents,'.-title');
 	my.sEditor = new qgStyleEditor();
 	my.sEditor.el.appendTo(styleBox).hide();
 	my.sEditor.on('change', function() {
@@ -119,7 +109,7 @@ qgStyleSheetEditor = function() {
 	/* redefine */
 	!function() {
 		var activeRule = null;
-		var redefineBox = $('<div style="display:none;"><div class="-title"><b>redefine selector</b><span class="-close">x</span></div><input style="width:300px; margin:2px 0; box-sizing:border-box"></div>').appendTo(my.div);
+		var redefineBox = $('<div style="display:none"><div class=-title><b>redefine selector</b><span class=-close></span></div><input style="width:300px; margin:2px 0; box-sizing:border-box"></div>').appendTo(my.div);
 		var set = function(v) {
 			activeRule.selectorText = v;
 			my.trigger('change');
@@ -158,7 +148,7 @@ qgStyleSheetEditor = function() {
 	var crosshair = $('<style>* { cursor:crosshair !important; }</style>');
 	/* add */
 	!function() {
-		var addBox = $('<div style="display:none;"><div class="-title"><b>add</b><span class="-close">x</span></div><input style="width:300px; margin:2px 0; box-sizing:border-box"></div>').appendTo(my.div);
+		var addBox = $('<div style="display:none"><div class=-title><b>add</b><span class=-close></span></div><input style="width:300px; margin:2px 0; box-sizing:border-box"></div>').appendTo(my.div);
 		var tmout=0;
 		var mouseout = function() {clearTimeout(tmout);};
 		var mousemove = function(e) {
@@ -217,7 +207,7 @@ qgStyleSheetEditor = function() {
 			var sel = $(e.target).data('unPseudoSel');
 			e.ctrlKey ? addBox.find('input').val(sel).focus() : add(sel);
 		});
-		$('<a href="#" style="margin:6px; padding:4px; display:inline-block">hinzufügen</a>').insertAfter(my.sheetBox.find('.-title')).on('click',show);
+		$('<button>hinzufügen</button>').insertAfter(my.sheetBox.find('.-title')).on('click',show);
 	}();
 
 	/* inspect */
@@ -258,8 +248,8 @@ qgStyleSheetEditor = function() {
                 });
 			}, 300);
 		};
-		var inspEl = $('<a href="#" style="margin:6px; padding:4px; display:inline-block">Inspect</a>').insertAfter(my.sheetBox.find('.-title')).on('click',inspect);
-		var allEl = $('<a href="#" style="margin:6px; padding:4px; display:inline-block">Show all</a>').insertAfter(my.sheetBox.find('.-title')).on('click',showAll).hide();
+		var inspEl = $('<button style="margin:6px">Inspect</button>').insertAfter(my.sheetBox.find('.-title')).on('click',inspect);
+		var allEl = $('<button style="margin:6px">Show all</button>').insertAfter(my.sheetBox.find('.-title')).on('click',showAll).hide();
 	}();
 };
 

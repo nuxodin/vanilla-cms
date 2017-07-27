@@ -66,7 +66,7 @@ $(function() {
 		uploader.bind('Error', function(up, err) { alert(err.message); });
 		uploader.bind('UploadComplete', function(up, file) {
 			loadImages();
-			cms.panel.tabs.show('options');
+			cms.cont(cms.cont.active).showWidget('options');
 		});
 	};
 });

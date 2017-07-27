@@ -1,12 +1,12 @@
 <?php namespace qg ?>
 <div cmsconf=contMedia_overview class=qgCmsFileManager pid=<?=$Cont?>>
 	<button class=-uploadBtn><?=L('hochladen')?></button>
-	<input class=-uploadButton multiple min=1 max=999 type=file style="width:1px; height:1px; overflow:hidden; opacity:0; padding:0">
 	<input class=-addExistingFile type=qgcms-file id=<?=$available=i()?> placeholder="<?=hee(L('bestehende Datei'))?>">
 	<?php if (count($Cont->FilesAndPlaceholders()) > 1) { ?>
 		<select class=-sortFilesSelect>
-			<option> <?=L('sortieren nach...')?>
+			<option value> <?=L('sortieren nach...')?>
 			<option value=name><?=L('Name')?>
+			<option value=name_reverse><?=L('Name von hinten')?>
 			<option value=date><?=L('Datum')?>
 			<option value=reverse><?=L('umkehren')?>
 		</select>

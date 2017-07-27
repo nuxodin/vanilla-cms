@@ -2,6 +2,7 @@
 namespace qg;
 
 $search = $vars['search'] ?? ($_GET['CmsPage'.$Cont] ?? '');
+$search = trim($search);
 
 $res['search'] = $search;
 $res['res'] = [];
@@ -13,22 +14,28 @@ if ($Cont->SET['module']->v) {
 	$wheres[] = "p.module LIKE '".$Cont->SET['module']->v."'";
 }
 
+$words = preg_split('/\P{L}+/u', $search);
+$mysqlSearch = '';
+foreach ($words as $word) {
+	$mysqlSearch .= ' +'.$word;
+}
+$sqlAgainst = "AGAINST (".D()->quote(trim($mysqlSearch))." IN BOOLEAN MODE)";
+
 // title
 $sqls[] =
 " SELECT 																" .
 " 	'title' as type														" .
-" 	,MATCH(t.text) AGAINST (".D()->quote($search).") AS relevance		" .
+" 	,MATCH(t.text) ".$sqlAgainst." AS relevance							" .
 "	,p.id AS id															" .
 "	,t.text as text														" .
 " FROM 																	" .
 "	page p		  														" .
 " 	join text t ON t.id = p.title_id AND t.lang = '".L()."'             " .
-" WHERE 1																" .
+" WHERE ".implode(' AND ', $wheres)."									" .
 "	AND ( 																" .
-"		MATCH(t.text) AGAINST (".D()->quote($search).")					" .
+"		MATCH(t.text) ".$sqlAgainst."									" .
 "		OR t.text LIKE ".D()->quote('%'.$search.'%')."					" .
 "	)																	" .
-"	AND ".implode(' AND ', $wheres)."									" .
 " GROUP BY p.id														    " .
 " ORDER BY relevance													" .
 " LIMIT 100																";
@@ -37,7 +44,7 @@ $sqls[] =
 $sqls[] =
 " SELECT 																" .
 " 	'text' as type														" .
-" 	,MATCH(t.text) AGAINST (".D()->quote($search).") AS relevance		" .
+" 	,MATCH(t.text) ".$sqlAgainst." AS relevance							" .
 "	,p.id AS id															" .
 "	,t.text 															" .
 "	,pt.name															" .
@@ -45,24 +52,22 @@ $sqls[] =
 "	page p		  														" .
 "	join page_text pt ON pt.page_id = p.id								" .
 " 	join text t ON t.id = pt.text_id AND t.lang = '".L()."'             " .
-//"	join page rp ON if(p.type='p',p.id=rp.id,p.basis=rp.id)	  			" .
-" WHERE 1   															" .
+" WHERE ".implode(' AND ', $wheres)."   								" .
 "	AND ( 																" .
-"		MATCH(t.text) AGAINST (".D()->quote($search).")					" .
+"		MATCH(t.text) ".$sqlAgainst." 									" .
 "		OR t.text LIKE ".D()->quote('%'.$search.'%')."					" .
 "	)																	" .
-"	AND ".implode(' AND ', $wheres)."									" .
-//" GROUP BY rp.id														" .
 " GROUP BY p.id															" .
 " ORDER BY relevance													" .
-" LIMIT 100																";
+" LIMIT 200															    ";
 
+/*
 if ($Cont->SET['files']->setType('bool')->v) {
 	// files
 	$sqls[] =
 	" SELECT 																" .
 	" 	'file' as type														" .
-	" 	,MATCH(f.text) AGAINST (".D()->quote($search).") AS relevance		" .
+	" 	,MATCH(f.text) ".$sqlAgainst." AS relevance		" .
 	"	,p.id AS id															" .
 	"	,f.name 															" .
 	"	,f.text 															" .
@@ -74,13 +79,14 @@ if ($Cont->SET['files']->setType('bool')->v) {
 	" WHERE 1																" .
 	"	AND ( 																" .
 	"		f.name LIKE ".D()->quote($search.'%')."							" .
-	"		OR MATCH(f.text) AGAINST (".D()->quote($search).")				" .
+	"		OR MATCH(f.text) ".$sqlAgainst."				" .
 	"		OR f.text LIKE ".D()->quote($search.'%')."						" .
 	"	)																	" .
 	" GROUP BY p.id														    " .
 	" ORDER BY relevance													" .
 	" LIMIT 100																";
 }
+*/
 
 //$start = microtime(true);
 
@@ -127,7 +133,13 @@ foreach ($sqls as $sql) {
 					$res['res'][$group]['text'] .= ' '.$vs['text'];
 				}
 				$text = strtolower(strip_tags($vs['text']));
-				$num = substr_count($text, $search);
+
+				$num = 0;
+				foreach ($words as $word) {
+					$num += substr_count($text, $word);
+				}
+
+				//$num = substr_count($text, $search);
 				$num = min($num,7);
 				$res['res'][$group]['relevance'] += 0.2 * $num;
 				break;

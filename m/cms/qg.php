@@ -86,6 +86,7 @@ qg::on('dbFile::access2', function($e){
 qg::on('textpro_lang::get',function($data){
 	$Obj = $data['obj'];
 	if (isset($Obj->Text->edit)) {
+		//$GLOBALS['cmsModifyTxt_lastObj'] = $Obj;
 		if (!$Obj->Text->edit) {
 			$Obj->value = preg_replace_callback('/cmspid:\/\/([0-9]+)/' ,'qg\cmsModifyTexts_replaceLinks', $Obj->value);
 		} else {
@@ -93,17 +94,26 @@ qg::on('textpro_lang::get',function($data){
 		$Obj->value = preg_replace_callback('|/dbFile/([0-9]+)/u-([a-z0-9]+)/|' ,'qg\cmsModifyTexts_replaceFileUrls', $Obj->value);
 	}
 });
+
 function cmsModifyTexts_replaceLinks($treffer) {
 	$P = Page((int)$treffer[1]);
 	if (!$P->is()) {
-		trigger_error('dead intern link '.$treffer[0]);
+		qg::on('background',function() use($treffer) {
+			trigger_error('dead intern link '.$treffer[0]);
+		});
 		return '#';
 	}
 	return $P->url();
 }
 function cmsModifyTexts_replaceFileUrls($treffer) { // edit only
 	$File = dbFile($treffer[1]);
-	if (!$File->exists()) trigger_error('dbFile does not exist: '.$treffer[1]);
+	if (!$File->exists()) {
+		//$Txt = $GLOBALS['cmsModifyTxt_lastObj'];
+		qg::on('background',function() use($treffer/*, $Txt*/) {
+			//trigger_error('dbFile "'.$treffer[1].'" does not exist, txt-id:'.$Txt->Text->id.' lang:'.$Txt->lang);
+			trigger_error('dbFile "'.$treffer[1].'" does not exist');
+		});
+	}
 	$u = substr($File->vs['md5'],0,4);
 	return '/dbFile/'.$treffer[1].'/u-'.$u.'/';
 }

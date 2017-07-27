@@ -1,13 +1,13 @@
 <dbscheme>
 	<table name="qg_db_table">
-		<field name="name"        type="varchar" length="255" key="PRI" null=""/>
+		<field name="name"        type="varchar" length="160" key="PRI" null=""/>
 		<field name="title"       type="int"     length="10"  key=""  null=""/>
 		<field name="description" type="int"     length="10"  key=""  null=""/>
 	</table>
 	<table name="qg_db_field">
 		<field name="id"               type="int"     length="10"  null="" key="UNI" autoincrement="true" />
 		<field name="tab"              type="varchar" length="160" null="" key="PRI" />
-		<field name="name"             type="varchar" length="160" null="" key="PRI" parenet="qg_db_table" on_parent_delete="delete" />
+		<field name="name"             type="varchar" length="160" null="" key="PRI" parent="qg_db_table" on_parent_delete="delete" />
 		<field name="title"            type="int"     length="10"  null=""/>
 		<field name="description"      type="int"     length="10"  null=""/>
 		<field name="handler"          type="varchar" length="32"  null=""/>

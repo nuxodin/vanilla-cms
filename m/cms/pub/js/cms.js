@@ -9,6 +9,10 @@
 	c1.ext(c1.Eventer, cms);
 
 	cms.cont = function(id) {
+
+		if (id === undefined) console.warn('cms.cont(id): id undefined?');
+		if (id === 'undefined') console.warn('cms.cont(id): id undefined?');
+
 		if (cms.cont.all[id]) return cms.cont.all[id];
 		if (!(this instanceof cms.cont)) return new cms.cont(id);
 		cms.cont.all[id] = this;
@@ -52,12 +56,21 @@
 
 	cms.contInitAdded = {};
 	cms.initCont = function(module, fn) {
+		// once per module
 		if (cms.contInitAdded[module]) throw 'cms.contInit not twice!';
 		cms.contInitAdded[module] = true;
+		// check if initilized
+		var checkAndRun = function(el){
+			if (el.cmsInitialized) return;
+			el.cmsInitialized = true;
+			fn(el);
+		}
+		// existing elements
 		var els = document.querySelectorAll('.-m-'+module.replace(/\./g,'-'));
-		for (var i=0, el; el=els[i++];) fn(el);
+		for (var i=0, el; el=els[i++];) checkAndRun(el);
+		// future elements
 		cms.on('contentReady', function(el) {
-			cms.el.module(el) === module && fn(el);
+			cms.el.module(el) === module && checkAndRun(el);
 		});
 	};
 

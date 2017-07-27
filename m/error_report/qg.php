@@ -41,10 +41,11 @@ function error_report($vs) {
 	if (!isset($vs['sample'])) {
 		if (is_file($vs['file']) && $vs['line']) {
 			$position = 0;
+			$col = max($vs['col'],1);
 			$lines = file($vs['file']);
 			foreach ($lines as $lineNr => $line) {
 				foreach (str_split($line) as $colNr => $char) {
-					if ($lineNr >= $vs['line']-1 && $colNr >= $vs['col']-1) break 2;
+					if ($lineNr >= $vs['line']-1 && $colNr >= $col-1) break 2;
 					$position++;
 				}
 			}

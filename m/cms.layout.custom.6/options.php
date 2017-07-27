@@ -56,7 +56,7 @@ if ($LPage->access() < 2) return;
 						  credentials: 'same-origin',
 						  body: data
 						}).then(()=>{
-							cms.panel.tabs.show('options');
+							cms.cont(cms.cont.active).showWidget('options');
 						});
 					}
 				})
@@ -79,7 +79,7 @@ if ($LPage->access() < 2) return;
 				<tr>
 					<td style="width:50px"> <img src="<?=$url?>" style="min-height:20px; max-height:35px; max-width:160px; box-shadow:0 0 5px rgba(0,0,0,.5); background:linear-gradient(45deg,#f3f3f3 50%,#fff 50%); background-size:8px 8px;" />
 					<td> <?=$file?>
-					<td onclick="var el = this; confirm('Möchten Sie die Datei wirklich löschen?') && $fn('page::api')(<?=$Cont?>,{deleteImg:'<?=$file?>'}).run(function() { cms.panel.tabs.show('options'); })" style="width:20px; padding-right:6px">
+					<td onclick="var el = this; confirm('Möchten Sie die Datei wirklich löschen?') && $fn('page::api')(<?=$Cont?>,{deleteImg:'<?=$file?>'}).run(() => cms.cont(cms.cont.active).showWidget('options') )" style="width:20px; padding-right:6px">
 						<img src="<?=sysURL?>cms.frontend.1/pub/img/delete.svg" alt="löschen">
 			<?php } ?>
 		</table>

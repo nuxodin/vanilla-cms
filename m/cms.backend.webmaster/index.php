@@ -18,22 +18,19 @@ $_SESSION['SettingsEditor roots'][$SET->i] = 1; // allow change settings
     </div-->
     <div class="beBox  Links">
         <div class=-head>Test-Tools</div>
-        <div style="overflow:auto; max-height:480px;">
+        <div class=-body style="overflow:auto; max-height:480px;">
             <?php
         	$domain = $_SERVER['HTTP_HOST'];
             ?>
-            <a target="_blank" href="http://www.dnsinspect.com/<?=$domain?>">
-              <b>DNS</b> dnsinspect.com
+            <h3> Performance </h3>
+            <a target="_blank" href="https://developers.google.com/speed/pagespeed/insights/?url=<?=$domain?>">
+              <b>Performance PageSpeed Insights</b> developers.google.com
             </a>
-            <a target="_blank" href="http://mxtoolbox.com/SuperTool.aspx?action=mx%3a<?=$domain?>&run=toolpage">
-              <b>MX-record</b> mx-tools
+            <a target="_blank" href="http://www.webpagetest.org/">
+              <b>Performance</b> www.webpagetest.org
             </a>
-            <a target="_blank" href="http://viewdns.info/dnsreport/?domain=<?=$domain?>">
-              <b>dns</b> viewdns.info
-            </a>
-            <a target="_blank" href="http://www.nabber.org/projects/dnscheck/?domain=<?=$domain?>">
-              <b>dns</b> nabber.org
-            </a>
+
+            <h3>Conform</h3>
             <a target="_blank" href="https://validator.w3.org/unicorn/check?ucn_uri=<?=$domain?>&doctype=Inline&charset=(detect%20automatically)&ucn_task=conformance#">
               <b>HTML, CSS, feed validator</b> w3.org
             </a>
@@ -49,34 +46,68 @@ $_SESSION['SettingsEditor roots'][$SET->i] = 1; // allow change settings
             <a target="_blank" href="http://realfavicongenerator.net/favicon_checker?site=<?=$domain?>">
               <b>Favion</b> realfavicongenerator.net
             </a>
-            <a target="_blank" href="https://www.ssllabs.com/ssltest/analyze.html?d=<?=$domain?>&hideResults=on">
-              <b>SSL</b> ssllabs.com
-            </a>
-            <a target="_blank" href="https://developers.google.com/speed/pagespeed/insights/?url=<?=$domain?>">
-              <b>Performance PageSpeed Insights</b> developers.google.com
-            </a>
-            <a target="_blank" href="http://www.webpagetest.org/">
-              <b>Performance</b> www.webpagetest.org
-            </a>
-
             <a target="_blank" href="http://loc.modern.ie/de-de/report#http%3A%2F%2F<?=$domain?>">
               <b>Compatibility</b> modern.ie
+            </a>
+
+            <h3>SEO</h3>
+            <a target="_blank" href="https://www.google.com/webmasters/tools/submit-url?hl=de">
+              bei google eintragen
+            </a>
+            <a target="_blank" href="http://www.woorank.com/de/www/<?=$domain?>">
+              woorank.com
+            </a>
+            <a target="_blank" href="http://www.opensiteexplorer.org/links?site=<?=urlencode( Url( Page(2)->url() ) )?>">
+              opensiteexplorer.org
+            </a>
+            <a target="_blank" href="https://ahrefs.com/site-explorer/overview/subdomains/?target=<?=$domain?>">
+              ahrefs.com
+            </a>
+            <a target="_blank" href="http://www.seobility.net/de/seocheck/check?url=<?=urlencode( Url( Page(2)->url() ) )?>">
+              seobility.net
+            </a>
+            <a target="_blank" href="https://www.similarweb.com/website/<?=$domain?>">
+              similarweb.com
+            </a>
+
+            <h3>DNS / Network</h3>
+            <a target="_blank" href="http://www.dnsinspect.com/<?=$domain?>">
+              <b>DNS</b> dnsinspect.com
+            </a>
+            <a target="_blank" href="http://mxtoolbox.com/SuperTool.aspx?action=mx%3a<?=$domain?>&run=toolpage">
+              <b>MX-record</b> mx-tools
+            </a>
+            <a target="_blank" href="http://viewdns.info/dnsreport/?domain=<?=$domain?>">
+              <b>dns</b> viewdns.info
+            </a>
+            <a target="_blank" href="http://www.nabber.org/projects/dnscheck/?domain=<?=$domain?>">
+              <b>dns</b> nabber.org
             </a>
             <a target="_blank" href="http://cloudmonitor.ca.com/en/ping.php?vtt=1401882475&varghost=<?=$domain?>&vhost=_&vaction=ping&ping=start">
               <b>Pings from countries</b> cloudmonitor.ca.com
             </a>
-            <a target="_blank" href="http://www.woorank.com/de/www/<?=$domain?>">
-              <b>SEO</b> woorank.com
+            <a target="_blank" href="http://ip6.nl/#!<?=$domain?>">
+              <b>ip-v6 check</b> ip6.nl
             </a>
-            <a target="_blank" href="http://www.opensiteexplorer.org/links?site=<?=urlencode( Url( Page(2)->url() ) )?>">
-              <b>SEO</b> opensiteexplorer.org
+            <a target="_blank" href="http://ready.chair6.net/?url=<?=$domain?>">
+              <b>ip-v6 check</b> ready.chair6.net
             </a>
-            <a target="_blank" href="https://ahrefs.com/site-explorer/overview/subdomains/?target=<?=$domain?>">
-              <b>SEO</b> ahrefs.com
+            <a target="_blank" href="https://en.internet.nl/domain/<?=$domain?>/">
+              <b>ip-v6 check</b> internet.nl
             </a>
-            <a target="_blank" href="http://www.seobility.net/de/seocheck/check?url=<?=urlencode( Url( Page(2)->url() ) )?>">
-              <b>SEO</b> seobility.net
+
+            <h3>Security</h3>
+            <a target="_blank" href="https://observatory.mozilla.org/analyze.html?host=<?=urldecode($domain)?>">
+              <b>security</b> observatory.mozilla.org
             </a>
+            <a target="_blank" href="https://securityheaders.io/?q=<?=urldecode(URL(Page(2)->url()))?>">
+              <b>security</b> securityheaders.io
+            </a>
+            <a target="_blank" href="https://www.ssllabs.com/ssltest/analyze.html?d=<?=$domain?>&hideResults=on">
+              <b>SSL</b> ssllabs.com
+            </a>
+
+            <h3> Content </h3>
             <a target="_blank" href="http://validator.w3.org/checklink?uri=<?=$domain?>&hide_type=all&recursive=on&depth=1&check=Check">
               <b>Broken Links</b> w3.org
             </a>
@@ -89,6 +120,8 @@ $_SESSION['SettingsEditor roots'][$SET->i] = 1; // allow change settings
             <a target="_blank" href="http://www.viewlike.us/operator/#u=http://<?=$domain?>|1024|768">
               <b>Layout: screen sizes</b>  viewlike.us
             </a>
+
+            <h3> Mobile </h3>
             <a target="_blank" href="http://validator.w3.org/mobile/check?docAddr=<?=$domain?>&async=true">
               <b>Mobile tests</b> w3.org
             </a>
@@ -98,23 +131,8 @@ $_SESSION['SettingsEditor roots'][$SET->i] = 1; // allow change settings
             <a target="_blank" href="https://www.bing.com/webmaster/tools/mobile-friendliness">
               <b>Mobile test</b> bing.com
             </a>
-            <a target="_blank" href="http://ip6.nl/#!<?=$domain?>">
-              <b>ip-v6 check</b> ip6.nl
-            </a>
-            <a target="_blank" href="http://ready.chair6.net/?url=<?=$domain?>">
-              <b>ip-v6 check</b> ready.chair6.net
-            </a>
-            <a target="_blank" href="https://en.internet.nl/domain/<?=$domain?>/">
-              <b>ip-v6 check</b> internet.nl
-            </a>
 
-            <a target="_blank" href="https://observatory.mozilla.org/analyze.html?host=<?=urldecode($domain)?>">
-              <b>security</b> observatory.mozilla.org
-            </a>
-            <a target="_blank" href="https://securityheaders.io/?q=<?=urldecode(URL(Page(2)->url()))?>">
-              <b>security</b> securityheaders.io
-            </a>
-
+            <h3> Accessibility </h3>
             <a target="_blank" href="http://wave.webaim.org/report#/<?=urldecode(URL(Page(2)->url()))?>">
               <b>Accessibility</b> wave.webaim.org
             </a>
@@ -131,6 +149,7 @@ $_SESSION['SettingsEditor roots'][$SET->i] = 1; // allow change settings
               <b>Accessibility</b> www.nvaccess.org | Download a real screenreader!
             </a>
 
+            <h3>E-Mail</h3>
             <a target="_blank" href="http://www.mail-tester.com/">
               <b>E-Mail</b> mail-tester.com
             </a>

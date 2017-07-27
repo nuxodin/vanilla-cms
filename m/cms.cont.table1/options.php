@@ -13,7 +13,7 @@ $errorID = i();
 <input type=number value="<?=$Cont->SET['rows']?>" min=1 max=300 oninput="$fn('page::setDefault')(<?=$Cont?>,{rows:this.value}).run()" style="width:80px; font-size:18px;">
 Zeilen (max: 300)<br>
 <br>
-<input type=number value="<?=$Cont->SET['cols']?>" min=1 max=15 oninput="$fn('page::setDefault')(<?=$Cont?>,{cols:this.value}); cms.panel.tabs.show('options');" style="width:80px; font-size:18px;">
+<input type=number value="<?=$Cont->SET['cols']?>" min=1 max=15 oninput="$fn('page::setDefault')(<?=$Cont?>,{cols:this.value}); cms.cont(cms.cont.active).showWidget('options')" style="width:80px; font-size:18px;">
 Spalten (max: 15)<br>
 
 <br>

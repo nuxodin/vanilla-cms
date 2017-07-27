@@ -18,28 +18,21 @@ document.addEventListener('keydown', function(e) {
 		break;
 	}
 });
+
 !function(){
 	var config = localStorage.getItem('cmsLastScrollPosition');
 	if (config) {
+		localStorage.removeItem('cmsLastScrollPosition');
 		config = JSON.parse(config);
 		c1.c1Use('scrollSync',function(scrollSync){
 			scrollSync.restoreIn(config, window);
-		})
-		localStorage.removeItem('cmsLastScrollPosition');
+		});
 	}
 }();
 
-
 document.addEventListener('DOMContentLoaded',function(){
-	var editToggle = document.createElement('a');
-	editToggle.style.cssText = 'position:fixed; z-index:3';
-	editToggle.className = 'qgCMS_editmode_switch '+(qgCmsEditmode?'-active':'');
-	editToggle.href = cmsToggleEditUrl;
-	editToggle.title = 'Bearbeiten [E]';
-	editToggle.innerHTML = '<div><i></i></div>';
-	//var editToggle = c1.el('<a style="position:fixed; z-index:3" class="qgCMS_editmode_switch '+(qgCmsEditmode?'-active':'')+'" href="'+cmsToggleEditUrl+' title="Bearbeiten (E)"><div><i></i></div></a>');
+	var editToggle = c1.dom.fragment('<a style="position:fixed; z-index:3" class="qgCMS_editmode_switch '+(qgCmsEditmode?'-active':'')+'" href="'+cmsToggleEditUrl+' title="Bearbeiten (E)"><div><i></i></div></a>').firstChild;
 	document.body.append(editToggle);
-
 	editToggle.addEventListener('click',function(){
 		this.classList.toggle('-active');
 	});

@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 		uploader.bind('Error', (up, err)=>{ alert(err.message); });
 		uploader.bind('UploadComplete', (up, file)=>{
 			loadImages();
-			cms.panel.tabs.show('options');
+			cms.cont(cms.cont.active).showWidget('options');
 		});
 	};
 });

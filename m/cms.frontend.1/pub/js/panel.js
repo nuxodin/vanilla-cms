@@ -193,6 +193,7 @@ document.addEventListener('DOMContentLoaded',function(){
 	// deprecated, frontend.0 compatibility
 	cms.panel.tabs = {};
 	cms.panel.tabs.show = what=>{
+		console.warn('deprecated');
 		cms.cont(cms.cont.active).showWidget(what);
 	};
 });
@@ -234,9 +235,12 @@ c1.onElement('.qgCmsTreeManager',el=>{
 c1.onElement('.qgCmsFileManager',el=>{
 	var pid = el.getAttribute('pid');
 	var $el = $(el);
-	el.c1Find('.-uploadBtn').addEventListener('click', function(){
-		this.nextElementSibling.click();
-	})
+	c1.c1Use('form',function(){
+		el.c1Find('.-uploadBtn').addEventListener('click', async function(){
+			const files = await c1.form.fileDialog();
+			upload(files);
+		})
+	});
 	var tbody = $el.find('tbody');
 	if (tbody[0]) {
 		tbody.children().each(function(i, tr) {
@@ -299,18 +303,17 @@ c1.onElement('.qgCmsFileManager',el=>{
 		$fn('page::reload')(pid);
 		cms.panel.get('widget').set('media',1);
 	}
-	el.c1Find('.-uploadButton').addEventListener('change',function(){
-		upload(this.files);
-	})
 	el.c1Find('.-addExistingFile').addEventListener('select_by_pointer',function(){
 		this.value && $fn('page::addDbFile')(pid,this.value).run();
 	})
 	if (el.c1Find('.-sortFilesSelect')) {
 		el.c1Find('.-sortFilesSelect').addEventListener('change',function(){
-			const val = this.options[this.selectedIndex].value;
-			val === 'name'    && $fn('page::filesSetOrder')(pid,'name','asc') && reload();
-			val === 'date'    && $fn('page::filesSetOrder')(pid,'date','asc') && reload();
-			val === 'reverse' && $fn('page::filesSetOrder')(pid,'reverse') && reload();
+			this.value && $fn('page::filesSetOrder')(pid,this.value,'asc') && reload();
+			// const val = this.value;
+			// val === 'name'         && $fn('page::filesSetOrder')(pid,'name','asc') && reload();
+			// val === 'name_reverse' && $fn('page::filesSetOrder')(pid,'name','asc') && reload();
+			// val === 'date'         && $fn('page::filesSetOrder')(pid,'date','asc') && reload();
+			// val === 'reverse'      && $fn('page::filesSetOrder')(pid,'reverse') && reload();
 		});
 		el.c1Find('.-deleteFilesSelect').addEventListener('change',function(){
 			const val = this.options[this.selectedIndex].value;

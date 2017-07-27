@@ -1,6 +1,7 @@
 .c1-box {
     display:flex;
     flex-flow:column;
+    overflow:visible; /* overwrite c1-dialog */
 }
 .c1-box.c1-box { /* stronger */
     padding:0;

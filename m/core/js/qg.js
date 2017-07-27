@@ -97,6 +97,7 @@ Ask = function(obj, opt) {
 };
 
 c1.ext(c1.Eventer, Ask);
+
 Ask.on('complete', function(res) {
 	'use strict';
 	if (!res) return;
@@ -142,7 +143,6 @@ Ask.on('complete', function(res) {
 		for (var selector in res.replaceElements) {
 			if (!res.replaceElements.hasOwnProperty(selector)) continue;
 			var html = res.replaceElements[selector];
-
 			var els = document.querySelectorAll(selector);
 			for (var i=0, el; el=els[i++];) {
 				// var range = document.createRange();

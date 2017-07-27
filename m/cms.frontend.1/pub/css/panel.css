@@ -76,6 +76,8 @@
 	box-sizing:border-box;
 	max-width:calc(100vw - 100%);
 	overflow:auto;
+	scroll-boundary-behavior:none;
+	
 	will-change: transform;
 }
 #qgCmsFrontend1 > .-sidebar > .-item > .-content > * {

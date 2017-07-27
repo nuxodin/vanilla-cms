@@ -117,8 +117,6 @@ class q9DataTransfer {
     }
     contains(type) {
         console.warn('used?');
-        //console.log(type);
-        //console.log(this.types);
         return [].slice.call(this.types).includes(type);
     }
     getData(type) {
@@ -143,30 +141,10 @@ class q9DataTransfer {
 
 class q9ClipboardData {
     constructor(cd) {
-        if (cd) {
-            this.items = cd.items || [];
-        } else if (window.clipboardData) { // ie / edge supports it // zzz?
-            this.items = [];
-            const text = clipboardData.getData('Text');
-            if (text) {
-                this.items.push({
-                    kind: 'string',
-                    type: 'text/plain',
-                    getAsString(cb) { cb && cb(text); }
-                });
-            }
-            const url = clipboardData.getData('URL');
-            if (url) {
-                this.items.push({
-                    kind: 'string',
-                    type: 'text/url',
-                    getAsString(cb) { cb && cb(url); }
-                });
-            }
-            console.warn('used?')
-        }
+        this.items = cd.items || [];
     }
     q9GetData(type, cb) { // widthout cb usefull as "hasType"
+        console.warn('used?') // zzz
         for (let i=this.items.length, item; item=this.items[--i];) {
             if (item.type===type) {
                 item.getAsString(cb);

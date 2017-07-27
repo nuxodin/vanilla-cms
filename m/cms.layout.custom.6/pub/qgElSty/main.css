@@ -55,26 +55,28 @@
 	box-shadow:0 0 5px #000;
 	border-radius: 2px;
 	max-height:95%;
-	box-shadow: black 0px 0px 10px;
+	box-shadow: 0 0 10px rgba(0,0,0,.7);
 }
 .qgStyleSheetEditor .-title {
 	padding:7px;
-	background:#777;
-	background:linear-gradient(#001,#557);
+	background:#333;
 	color:#fff;
 	cursor:move;
+	display:flex;
+	align-items: center;
 }
-.qgStyleSheetEditor .-title > .-close{
-	width:20px;
-	float:right;
-	font-weight:bold;
-	text-align:center;
+.qgStyleSheetEditor .-title > .-close {
+	margin-left:auto;
+	width:18px;
+	height:18px;
 	cursor:pointer;
+	background:url(close.svg) center no-repeat;
 }
 
 
 .qgStyleSheetEditor .-contents {
 	overflow:hidden;
+	scroll-boundary-behavior:none;
 }
 .qgStyleSheetEditor .-contents:hover {
 	overflow:auto;
@@ -84,8 +86,9 @@
 	width:99%;
     margin-right: 18px; /* scrollbars! very tricky, if the are no scrollbars margin is not active  */
 }
-.qgStyleSheetEditor .-contents .-rules > tr:hover, .qgStyleSheetEditor .-contents > table > tbody > tr.active {
-	background:#ffc;
+.qgStyleSheetEditor .-contents .-rules > tr:hover,
+.qgStyleSheetEditor .-contents > table > tbody > tr.active {
+	background:#ffb;
 }
 .qgStyleSheetEditor .-contents .-rules > tr > td {
 	padding:1px 5px 1px 1px;
@@ -98,16 +101,18 @@
     overflow:hidden;
     padding-left:5px;
 }
-.qgStyleSheetEditor .-contents .-rules > tr > td.-rem, .qgStyleSheetEditor .-contents .-rules > tr > td.-redefine {
-	background:url(rem.png) center no-repeat;
+.qgStyleSheetEditor .-contents .-rules > tr > td.-rem,
+.qgStyleSheetEditor .-contents .-rules > tr > td.-redefine {
+	background:url(rem.svg) center no-repeat;
 	width:10px; height:10px;
 	color:transparent;
+	font-size:8px;
 }
 .qgStyleSheetEditor .-contents .-rules > tr.-has > td.-rem {
 	opacity:.5;
 }
 .qgStyleSheetEditor .-contents .-rules > tr > td.-redefine {
-	background-image:url(pencil.png);
+	background-image:url(pencil.svg);
 }
 
 

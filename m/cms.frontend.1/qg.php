@@ -83,12 +83,12 @@ qg::on('deliverHtml', function(){
 	if (isset($_GET['qgCmsNoFrontend'])) return;
 	if (Page()->access() < 2) return;
 	html::addJSFile(sysURL.'core/js/c1.js',                     'cms/noEdit');
+	html::addJsFile(sysURL.'core/js/c1/dom.js',                 'cms/noEdit');
 	html::addCSSFile(sysURL.'cms.frontend.1/pub/css/off.css',   'cms/noEdit');
 	html::addJSFile( sysURL.'cms.frontend.1/pub/js/init.js',    'cms/noEdit');
 	if (Page()->edit) {
 		html::addJSFile( sysURL.'cms.frontend.1/pub/js/browserCheck.js', 'cms/edit');
 		html::addJSFile( sysURL.'core/js/qg.js',                         'cms/edit');
-		html::addJsFile( sysURL.'core/js/c1/dom.js',                 'cms/edit');
 		html::addJSFile( sysURL.'core/js/c1/onElement.js',               'cms/edit');
 		html::addJSFile( sysURL.'cms/pub/js/cms.js',                     'cms/edit', true, '');
 		html::addJSFile( sysURL.'core/js/c1/NodeCleaner.js',             'cms/edit');

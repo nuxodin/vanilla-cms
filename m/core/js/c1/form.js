@@ -39,5 +39,21 @@ c1.form = {
             return;
         }
         return el.value;
+    },
+    fileDialog: function(options){
+        if (!options) options = {};
+        Object.assign(options,{
+            multiple: true,
+            accept: '',
+        });
+        var inp = document.createElement('input');
+        inp.type = 'file';
+        inp.multiple = options.multiple;
+        inp.accept   = options.accept;
+        var P = new Promise(function(resolve, reject){
+            inp.onchange = function(){ resolve(inp.files); }
+        });
+        inp.click();
+        return P;
     }
 }

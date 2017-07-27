@@ -311,6 +311,7 @@ class serverInterface_page {
 				" ORDER BY pf.sort DESC					";
 				break;
 			case 'name':
+			case 'name_reverse':
 				$sql =
 				" SELECT pf.name, f.name AS fname	" .
 				" FROM file f, page_file pf			" .
@@ -319,6 +320,9 @@ class serverInterface_page {
 				"	AND pf.page_id = ".$P." 		" .
 				" ORDER BY f.name					";
 				$vs = D()->indexCol($sql);
+				if ($what === 'name_reverse') {
+					foreach ($vs as $n => $v) $vs[$n] = strrev($v);
+				}
 				natsort($vs);
 				foreach ($vs as $name => $egal) {
 					D()->page_file->update([

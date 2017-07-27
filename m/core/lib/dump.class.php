@@ -8,10 +8,13 @@ class dump {
         echo hee(var_export($x,1));
         echo '</pre>';
     }
-    static function h($x){
-        echo '<pre style="font-size:10px; color:#000; overflow:auto; max-width:100%">';
-        echo self::_h($x);
-        echo '</pre>';
+    static function h($x,$return=false){
+        $str =
+        '<pre style="font-size:10px; color:#000; overflow:auto; max-width:100%">'.
+        self::_h($x).
+        '</pre>';
+        if ($return) return $str;
+        else echo $str;
     }
     static function _h($x){
         if (is_array($x)) {
