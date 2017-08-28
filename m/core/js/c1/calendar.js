@@ -1,7 +1,6 @@
 !function(){
 	'use strict';
 
-
 	var css =
 	'.c1Calendar { '+
 	'	display:inline-block; '+

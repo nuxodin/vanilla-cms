@@ -74,6 +74,36 @@ $SET['background_color'];
 $SET->make('display','browser')->setHandler('select')->setOptions('fullscreen','standalone','minimal-ui','browser');
 $SET->make('orientation','any')->setHandler('select')->setOptions('any','natural','landscape','portrait','portrait-primary','portrait-secondary','landscape-primary','landscape-secondary');
 $SET->make('service-worker',0)->setType('bool');
+$SET->make('category','')->setHandler('select')->setOptions(
+    '',
+    'books',
+    'business',
+    'education',
+    'entertainment',
+    'finance',
+    'food',
+    'games',
+    'government & politics',
+    'health & fitness',
+    'kids',
+    'lifestyle',
+    'magazines',
+    'medical',
+    'music',
+    'navigation',
+    'news',
+    'personalization',
+    'photo',
+    'productivity',
+    'security',
+    'shopping',
+    'social',
+    'sports',
+    'travel',
+    'utilities',
+    'weather'
+);
+
 
 $SET['use apple-touch-icon']->setType('string')->setHandler('select')->setOptions('','precomposed','not precomposed');
 $SET['use apple-mobile-web-app-capable']->setHandler('checkbox');

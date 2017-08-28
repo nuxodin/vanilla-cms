@@ -2,8 +2,8 @@
 namespace qg;
 
 html::addCSSFile(sysURL.'core/css/q1Rst.css');
-html::addCSSFile(sysURL.'core/js/c1/css/normalize.css');
-html::addCSSFile(sysURL.'core/js/c1/css/recommend.css');
+html::addCSSFile(sysURL.'core/css/c1/normalize.css');
+html::addCSSFile(sysURL.'core/css/c1/recommend.css');
 
 html::addJSFile(sysURL.'core/js/c1.js');
 html::addJSFile(sysURL.'core/js/jQuery.js');
@@ -63,6 +63,7 @@ G()->js_data['qgToken'] = qg::token();
 		<?php
 		$ext = preg_replace('/.*\.([^.])/', '$1', $file);
 		$mime = File::extensionToMime($ext);
+	  	if ($mime === 'image/svg+xml') $mime = 'application/xml';
 		$mime = str_replace('application/x-javascript','text/javascript', $mime);
 		?>
 		<div style="height:100%; width:100%">

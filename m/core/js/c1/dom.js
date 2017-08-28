@@ -173,11 +173,13 @@
 
 	// iterators
 	if (w.Symbol && Symbol.iterator) {  // no ie11 :(
-		for (var Interface of [HTMLCollection,NodeList,StyleSheetList,CSSRuleList]) {
+		[HTMLCollection,NodeList,StyleSheetList,CSSRuleList].forEach(function(Interface){
 			var proto = Interface.prototype;
-			if (proto[Symbol.iterator]) continue;
+			if (proto[Symbol.iterator]) return;
 			proto[Symbol.iterator] = Array.prototype[Symbol.iterator];
-		}
+		})
+//		for (var Interface of [HTMLCollection,NodeList,StyleSheetList,CSSRuleList]) {
+//		}
 	}
 
 	// divers fix

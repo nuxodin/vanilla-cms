@@ -8,7 +8,7 @@ if (isset($_POST['edit'])) {
 }
 $vs = D()->row("SELECT * FROM grp WHERE id='".(int)$_GET['id']."'");
 ?>
-<form method=post class=beBox style="flex:0 0 auto">
+<form method=post class=c1-box style="flex:0 0 auto">
 	<div class=-head> Details Gruppe "<?=hee($vs['name'])?>" </div>
 	<table class=c1-style>
 		<tr>

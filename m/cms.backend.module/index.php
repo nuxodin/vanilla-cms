@@ -6,7 +6,7 @@ if (isset($_GET['module'])) return include 'module.php';
 module::syncLocal();
 
 ?>
-<div class=beBox>
+<div class=c1-box>
 	<div class=-head>Module</div>
 	<div class=-body>
 		<button class=btnUpdateAll style="float:right">Alle updaten</button>

@@ -1,10 +1,11 @@
 /* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
 class c1ImageEditor extends c1FullScreenPopup {
-    construct(){
+    construct(){ // constructor!?!?
         this.minHeight = 0;
         this.minWidth  = 0;
     }
     show(src, options){
+        c1.c1Use('form',1);
         this.options = options;
         this.init();
         let img     = this.el('.-img');
@@ -57,28 +58,21 @@ class c1ImageEditor extends c1FullScreenPopup {
         this.cropper.hide();
         removeEventListener('resize',this);
     }
-    uploadDialog(){
-        let inp = document.createElement('input');
-        inp.setAttribute('type','file');
-        inp.setAttribute('accept','image/*');
-        inp.click();
-        inp.onchange = ()=>{
-            let file = inp.files[0];
-            if (!file) return;
-            if (!file.type.match('image.*')) return;
-            if (file.size > 8000000) {
-                c1Use(sysURL+'core/js/qg/fileHelpers.js',()=>{
-                    file.q9ToImage(img=>{
-                        img.q9ScaleToArea(2000*3000,()=>{
-                            img.q9ToBlob(blob=>{
-                                this.el('.-img').src = URL.createObjectURL(blob);
-            				}, file.type, 1);
-            			});
-            		});
-                });
-            } else {
-                this.el('.-img').src = URL.createObjectURL(file);
-            }
+    async uploadDialog(){
+        const [file] = await c1.form.fileDialog({multiple:false, accept:'image/*'});
+        if (!file) return;
+        if (!file.type.match('image.*')) return;
+        if (file.size > 8000000) {
+            await c1Use(sysURL+'core/js/qg/fileHelpers.js',1)
+            file.q9ToImage(img=>{
+                img.q9ScaleToArea(2000*3000,()=>{
+                    img.q9ToBlob(blob=>{
+                        this.el('.-img').src = URL.createObjectURL(blob);
+    				}, file.type, 1);
+    			});
+    		});
+        } else {
+            this.el('.-img').src = URL.createObjectURL(file);
         }
     }
     init(){
@@ -141,7 +135,7 @@ class c1ImageEditor extends c1FullScreenPopup {
         this.el('.-upload').addEventListener('click',()=>this.uploadDialog());
         this.el('.-cancelCrop').addEventListener('click',()=>this.cropper.hide());
     }
-    initSeriously(){
+    async initSeriously(){
         if (this.initialized) return;
         var run = ()=>{
             let self = this;
@@ -188,7 +182,7 @@ class c1ImageEditor extends c1FullScreenPopup {
                     this.el().focus(); // prevent (activated) button from trigger click again
                 }
             });
-            this.el('.-cropValues').addEventListener('input',((e)=>{
+            this.el('.-cropValues').addEventListener('input',(e=>{
                 this.cropper[e.target.name] = e.target.value / this.scale;
             }).c1Debounce(200))
 
@@ -228,15 +222,14 @@ class c1ImageEditor extends c1FullScreenPopup {
 			seriously.go();
         }
         var baseUrl = sysURL+'cms.image_editor/pub/Seriously.js/';
-        c1Use(baseUrl+'lib/require.js', ()=>{
+        await c1Use(baseUrl+'lib/require.js',1);
+        require([
+            baseUrl+'seriously.js',
+        ], ()=>{
             require([
-                baseUrl+'seriously.js',
-            ], ()=>{
-                require([
-                    baseUrl+'effects/seriously.brightness-contrast.js',
-                    baseUrl+'effects/seriously.crop.js',
-                ], run);
-            });
+                baseUrl+'effects/seriously.brightness-contrast.js',
+                baseUrl+'effects/seriously.crop.js',
+            ], run);
         });
     }
     handleEvent(e) {

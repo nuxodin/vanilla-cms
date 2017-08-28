@@ -1,5 +1,5 @@
 <?php namespace qg; ?>
-<div class=beBox>
+<div class=c1-box>
 	<?php
 	$sql = 	" SELECT 									" .
 			"	m.*, 									" .
@@ -17,7 +17,7 @@
 	?>
 	<table class=c1-style>
 		<thead>
-			<tr class=beHead>
+			<tr class=c1-box-head>
 				<th> Erstellt
 				<th> Betreff
 				<th> Absender

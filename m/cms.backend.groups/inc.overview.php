@@ -17,7 +17,7 @@ $res = D()->query(
 	" ORDER BY type, name									");
 ?>
 
-<div class=beBox style="flex:0 0 auto">
+<div class=c1-box style="flex:0 0 auto">
 	<div class=-head>Gruppe erstellen</div>
 	<form method=post>
 		<table class=c1-style>
@@ -34,10 +34,10 @@ $res = D()->query(
 	</form>
 </div>
 
-<div class=beBox style="flex:0 0 auto">
+<div class=c1-box style="flex:0 0 auto">
 	<table class=c1-style>
 		<thead>
-			<tr class=beHead>
+			<tr class=c1-box-head>
 				<th> Id
 				<th> Gruppe
 				<th> Type

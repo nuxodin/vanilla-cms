@@ -103,8 +103,9 @@ foreach ($All as $M) {
 			$color = $M->server_version ? $color : '#fbb';
 			?>
 			<td style="color:<?=$color?>">
-				<?php if ($M->local_changed && $M->local_changed > $M->server_time /* neuer als auf dem Server? */
-						&& $M->local_changed > $M->local_updated) { /* lokal geändert? */ ?>
+				<?php if ($M->local_changed
+						  /* && $M->local_changed > $M->server_time //neuer als auf dem Server? */
+						  && $M->local_changed > $M->local_updated) { /* lokal geändert? */ ?>
 						<a style="color:inherit" class=-upload>release</a>
                 <?php } /* elseif (!$M->checkRemoteFolder() && $M->local_changed) { ?>
 						<a style="color:inherit" onclick="return moduleUpload(this,'<?=$M?>',2);" href="#" >release (not realy on server!)</a>

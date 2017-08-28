@@ -8,7 +8,7 @@
             $T = $Cont->Title();
             L::nsStop();
             ?>
-            <input<?=$Cont->edit?' contenteditable cmstxt='.$T->id:''?> value="<?=hee($T)?>" style="color:inherit; background:transparent; letter-spacing:.1em; width:100%; padding:0; border:none; outline:none; font-size:inherit" placeholder="kein Titel">
+            <input<?=$Cont->edit?' cmstxt='.$T->id:''?> value="<?=hee($T)?>" style="color:inherit; background:transparent; letter-spacing:.1em; width:100%; padding:0; border:none; outline:none; font-size:inherit" placeholder="kein Titel">
             <?php
             $path = sysPATH.$Cont->vs['module'].'/pub/';
             $url = is_file($path.'module.svg') ? path2uri($path).'module.svg' : sysURL.'cms.frontend.1/pub/img/module_default.svg';

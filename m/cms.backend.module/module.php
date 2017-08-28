@@ -27,10 +27,10 @@ $hasNewVersion = $storeData && $storeData['version'] > $localData['version'];
 ?>
 <div class=beBoxCont>
 
-	<h1 class=beBox style="flex:100%; padding:10px">Modul "<?=$name?>"</h1>
+	<h1 class=c1-box style="flex:100%; padding:10px">Modul "<?=$name?>"</h1>
 
 	<?php if (G()->SET->has($name)) { ?>
-		<div class=beBox>
+		<div class=c1-box>
 			<div class=-head>Einstellungen</div>
 			<div style="max-height:60vh; overflow:auto">
 				<?php
@@ -41,7 +41,7 @@ $hasNewVersion = $storeData && $storeData['version'] > $localData['version'];
 		</div>
 	<?php } ?>
 
-	<div class=beBox style="flex:320px">
+	<div class=c1-box style="flex:320px">
 		<div class=-head>Manage</div>
 		<table class=c1-style>
 			<tr> <td> Lokale Version : <td> <?=$localData['version']?>
@@ -121,7 +121,7 @@ $hasNewVersion = $storeData && $storeData['version'] > $localData['version'];
 		</div>
 	</div>
 
-	<div class=beBox style="flex:320px">
+	<div class=c1-box style="flex:320px">
     	<div class=-head>Dateien</div>
     	<style>.files a { display:block;} </style>
 		<div class=-body>
@@ -169,7 +169,7 @@ $hasNewVersion = $storeData && $storeData['version'] > $localData['version'];
         </div>
     </div>
 
-	<div class=beBox style="flex:320px">
+	<div class=c1-box style="flex:320px">
 		<div class=-head>als Seiten / Inhalte Vorhanden</div>
 		<div style="max-height:60vh; overflow:auto">
 			<table class=c1-style style="width:auto">
@@ -186,7 +186,7 @@ $hasNewVersion = $storeData && $storeData['version'] > $localData['version'];
 		</div>
 	</div>
 
-	<div class=beBox style="flex:320px">
+	<div class=c1-box style="flex:320px">
 		<div class=-head>Changelog</div>
 		<div style="max-height:60vh; overflow:auto">
 			<table class=c1-style style="white-space:nowrap;">
@@ -211,7 +211,7 @@ $hasNewVersion = $storeData && $storeData['version'] > $localData['version'];
 	</div>
 
 	<?php if ($storeData['time'] && $localData['updated']) { ?>
-		<div class=beBox style="flex:100%">
+		<div class=c1-box style="flex:100%">
 			<div class=-head>Mit Server vergleichen</div>
 			<div class=-body style="max-height:90vh; overflow:auto;" data-part="diff">
 				<button onclick="$fn('page::loadPart')(<?=$Cont?>,'diff').run(c1.loading.mark(this))">laden</button>

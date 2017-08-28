@@ -41,7 +41,7 @@ if (isset($_GET['showit'])) {
 	exit();
 }
 ?>
-<div class=beBox style="flex-basis:800px">
+<div class=c1-box style="flex-basis:800px">
 	<div class=-head>Mail-Details</div>
 	<table class=c1-style>
 		<tr>
@@ -78,7 +78,7 @@ if (isset($_GET['showit'])) {
 $files = D()->all("SELECT * FROM mail_attachment WHERE mail_id = '".(int)$_GET['id']."' ");
 if ($files) {
 ?>
-<div class=beBox>
+<div class=c1-box>
 	<div class=-head>Anhänge</div>
 	<div class=-body>
 		<?php foreach ($files as $row) { ?>
@@ -101,7 +101,7 @@ if ($files) {
 </div>
 <?php } ?>
 
-<div class=beBox>
+<div class=c1-box>
 	<?php
 	$sql =
 	" SELECT *, r.email as email				" .
@@ -113,7 +113,7 @@ if ($files) {
 	?>
 	<table class=c1-style style="vertical-align:top">
 		<thead>
-			<tr class=beHead>
+			<tr class=c1-box-head>
 				<th> Empfänger
 				<th> Versendet
 				<th> Geöffnet
@@ -139,7 +139,7 @@ if ($files) {
 </div>
 
 <?php if (D()->mail1_track) { ?>
-<div class=beBox>
+<div class=c1-box>
 	<div class=-head>Tracking</div>
 	<?php
 	$sql =

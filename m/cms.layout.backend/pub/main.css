@@ -91,38 +91,53 @@ html, body {
 	flex:1 1 auto;
 }
 
-.beBox {
+/* c1-box */
+.beBox::before {
+	content:'deprecated class ".beBox", report to tobias buschor';
+	padding:3px;
+	background:yellow;
+	background-image:url(css-error?message=class_beBox_in_use);
+}
+.beBox,
+.qgCMS .c1-box {
 	flex:1 1 400px;
 	margin:10px;
 	max-width: calc(100% - 20px);
 	box-sizing:border-box;
 	box-shadow:0 0 10px rgba(0,0,0,.4);
 	background:#fff;
-	display:flex;
-	flex-direction: column;
+	zzz_display:flex; /* zzz */
+	zzz_flex-direction: column; /* zzz */
 }
-.beBox > .-head {
-	margin:0;
-	display:flex;
+.beBox > .-head,
+.qgCMS .c1-box > .-head {
+	zzz_margin:0; /* needed */
 	align-items:center;
 	justify-content: space-between;
 	background:var(--cms-dark);
-	color:#fff;
 	padding:5px 15px;
 	min-height:40px;
 	box-sizing:border-box;
 	margin-bottom:1px;
-	flex:0 0 auto;
 	font-weight: bold;
+	zzz_flex:0 0 auto; /* zzz */
+	zzz_display:flex; /* zzz */
+	zzz_color:#fff; /* zzz */
 }
 
-.beBox > .-body {
+.beBox > .-body,
+.qgCMS .c1-box > .-body {
 	padding:15px;
 }
-tr.beHead > * {
+tr.beHead > *,
+.qgCMS tr.c1-box-head > *
+ {
     padding-top:13px;
     padding-bottom:12px;
 }
+
+
+
 
 /* Table */
 table.data {

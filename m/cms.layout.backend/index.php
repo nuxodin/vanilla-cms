@@ -15,9 +15,10 @@ html::addJsFile(sysURL.'core/js/c1/loading.js',     'be-layout', true, 'defer');
 //html::addJSFile( sysURL.'cms.frontend.1/pub/js/frontend1.js',    'cms/edit', true, 'defer');
 
 
-html::addCssFile(sysURL.'core/js/c1/css/normalize.css',    'be-layout');
-html::addCssFile(sysURL.'core/js/c1/css/recommend.css',    'be-layout');
+html::addCssFile(sysURL.'core/css/c1/normalize.css',    'be-layout');
+html::addCssFile(sysURL.'core/css/c1/recommend.css',    'be-layout');
 html::addCssFile(sysURL.'core/js/c1/css/theme1.css',       'be-layout');
+html::addCssFile(sysURL.'core/css/c1/box.css',       'be-layout');
 html::addCssFile(sysURL.'cms.frontend.1/pub/css/main.css', 'be-layout');
 
 html::$meta['viewport'] = 'width=device-width, initial-scale=1, maximum-scale=1';

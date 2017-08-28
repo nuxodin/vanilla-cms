@@ -118,7 +118,7 @@
 		<field name="hash"      type="varchar" length="32" key="PRI" null=""/>
 		<field name="namespace" type="varchar" length="16" key="PRI" null=""/>
 		<field name="original"  type="text"    length=""   key="" null=""/>
-		<field name="count"     type="tinyint" length="3"  key="" null=""/>
+		<field name="count"     type="smallint" length="6" key="" null=""/>
 		<field name="de"        type="text"    length=""   key="" null=""/>
 		<field name="fr"        type="text"    length=""   key="" null=""/>
 		<field name="en"        type="text"    length=""   key="" null=""/>

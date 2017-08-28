@@ -1,6 +1,6 @@
 <?php namespace qg; ?>
 <div class=beBoxCont>
-	<div class=beBox>
+	<div class=c1-box>
 		<div class=-head>Icons</div>
 		<div class=-body>
 			<div style="margin:-5px">
@@ -36,7 +36,7 @@
 		</div>
 	</div>
 
-	<div class=beBox style="flex-basis:700px">
+	<div class=c1-box style="flex-basis:700px">
 		<div class=-head>Einstellungen</div>
 		<div class=-body>
 	        <h2>Manifest-Standards:</h2>

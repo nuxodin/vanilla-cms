@@ -1,5 +1,5 @@
 <?php namespace qg ?>
-<div class=beBox style="flex:0 1 1200px">
+<div class=c1-box style="flex:0 1 1200px">
 	<div class=-head>Struktur</div>
 	<div class=-body>
 		<?php foreach (Page($rootPageNode)->Path() as $C) { ?>

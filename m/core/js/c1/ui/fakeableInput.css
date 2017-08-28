@@ -22,7 +22,7 @@ html:
 <input type=checkbox class=c1-fakable><i></i>
 
 css:
-input[type=checkbox].fakeBox + i { }
-input[type=radio].fakeBox + i { }
-input.fakeBox:checked + i { background:green }
+input[type=checkbox].c1-fakable + i { }
+input[type=radio].c1-fakable + i { }
+input.c1-fakable:checked + i { background:green }
 */

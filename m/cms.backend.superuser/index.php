@@ -4,7 +4,7 @@ if (!Usr()->superuser) return;
 ?>
 <div class=beBoxCont>
 
-    <div class=beBox>
+    <div class=c1-box>
     	<div class=-head>Dateien</div>
     	<style>.files a { display:block;} </style>
         <div style="overflow:auto; max-height:80vh">
@@ -34,7 +34,7 @@ if (!Usr()->superuser) return;
         </div>
     </div>
 
-    <div class=beBox>
+    <div class=c1-box>
     	<div class=-head>Settings Mehrfach vorhanden</div>
         <div style="overflow:auto; max-height:80vh">
 			<?php

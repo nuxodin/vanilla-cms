@@ -16,10 +16,10 @@ L::nsStart('cms');
 			<div style="opacity:0"><i></i></div>
 		</a>
 		<?php
-		cmsFrontend1WidgetSidebar('tree'    , L('Struktur'));
-		cmsFrontend1WidgetSidebar('settings', L('Einstellungen'));
-		cmsFrontend1WidgetSidebar('add'     , L('Module'));
-		cmsFrontend1WidgetSidebar('more'    , L('Weiteres'));
+		cmsFrontend1WidgetSidebar('tree'    , L('Struktur'), L('Übsersicht aller Seiten, <br>Seiten erstellen, verschieben, löschen...'));
+		cmsFrontend1WidgetSidebar('settings', L('Einstellungen'), L('Einstellungen, Dateien, Rechte der aktuellen Seite'));
+		cmsFrontend1WidgetSidebar('add'     , L('Module'), L('Inhalte hinzufügen, z.B. ein Textfeld oder eine Tabelle'));
+		cmsFrontend1WidgetSidebar('more'    , L('Weiteres'), L('CMS-Feedback, Passwort ändern...'));
 		?>
 		<div class=-sensor></div>
 	</div>

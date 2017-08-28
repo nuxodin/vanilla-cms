@@ -74,18 +74,17 @@
         showEditor(e.target);
     });
     // show the editor
-    let showEditor = function(el) {
+    let showEditor = async function(el) {
         let src = el.getAttribute('data-dbfile-editable') || el.src;
         var baseUrl = sysURL+'cms.image_editor/pub/';
         c1.c1Use('focusIn',()=>{});
-        c1Use([
+        await c1Use([
             baseUrl+'c1FullScreenPopup.js',
             baseUrl+'c1ImageCropper.js',
             baseUrl+'c1ImageEditor.js',
             baseUrl+'qgDbFileImageEditor.js',
-        ],()=>{
-            let editor = new qgDbFileImageEditor();
-            editor.show(src);
-        });
+        ],1)
+        const editor = new qgDbFileImageEditor();
+        editor.show(src);
     }
 }

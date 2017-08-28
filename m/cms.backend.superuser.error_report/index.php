@@ -1,6 +1,6 @@
 <?php namespace qg ?>
 <div class=beBoxCont>
-	<div class=beBox style="overflow:auto; width:auto; flex:0 0 auto">
+	<div class=c1-box style="overflow:auto; width:auto; flex:0 0 auto">
 		<div class=-head>Tools</div>
 		<div class=-body>
 			<?php if (!isset($_GET['latest'])) { ?>
@@ -24,7 +24,7 @@
 	</div>
 
 	<?php if (!isset($_GET['message'])) { ?>
-		<div class=beBox style="max-height:88vh; overflow:auto; width:auto;">
+		<div class=c1-box style="max-height:88vh; overflow:auto; width:auto;">
 			<div class=-head>Errors</div>
 			<table class=c1-style>
 				<?php
@@ -56,7 +56,7 @@
 			<?php } ?>
 		</div>
 	<?php } else { ?>
-		<div class=beBox style="height:88vh; overflow:auto; width:auto;">
+		<div class=c1-box style="height:88vh; overflow:auto; width:auto;">
 			<div class=-head><?=hee($_GET['message'])?></div>
 			<table class=c1-style>
 				<?php

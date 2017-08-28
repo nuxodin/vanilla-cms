@@ -78,6 +78,7 @@ class cache {
 		//echo '<pre>'; var_dump(self::$data); echo '</pre>';
 	}
 	static function save(){
+		if (!self::$enabled) return false;
 		//echo '<pre>'; var_dump(self::$data); echo '</pre>';
 		if (self::$changed) {
 			file_put_contents(appPATH.'qg/qgCacheData.txt', serialize(self::$data));

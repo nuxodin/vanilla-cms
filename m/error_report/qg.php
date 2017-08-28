@@ -236,6 +236,20 @@ qg::on('action', function() {
 		error_report($report);
 		exit();
 	}
+	// css api
+	if (preg_match('/\/css-error\?/',$_SERVER['REQUEST_URI'])) {
+		var_dump($_SERVER);
+		$report['source'] = 'css';
+		$report['backtrace'] = [];
+		$report['file'] = $_SERVER['HTTP_REFERER'];
+		error_report([
+			'source' => 'css',
+			'message' => $_GET['message'],
+			'file' => $_SERVER['HTTP_REFERER'],
+			'backtrace' => [],
+		]);
+		exit();
+	}
 
 	// Content-Security-Policy api
 	G()->csp_report_uri = URL(appURL).'csp-error';

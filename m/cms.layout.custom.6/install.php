@@ -15,7 +15,7 @@ if (!is_dir(appPATH.'qg/'.$module)) {
 	$content .= "	hyphens:auto;\n";
 	$content .= "}\n";
 	$content .= "@media (max-width: 1200px) {}\n\n";
-	$content .= file_get_contents(sysPATH.'core/js/c1/css/normalize.css')."\n\n";
-	$content .= file_get_contents(sysPATH.'core/js/c1/css/recommend.css');
+	$content .= file_get_contents(sysPATH.'core/css/c1/normalize.css')."\n\n";
+	$content .= file_get_contents(sysPATH.'core/css/c1/recommend.css');
 	file_put_contents(appPATH.'qg/'.$module.'/pub/base.css', $content);
 }

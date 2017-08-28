@@ -7,7 +7,7 @@ $vs = D()->row("SELECT * FROM usr WHERE id = ".(int)$_GET['id']);
 <div class=beBoxCont itemid="<?=hee($_GET['id'])?>">
 	<?php
 	?>
-	<div class=beBox style="flex:0 1 auto">
+	<div class=c1-box style="flex:0 1 auto">
 		<div class=-head>Benutzer <?=$vs['id']?></div>
 		<div style="overflow:auto">
 			<table class="c1-style -detail">
@@ -42,7 +42,7 @@ $vs = D()->row("SELECT * FROM usr WHERE id = ".(int)$_GET['id']);
 		</div>
 	</div>
 
-	<div class=beBox style="flex:0 1 auto">
+	<div class=c1-box style="flex:0 1 auto">
 		<div class=-head>Gruppen</div>
 		<table class="c1-style -set_grp" style="width:auto">
 		<?php foreach (D()->query("SELECT grp.*, usr_grp.usr_id as has FROM grp LEFT JOIN usr_grp ON grp.id = usr_grp.grp_id AND usr_grp.usr_id = ".(int)$_GET['id']) as $vs) { ?>

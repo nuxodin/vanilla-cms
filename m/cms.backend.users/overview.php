@@ -6,7 +6,7 @@ $allow_login_as = $Cont->SET['allow_login_as']->setType('bool')->v || Usr()->sup
 
 ?>
 <div class=beBoxCont>
-	<div class=beBox style="flex:0 1 auto">
+	<div class=c1-box style="flex:0 1 auto">
 		<div class=-head>Benutzer hinzufügen</div>
 		<?php
 		if (isset($_POST['add']) && $_POST['qgToken'] === qg::token()) {
@@ -49,7 +49,7 @@ $allow_login_as = $Cont->SET['allow_login_as']->setType('bool')->v || Usr()->sup
 		</form>
 	</div>
 
-	<div class=beBox style="flex:1">
+	<div class=c1-box style="flex:1">
 		<div class=-head> Benutzer suchen </div>
 		<div class=-body>
 			<input type=search placeholder="suchen..." id=usrSearch style="width:300px; max-width:100%">

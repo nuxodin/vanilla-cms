@@ -1,0 +1,204 @@
+html {
+	font-family:Arial, sans serif;
+}
+a {
+    -webkit-tap-highlight-color:transparent;
+	background: transparent; /* ie10 */
+}
+ul, ol {
+	padding-left: 1.6em;
+}
+hr {
+	border:1px solid;
+	border-width:0 0 1px 0;
+	opacity:.4;
+}
+
+:focus:not(a) { outline:0; }
+a:hover { text-decoration:underline; outline: 0; }
+a:active { outline: 0; }
+
+table { border-collapse: collapse; }
+tbody { vertical-align: top; }
+th { text-align:left; }
+
+nav ul {
+	margin:0;
+	list-style:none;
+	list-style-image:none;
+	padding:0;
+}
+
+nav a, nav a:hover {
+	text-decoration:none;
+}
+
+/* form http://jsfiddle.net/fs8njy1d/4/embedded/result/ */
+label { cursor: pointer; }
+
+input,
+[type=search],
+textarea,
+select,
+button,
+.c1-inp,
+.c1-btn {
+	box-sizing:border-box;
+	padding:3px 4px;
+	font-size:inherit;
+	max-width:100%; /* todo: neu ok?*/
+}
+input,
+textarea {
+	width:170px;
+	border-radius:0;
+}
+select {
+	padding:3px 3px 3px 4px;
+}
+input[type=button],
+input[type=submit],
+input[type=reset],
+button {
+	padding-left:1em;
+	padding-right:1em;
+}
+xinput[type=file],
+input[type=range],
+input[type=checkbox],
+input[type=radio] {
+	padding:0;
+	border:0;
+}
+input[type=file] {
+	padding-left:0;
+	border-color:transparent;
+	border-left-width:0;
+}
+body input[type=checkbox],
+body input[type=radio],
+input[type=button],
+input[type=submit],
+input[type=reset],
+input[type=file],
+button {
+	width:auto;
+}
+[type=checkbox],
+[type=radio] {
+	cursor:pointer;
+}
+[type=number] {
+	text-align:right;
+}
+
+input[type=text],
+input[type=password],
+input[type=number],
+input[type=search],
+/*input[type=date], not good on ios */
+input[type=email],
+input[type=tel],
+input:not([type]) {
+	-webkit-appearance: none;
+}
+
+/* overwrite styles */
+select, input, textarea, .c1-inp, button, .c1-btn {
+	padding:.2em;
+	border:1px solid #999;
+	font-family:inherit;
+	line-height:1.4;
+	margin:0;
+	color:inherit;
+}
+.c1-inp {
+	display:inline-block;
+	background-color:#fff;
+	border:1px solid #999;
+	min-height:1.9em;
+	width:170px;
+	display:inline-flex; /* was flex */
+}
+html body .c1-inp > * {
+	margin:0;
+	border-width:0 0 0 1px;
+	border-radius:0;
+	flex:1 1 auto;
+}
+.c1-inp > *:first-child {
+	border-left-width:0;
+}
+.c1-inp > input {
+	flex:100 1 auto;
+}
+.c1-btn,
+button,
+input[type=submit],
+input[type=reset],
+input[type=button] {
+	background-image:linear-gradient(#fff,#ddd);
+	border-radius:3px;
+	padding-left:.5em;
+	padding-right:.5em;
+	cursor:pointer;
+	color:inherit;
+	text-align:center;
+	text-decoration:none;
+}
+.c1-btn:hover,
+button:hover,
+input[type=submit]:hover,
+input[type=reset]:hover,
+input[type=button]:hover {
+	border-color:#666;
+	color:inherit; /* a-tag */
+	text-decoration:none; /* a-tag */
+}
+.c1-btn:active,
+button:active,
+input[type=submit]:active,
+input[type=reset]:active,
+input[type=button]:active {
+	background-image:linear-gradient(#ddd,#fff);
+}
+.c1-btn[disabled],
+button[disabled],
+input[type=submit][disabled],
+input[type=reset][disabled],
+input[type=button][disabled] {
+	background-image:linear-gradient(#fff,#eee);
+	border-color:#999;
+	opacity:.9;
+	color:#aaa;
+}
+
+a[href^=tel] {
+    color:inherit;
+    text-decoration:none;
+}
+iframe[seamless], iframe[seamless="*"]:not([seamless="false"]):not([seamless="no"]) {
+	border:none;
+	background-color: transparent;
+}
+
+
+/*
+Force hardware-acceleration in Webkits to prevent text flickering.
+-webkit-transition: translate3d(0,0,0);
+Having flickering problems in Webkit? Use -webkit-backface-visibility.
+-webkit-backface-visibility: hidden;
+don't let iOS' "actions" dialog to come up when element is touch/held
+-webkit-touch-callout: none;
+no dragging of element at all
+-webkit-user-drag: none;
+drags entire element, not the text/selection
+-webkit-user-drag: element;
+change the character used to hide user passwords
+-webkit-text-security: square;
+
+::-webkit-input-placeholder { color:#c6251e; }
+:-ms-input-placeholder { color:#c6251e; }
+::placeholder { color:#c6251e; }
+
+*/

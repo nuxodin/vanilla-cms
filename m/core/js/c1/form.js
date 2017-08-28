@@ -42,10 +42,10 @@ c1.form = {
     },
     fileDialog: function(options){
         if (!options) options = {};
-        Object.assign(options,{
+        options = Object.assign({
             multiple: true,
             accept: '',
-        });
+        },options);
         var inp = document.createElement('input');
         inp.type = 'file';
         inp.multiple = options.multiple;

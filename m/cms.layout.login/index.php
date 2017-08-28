@@ -1,8 +1,8 @@
 <?php
 namespace qg;
 
-html::addCssFile(sysURL.'core/js/c1/css/normalize.css');
-html::addCssFile(sysURL.'core/js/c1/css/recommend.css');
+html::addCssFile(sysURL.'core/css/c1/normalize.css');
+html::addCssFile(sysURL.'core/css/c1/recommend.css');
 html::addCSSFile(sysURL.'cms.frontend.1/pub/css/main.css');
 
 html::$meta['viewport'] = 'width=device-width, initial-scale=1, maximum-scale=1';

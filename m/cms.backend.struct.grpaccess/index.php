@@ -2,7 +2,7 @@
 namespace qg;
 html::addCssFile(sysURL.'cms.backend.struct/pub/main.css');
 ?>
-<div class=beBox style="flex:1 1 1000px">
+<div class=c1-box style="flex:1 1 1000px">
 	<div class=-head>Struktur</div>
 	<div class=-body style="display:flex; justify-content:space-between; align-items:center">
 		<div>

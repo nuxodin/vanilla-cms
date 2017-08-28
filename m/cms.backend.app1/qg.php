@@ -217,7 +217,10 @@ qg::on('action', function() {
 			'orientation'      => $SET['orientation']->v,
 			'theme_color'      => $SET['theme_color']->v,
 			'background_color' => $SET['background_color']->v,
+			'category'         => $SET['category']->v,
 		];
+		foreach ($app as $name => $value) if ($value === '') unset($app[$name]);
+
 		if ($SET['service-worker']->v) {
 			$app['serviceworker'] = [
 				'src'       => (string)Url(appURL.'cms.app1.service-worker.js'),

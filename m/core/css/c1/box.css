@@ -21,3 +21,14 @@
     overflow:auto;
     padding:20px;
 }
+
+
+/* neu */
+tr.c1-box-head > * {
+    position:sticky;
+    top:0;
+    left:0;
+    background:#000;
+    color:#fff;
+    padding:10px;
+}

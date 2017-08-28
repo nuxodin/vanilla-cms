@@ -6,10 +6,10 @@
 
 	cms.contDrag = function() {
 		let self = this;
-		function move(e) {
+		let move = function(e) {
 			active.style.left = e.clientX - 40 + 'px';
 			active.style.top  = e.clientY + 20 + 'px';
-			let newDropCont   = getNearestElement(e,self.targets,active);
+			let newDropCont   = getNearestElement2(e,self.targets,active);
 			let newDropBefore = getBeforeElement(e,newDropCont);
 			if (dropCont !== newDropCont || dropBefore !== newDropBefore) {
 				dropCont   = newDropCont;
@@ -30,10 +30,10 @@
 			dropCont   = 0;
 			dropBefore = 0;
 		}
-		function change() {
-            dropCont.insertBefore(ghost,dropBefore);
+		let change = function(){
+			dropCont.insertBefore(ghost,dropBefore);
 			self.trigger('change',{target:dropCont,before:dropBefore});
-		}
+		}//.c1Debounce(70);
 
 		this.start = (el, e)=>{
 			document.addEventListener('mousemove',move);
@@ -50,6 +50,7 @@
 	};
 	cms.contDrag.prototype = c1.Eventer;
 
+	/*
 	function getNearestElement(e, els, notInside) {
 		let winner, winner2, min=null;
 		for (let i = els.length, el; el = els[--i];) {
@@ -83,6 +84,80 @@
 		}
 		return winner;
 	}
+	*/
+
+
+
+	function elementDistance(el,x,y) {
+		let distance = null;
+		const rect = el.getBoundingClientRect();
+		const distanceX = Math.min(
+			Math.abs(rect.left - x),
+			Math.abs(rect.right - x)
+		);
+		const distanceY = Math.min(
+			Math.abs(rect.top - y),
+			Math.abs(rect.bottom - y)
+		);
+		const isInside = !(y < rect.top || y > rect.bottom || x < rect.left || x > rect.right);
+		if (isInside) {
+			distance = Math.min(distanceX,distanceY); // 0?
+		} else {
+			if (y > rect.top && y < rect.bottom) { // in Y
+				distance = distanceX;
+			} else if (x > rect.left && x < rect.right) { // in X
+				distance = distanceY;
+			} else {
+				distance = Math.sqrt(distanceX*distanceX + distanceY*distanceY);
+			}
+		}
+		return {
+			distance,
+			distanceX,
+			distanceY,
+			isInside,
+		};
+	}
+	function elementDistances(e, els) {
+		const items = [];
+		for (let element of els) {
+			const distances = elementDistance(element, e.clientX, e.clientY);
+			let distance = distances.distance;
+			if (distances.isInside) distance = distance / 50; // inside is 50x better (nearer)!
+			items.push({
+				element,
+				distances,
+				distance,
+			});
+		}
+		return items.sort(function(a, b) {
+		    return a.distance - b.distance;
+		});
+	}
+	function getNearestElement2(e, els, notInside) {
+		els = Array.prototype.filter.call(els, el => !notInside.contains(el) )
+		const items = elementDistances(e, els);
+		return items[0] && items[0].element;
+	}
+	/*
+	function getBeforeElement(e, inside) {
+		const children = Array.from(inside.children).filter(item=>{ return item !== active && item !== ghost });
+		const nearest = getNearestElement2(e, children);
+		if (!nearest) return null;
+
+		const rect = nearest.getBoundingClientRect();
+		const x = e.clientX
+		const y = e.clientY;
+
+		const center = {
+			x: rect.left + (rect.width/2),
+			y: rect.top + (rect.height/2),
+		}
+		const isBefore = y < center.y || x < center.x;
+		return isBefore ? nearest : nearest.nextElementSibling;
+	}
+	*/
+
 	function getBeforeElement(e, el) {
 		let min=null, winner;
 		if (el.children.length) {

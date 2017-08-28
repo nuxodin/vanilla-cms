@@ -42,7 +42,7 @@ class serverInterface_page {
 	}
 	static function getPart($pid, $part, $vars=[]) {
 		$str = Page($pid)->getPart($part, $vars);
-		trigger_error('page::getPart needed?');
+//		trigger_error('page::getPart needed?');
 		return $str;
 	}
 	static function reload($pid, $vars=[]) {

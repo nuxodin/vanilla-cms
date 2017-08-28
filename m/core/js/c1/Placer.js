@@ -112,7 +112,7 @@ c1.Placer = class {
         if (placeY==='before')  y = rect.top    - layerHeight;
         if (placeY==='append')  y = rect.bottom - layerHeight;
         if (y < -viewport.top) y = placeY === 'before' ? rect.bottom : rect.top;
-        if (placeY==='center')  y = rect.top + rect.height/2 - layerWidth/2;
+        if (placeY==='center')  y = rect.top + rect.height/2 - layerHeight/2;
 
         x = Math.c1Limit(x, -viewport.left, innerWidth  - viewport.left - layerWidth);
         y = Math.c1Limit(y, -viewport.top,  innerHeight - viewport.top  - layerHeight)

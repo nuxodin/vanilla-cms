@@ -4,7 +4,7 @@ namespace qg;
 if (!isset($_GET['open'])) $_GET['open'] = null;
 ?>
 <div class=beBoxCont>
-	<div class=beBox>
+	<div class=c1-box>
 		<div class=-head>Cache</div>
 		<div class=-body>
 			<?php
@@ -41,7 +41,7 @@ if (!isset($_GET['open'])) $_GET['open'] = null;
 		</div>
 	</div>
 
-	<div class=beBox>
+	<div class=c1-box>
 		<div class=-head>Todos</div>
 		<div class=-body>
 			<?php
@@ -94,7 +94,7 @@ if (!isset($_GET['open'])) $_GET['open'] = null;
 		</div>
 	</div>
 
-	<div class=beBox>
+	<div class=c1-box>
 		<a class=-head href="<?=hee(URL()->addParam('open','phpinfo'))?>">phpinfo</a>
 		<div class=-body>
 			<?php if ($_GET['open']=='phpinfo') { ?>
@@ -103,7 +103,7 @@ if (!isset($_GET['open'])) $_GET['open'] = null;
 		</div>
 	</div>
 
-	<div class=beBox>
+	<div class=c1-box>
 		<a class=-head href="<?=hee(URL()->addParam('open','mysql'))?>">mysql</a>
 		<div class=-body>
 			<?php if ($_GET['open']=='mysql') { ?>
@@ -127,7 +127,7 @@ if (!isset($_GET['open'])) $_GET['open'] = null;
 		</div>
 	</div>
 
-	<div class=beBox>
+	<div class=c1-box>
 		<a class=-head href="<?=hee(URL()->addParam('open','locale'))?>">Locales</a>
 		<div class=-body>
 			<?php if ($_GET['open']=='locale') { ?>

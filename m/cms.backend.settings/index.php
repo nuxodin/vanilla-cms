@@ -1,5 +1,5 @@
 <?php namespace qg; ?>
-<div class=beBox>
+<div class=c1-box>
 	<div class=-head>Einstellungen</div>
 	<div class=-body>
 		<?php

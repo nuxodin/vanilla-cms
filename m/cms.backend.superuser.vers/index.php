@@ -27,7 +27,7 @@ foreach (D()->col("SELECT space FROM vers_space") as $space) {
 ?>
 <div>
 	<div class=beBoxCont>
-		<div class=beBox style="flex:0 1 auto">
+		<div class=c1-box style="flex:0 1 auto">
 			<div class=-head>Tools</div>
 			<div class=-body>
 				<button onclick="$fn('page::reload')(<?=$Cont?>,{deleteAll:1})">history alle workspaces löschen</button><br>
@@ -36,7 +36,7 @@ foreach (D()->col("SELECT space FROM vers_space") as $space) {
 		</div>
 
 		<?php foreach ($spaces as $space) { ?>
-			<div class=beBox style="flex:0 1 auto">
+			<div class=c1-box style="flex:0 1 auto">
 				<div class=-head>
 					<?=$space==0?'Live':'Space '.$space?>
 					<?php if ($space!=0) { ?><button onclick="$fn('page::reload')(<?=$Cont?>,{deleteSpace:<?=$space?>})">löschen</button><?php } ?>
@@ -67,7 +67,7 @@ foreach (D()->col("SELECT space FROM vers_space") as $space) {
 
 	<div class=beBoxCont style="flex:100%" id=trees>
 		<?php foreach ($spaces as $space) { ?>
-			<div class=beBox style="flex:0 1 auto" space=<?=$space?>>
+			<div class=c1-box style="flex:0 1 auto" space=<?=$space?>>
 				<div class=-head><?=$space==0?'Live':'Space '.$space?></div>
 				<div style="overflow:auto">
 					<table class=c1-style>

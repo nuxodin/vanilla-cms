@@ -33,10 +33,11 @@ function form_input($conf) {
 			$tag = 'select';
             $close = true;
 			$content = '';
-			$assoc = (bool)count(array_filter(array_keys($conf['options']), 'is_string'));
-			foreach ($conf['options'] as $key => $option) {
+            $options = $conf['options'];
+            $assoc = array_keys($options) !== range(0, count($options) - 1);
+			foreach ($options as $key => $option) {
 				$key = $assoc ? $key : $option;
-				$content .= '<option '.($assoc?'value="'.hee($key).'" ':'').($conf['value']===$key?'selected':'').'>'.hee($option).'</option>';
+				$content .= '<option '.($assoc?'value="'.hee($key).'" ':'').($conf['value'].''===$key.''?'selected':'').'>'.hee($option).'</option>';
 			}
 			unset($conf['value']);
 			unset($conf['type']);
@@ -273,7 +274,7 @@ function urlize($str) {
 			'π' => 'pi',
 			'Π' => 'pi',
 			'&' => 'and',
-			'&' => 'and',
+            '&amp;' => 'and',
 	]);
 	$str = iconv('UTF-8', 'ASCII//TRANSLIT', $str);
 	$str = preg_replace("/[^a-zA-Z0-9\/_|+ -]/", '', $str);

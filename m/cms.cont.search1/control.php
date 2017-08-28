@@ -136,6 +136,7 @@ foreach ($sqls as $sql) {
 
 				$num = 0;
 				foreach ($words as $word) {
+					if ($word === '') continue;
 					$num += substr_count($text, $word);
 				}
 

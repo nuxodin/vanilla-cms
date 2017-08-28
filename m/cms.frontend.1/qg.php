@@ -21,13 +21,13 @@ function cmsFrontend1WidgetAccordion($widget, $title) {
 	}
 	cmsFrontend1Widget($widget, $open, '-content');
 }
-function cmsFrontend1WidgetSidebar($widget, $titel) {
+function cmsFrontend1WidgetSidebar($widget, $title, $tooltip='') {
 	$open = G()->SET['cms.frontend.1']['custom']['sidebar']->v === $widget;
 	?>
 	<div class="-item <?=$open?'-open':''?>" itemid="<?=$widget?>">
 		<?php cmsFrontend1Widget($widget, $open) ?>
 		<div class=-title>
-			<div class=-text><?=$titel?></div>
+			<div class=-text title="<?=hee($tooltip)?>" c1-tooltip><?=$title?></div>
 		</div>
 	</div>
 	<?php
@@ -124,6 +124,7 @@ qg::on('deliverHtml', function(){
 
 		html::addJSFile( sysURL.'core/js/c1/fix/contextMenu.js',         'cms/edit', true, 'defer');
 		html::addJSFile( sysURL.'core/js/c1/contextMenu.js',             'cms/edit', true, 'defer');
+		//html::addJSFile( sysURL.'core/js/c1/tooltip.js',             'cms/edit', true, 'defer');
 		html::addJSFile( sysURL.'cms.frontend.1/pub/js/contextMenu.js',  'cms/edit', true, 'defer');
 		html::addJSFile( sysURL.'core/js/SettingsEditor.js',             'cms/edit', true, 'async');
 

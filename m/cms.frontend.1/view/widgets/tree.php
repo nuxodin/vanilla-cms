@@ -8,7 +8,7 @@ L::nsStop();
 <div class="-standalone qgCmsTreeManager" style="flex:1; margin-bottom:2em" data="<?=hee($treeJson)?>">
 	<div class=-h1>
 		<span><?=L('Struktur')?></span>
-		<input id=cmsPageAddInp style="width:50%" type=text placeholder="<?=hee(L('Neue Unterseite von "###1###"', $Cont->Title()))?>" title="<?=L('Die neue Seite wird als Unterseite der ausgewählten Seite erstellt.')?>">
+		<input id=cmsPageAddInp style="width:50%" type=text placeholder="<?=hee(L('Neue Unterseite von "###1###"', $Cont->Title()))?>" title="<?=L('Die neue Seite wird als Unterseite der ausgewählten Seite erstellt. Klicken Sie Enter um die Seite zu erstellen')?>" c1-tooltip>
 	</div>
 	<div id=cmsTreeContainer></div>
 </div>

@@ -5,7 +5,7 @@ $SET = G()->SET['cms.backend.webmaster'];
 $_SESSION['SettingsEditor roots'][$SET->i] = 1; // allow change settings
 ?>
 <div class=beBoxCont>
-    <!--div class="beBox Links" style="flex-basis:300px">
+    <!--div class="c1-box Links" style="flex-basis:300px">
         <div class=-head>Brower-Kompatibilität</div>
         <table class=c1-style>
         	<tr>
@@ -16,7 +16,7 @@ $_SESSION['SettingsEditor roots'][$SET->i] = 1; // allow change settings
                 <td> <input value="4.4" placeholder="standard 5">
         </table>
     </div-->
-    <div class="beBox  Links">
+    <div class="c1-box  Links">
         <div class=-head>Test-Tools</div>
         <div class=-body style="overflow:auto; max-height:480px;">
             <?php
@@ -192,7 +192,7 @@ $_SESSION['SettingsEditor roots'][$SET->i] = 1; // allow change settings
         </div>
     </div>
 
-    <div class="beBox Links" style="flex-basis:440px">
+    <div class="c1-box Links" style="flex-basis:440px">
         <div class=-head>SEO</div>
         <div class=-body>
             <b>robots.txt</b>
@@ -214,17 +214,17 @@ $_SESSION['SettingsEditor roots'][$SET->i] = 1; // allow change settings
         </table>
     </div>
 
-    <div class=beBox style="flex-grow:0">
+    <div class=c1-box style="flex-grow:0">
         <div class=-head>Tags</div>
         <div data-part="classes" style="max-height:500px; overflow:auto">
             <?php include 'parts/classes.php' ?>
         </div>
     </div>
 
-    <div class=beBox>
+    <div class=c1-box>
         <table class="c1-style">
             <thead>
-                <tr class=beHead>
+                <tr class=c1-box-head>
                     <th> Webmaster Tools
                     <th> Authcodes
             <tbody>
@@ -258,7 +258,7 @@ $_SESSION['SettingsEditor roots'][$SET->i] = 1; // allow change settings
         </table>
     </div>
 
-  <div class="beBox Links">
+  <div class="c1-box Links">
     <div class=-head>Archived</div>
     <div class=-body>
         <a target=_blank href="http://wayback.archive.org/web/*/http://<?=$domain?>/">Archive.org</a>
@@ -266,7 +266,7 @@ $_SESSION['SettingsEditor roots'][$SET->i] = 1; // allow change settings
     </div>
   </div>
 
-  <div class=beBox>
+  <div class=c1-box>
   	<div class=-head>
         404 Requests
         <a href="<?=hee(Url()->addParam('404requestDeleteAll',1))?>"><button>alle löschen</button></a>
@@ -329,7 +329,7 @@ $_SESSION['SettingsEditor roots'][$SET->i] = 1; // allow change settings
 	<?PHP } ?>
   </div>
 
-  <div class=beBox style="flex:600px">
+  <div class=c1-box style="flex:600px">
     <div class=-head>Last Requests</div>
     <?php
     $sql =
