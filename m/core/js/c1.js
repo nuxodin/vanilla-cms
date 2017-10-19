@@ -28,7 +28,6 @@
             return false;
         };
     }
-
 	if (!HTMLFormElement.prototype.reportValidity) { // ie 11, edge 14, safari 10
 	    HTMLFormElement.prototype.reportValidity = function() {
 			if (this.checkValidity()) return true;
@@ -39,7 +38,6 @@
 			return false;
 	    }
 	}
-
 	/* Waits for the execution of the function (min) and then executes the last call, but waits maximal (max) millisecunds.
 	*  If the function-scope changes, the function executes immediatly (good for event-delegation)
 	*/
@@ -84,9 +82,7 @@
 	    var fn = this;
 	    return function(a,b) {
 	        if (b === undf && typeof a === 'object') {
-
-                console.error('no object as first argument');
-
+                console.error('deprecated object as first argument');
 	            for (var i in a)
 	                if (a.hasOwnProperty(i))
 	                    fn.call(this, i, a[i]);
@@ -155,10 +151,8 @@
 
 }(this);
 
-
-
-
-!function(global, undefined) { // c1Use
+// c1Use
+!function(global, undefined) {
 	'use strict';
 	var CALLBACKS = 'pseudosymbol_&/%f983';
     global.c1Use = function (prop_or_opts, cb) {
@@ -332,7 +326,6 @@ $('#text').c1Use('myplugin', function() {
 	this.myplugin();
 })
 */
-
 
 c1Use.able(window,'c1');
 if (!('Promise' in window)) document.write('<script src="'+c1.c1UseSrc+'/fix/Promise.js"><\/script>');

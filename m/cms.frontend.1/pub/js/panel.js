@@ -28,15 +28,14 @@ document.addEventListener('DOMContentLoaded',function(){
 			el.c1FindAll('> .-sidebar > .-item').forEach(el=>el.classList.remove('-open'));
 
 			if (e.value) {
-
 				let item = el.c1Find('> .-sidebar > .-item[itemid="'+e.value+'"]');
 				item.classList.add('-open');
-				item.setAttribute('tabindex',0);
 				item.focus();
 
 				el.c1ZTop();
-				const switches = document.querySelectorAll('.qgCMS_editmode_switch');
-				for (let i=0,item; item=switches[i++];) item.c1ZTop();
+
+				document.querySelectorAll('.qgCMS_editmode_switch').forEach(item=>item.c1ZTop());
+
 				el.classList.add('-open');
 				const load = el.c1Find('> .-sidebar > [itemid="'+e.value+'"] > .-content').getAttribute('widget');
 				load && panel.loadWidget(e.value, {pid: cms.cont.active || Page});
@@ -145,7 +144,6 @@ document.addEventListener('DOMContentLoaded',function(){
 		});
 	})
 
-	$fn.on('page::addDbFile', e => cms.cont(e.arguments[0]).showWidget('media',true) );
 	$fn.on('page::FileAdd',   e => cms.cont(e.arguments[0]).showWidget('media',true) );
 	cms.cont.prototype.showWidget = function(what, reload) {
 		if (!reload) {
@@ -295,25 +293,18 @@ c1.onElement('.qgCmsFileManager',el=>{
 	}
 
 	var upload = (files, replaces)=>{
-		for (let i=0, file; file=files[i++];) {
-			cms.cont(pid).upload(file, reload, replaces);
-		}
+		for (const file of files) cms.cont(pid).upload(file, reload, replaces);
 	}
 	var reload = ()=>{
 		$fn('page::reload')(pid);
 		cms.panel.get('widget').set('media',1);
 	}
 	el.c1Find('.-addExistingFile').addEventListener('select_by_pointer',function(){
-		this.value && $fn('page::addDbFile')(pid,this.value).run();
+		this.value && $fn('page::FileAdd')(pid,this.value).run();
 	})
 	if (el.c1Find('.-sortFilesSelect')) {
 		el.c1Find('.-sortFilesSelect').addEventListener('change',function(){
 			this.value && $fn('page::filesSetOrder')(pid,this.value,'asc') && reload();
-			// const val = this.value;
-			// val === 'name'         && $fn('page::filesSetOrder')(pid,'name','asc') && reload();
-			// val === 'name_reverse' && $fn('page::filesSetOrder')(pid,'name','asc') && reload();
-			// val === 'date'         && $fn('page::filesSetOrder')(pid,'date','asc') && reload();
-			// val === 'reverse'      && $fn('page::filesSetOrder')(pid,'reverse') && reload();
 		});
 		el.c1Find('.-deleteFilesSelect').addEventListener('change',function(){
 			const val = this.options[this.selectedIndex].value;
@@ -323,13 +314,15 @@ c1.onElement('.qgCmsFileManager',el=>{
 	}
 });
 c1.onElement('.qgCmsFront1ModuleManager',el=>{
+	c1.c1Use('loading',1); // preload
+
 	const searchInp = el.c1Find('input');
 	searchInp.addEventListener('input',function(){
-		var els = el.c1FindAll('.-module-boxes > *'), i=0, box;
-		while (box = els[i++]) {
+		for (let box of el.c1FindAll('.-module-boxes > *')) {
 			box.style.display = box.textContent.toLowerCase().match(this.value.toLowerCase())?'flex':'none';
 		}
 	})
+
 	/* add module */
 	el.addEventListener('mousedown',e=>{
 		if (e.which !== 1) return;

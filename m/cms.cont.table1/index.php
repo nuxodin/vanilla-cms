@@ -4,7 +4,6 @@ namespace qg;
 if ($Cont->edit) {
 	html::addJsFile($Cont->modUrl.'pub/edit.js');
 }
-
 if (!$Cont->SET->has('cols')) {
 	$Cont->SET['cols'] = 2;
 	$Cont->SET['rows'] = 2;

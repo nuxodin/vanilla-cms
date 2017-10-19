@@ -1,4 +1,4 @@
-function scrollOffset(){
+function l1ScrollOffset(){
     return document.getElementById('head').offsetHeight - 1;
 }
 !function() {
@@ -7,7 +7,7 @@ function scrollOffset(){
     function gotoHash(){
         var el = document.getElementById(location.hash.substring(1));
         if (!el) return;
-        var top = el.getBoundingClientRect().top + pageYOffset - scrollOffset();
+        var top = el.getBoundingClientRect().top + pageYOffset - l1ScrollOffset();
         document.documentElement.scrollTop = document.body.scrollTop = top;
     }
     requestAnimationFrame(gotoHash);
@@ -38,6 +38,7 @@ function scrollOffset(){
             el.removeAttribute('id'); // tricky hack! (ie only needed?)
             location.hash = id; // ie10 does not preventDefault :(
             el.setAttribute('id',id);
+			markLinksActivated('#'+id);
         });
         e.preventDefault();
     })
@@ -56,7 +57,7 @@ function scrollOffset(){
     // scroll
 	function scrollToEl(el, cb) {
 		if (!el) return;
-        var top = el.getBoundingClientRect().top + pageYOffset - scrollOffset();
+        var top = el.getBoundingClientRect().top + pageYOffset - l1ScrollOffset();
 		$('html, body').animate({
 		    scrollTop: top
 		},{
@@ -71,26 +72,24 @@ function scrollOffset(){
 
     /* mark link */
     var listen = function(e){
-		var best = null;
 		var winHeight = window.innerHeight * 0.5; // obere 50%
 		var winner = null;
-		var els = document.body.getElementsByClassName('qgCmsCont');
+		var winnerValue = null;
+		var els = document.querySelectorAll('.qgCmsCont[id]');
 		for (var i=0,el; el=els[i++];) {
-			if (!el.hasAttribute('id')) continue;
 			var pos = el.getBoundingClientRect();
-			var bottom = Math.min( pos.bottom, winHeight );
-			var top = Math.max( pos.top, 0 );
+			var bottom = Math.min(pos.bottom, winHeight);
+			var top = Math.max(pos.top, 0);
 			var visible = bottom-top;
-			if (best===null || visible > best) {
+			if (winnerValue===null || visible > winnerValue) {
 				winner = el;
-				best = visible;
+				winnerValue = visible;
 			}
 		}
-		els = document.body.getElementsByClassName('scrollSection');
-		for (i=0,el; el=els[i++];) {
-			el.classList.remove('scrollSection');
-		}
-        if (!winner) return;
+		els = document.querySelectorAll('.scrollSection');
+		for (i=0,el; el=els[i++];) el.classList.remove('scrollSection');
+
+		if (!winner) return;
 		winner.classList.add('scrollSection');
 		winner && markLinksActivated('#'+winner.id);
 	};
@@ -99,21 +98,22 @@ function scrollOffset(){
     window.addEventListener('scroll',listen);
     window.addEventListener('resize',listen);
 
-	var lastWinner;
+	var latestWinner;
 	function markLinksActivated(id){
-		if (lastWinner === id) return;
-		lastWinner = id;
-		document.querySelectorAll('.c1-scrollSectionActive').forEach(function(el){
-			el.classList.remove('.c1-scrollSectionActive');
-		})
+		if (latestWinner === id) return;
+		latestWinner = id;
+		var i, el;
+
+		var els = document.querySelectorAll('.hashLinkActive');
+		for (i=0,el; el=els[i++];) el.classList.remove('hashLinkActive');
+
 		var els = document.querySelectorAll('a[href]');
-		for (var i=0,el; el=els[i++];) {
+		for (i=0,el; el=els[i++];) {
 			var elHash = el.href.match(/#.*/);
 			if (!elHash) continue;
 			if (elHash[0] !== id) continue;
-			el.classList.add('c1-scrollSectionActive');
+			el.classList.add('hashLinkActive');
 		}
 	}
-    /* */
 
 }();

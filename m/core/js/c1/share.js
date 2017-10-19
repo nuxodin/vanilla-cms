@@ -67,6 +67,7 @@
         });
         c1.c1Use('dialog',function(){
             var dialog = new c1.dialog({
+                body:' ',
                 class:'c1Share',
                 title:'Teilen',
                 buttons:[{title:'schliessen'}],

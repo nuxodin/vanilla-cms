@@ -33,7 +33,6 @@ $getUl = function ($Page) use ($Cont, &$level, &$getUl) {
 			$Children[] = $Content;
 		}
 	}
-
 	// filter
 	foreach ($Children as $key => $C) {
 		if (!trim($C->Title())) unset($Children[$key]);

@@ -217,9 +217,9 @@ qg::on('action', function() {
 			'orientation'      => $SET['orientation']->v,
 			'theme_color'      => $SET['theme_color']->v,
 			'background_color' => $SET['background_color']->v,
-			'category'         => $SET['category']->v,
+			'categories'       => explode("\n", $SET['categories']->v),
 		];
-		foreach ($app as $name => $value) if ($value === '') unset($app[$name]);
+		foreach ($app as $name => $value) if ($value === '' || $value === [0=>'']) unset($app[$name]);
 
 		if ($SET['service-worker']->v) {
 			$app['serviceworker'] = [

@@ -82,14 +82,16 @@ window.Rte.ui = {
 		my.div.addEventListener('mouseenter',()=>{
 			clearTimeout(moreTimeout);
 			moreTimeout = setTimeout(()=>{
-				Rte.ui.div.querySelector('.-more').style.display = 'flex';
+				//Rte.ui.div.querySelector('.-more').style.display = 'flex';
+				Rte.ui.div.querySelector('.-more').classList.add('-show');
 			},300);
 			Rte.ui.mouseover = 1;
 		});
 		my.div.addEventListener('mouseleave',()=>{
 			clearTimeout(moreTimeout);
 			moreTimeout = setTimeout(()=>{
-				Rte.ui.div.querySelector('.-more').style.display = 'none';
+				//Rte.ui.div.querySelector('.-more').style.display = 'none';
+				Rte.ui.div.querySelector('.-more').classList.remove('-show');
 			},300);
 			Rte.ui.mouseover = 0;
 		});

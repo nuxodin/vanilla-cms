@@ -44,6 +44,7 @@ a:hover {}
   background-color: rgb(17, 17, 17);
   color: rgb(255, 255, 255);
   padding: 20px 0px;
+  z-index:1;
 }
 #head a {
   color: inherit;
@@ -104,15 +105,24 @@ a:hover {}
   text-align: center;
   display: block;
 }
+
 .Left {
-  float: left;
-  margin-right: 10px;
-  margin-top: 3px;
-  margin-bottom: 3px;
+	display:block;
+	text-align:left;
 }
 .Right {
-  float: right;
-  margin-left: 10px;
-  margin-top: 3px;
-  margin-bottom: 3px;
+	display:block;
+	text-align:right;
+}
+img.Left {
+    float: left;
+    margin-right: 10px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+img.Right {
+    float: right;
+    margin-left: 10px;
+    margin-top: 3px;
+    margin-bottom: 3px;
 }

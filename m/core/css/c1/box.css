@@ -6,7 +6,13 @@
 .c1-box.c1-box { /* stronger */
     padding:0;
 }
-.c1-box > .-head {
+.c1-box > .-body {
+    flex:auto;
+    overflow:auto;
+    padding:20px;
+}
+.c1-box > .-head ,
+.c1-box > .-foot {
     flex:0 0 auto;
     display:flex;
     background:#000;
@@ -16,10 +22,8 @@
 .c1-box > .-head > .-title {
     flex:1;
 }
-.c1-box > .-body {
-    flex:auto;
-    overflow:auto;
-    padding:20px;
+.c1-box > .-foot {
+    background:transparent;
 }
 
 

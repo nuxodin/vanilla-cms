@@ -33,7 +33,7 @@
 		if (fileUrl.match(location.host)) {
 			const intern = fileUrl.match(/dbFile\/([0-9]+)\//)[1];
 			if (intern) {
-				cms.txtIdToPid(tid, pid => $fn('page::addDbFile')(pid, intern).run());
+				cms.txtIdToPid(tid, pid => $fn('page::FileAdd')(pid, intern).run());
 				return;
 			}
 		}
@@ -119,7 +119,7 @@
 			if (fileUrl.match(location.host)) {
 				const match = fileUrl.match(/dbFile\/([0-9]+)\//);
 				if (match) {
-					$fn('page::addDbFile')(pid, match[1]).run(complete);
+					$fn('page::FileAdd')(pid, match[1]).run(complete);
 					return;
 				}
 			}

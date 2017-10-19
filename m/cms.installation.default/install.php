@@ -30,7 +30,7 @@ if (!D()->one("SELECT id FROM page WHERE id = 2")) {
 }
 // Service
 if (!D()->one("SELECT id FROM page WHERE id = 10")) {
-	$Page = Page(1)->createChild(['id'=>10, 'access'=>1, 'visible'=>0, 'searchable'=>1, 'sort'=>2]);
+	$Page = Page(1)->createChild(['id'=>10, 'access'=>1, 'visible'=>0, 'searchable'=>1, 'sort'=>4]);
 	$Page->changeGroup($adminGrp, 1);
 	$Page->Title('de','Service');
 	$Page->Title('en','Service');
@@ -46,7 +46,7 @@ if (!D()->one("SELECT id FROM page WHERE id = 20")) {
 
 // System
 if (!D()->one("SELECT id FROM page WHERE id = 40")) {
-	$Page = Page(1)->createChild(['id'=>40, 'access'=>0, 'visible'=>0, 'sort'=>3, 'searchable'=>0]);
+	$Page = Page(1)->createChild(['id'=>40, 'access'=>0, 'visible'=>0, 'searchable'=>0, 'sort'=>8]);
 	$Page->changeGroup($adminGrp, 1);
 	$Page->Title('de','System');
 	$Page->Title('en','System');

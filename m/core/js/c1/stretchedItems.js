@@ -44,8 +44,11 @@
 		if (!widthContainer) return;
 		minWidth = parseInt(Parent.getAttribute('data-items-min-width') || style.getPropertyValue('min-width')) || 200;
 		minWidth = Math.min(widthContainer, minWidth);
-		colGap   = parseInt(Parent.getAttribute('data-items-gap') || style.getPropertyValue('column-gap') || style.getPropertyValue('-webkit-column-gap') || style.getPropertyValue('-moz-column-gap')) || 0;
-		rowGap   = parseInt(Parent.getAttribute('data-items-row-gap') || 0);
+		colGap   = rowGap = style.getPropertyValue('column-gap') || style.getPropertyValue('-webkit-column-gap') || style.getPropertyValue('-moz-column-gap') || 0;
+		if (Parent.hasAttribute('data-items-gap'))     colGap = Parent.getAttribute('data-items-gap');
+		if (Parent.hasAttribute('data-items-row-gap')) rowGap = Parent.getAttribute('data-items-row-gap');
+		rowGap = parseInt(rowGap);
+		colGap = parseInt(colGap);
 
 		cols = Math.floor((widthContainer + colGap) / (minWidth + colGap));
 

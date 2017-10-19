@@ -33,7 +33,7 @@ class serverInterface_cms_vers {
 			'page::setDefaultById'    => 'Einstellung geändert',
 			'page::FilesSort'         => 'Dateireihenfolge geändet',
 			'page::filesSetOrder'     => 'Dateien sortiert',
-			'page::addDbFile'         => 'Datei hinzugefügt',
+			'page::FileAdd'           => 'Datei hinzugefügt',
 			'page::FileDelete'        => 'Datei gelöscht',
 			'page::filesDeleteDouble' => 'Doppelte Dateien gelöscht',
 			'page::copy'              => 'Kopiert',

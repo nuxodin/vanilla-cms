@@ -2,8 +2,8 @@
 c1.form = {
     serializeObject: function(element) {
         var els = element.elements || element.querySelectorAll('input, select, textarea');
-        els = Array.from(els);
-        els.push(els);
+        els = Array.prototype.slice.call(els);
+        els.push(els); // zzz needed?
         var object = Object.create(null);
         els.forEach(function(el){
             var value = c1.form.elementValue(el);
@@ -51,9 +51,14 @@ c1.form = {
         inp.multiple = options.multiple;
         inp.accept   = options.accept;
         var P = new Promise(function(resolve, reject){
-            inp.onchange = function(){ resolve(inp.files); }
+			setTimeout(function(){ // bug, change sometimes not fired without this timeout (chrome tested)
+				inp.onchange = function(){
+					resolve(inp.files);
+					inp.onchange = null;
+				}
+			    inp.click();
+			},50)
         });
-        inp.click();
         return P;
     }
 }

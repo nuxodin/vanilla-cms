@@ -1,4 +1,12 @@
-<?php namespace qg ?>
+<?php
+namespace qg;
+
+if (isset($_GET['id'])) {
+	include 'detail.php';
+	return;
+}
+
+?>
 <div class=beBoxCont>
 	<div class=c1-box style="overflow:auto; width:auto; flex:0 0 auto">
 		<div class=-head>Tools</div>
@@ -57,24 +65,28 @@
 		</div>
 	<?php } else { ?>
 		<div class=c1-box style="height:88vh; overflow:auto; width:auto;">
-			<div class=-head><?=hee($_GET['message'])?></div>
+			<div class=-head> <?=hee($_GET['message'])?> </div>
 			<table class=c1-style>
 				<?php
-				$rows = D()->all(
-					"SELECT * FROM m_error_report WHERE message = ".D()->quote($_GET['message'])." ORDER BY time DESC"
-				);
+				$rows = D()->all("SELECT * FROM m_error_report WHERE message = ".D()->quote($_GET['message'])." ORDER BY time DESC");
 				?>
 				<tbody>
 					<?php foreach ($rows as $row) { ?>
 						<tr style="white-space:nowrap">
-							<td> <?=$row['time']?> <br> <?=$row['log_id']?>
-							<td> <a href="<?=hee(appURL.'editor/?file='.urlencode($row['file']).'&line='.$row['line'].'&col='.$row['col'])?>" target=_blank title="<?=hee($row['file'])?>">goto</a>
+							<td>
+								<a href="<?=URL($Cont->Page->url())->addParam('id',$row['id'])?>">
+									<?=$row['time']?> <br> <?=$row['log_id']?>
+								</a>
 							<td> <a href="<?=hee($row['request'])?>" target=_blank>
 									<?=$row['request']?>
 								 </a><br>
 								 <?=$row['browser']?><br>
 								 <?=$row['ip']?>
-							<td> <pre style="font-size:10px; box-shadow:0 0 5px; padding:4px"><?=hee($row['sample'])?></pre>
+							<td>
+								<a href="<?=hee(appURL.'editor/?file='.urlencode($row['file']).'&line='.$row['line'].'&col='.$row['col'])?>" target=_blank title="<?=hee($row['file'])?>" style="color:inherit; text-decoration:none">
+									<pre style="font-size:10px; box-shadow:0 0 5px; padding:4px"><?=hee($row['sample'])?></pre>
+									<?php if (!$row['sample']) echo 'edit File'; ?>
+								</a>
 							<td>
 								<?php
 								if (!$row['backtrace']) continue;

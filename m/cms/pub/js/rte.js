@@ -56,6 +56,7 @@
 				let el = qgSelection.surroundContents(document.createElement('a')); // todo: selection on multiple elements
 				Rte.element = 0; // force rte-event "elementchange"!
 				// set initial value
+				inp.value = '';
 				const txt = el.textContent.trim();
 				if (txt.match(/^http[^\s]+$/) || txt.match(urlRegexp) || txt.match(mailRegexp)) {
 					inp.value = txt;
@@ -67,7 +68,13 @@
 						inp.dispatchEvent(new Event('input'));
 					});
 				}
-				setTimeout(()=>inp.focus(),1); // todo: why timeout?
+				setTimeout(()=>{
+					el.classList.add('qgRte_fakeSelection');
+					inp.addEventListener('blur',function(){
+						el.classList.remove('qgRte_fakeSelection');
+					},{once:true})
+					inp.focus();
+				},1); // todo: why timeout?
 			}
 		},
 		check(el) { return el && el.matches('a, a > *'); },

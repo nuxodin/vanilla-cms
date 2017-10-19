@@ -37,7 +37,8 @@ class dbTable {
 				if ($this->Fs[$name]->isPrimary())       { $this->Primaries[$name] = $this->Fs[$name]; }
 				if ($this->Fs[$name]->isAutoIncrement()) { $this->AutoIncrement    = $this->Fs[$name]; }
 			}
-			isset($this->Fs['_qgtmp']) && count($this->Fs) > 1 && $this->Db->query("ALTER TABLE ".$this." DROP _qgtmp");
+			//isset($this->Fs['_qgtmp']) && count($this->Fs) > 1 && $this->Db->query("ALTER TABLE ".$this." DROP _qgtmp"); // zzz
+			isset($this->Fs['_qgtmp']) && count($this->Fs) > 1 && $this->remField('_qgtmp');
 		}
 		return $this->Fs;
 	}
@@ -303,15 +304,16 @@ class dbTable {
 		$data = $data + ['type'=>'varchar','lenght'=>255,'null'=>false];
 		$sql = "ALTER TABLE ".$this." ADD ".$data['name']." ".db::_array_to_column_definition($data);
 		$this->Db->query($sql);
-		$this->Db->query("INSERT IGNORE INTO qg_db_field SET tab = '".$this."', name = '".$data['name']."'");
+		$this->Db->query("INSERT IGNORE INTO qg_db_field SET tab = '".$this."', name = ".D()->quote($data['name']));
 		$this->Fs = null;
 		$this->fieldsCache->remove();
 		return $this->{$data['name']};
 	}
 	function remField($name) {
-		$this->Db->query("REMOVE FROM qg_db_field WHERE tab = '".$this."' AND name = '".$name."'");
+		$this->Db->query("DELETE FROM qg_db_field WHERE tab = '".$this."' AND name = ".D()->quote($name));
 		$this->Db->query("ALTER TABLE ".$this." DROP ".$name." ");
 		$this->fieldsCache->remove();
-		$this->Fs = null;
+		unset($this->Fs[$name]);
+		//$this->Fs = null;
 	}
 }

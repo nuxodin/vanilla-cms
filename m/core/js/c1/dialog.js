@@ -97,15 +97,15 @@ c1.c1Use(['focusIn','onElement'],function(){
         '	<div class=-head>'+
 		'		<div class=-title>'+options.title+'</div>'+
 		'	</div>'+
-        '	<div class=-body>'+
         (options.body?
-        '		<div style="margin-bottom:.8em">'+(options.body||'')+'</div>':'')+
-        '		<div class=-buttons style="margin:-.4em; display:flex; flex-wrap:wrap; justify-content: flex-end;"></div>'+
+        '	<div class=-body>'+options.body+'</div>':'')+
+        '	<div class=-foot>'+
+        '		<div class=-buttons style="xmargin:-.4em; flex:1; display:flex; flex-wrap:wrap; justify-content: flex-end;"></div>'+
 		'	</div>'+
 		'</form>';
 		var element = this.element = c1.dom.fragment(str).firstChild;
         if (options.class) element.className += ' '+options.class
-		var btnCont = element.c1Find('>.-body>.-buttons');
+		var btnCont = element.c1Find('>.-foot>.-buttons');
 		element.addEventListener('submit',  function(e){ e.preventDefault(); });
         options.buttons && options.buttons.forEach(function(btn, i){
             var el = document.createElement('button');
@@ -182,7 +182,7 @@ c1.c1Use(['focusIn','onElement'],function(){
 
     /* backdrop */
     var bdDiv = document.createElement('div');
-    bdDiv.style.cssText = 'position:fixed; top:0; left:0; bottom:0; right:0; background:rgba(0,0,0,.4); transition:opacity .16s linear; opacity:0';
+    bdDiv.style.cssText = 'position:fixed; top:-70px; left:0; bottom:0; right:0; background:rgba(0,0,0,.4); transition:opacity .16s linear; opacity:0'; // top:-70px => addressbar toggle on scroll
 	bdDiv.className = 'c1-backdrop';
     var bdTimeout = null;
     var backdrop = {

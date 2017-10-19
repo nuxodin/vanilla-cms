@@ -65,15 +65,16 @@
 			var parentNode = this.parentNode;
 			parentNode && parentNode.removeChild(this);
 		},
+		c1Id: function() {
+			return this.id || (this.id = 'c1-gen-'+(autoId++));
+		},
 		c1FindAll: function(selector){
-			if (!this.id) this.id = 'c1-gen-'+(autoId++);
-			var elements = this.querySelectorAll('#'+this.id+' '+selector);
+			var elements = this.querySelectorAll('#'+this.c1Id()+' '+selector);
 			//return Array.from(elements); // no ie11
 			return elements;
 		},
 		c1Find: function(selector){
-			if (!this.id) this.id = 'c1-gen-'+(autoId++);
-			return this.querySelector('#'+this.id+' '+selector);
+			return this.querySelector('#'+this.c1Id()+' '+selector);
 		},
 		/* (non standard) only ie supports native */
 		removeNode: function(children) {
@@ -129,7 +130,7 @@
 	if (!el.contains(t)) {
 		HTMLElement.prototype.contains = function(contains) {
 			return function(el) {
-				return contains.call(this, el.nodeType === 1 ? el : el.parentNode);
+				return contains.call(this, !el || el.nodeType === 1 ? el : el.parentNode);
 			};
 		}(HTMLElement.prototype.contains);
 	}

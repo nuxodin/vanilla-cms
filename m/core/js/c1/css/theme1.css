@@ -5,7 +5,8 @@
 	border-collapse:collapse;
 	background:#fff;
 }
-.c1-style > thead {
+.c1-style > thead > tr > th {
+	background-color:inherit;
 	position:sticky;
 	top:0;
 	left:0;

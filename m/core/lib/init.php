@@ -13,7 +13,6 @@ class liveClient {
 	}
 	static function register() {
 		$hash = base64_encode(random_bytes(24));
-		//$hash = randstring(32); // better? // duplicate entry errors!!? WHY!?!?!?
 		setcookie('cid', $hash, 2004929530, appURL, false, QG_HTTPS, true);
 		$_COOKIE['cid'] = $hash;
 		$_SESSION['liveClient'] = D()->client->insert([

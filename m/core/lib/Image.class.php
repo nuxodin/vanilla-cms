@@ -10,12 +10,10 @@ class Image {
 			case(IMAGETYPE_PNG):  return 'image/png';
 		}
 	}
-    static function create($w, $h) { return new Image(imagecreatetruecolor($w, $h) ); }
+    static function create($w, $h) { return new Image(imagecreatetruecolor(max(1,$w), max(1,$h)) ); }
 
 	function __construct($path = null) {
-		if ($path) {
-			$this->from($path);
-		}
+		if ($path) $this->from($path);
 	}
 	// ignore warnings like "gd-jpeg, libjpeg: recoverable error: Invalid SOS parameters for sequential JPEG" and "gd-jpeg, libjpeg: recoverable error: Invalid SOS parameters for sequential JPEG"
 	function fromjpeg($path)	{ $this->Img = @imagecreatefromjpeg($path); }

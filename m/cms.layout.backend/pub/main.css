@@ -80,7 +80,10 @@ html, body {
 	box-sizing:border-box;
 
 	overflow:auto; /* test */
-	background:rgba(255,255,255,.2)
+	background:rgba(255,255,255,.2);
+
+	position: relative; /* neu */
+    z-index: 0;
 }
 .beBoxCont {
 	display:flex;

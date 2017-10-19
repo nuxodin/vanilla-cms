@@ -136,12 +136,21 @@ Rte = {
 };
 c1.ext(c1.Eventer,Rte);
 
-//Rte.on('activate', function() {
-	//insertBrOnReturn ?
-	//styleWithCSS ?
-	qgExecCommand('enableObjectResizing', false, false);
-	qgExecCommand('enableInlineTableEditing', false, false); // bug: if i first click in the table the nativ handles appear
-//});
+// fake Selection
+{
+	let el = c1.dom.fragment(`<style>.qgRte_fakeSelection {}</style>`).firstChild;
+	document.head.append(el);
+	let style = el.sheet.cssRules[0].style;
+	style.background = 'rgba(150,150,150,.9)';
+	style.color = '#fff';
+	Rte.fakeSelection = {
+		addClass   (el){ el.classList.add   ('qgRte_fakeSelection'); },
+		removeClass(el){ el.classList.remove('qgRte_fakeSelection'); },
+	}
+}
+
+qgExecCommand('enableObjectResizing', false, false);
+qgExecCommand('enableInlineTableEditing', false, false); // bug: if i first click in the table the nativ handles appear
 
 //ie: prevent resizable handle bug: if i move the image, it will show the handles
 document.addEventListener('mouseup', e=>{

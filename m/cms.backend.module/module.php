@@ -14,6 +14,7 @@ if (isset($vars['delModuleFile'])) {
 	unlink($file);
 }
 
+//$installed     = is_dir(sysPATH.$name);
 $mTime         = dir_mtime(sysPATH.$name)-1;
 $tmp           = qg::Store()->index();
 $storeData     = $tmp[$name] ?? false;

@@ -88,7 +88,7 @@
 	font-weight:bold;
 }
 #cmsTreeContainer .dynatree-active a:after {
-	content: '◄';
+	content: '◀';
     display: inline-block;
     margin-left: 5px;
 }

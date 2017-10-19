@@ -12,6 +12,8 @@
 
     if (ok) return;
 
+    window.error_report_count = 1000; // dont send errors
+
     let ignore = document.cookie.replace(/(?:(?:^|.*;\s*)qgCMS_browserCheck_ignore\s*\=\s*([^;]*).*$)|^.*$/, "$1");
     if (ignore) return;
 
@@ -95,7 +97,5 @@
         div.c1ZTop();
         clearInterval(iv);
     },200)
-
-    window.error_report_count = 1000; // dont send errors
 
 })();

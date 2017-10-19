@@ -50,7 +50,8 @@ function error_report($vs) {
 				}
 			}
 			$content = implode('', $lines);
-			$vs['sample'] = substr($content, max($position - 60,0), 120);
+			$content = substr_replace($content, '❌', $position, 0); // ⚡
+			$vs['sample'] = substr($content, max($position - 100,0), 201);
 		}
 	}
 

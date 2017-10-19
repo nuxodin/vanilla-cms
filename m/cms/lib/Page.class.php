@@ -553,13 +553,13 @@ class Page {
 	}
 	function FileAdd($file=null, $name=null) {
 		$File = ($file instanceof dbFile) ? $file : dbFile::add($file);
-		if ($name === null) $name = '_'.randString(7);
-		D()->page_file->insert([
-			'page_id' => $this,
-			'file_id' => $File,
-			'name'    => $name,
-			'sort'    => D()->one($this->sql("SELECT min(sort) FROM page_file WHERE page_id = ".$this))-1,
-		]);
+		$row = ['page_id' => $this, 'file_id' => $File];
+		if ($name === null) {
+			$row['sort'] = D()->one($this->sql("SELECT min(sort) FROM page_file WHERE page_id = ".$this))-1;
+			$name = '_'.randString(7);
+		}
+		$row['name'] = $name;
+		D()->page_file->ensure($row);
 		$this->_Files = null;
 		return $File;
 	}

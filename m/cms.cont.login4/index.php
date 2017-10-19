@@ -1,7 +1,6 @@
 <?php namespace qg ?>
 <div>
 <?php
-
 if (!$Cont->edit && Usr()->is()) {
 	$redirect = (int)$Cont->SET['redirect']->v;
 	if ($redirect) {

@@ -28,7 +28,7 @@
 	font-family:Arial;
     background-color:#222;
     color:#fff;
-    max-width:264px;
+    max-width:297px;
     transition:top .14s;
     transition-property:top, left, opacity;
     will-change:top, left;
@@ -46,6 +46,9 @@
 #qgRteToolbar .-more {
     color:#fff;
     display:none;
+}
+#qgRteToolbar .-more.-show {
+    display:flex;
 }
 #qgRteToolbar > .-more.c1-focusIn {
 	display:flex !important;
@@ -75,10 +78,10 @@ body #qgRteToolbar [hidden] {
 }
 
 #qgRteToolbar td {
-	height:31px;
+	height:39px;
     box-sizing:border-box;
     vertical-align: middle;
-    padding:5px;
+    padding:8px 10px;
 }
 #qgRteToolbar input {
     border:none;
@@ -99,8 +102,8 @@ body #qgRteToolbar [hidden] {
 	box-sizing:border-box;
 	cursor:pointer;
 	line-height:1.2;
-    width:32px;
-	height:32px;
+    width:36px;
+	height:36px;
     padding:5px 8px;
     xpadding:16px;
     outline:.5px solid #444;
@@ -111,13 +114,19 @@ body #qgRteToolbar [hidden] {
 }
 
 #qgRteToolbar .-item.-select {
-    width:65px;
+    width:73px;
 	position:relative;
-    padding:5px;
+    padding:5px 8px;
     flex:1 1 auto;
+    padding-right:16px;
 }
-#qgRteToolbar .-item.-select > div {
-	padding:4px 3px 3px 3px;
+#qgRteToolbar .-item.-select:after {
+    content:'▼';
+    position:absolute;
+    top:50%;
+    right:5px;
+    transform:translateY(-50%);
+    font-size:.8em;
 }
 #qgRteToolbar .-item.-button {
     width:auto;
@@ -132,6 +141,7 @@ body #qgRteToolbar [hidden] {
 
 #qgRteToolbar .-options {
     display:none;
+    padding:3px 3px 3px 3px;
 	position: absolute;
     left:-1px;
     top:100%;

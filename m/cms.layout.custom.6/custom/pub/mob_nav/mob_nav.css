@@ -26,7 +26,7 @@
   }
 
   /* overlay */
-  #container:after {
+  #container::after {
       content:'';
       opacity:0;
       visibility:hidden;
@@ -37,7 +37,7 @@
       pointer-events: none; /* ? */
       transition:opacity .7s;
   }
-  body.mob_nav_open #container:after {
+  body.mob_nav_open #container::after {
       opacity:1;
       visibility:visible;
   }

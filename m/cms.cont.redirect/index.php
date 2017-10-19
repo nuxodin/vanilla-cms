@@ -38,6 +38,11 @@ if (!$Cont->edit) {
 }
 ?>
 <div style="padding:15px; background-color:#ee9; color:#000; box-shadow:0 0 8px; background-image:linear-gradient(#FBFBE7,#F0F0AC)">
+	<style>
+	.-m-cms-cont-redirect > span {
+		max-width:100%;
+	}
+	</style>
 	<h2><?=L('Weiterleitung')?></h2>
 	<?=L('Interne Seite (Vorschläge) oder URL:')?><br>
 	<input value="<?=hee($link)?>" type=qgcms-page onblur="$fn('cms::setTxt')(<?=$link->id?>, $(this)[0].value); $fn('page::reload')(<?=$Cont?>)" style="max-width:100%; width:400px" />
@@ -63,9 +68,4 @@ if (!$Cont->edit) {
 		<?=L('Diese Seite wird nur im Edit-Modus angezeigt.')?> <br>
 		<?=L('Normal wird direkt an die definierte Adresse weitergeleitet.')?>
 	</div>
-	<style>
-	.-m-cms-cont-redirect > span {
-		max-width:100%;
-	}
-	</style>
 </div>

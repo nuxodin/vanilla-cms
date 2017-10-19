@@ -52,7 +52,7 @@ function reporting_send() {
                 $path = substr($filePATH, strlen($sysPATH));
                 list($module, $path) = explode('/',$path,2);
 				$row['module']         = $module;
-				$row['module_version'] = module::index()[$module]['version'];
+				$row['module_version'] = module::index()[$module]['version'] ?? '';
 				$row['module_path']    = $path;
             }
             $file = $filePATH;

@@ -42,7 +42,6 @@ class serverInterface_page {
 	}
 	static function getPart($pid, $part, $vars=[]) {
 		$str = Page($pid)->getPart($part, $vars);
-//		trigger_error('page::getPart needed?');
 		return $str;
 	}
 	static function reload($pid, $vars=[]) {
@@ -182,9 +181,12 @@ class serverInterface_page {
 			$TrashPage = Page($trash);
 			$TrashPage->insertBefore($P, $TrashPage->Cont('main'));
 			$P->set('access', 0);
-			$P->onlineEnd(time()); // no effect!?
-			D()->query("DELETE FROM page_access_usr WHERE page_id = '".$P."' AND access < 2 ");
-			D()->query("DELETE FROM page_access_grp WHERE page_id = '".$P."' AND access < 2 ");
+			//$P->onlineEnd(time()); // no effect!? // why this
+			foreach ($P->Bough() as $Child) {
+				$Child->vs['access'] !== null && $Child->set('access', 0);
+				D()->query("DELETE FROM page_access_usr WHERE page_id = '".$Child."' AND access < 2 ");
+				D()->query("DELETE FROM page_access_grp WHERE page_id = '".$Child."' AND access < 2 ");
+			}
 		}
 		G()->Answer['cmsInfo'] = L(($P->vs['type']==='c'?'Der Inhalt':'Die Seite').' wurde gelöscht.');
 		return $return;
@@ -211,8 +213,7 @@ class serverInterface_page {
 		];
 		return $d;
 	}
-
-	/* SET */
+	// settings
 	static function setDefault($pid, $v, $reload=true) {
 		if (!self::checkRight(2)) return false;
 		Page($pid)->SET->setDefault($v);
@@ -256,7 +257,6 @@ class serverInterface_page {
 		$S->setUser($v);
 		return 1;
 	}
-
 	/* Files */
 	static function FileDelete($pid, $name) {
 		if (!self::checkRight(2)) return false;
@@ -271,21 +271,26 @@ class serverInterface_page {
 		G()->Answer['cmsInfo'] = L('Die Dateien wurden sortiert.');
 		return self::reload($pid);
 	}
-	static function FileAdd($pid, $file) {
+	static function FileAdd($pid, $file=null, $name=null) {
 		if (!self::checkRight(2)) return false;
-		$File = Page($pid)->FileAdd($file); // security!?
-		return ['url'=>$File->url()];
-		G()->Answer['cmsInfo'] = L('Die Datei wurde hinzugefügt.');
-	}
-	static function addDbFile($pid, $id) {
-		if (!self::checkRight(2)) return false;
-		$DbFile = dbFile($id);
-		if ($DbFile->access()) {
-			Page($pid)->FileAdd($DbFile->clone());
-			G()->Answer['cmsInfo'] = L('Die Datei wurde hinzugefügt.');
+		// file access check
+		if (is_numeric($file)) {
+			$file = dbFile($file);
+			if (!$file->access()) {
+				trigger_error('No access ('.$file.')');
+				G()->Answer['cmsInfo'] = L('Ihnen fehlen die nötigen Berechtigungen.');
+				return;
+			}
+			$file = $file->clone();
+		} else if ($file !== null && !preg_match('/^https?:\/\//', $file)) {
+			trigger_error('other then http/https not allowed ('.$file.')');
+			G()->Answer['cmsInfo'] = L('Ihnen fehlen die nötigen Berechtigungen.');
 			return;
 		}
-		G()->Answer['cmsInfo'] = L('Ihnen fehlen die nötigen Berechtigungen.');
+		// main logic
+		$File = Page($pid)->FileAdd($file, $name);
+		G()->Answer['cmsInfo'] = L('Die Datei wurde hinzugefügt.');
+		return ['url'=>$File->url()];
 	}
 	static function filesSetOrder($pid, $what) {
 		if (!self::checkRight(2)) return false;
@@ -366,8 +371,7 @@ class serverInterface_page {
 		self::reload($pid);
 		return 1;
 	}
-
-	/* urls */
+	// urls
 	static function urlCustomSet($pid , $lang , $url) {
 		if (!self::checkRight(2)) return false;
 		Page($pid)->urlSet($lang, [
@@ -390,7 +394,7 @@ class serverInterface_page {
 		]);
 		return 1;
 	}
-
+	// redirects
 	static function requestAdd($pid, $v) { // todo rename to redirectAdd
 		if (!self::checkRight(2)) return false;
 		if (serverInterface_Cms::requestUsed($v)) { G()->Answer['cmsWarning'] = L('Diese URL wird bereits verwendet.'); return; }

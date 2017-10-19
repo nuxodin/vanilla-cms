@@ -387,7 +387,7 @@ c1.c1Use('tableHandles', tH=>{
 Rte.ui.config = {
 	rteDef:{
 		main:['LinkInput','Bold','Insertunorderedlist','Link','Removeformat','Format','Style'],
-		more:['Italic','Insertorderedlist','Strikethrough','Underline','Hr','Code','Table','Speech','LinkTarget','ImgOriginal','ImgOriginalRetina','AttributeTitle','ImageDimension','Tree']
+		more:['Italic','Insertorderedlist','Strikethrough','Underline','Hr','Code','Table','LinkTarget','ImgOriginal','ImgOriginalRetina','AttributeTitle','ImageDimension','Tree']
 	},
 	rteMin:{
 		main:['Bold','Insertunorderedlist','Link','Style']

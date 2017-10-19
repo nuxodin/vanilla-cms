@@ -195,6 +195,10 @@ $fn.run = function(cb) {
 		onComplete: function(res) {
 			if (!res) return;
 			var results = res.serverInterface;
+			if (!results) {
+				console.warn('serverInterface no results');
+				return;
+			}
 			while (results.length) {
 				var value = results.shift();
 				var data  = fns.shift();

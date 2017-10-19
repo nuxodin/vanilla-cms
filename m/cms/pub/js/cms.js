@@ -45,7 +45,7 @@
 
 	$fn.on('page::insertBefore', function(e) {
 		if (e.initiator === 'cms.dnd') return;
-		if (e.arguments[1] == Page) {
+		if (e.arguments[1] == window.Page) {
 			$fn('page::reload')(e.arguments[1]);
 		} else {
 			var els = document.querySelectorAll('.-pid'+e.arguments[1]);

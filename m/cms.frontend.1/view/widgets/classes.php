@@ -4,7 +4,7 @@
 	<div style="margin-top:10px">
 		<?php
 		$classes = $Cont->classes();
-		foreach (D()->query("SELECT *, count(class) as count FROM ".table('page_class')." GROUP BY class ORDER BY page_id = '".$Cont."', count(*) DESC LIMIT 20") as $vs) {
+		foreach (D()->query("SELECT class, count(class) as count FROM ".table('page_class')." GROUP BY class ORDER BY page_id = '".$Cont."', count(*) DESC LIMIT 20") as $vs) {
 			$cl = $vs['class'];
 			if (!$cl || isset($classes[$cl])) continue;
 			$classes[$cl] = $vs;
