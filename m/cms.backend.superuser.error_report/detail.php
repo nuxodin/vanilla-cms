@@ -95,7 +95,7 @@ $usr = D()->row("SELECT * FROM usr WHERE id = ".$sess['usr_id']);
 						<div style="font-size:.9em; color:#aaa"><?=hee($item['referer'])?></div>
 						<?php foreach ($errorItems as $eItem) { ?>
 							<a style="color:red; border:1px solid; border-width:1px 0; padding:3px 0; margin-bottom:-1px; display:block;" href="<?=Url($Cont->Page->url())->addParam('id',$eItem['id'])?>">
-								<?php if ($eItem['id'] === $error['id']) echo '▶'; ?>
+								<?php if ($eItem['id'] === $error['id']) echo '&#x25B6;&#xFE0E;'; ?>
 								<?=$eItem['message']?>
 							</a>
 						<?php } ?>

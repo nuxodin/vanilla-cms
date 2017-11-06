@@ -23,13 +23,13 @@
 		isDraggable() {
 			if (this.el.classList.contains('-draggable')) return true;
 			let p = this.el.parentNode;
-			return p.classList.contains('-e') && p.classList.contains('-m-cms-cont-flexible');
+			return p.classList.contains('-e') && p.classList.contains('qgCMS-dropTarget');
 		},
 		mark(e) {
 			let _ = cms.contPos;
 			e && e.stopPropagation(); // verschachtelt
 			_.active && _.active.unmark();
-			if (_.moving || _.active === this /*|| this.el.classList.contains('-m-cms-cont-flexible')*/) { _.active = false; return; }
+			if (_.moving || _.active === this /*|| this.el.classList.contains('qgCMS-dropTarget')*/) { _.active = false; return; }
 			_.active = this;
 			this.el.classList.add('qgCmsMarked');
 			cms.contPos.trigger('mark', this);
@@ -60,7 +60,7 @@
 
 	cms.cont.loadCallback = res=>{
 		setTimeout(()=>{ // html possibility has content-script that needs header-script to be executed first
-			let el = new DOMParser().parseFromString(res.html, 'text/html').body.firstChild;
+			let el = c1.dom.fragment(res.html).firstChild;
 			cms.contPos(el);
 			cms.contPos.dd.start(el); // todo. what todo?
 			el.style.top = '130px';
@@ -83,14 +83,13 @@
 		/* /neu */
 
 		let p = cms.contPos;
-		let menu = new DOMParser().parseFromString(
+		let menu = c1.dom.fragment(
 			'<div id=qgCmsContPosMenu class=q1Rst>'+
 			'	<div class=-opts title="Einstellungen"></div>'+
 			'	<div class=-drag title="Verschieben"></div>'+
 			'	<div class=-mod  title="Module"></div>'+
-			'</div>', 'text/html').body.firstChild;
+			'</div>', 'text/html').firstChild;
 		document.body.append(menu);
-		//let menu = document.getElementById('qgCmsContPosMenu');
 		menu.drag = menu.querySelector('.-drag');
 		menu.mod  = menu.querySelector('.-mod');
 		menu.opts = menu.querySelector('.-opts')
@@ -101,13 +100,13 @@
 		menu.addEventListener('mouseenter', e => p.active && p.active.mark(e) )
 		menu.addEventListener('mouseleave', e => p.active && p.active.unmarkDelay(e) )
 
-		let trash = new DOMParser().parseFromString(
+		let trash = c1.dom.fragment(
 			'<div id=qgCmsContTrash>'+
 			'	<svg xmlns="http://www.w3.org/2000/svg" width="50" height="60" viewBox="0 -5 26 30">'+
 			'	  <path class="-lis" d="M18.902 1.194h-1.21C17.368.494 16.66 0 15.843 0H9.727c-.818 0-1.525.493-1.85 1.194h-1.21c-2.242 0-4.076 1.835-4.076 4.078H22.98c0-2.242-1.833-4.078-4.076-4.078z"/>'+
 			'	  <path d="M3.83 21.988c0 1.97 1.612 3.582 3.583 3.582H18.16c1.97 0 3.58-1.612 3.58-3.582V6.466H3.83v15.522zm12.537-11.94c0-.66.535-1.194 1.194-1.194s1.194.535 1.194 1.194v11.94c0 .66-.534 1.193-1.193 1.193s-1.193-.534-1.193-1.192v-11.94zm-4.775 0c0-.66.534-1.194 1.194-1.194s1.194.535 1.194 1.194v11.94c0 .66-.534 1.193-1.194 1.193s-1.194-.534-1.194-1.192v-11.94zm-4.777 0c0-.66.534-1.194 1.193-1.194.66 0 1.194.535 1.194 1.194v11.94c0 .66-.534 1.193-1.194 1.193-.66 0-1.193-.534-1.193-1.192v-11.94z"/>'+
 			'	</svg>'+
-			'</div>', 'text/html').body.firstChild;
+			'</div>', 'text/html').firstChild;
 		document.body.append(trash);
 
 
@@ -116,8 +115,8 @@
 		cms.contPos.dd = dd;
 		dd.on('start',e=>{
 			const el = e.target;
-			dd.targets = document.querySelectorAll('.-m-cms-cont-flexible.-e, #qgCmsContTrash');
-			Array.from(document.querySelectorAll('.-m-cms-cont-flexible')).forEach(el=>el.classList.add('dropTarget'))
+			dd.targets = document.querySelectorAll('.qgCMS-dropTarget.-e, #qgCmsContTrash');
+			document.querySelectorAll('.qgCMS-dropTarget').forEach(el=>el.classList.add('dropTarget'))
 			p.moving = true;
 			menu.style.display = 'none';
 			el.classList.add('-moving');
@@ -128,7 +127,7 @@
 			trash.classList[[(e.target.id==='qgCmsContTrash'?'add':'remove')]]('-full');
 		})
 		dd.on('stop',el=>{
-			Array.from(document.querySelectorAll('.-m-cms-cont-flexible')).forEach(el=>el.classList.remove('dropTarget'))
+			document.querySelectorAll('.qgCMS-dropTarget').forEach(el=>el.classList.remove('dropTarget'))
 			p.moving = false;
 			el.classList.remove('-moving');
 			if (!cms.el.pid(el.parentNode)) { // trash
@@ -139,35 +138,7 @@
 			}
 			trash.classList.remove('-dropTarget');
 		})
-		/*
-		dd.on({
-			start(e) {
-				const el = e.target;
-				dd.targets = document.querySelectorAll('.-m-cms-cont-flexible.-e, #qgCmsContTrash');
-				Array.from(document.querySelectorAll('.-m-cms-cont-flexible')).forEach(el=>el.classList.add('dropTarget'))
-				p.moving = true;
-				menu.style.display = 'none';
-				el.classList.add('-moving');
-				trash.classList.add('-dropTarget');
-				trash.c1ZTop();
-			},
-			change(e) {
-				trash.classList[[(e.target.id==='qgCmsContTrash'?'add':'remove')]]('-full');
-			},
-			stop(el) {
-				Array.from(document.querySelectorAll('.-m-cms-cont-flexible')).forEach(el=>el.classList.remove('dropTarget'))
-				p.moving = false;
-				el.classList.remove('-moving');
-				if (!cms.el.pid(el.parentNode)) { // trash
-					$fn('page::remove')(cms.el.pid(el));
-				} else {
-					let next = el.nextElementSibling ? cms.el.pid(el.nextElementSibling) : null; // next '.qgCmsCont'?
-					$fn('page::insertBefore')(cms.el.pid(el.parentNode), cms.el.pid(el), next).setInitiator('cms.dnd');
-				}
-				trash.classList.remove('-dropTarget');
-			}
-		});
-		*/
+
 		let startX, startY, ddEl;
 		function move(e) {
 			if (e.ctrlKey) {

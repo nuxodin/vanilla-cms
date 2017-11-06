@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded',function(){
 		cms.Tree && cms.Tree.goTo(this.id);
 	}
 
-	!document.querySelector('.-e.-m-cms-cont-flexible') && el.c1Find('> .-sidebar > [itemid=add]').setAttribute('hidden','hidden');
+	!document.querySelector('.-e.qgCMS-dropTarget') && el.c1Find('> .-sidebar > [itemid=add]').setAttribute('hidden','hidden');
 
 	const switches = document.querySelectorAll('.qgCMS_editmode_switch');
 	for (let switc of switches) {

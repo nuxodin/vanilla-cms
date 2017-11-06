@@ -57,10 +57,11 @@
 		<field name="id"         type="int"      length="10"  key="PRI" autoincrement="true"  null=""/>
 		<field name="log_id"     type="int"      length="10"  key="MUL" parent="log" on_parent_delete="setnull" null="true"/>
 		<field name="sender"     type="varchar"  length="255" key="" null=""/>
-		<field name="sendername" type="text"     key="" null=""/>
-		<field name="subject"    type="text"     length="" key="" null=""/>
-		<field name="text"       type="text"     length="" key="" null=""/>
-		<field name="html"       type="text"     length="" key="" null=""/>
+		<field name="sendername" type="text"                  key="" null=""/>
+		<field name="reply_to"   type="varchar"  length="255" key="" null=""/>
+		<field name="subject"    type="text"     length=""    key="" null=""/>
+		<field name="text"       type="text"     length=""    key="" null=""/>
+		<field name="html"       type="text"     length=""    key="" null=""/>
 	</table>
 	<table name="mail_attachment">
 		<field name="mail_id"    type="int"      length="10" key="PRI" parent="mail" on_parent_delete="cascade" null=""/>

@@ -81,6 +81,7 @@ class dbEntry_mail extends dbEntry {
 		foreach (D()->mail_recipient->selectEntries("WHERE mail_id = ".$this." AND sent = 0") as $Item) {
 			$ZendMail = new \Zend_Mail('utf-8');
 			$ZendMail->setFrom($this->sender, $this->sendername ?: $this->sender);
+			$this->reply_to && $ZendMail->setReplyTo($this->reply_to, null);
 			$ZendMail->setSubject(($toWebmaster?'Debug! ':'').$this->subject);
 
 			$html = $this->getHtml($Item, $ZendMail); // dirty hack for thunderbird, it needs multipart/related for inline-images

@@ -27,7 +27,7 @@
                     '<div class=-v1><iframe class=-i1></iframe></div>'+
                 '</div>'+
             '</div>';
-            div = new DOMParser().parseFromString(html, 'text/html').body.firstChild;
+            div = c1.dom.fragment(html).firstChild;
             iframe1 = div.querySelector('.-i1');
             iframe2 = div.querySelector('.-i2');
             view1   = div.querySelector('.-v1');

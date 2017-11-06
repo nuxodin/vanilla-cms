@@ -1,10 +1,10 @@
 {
     "cms": {
         "time": 1496213662,
-        "version": "6.27.0",
-        "changed": 1507796229,
+        "version": "6.28.0",
+        "changed": 1509097242,
         "server": "v6.vanilla-cms.org",
-        "updated": 1507796229
+        "updated": 1509097242
     },
     "cms.backend": {
         "time": 1492606527,
@@ -36,10 +36,10 @@
     },
     "cms.backend.module": {
         "time": 1495838197,
-        "version": "6.21.0",
-        "changed": 1504688822,
+        "version": "6.22.0",
+        "changed": 1509701857,
         "server": "v6.vanilla-cms.org",
-        "updated": 1504688822
+        "updated": 1509701857
     },
     "cms.backend.settings": {
         "time": 1495838197,
@@ -78,10 +78,10 @@
     },
     "cms.backend.superuser.error_report": {
         "time": 1495838199,
-        "version": "6.9.0",
-        "changed": 1507796230,
+        "version": "6.10.0",
+        "changed": 1509097242,
         "server": "v6.vanilla-cms.org",
-        "updated": 1508435807
+        "updated": 1509097242
     },
     "cms.backend.superuser.vers": {
         "time": 1495838199,
@@ -190,10 +190,10 @@
     },
     "cms.frontend.1": {
         "time": 1496046651,
-        "version": "6.29.0",
-        "changed": 1508273924,
+        "version": "6.34.0",
+        "changed": 1509701858,
         "server": "v6.vanilla-cms.org",
-        "updated": 1508435807
+        "updated": 1509701858
     },
     "cms.image_editor": {
         "time": 1495838201,
@@ -219,7 +219,7 @@
     "cms.layout.custom.6": {
         "time": 1495838202,
         "version": "6.20.0",
-        "changed": 1507796230,
+        "changed": 1508435808,
         "server": "v6.vanilla-cms.org",
         "updated": 1508435808
     },
@@ -239,17 +239,17 @@
     },
     "cms.versions": {
         "time": 1493393761,
-        "version": "6.4.0",
-        "changed": 1504873240,
+        "version": "6.5.0",
+        "changed": 1509097243,
         "server": "v6.vanilla-cms.org",
-        "updated": 1504873240
+        "updated": 1509097243
     },
     "core": {
         "time": 1496213662,
-        "version": "6.137.0",
+        "version": "6.140.0",
         "server": "v6.vanilla-cms.org",
-        "updated": 1508435806,
-        "changed": 1507796228
+        "updated": 1509701857,
+        "changed": 1509701857
     },
     "error_report": {
         "time": 1495146594,

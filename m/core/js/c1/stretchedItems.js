@@ -47,8 +47,8 @@
 		colGap   = rowGap = style.getPropertyValue('column-gap') || style.getPropertyValue('-webkit-column-gap') || style.getPropertyValue('-moz-column-gap') || 0;
 		if (Parent.hasAttribute('data-items-gap'))     colGap = Parent.getAttribute('data-items-gap');
 		if (Parent.hasAttribute('data-items-row-gap')) rowGap = Parent.getAttribute('data-items-row-gap');
-		rowGap = parseInt(rowGap);
-		colGap = parseInt(colGap);
+		rowGap = parseInt(rowGap)||0;
+		colGap = parseInt(colGap)||0;
 
 		cols = Math.floor((widthContainer + colGap) / (minWidth + colGap));
 

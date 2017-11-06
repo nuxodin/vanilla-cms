@@ -191,3 +191,4 @@ body #qgRteToolbar [hidden] {
 #qgRteToolbar .-item.-Strikethrough::before        { content:'\e02d'; }
 #qgRteToolbar .-item.-Hr::before                   { content:'\e01c'; }
 #qgRteToolbar .-item.-Table::before                { content:'\e01b'; }
+#qgRteToolbar .-item.-ShowInvisibleChars::before   { content:'\e02e'; }

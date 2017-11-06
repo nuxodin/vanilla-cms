@@ -236,7 +236,7 @@
 	opacity:1;
 	visibility:visible;
 }
-.cmsShowEditables .qgCmsCont.-e.-m-cms-cont-flexible {
+.cmsShowEditables .qgCmsCont.-e.qgCMS-dropTarget {
 	outline:4px solid red;
 	outline-offset:-2px;
 	min-width:50px;
@@ -253,7 +253,7 @@
 }
 
 :hover .qgCmsCont.-e { outline: 1px solid var(--cms-color); }
-:hover .qgCmsCont.-m-cms-cont-flexible { outline:none; }
+:hover .qgCmsCont.qgCMS-dropTarget { outline:none; }
 
 
 .qgCmsCont.qgCmsMarked.qgCmsMarked {

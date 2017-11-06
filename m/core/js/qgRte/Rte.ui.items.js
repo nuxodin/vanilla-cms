@@ -131,12 +131,39 @@ Rte.ui.setItem( 'Tree', {
 		}
 	});
 }
-{ /* clean / remove format */
-	function clean(node) {
+
+/* show invisibles *
+{
+	function replaceContents(node){
+		for (const el of node.childNodes) replaceNode(el);
+	}
+	function replaceNode(node) {
+		if (node.nodeType === 3) { // text-nodes
+			let offset = 0;
+			for (const char of node.data) {
+				if (char === '\xa0') {  // nbsp
+					//var x = node.splitText(offset);
+				}
+				++offset;
+			}
+		} else {
+			replaceContents(node);
+		}
+	}
+	Rte.ui.setItem('ShowInvisibleChars', {
+		click(e) {
+			let root = Rte.active;
+			replaceContents(root);
+		}
+		,shortcut:'space'
+	});
+}
+/* clean / remove format */
+{
+	const removeTags = ['FONT','O:P','SDFIELD','SPAN'].reduce((obj, item)=>{ obj[item]=1; return obj; }, {});
+	function cleanNode(node) {
 	    if (!node) return;
-	    if (node.childNodes) {
-			for (let child of node.childNodes) clean(child);
-	    }
+		cleanContents(node);
 	    node.nodeType === Node.COMMENT_NODE && node.remove();
 		if (node.nodeType === Node.ELEMENT_NODE) {
 			if (!Rte.active.contains(node)) return;
@@ -148,17 +175,20 @@ Rte.ui.setItem( 'Tree', {
 			node.removeAttribute('cellpadding');
 			node.removeAttribute('cellspacing');
 			node.removeAttribute('bgcolor');
-			['FONT','O:P','SDFIELD','SPAN'].includes(node.tagName) && node.removeNode();
+			removeTags[node.tagName] && node.removeNode();
 			if (node.tagName !== 'IMG') {
 				node.removeAttribute('width');
 				node.removeAttribute('height');
 			}
 		}
 	}
+	function cleanContents(node){
+		if (node.childNodes) for (let child of node.childNodes) cleanNode(child);
+	}
 	Rte.ui.setItem('Removeformat', {
 		click(e) {
 			let root = e.ctrlKey ? Rte.element : Rte.active;
-			clean(root);
+			cleanContents(root);
 		}
 		,shortcut:'space'
 	});
@@ -387,7 +417,7 @@ c1.c1Use('tableHandles', tH=>{
 Rte.ui.config = {
 	rteDef:{
 		main:['LinkInput','Bold','Insertunorderedlist','Link','Removeformat','Format','Style'],
-		more:['Italic','Insertorderedlist','Strikethrough','Underline','Hr','Code','Table','LinkTarget','ImgOriginal','ImgOriginalRetina','AttributeTitle','ImageDimension','Tree']
+		more:['Italic','Insertorderedlist','Strikethrough','Underline','Hr','Code','Table',/*'ShowInvisibleChars',*/'LinkTarget','ImgOriginal','ImgOriginalRetina','AttributeTitle','ImageDimension','Tree']
 	},
 	rteMin:{
 		main:['Bold','Insertunorderedlist','Link','Style']

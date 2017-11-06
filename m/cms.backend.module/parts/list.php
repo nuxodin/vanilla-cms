@@ -36,6 +36,10 @@ foreach (module::index() as $name => $entry) {
 	$module->local_version = $entry['version'];
 	$module->local_updated = $entry['updated'];
 	$module->local_changed = $entry['changed'];
+
+	$db = D()->row("SELECT * FROM module WHERE name = ".D()->quote($name));
+	$module->access = $db['access'];
+
 	$unsorted[$name] = $module;
 }
 

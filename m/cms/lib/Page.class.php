@@ -160,7 +160,10 @@ class Page {
 				if (isset($expose[$name]))
 					$class .= ' '.$name;
 
-		if ($this->edit) $class .= ' -e';
+		if ($this->edit) {
+			$class .= ' -e';
+			if (substr($this->vs['module'], 0, 17) === 'cms.cont.flexible') $class .= ' qgCMS-dropTarget';
+		}
 		$attr = '';
 		if ($this->vs['type']==='c' && $this->vs['visible']) {
 			$attr = ' id="'.hee(substr($this->urlSeo(L()), 1)).'"';

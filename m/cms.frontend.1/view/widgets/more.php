@@ -20,8 +20,9 @@
 		];
 		$Mail = D()->mail->Entry();
 		$Mail->subject    = 'CMS feedback';
-		$Mail->sender     = Usr()->email;
-		$Mail->sendername = Usr()->firstname.' '.Usr()->lastname;
+		$Mail->reply_to   = Usr()->email;
+		//$Mail->sender     = Usr()->email;
+		//$Mail->sendername = Usr()->firstname.' '.Usr()->lastname;
 		$Mail->html       = array2formatedStr($arr);
 		$Mail->addTo(G()->SET['cms']['feedback']['email']->v);
 		$Mail->send();
