@@ -29,9 +29,11 @@
 	'  background-repeat: no-repeat !important; ' +
 	'  background-position: 50% !important; ' +
 	'  background-size: 32px !important; ' +
+	'  cursor: progress !important; ' +
 	'} ' +
 	'.c1Loading > * { ' +
 	'  opacity:.1; ' +
+	'  cursor: progress !important; ' +
 	'} ' +
 	' ';
 	var sEl = document.createElement('style');

@@ -39,7 +39,7 @@ function error_report($vs) {
 
 	// get sample content
 	if (!isset($vs['sample'])) {
-		if (is_file($vs['file']) && $vs['line']) {
+		if (@is_file($vs['file']) && $vs['line']) { // ignore warnings on unsupported file-wrappers like "chrome-extension://"
 			$position = 0;
 			$col = max($vs['col'],1);
 			$lines = file($vs['file']);

@@ -14,7 +14,7 @@
 				$title = ucfirst(str_replace('cms.cont.','',$M->Title()));
 				$title = str_replace('.',' ',$title);
 			?>
-			<div itemid="<?=hee($name)?>" title="<?=hee($desc)?>">
+			<div itemid="<?=hee($name)?>" title="<?=hee($desc)?>" todo_c1-tooltip style="--c1-tooltip-delay:.5">
 				<div class=-title title="<?=hee($M->name)?>"><?=$title?></div>
 				<svg class=-img xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#fff">
 					<?php if (is_file($path.'pub/module.svg')) { ?>

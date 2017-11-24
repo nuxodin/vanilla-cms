@@ -106,10 +106,10 @@
     },
     "cms.backend.webmaster": {
         "time": 1495838200,
-        "version": "6.7.0",
-        "changed": 1503398500,
+        "version": "6.8.0",
+        "changed": 1511207437,
         "server": "v6.vanilla-cms.org",
-        "updated": 1503398500
+        "updated": 1511207437
     },
     "cms.cont.flexible": {
         "time": 1492606523,
@@ -162,10 +162,10 @@
     },
     "cms.cont.search1": {
         "time": 1492606533,
-        "version": "6.3.0",
-        "changed": 1507881734,
+        "version": "6.4.0",
+        "changed": 1511207437,
         "server": "v6.vanilla-cms.org",
-        "updated": 1507881734
+        "updated": 1511207437
     },
     "cms.cont.table1": {
         "time": 1495146593,
@@ -190,10 +190,10 @@
     },
     "cms.frontend.1": {
         "time": 1496046651,
-        "version": "6.34.0",
-        "changed": 1509701858,
+        "version": "6.36.0",
+        "changed": 1511207438,
         "server": "v6.vanilla-cms.org",
-        "updated": 1509701858
+        "updated": 1511207438
     },
     "cms.image_editor": {
         "time": 1495838201,
@@ -218,10 +218,10 @@
     },
     "cms.layout.custom.6": {
         "time": 1495838202,
-        "version": "6.20.0",
-        "changed": 1508435808,
+        "version": "6.24.0",
+        "changed": 1511427154,
         "server": "v6.vanilla-cms.org",
-        "updated": 1508435808
+        "updated": 1511427154
     },
     "cms.layout.login": {
         "time": 1492606535,
@@ -246,17 +246,17 @@
     },
     "core": {
         "time": 1496213662,
-        "version": "6.140.0",
+        "version": "6.148.0",
         "server": "v6.vanilla-cms.org",
-        "updated": 1509701857,
-        "changed": 1509701857
+        "updated": 1511427154,
+        "changed": 1511427154
     },
     "error_report": {
         "time": 1495146594,
-        "version": "6.9.0",
-        "changed": 1507018875,
+        "version": "6.12.0",
+        "changed": 1511427155,
         "server": "v6.vanilla-cms.org",
-        "updated": 1507018875
+        "updated": 1511427155
     },
     "fileEditor": {
         "time": 1492606523,
@@ -267,10 +267,10 @@
     },
     "reporting": {
         "time": 1492606536,
-        "version": "6.6.0",
-        "changed": 1504688823,
+        "version": "6.7.0",
+        "changed": 1511207440,
         "server": "v6.vanilla-cms.org",
-        "updated": 1504688823
+        "updated": 1511207440
     },
     "shwups": {
         "time": 1496213663,

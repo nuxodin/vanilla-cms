@@ -13,6 +13,9 @@ class db {
 		$this->PDO->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
 		$this->PDO->exec('SET NAMES utf8');
 		$this->PDO->exec('SET time_zone = "'.date('P').'"');
+		//$this->PDO->exec('SET SESSION sql_mode = \'TRADITIONAL\''); // todo
+		$this->PDO->exec('SET SESSION sql_mode = \'NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION\'');
+
 		$this->Cache = cache($conn.'_dbTables');
 	}
 	function __get($n) {

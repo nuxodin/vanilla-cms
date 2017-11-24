@@ -6,6 +6,7 @@ class dbField {
 
 	static $dateTypes   = ['DATETIME'=>1, 'DATE'=>1, 'TIMESTAMP'=>1];
 	static $stringTypes = ['CHAR'=>1, 'VARCHAR'=>1, 'BINARY'=>1, 'VARBINARY'=>1, 'BLOB'=>1, 'TEXT'=>1, 'ENUM'=>1, 'SET'=>1];
+	static $numTypes    = ['TINYINT'=>1, 'SMALLINT'=>1, 'MEDIUMINT'=>1, 'INT'=>1, 'BIGINT'=>1, 'DECIMAL'=>1, 'FLOAT'=>1, 'DOUBLE'=>1];
 
 	private $type    = null;
 	private $length  = null;
@@ -23,17 +24,17 @@ class dbField {
 
 	function valueToSql ($value) {
 		$type = strtoupper($this->getType());
-		if (is_float($value)) { $value = str_replace(',','.',(string)$value); }
 		if ($value === null && $this->getNull()) {
-			$valSql = 'NULL';
+			return 'NULL';
 		} elseif ($value === '' && $this->getNull() && !isset(self::$stringTypes[$type])) {
-			$valSql = 'NULL';
+			return 'NULL';
 		} elseif (is_numeric($value) && isset(self::$dateTypes[$type])) {
-			$valSql = "'".Date('Y-m-d H:i:s', $value)."'";
+			return "'".Date('Y-m-d H:i:s', $value)."'";
 		} else {
-			$valSql = $this->Db->quote((string)$value);
+			if (isset(self::$numTypes[$type]) && !is_float($value) && !is_int($value)) $value = (float)(string)$value;
+			if (is_float($value)) $value = str_replace(',','.',(string)$value);
+			return $this->Db->quote((string)$value);
 		}
-		return $valSql;
 	}
 
 	private $_Title = null;

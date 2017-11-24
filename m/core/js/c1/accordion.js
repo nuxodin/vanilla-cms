@@ -17,6 +17,7 @@
                 triggers.forEach(function (trigger) {
                     if (trigger.getAttribute('aria-expanded') == 'true') {
                         var panel = document.getElementById(trigger.getAttribute('aria-controls'));
+	                    panel.style.height = '';
                         panel.setAttribute('hidden', '');
                         trigger.setAttribute('aria-expanded', 'false');
                     }
@@ -27,11 +28,12 @@
             panel.addEventListener('transitioncancel',transitionend);
             panel.style.overflow = 'hidden';
             if (isExpanded) {
-                panel.style.height = panel.offsetHeight+'px';
-                setTimeout(function(){
+				panel.style.height = panel.c1Find('> .-content').offsetHeight+'px';
+				setTimeout(function(){
                     panel.style.height = '';
                     panel.setAttribute('hidden', '');
                     target.setAttribute('aria-expanded', 'false');
+					target.id && history.replaceState('', '', location.pathname+location.search);
                 },10)
             } else {
                 panel.removeAttribute('hidden');
@@ -40,6 +42,7 @@
                     panel.style.height = height+'px';
                     panel.removeAttribute('hidden');
                     target.setAttribute('aria-expanded', 'true');
+					target.id && history.replaceState('', '', location.pathname+location.search+'#'+target.id);
                 },10);
             }
             event.preventDefault();
@@ -84,7 +87,6 @@
         });
 		if (location.hash) {
 			var el = accordion.c1Find('> .-trigger'+location.hash);
-			console.log('> .-trigger'+location.hash, el)
 			if (el) el.setAttribute('aria-expanded', 'true');
 		}
 

@@ -32,7 +32,7 @@ $Logo = $LPage->File('logo');
 			<div id=nav style="flex:1">
 				<?=$LPage->Cont('head')->get()?>
 			</div>
-			<svg class=mob_nav_btn style="stroke:#4F83A6; stroke-linecap:round; stroke-width:1.5; margin-left:auto" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewbox="0 0 30 30">
+			<svg class=mob_nav_btn style="stroke:currentColor; stroke-linecap:round; stroke-width:1.5; margin-left:auto" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewbox="0 0 30 30">
 			    <g class=-menu>
 			      <line x1="5" y1="7"  x2="25" y2="7" ></line>
 			      <line x1="5" y1="15" x2="25" y2="15"></line>

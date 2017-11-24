@@ -314,7 +314,7 @@ c1.onElement('.qgCmsFileManager',el=>{
 	}
 });
 c1.onElement('.qgCmsFront1ModuleManager',el=>{
-	c1.c1Use('loading',1); // preload
+	c1.c1Use(['loading'/*,'tooltip'*/],1); // preload
 
 	const searchInp = el.c1Find('input');
 	searchInp.addEventListener('input',function(){

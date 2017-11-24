@@ -37,7 +37,7 @@ function reporting_send() {
     " GROUP BY module.name ";
     foreach (D()->query($sql) as $row) {
         $report['modules'][$row['name']] = [
-            'version' => module::index()[$row['name']]['version'],
+            'version' => module::index()[$row['name']]['version'] ?? '?', // "?" if module is no longer installed
             'num_as_cont' => $row['num'],
         ];
     }

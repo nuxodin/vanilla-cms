@@ -33,7 +33,7 @@ a:hover {}
 #container {
   position: relative;
   z-index: 0;
-  height: 200px; /* ie11 */
+  zzz_height: 200px; /* ie11, why?, its bad vor safari and ie11 */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -49,6 +49,9 @@ a:hover {}
 #head a {
   color: inherit;
   text-decoration: none;
+}
+#head > .-l1_width {
+  align-items: center;
 }
 #logo > img {
 	display:block;

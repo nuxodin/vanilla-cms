@@ -115,6 +115,7 @@ qg::on('deliverHtml', function() {
 
 		G()->csp['script-src']['https://www.google-analytics.com'] = true;
 		G()->csp['img-src']['https://www.google-analytics.com'] = true;
+		G()->csp['connect-src']['https://www.google-analytics.com'] = true;
 		html::addJsFile(sysURL.'cms.backend.webmaster/pub/analytics.js',null,null,'async');
 		G()->js_data['gAnalyticsCode'] = $S['analytics code google']->v;
 

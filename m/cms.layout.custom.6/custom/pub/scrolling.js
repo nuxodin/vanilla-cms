@@ -58,13 +58,20 @@ function l1ScrollOffset(){
 	function scrollToEl(el, cb) {
 		if (!el) return;
         var top = el.getBoundingClientRect().top + pageYOffset - l1ScrollOffset();
-		$('html, body').animate({
-		    scrollTop: top
-		},{
+
+		console.log('todo');
+		//c1.use('scroll',function(){
+		//	c1.scroll(null, top, {
+		//		duration:290,
+		//		onfinish:cb,
+		//	});
+		//})
+
+		$('html, body').animate({scrollTop:top},{
 			queue: false,
 			duration: 250,
 			done: function() {
-				setTimeout(function() { $('html,body').scrollTop(top); },160); // window phone 8
+				//setTimeout(function() { $('html,body').scrollTop(top); },160); // window phone 8
 				cb && cb();
 			}
 		});
