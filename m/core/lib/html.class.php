@@ -12,22 +12,23 @@ class html {
 	static $jsFiles 	= [];
 	static $cssFiles 	= [];
 	static $optimiseJs  = true;
-	// static function addJsFiles($files, $mode='defer') { // todo?
-	// 	static $all = [];
-	// 	$files = (array)$files;
-	// 	foreach ($files as $file) {
-	// 		if (isset($all[$file])) {
-	// 			unset($files[$file]);
-	// 			continue;
-	// 		}
-	// 		$all[$file] = 1;
-	// 	}
-	//  if (!$files) return;
-	// 	self::$jsFileGroups[] = [
-	// 		'files' => $files,
-	// 		'mode' => $files,
-	// 	];
-	// }
+	static private $jsms = [];
+	static function addJSM($v) {
+		if (isset(self::$jsms[$v])) return;
+		self::$jsms[$v] = [];
+	}
+	static function _getHeaderJSMs() {
+		$ret = '';
+		foreach (self::$jsms as $url => $egal) {
+			//qg::fire('html::url-jsm',['url'=>&$url]); todo?
+			$path = uri2path($url);
+			//$mtime = filemtime($path);
+			$hash = substr(md5_file($path),0,7);
+			$ret .= '<script type=module src="'.$url.'?qgUniq='.$hash.'"></script>'."\n";
+		}
+		return $ret;
+	}
+
 	static function addJSFile($v, $group=null, $compress=true, $mode='') {
 		if (isset(self::$jsFiles[$v])) return;
 		self::$jsFiles[$v] = ['group'=>$group.$mode, 'file'=>$v, 'compress'=>$compress, 'mode'=>$mode];
@@ -49,6 +50,7 @@ class html {
 			$return .= '<script type=json/c1>'.json_encode(G()->js_data, JSON_HEX_QUOT|JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS).'</script>'."\n";
 		}
 		$return .= self::_getHeaderJSFiles();
+		$return .= self::_getHeaderJSMs();
 		return $return;
 	}
 	static function _getHeaderCssFiles() {
@@ -87,7 +89,7 @@ class html {
 		if (debug) {
 			$ret = '';
 			foreach ($files AS $item) {
-				$ret .= '<link rel=stylesheet href="'.$item['file'].'?'.$item['mtime'].'">'."\n";
+				$ret .= '<link rel=stylesheet href="'.$item['file'].'?qgUniq='.$item['mtime'].'">'."\n";
 			}
 			return $ret;
 		}
@@ -112,7 +114,7 @@ class html {
 		if (debug || !html::$optimiseJs) {
 			$ret = '';
 			foreach ($files AS $item) {
-				$ret .= '<script src="'.$item['file'].'?'.$item['mtime'].'" '.$mode.'></script>'."\n";
+				$ret .= '<script src="'.$item['file'].'?qgUniq='.$item['mtime'].'"'.($mode?' '.$mode:'').'></script>'."\n";
 			}
 			return $ret;
 		}
@@ -128,7 +130,7 @@ class html {
 			}
 			file_put_contents($cFile, $str);
 		}
-		return '<script src="'.$cUri.'" '.$mode.'></script>'."\n";
+		return '<script src="'.$cUri.'"'.($mode?' '.$mode:'').'></script>'."\n";
 	}
 
 	static function _compressJS($str) {

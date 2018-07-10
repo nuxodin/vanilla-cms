@@ -40,11 +40,7 @@ function dbRes(pid, obj) {
 }
 dbRes.queryObj = {};
 function setFieldShow(pid, t, f, v) {
-	var set = {};
-	set.table = {};
-	set.table[t] = {};
-	set.table[t].field = {};
-	set.table[t].field[f] = {show:v};
+	var set = { table:{ [t]:{ field:{ [f]:{ show: v } } } } };
 	$fn('page::setUser')(pid,set);
 	dbRes(pid,{table:t});
 }

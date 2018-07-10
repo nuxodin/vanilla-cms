@@ -3,7 +3,7 @@
 namespace qg;
 
 class Auth {
-	static function listen(){
+	static function listen() {
 		if (isset($_POST['liveUser_login'])) {
 			$saveLogin = isset($_POST['save_login']) ? (int)(bool)$_POST['save_login'] : 0;
 			$error = (int)self::auth($_POST['email'], $_POST['pw'] ?? '');
@@ -22,7 +22,7 @@ class Auth {
 		if (isset($_GET['liveUser_logout'])) {
 			self::logout();
 			header('Location: '.Url()->stripParam('liveUser_logout'));
-			exit();
+			exit;
 		}
 		if (!isset($_SESSION['liveUser'])) {
 			if ($uid = Client()->usr_id) self::auth(Usr($uid)->email);
@@ -42,17 +42,17 @@ class Auth {
 			if (isset($ClientUsrs[$Usr->id]) && $ClientUsrs[$Usr->id]->save_login) return self::login($Usr->id);
 		}
 		if (!self::pw_verify($pw, $Usr->pw)) return 0;
-		if ($rehash) $Usr->pw = self::pw_hash($pw, PASSWORD_DEFAULT);
+		if ($rehash) $Usr->pw = self::pw_hash($pw);
 		return self::login($Usr->id);
 	}
 	static function pw_hash($pw) {
 		return password_hash($pw, PASSWORD_DEFAULT);
 	}
 	static function pw_verify($pw, $hash) {
-		return password_verify($pw, $hash) || md5($pw) === $hash;
+		return password_verify($pw, $hash) || md5($pw) === $hash; // md5 zzz
 	}
 	static function pw_needs_rehash($hash) {
-		return !preg_match('/^\$/', $hash) || password_needs_rehash($hash, PASSWORD_DEFAULT);
+		return !preg_match('/^\$/', $hash) || password_needs_rehash($hash, PASSWORD_DEFAULT); // preg_match zzz
 	}
 	static function login($id) {
 		$id = (int)(string)$id;

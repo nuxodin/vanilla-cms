@@ -27,6 +27,11 @@ class dump {
             $str .= '</table>';
             return $str;
         } else {
+            if ($x===true)  return '<b>true</b>';
+            if ($x===false) return '<b>false</b>';
+            if (is_int($x))   return '<span style="color:blue">'.$x.'</span>';
+            if (is_float($x)) return '<span style="color:green">'.$x.'</span>';
+            if (is_string($x)) return "'".hee($x)."'";
             return hee($x);
         }
     }

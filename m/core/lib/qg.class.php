@@ -31,6 +31,7 @@ class qg {
 		$path = sysPATH.$module.'/';
 		is_file($path.'/dbscheme.xml') && dbScheme::check(file_get_contents($path.'dbscheme.xml'));
 		is_file($path.'install.php')   && require_once($path.'install.php');
+		is_dir($path.'/custom') && !is_dir(appPATH.'qg/'.$_x_module) && copyDir(sysPATH.$_x_module.'/custom', appPATH.'qg/'.$_x_module); // after including install.php
 		self::setInstalled($_x_module);
 	}
 	/* initialized (no new local version detected) */

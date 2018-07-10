@@ -33,39 +33,36 @@ if (!$Cont->edit) {
 	} else {
 		header('HTTP/1.1 '.$code);
 		header('Location: '.$redirect);
-		exit();
+		exit;
 	}
 }
 ?>
-<div style="padding:15px; background-color:#ee9; color:#000; box-shadow:0 0 8px; background-image:linear-gradient(#FBFBE7,#F0F0AC)">
-	<style>
-	.-m-cms-cont-redirect > span {
-		max-width:100%;
-	}
-	</style>
-	<h2><?=L('Weiterleitung')?></h2>
-	<?=L('Interne Seite (Vorschläge) oder URL:')?><br>
-	<input value="<?=hee($link)?>" type=qgcms-page onblur="$fn('cms::setTxt')(<?=$link->id?>, $(this)[0].value); $fn('page::reload')(<?=$Cont?>)" style="max-width:100%; width:400px" />
-	<br>
-	oder:<br>
-	<select onchange="$fn('cms::setTxt')(<?=$link->id?>, $(this).val()); $fn('page::reload')(<?=$Cont?>).run()" style="max-width:100%; width:400px">
-		<option value="">
-		<option <?=$link=='__parent__'      ? 'selected':''?> value="__parent__"     >Vaterseite
-		<option <?=$link=='__first-child__' ? 'selected':''?> value="__first-child__">Erste Unterseite
-		<option <?=$link=='__last-child__'  ? 'selected':''?> value="__last-child__" >Letzte Unterseite
-	</select>
-	<br>
-	<br>
-	<a href="<?=$redirect?>">
-		<button style="display:block; padding:15px; max-width:100%; width:400px">
-			Gehe zu: <?=$Page?$Page->Title():$redirect?>
-		</button>
-	</a>
-	<br>
-	<div style="font-size:0.8em">
-		<?=L('Die Weiterleitung ist sprachabhängig!')?> <br>
+<div class="qgCMS c1-box" style="border:1px solid rgba(0,0,0,.5); background:#fff; max-width:400px; margin:10px auto">
+	<div class=-head><?=L('Weiterleitung')?></div>
+	<div class=-body>
+		<?=L('Interne Seite (Vorschläge) oder URL:')?><br>
+		<input value="<?=hee($link)?>" type=qgcms-page onblur="$fn('cms::setTxt')(<?=$link->id?>, $(this)[0].value); $fn('page::reload')(<?=$Cont?>)" style="width:100%" />
 		<br>
-		<?=L('Diese Seite wird nur im Edit-Modus angezeigt.')?> <br>
-		<?=L('Normal wird direkt an die definierte Adresse weitergeleitet.')?>
+		oder:<br>
+		<select onchange="$fn('cms::setTxt')(<?=$link->id?>, $(this).val()); $fn('page::reload')(<?=$Cont?>).run()" style="width:200%">
+			<option value="">
+			<option <?=$link=='__parent__'      ? 'selected':''?> value="__parent__"     > Vaterseite
+			<option <?=$link=='__first-child__' ? 'selected':''?> value="__first-child__"> Erste Unterseite
+			<option <?=$link=='__last-child__'  ? 'selected':''?> value="__last-child__" > Letzte Unterseite
+		</select>
+		<br>
+		<br>
+		<div style="font-size:0.9em">
+			<div style="color:var(--cms-access-3)"><?=L('Die Weiterleitung ist sprachabhängig!')?> </div>
+			<br>
+			<div style="color:var(--cms-access-3)"><?=L('Diese Seite wird nur im Edit-Modus angezeigt.')?> </div>
+			<?=L('Normal wird direkt an die definierte Adresse weitergeleitet.')?>
+		</div>
+		<br>
+		<a href="<?=hee($redirect)?>">
+			<button style="display:block; padding:20px; max-width:100%; width:400px">
+				Gehe zu: <?=$Page?$Page->Title():$redirect?>
+			</button>
+		</a>
 	</div>
 </div>

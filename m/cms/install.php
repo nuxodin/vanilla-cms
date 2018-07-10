@@ -21,6 +21,6 @@ foreach (scandir($dir) as $file) {
 	if (isset($matches[1])) {
 		$lang = $matches[1];
 		$json = file_get_contents($dir.$file);
-		L::import($lang,'cms', $json );
+		L::import($lang,'cms', $json);
 	}
 }

@@ -29,15 +29,21 @@ qg::on('vers::createSpace',function($e){
 });
 
 
-
-
+// inform the Client about changes
 qg::on('Api::after',function($e){ // $fn, &$args, &$ret;
     if (!G()->SET['cms.versions']['draftmode']->v) return;
-
     if (substr($e['fn'],0,6) === 'page::') {
         $pid = (int)$e['args'][0];
-        D()->one("SELECT changed FROM vers_cms_page_changed WHERE space = ".cms_vers::$space." AND page_id = ".$pid);
-
+        /* neu */
+        $pids = [$pid, Page($pid)->Page->id];
+        foreach ($pids as $page_id) {
+            $versions = D()->indexCol('SELECT space, unix_timestamp(changed_page) FROM vers_cms_page_changed WHERE page_id = '.$page_id);
+    		if (!isset($versions[0]) || $versions[1] > $versions[0]) {  // no live or draft younger then live
+                G()->Answer['cms_vers_changed'][$page_id] = true;
+            }
+        }
+        /* alt
+        //D()->one("SELECT changed FROM vers_cms_page_changed WHERE space = ".cms_vers::$space." AND page_id = ".$pid); // zzz not needed!?
         $versions = D()->indexCol('SELECT space, unix_timestamp(changed_page) FROM vers_cms_page_changed WHERE page_id = '.$pid);
 		if (!isset($versions[0]) || $versions[1] > $versions[0]) { // no live or draft younger then live
             G()->Answer['cms_vers_changed'][$pid] = true;
@@ -46,5 +52,6 @@ qg::on('Api::after',function($e){ // $fn, &$args, &$ret;
 		if (!isset($versions[0]) || $versions[1] > $versions[0]) { // no live or draft younger then live
             G()->Answer['cms_vers_changed'][Page($pid)->Page->id] = true;
 		}
+        */
     }
 });

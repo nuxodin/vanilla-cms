@@ -4,6 +4,7 @@ namespace qg;
 
 class Ftp {
 	function __construct($host, $user, $pass) {
+		time_limit(20);
 		$this->res = ftp_connect($host);
 		$this->connected = ftp_login($this->res, $user, $pass);
 		ftp_pasv($this->res, true);

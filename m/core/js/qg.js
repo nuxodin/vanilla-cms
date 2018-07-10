@@ -1,53 +1,7 @@
 /* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
-!function(undf, k) { // old stuff
+!function(undf, k) {
 	'use strict';
-
 	window.qg = {};
-	/*
-    Function.prototype.c1Multi = function() {
-	    var fn = this;
-	    return function(a,b) {
-	        if (b === undf && typeof a === 'object') {
-	            for (var i in a)
-	                if (a.hasOwnProperty(i))
-	                    fn.call(this, i, a[i]);
-	            return;
-	        }
-	        return fn.apply(this,arguments);
-	    };
-    };
-    qg.Eventer = {
-		initEvent: function(n) {
-		    !this._Es && (this._Es={});
-		    !this._Es[n] && (this._Es[n]=[]);
-		    return this._Es[n];
-		},
-		on: function(ns,fn) {
-		    ns = ns.split(' ');
-		    for (var i=0, n; n = ns[i++];) {
-		        this.initEvent(n).push(fn);
-		    }
-		}.c1Multi(),
-		no: function(ns,fn) {
-		    ns = ns.split(' ');
-		    for (var i=0, n; n = ns[i++];) {
-		        var Events = this.initEvent(n);
-		        Events.splice(Events.indexOf(fn) ,1);
-		    }
-		}.c1Multi(),
-		fire: function(ns,e) {
-		    var self = this, i=0, n;
-		    ns = ns.split(' ');
-		    for (;n = ns[i++];) {
-		        var Events = this.initEvent(n);
-		        Events.forEach(function(E) {
-		            E.call(self,e);
-		        });
-		    }
-		}
-    };
-	*/
-
     /* devicePixelRatio polyfill */
     if (!('devicePixelRatio' in window)) window.devicePixelRatio = ('systemXDPI' in screen) ? screen.systemXDPI / screen.logicalXDPI : 1;
     if (window.devicePixelRatio) document.cookie = "q1_dpr=" + devicePixelRatio + "; path=/";
@@ -70,12 +24,9 @@
 }();
 
 // remote
-Ask_async = true;
-addEventListener('beforeunload',function() { // blur before unload (save)
-	document.activeElement && document.activeElement.blur(); // ok?
-	Ask_async = false;
-});
+
 Ask = function(obj, opt) {
+	'use strict';
 	opt = opt || {};
 	Ask.trigger('start', obj);
 	var data = new FormData();
@@ -83,20 +34,26 @@ Ask = function(obj, opt) {
 	data.append('askJSON', JSON.stringify(obj));
 	var http = new XMLHttpRequest();
 	var url = opt.url || location.href;
-	http.open('POST', url, Ask_async);
+	http.open('POST', url, Ask.async);
 	http.onreadystatechange = function() {
 	    if (http.readyState == 4 && http.status == 200) {
 			var res = JSON.parse(http.responseText);
 			Ask.trigger('complete', res); // first! loads head
-			res && res.script && eval(res.script); // todo
+			res && res.script && eval(res.script); // todo, only used in cms.cont.shp3.paypement.paypal/qg.php
 			opt.onComplete && opt.onComplete(res);
 	    }
 	}
 	http.send(data);
 	return http;
 };
-
 c1.ext(c1.Eventer, Ask);
+
+Ask.async = true;
+addEventListener('beforeunload',function() { // blur before unload (save)
+	'use strict';
+	Ask.async = false;
+	document.activeElement && document.activeElement.blur(); // ok?
+});
 
 Ask.on('complete', function(res) {
 	'use strict';
@@ -117,25 +74,17 @@ Ask.on('complete', function(res) {
 		range.selectNode(document.head); // required in Safari
 		var fragment = range.createContextualFragment('<div>'+res.head+'</div>');
 		document.head.append(fragment);
-
 		// $('head').append( $('<div>'+res.head+'</div>') );
 	}
 	if (res.updateElements) {
 		for (var selector in res.updateElements) {
 			if (!res.updateElements.hasOwnProperty(selector)) continue;
 			var html = res.updateElements[selector];
-
 			var els = document.querySelectorAll(selector);
 			for (var i=0, el; el=els[i++];) {
-				// var range = document.createRange();
-				// range.selectNode(document.head); // required in Safari
-				// var fragment = range.createContextualFragment(html);
-				// el.innerHTML = '';
-				// el.append(fragment);
 				el.innerHTML = html;
 				executeHTML(html)
 			}
-
 			//$(selector).html(html);
 		}
 	}
@@ -145,15 +94,9 @@ Ask.on('complete', function(res) {
 			var html = res.replaceElements[selector];
 			var els = document.querySelectorAll(selector);
 			for (var i=0, el; el=els[i++];) {
-				// var range = document.createRange();
-				// range.selectNode(document.head); // required in Safari
-				// var fragment = range.createContextualFragment(html);
-				// el.innerHTML = '';
-				// el.parentNode.replaceChild(fragment, el);
 				el.outerHTML = html;
 				executeHTML(html)
 			}
-
 			//$(selector).replaceWith(html);
 		}
 	}
@@ -169,7 +112,7 @@ $fn = function(fn) {
 				data.callb = callb;
 				return $fn.run();
 			},
-			then: function(callb) {
+			then: function(callb) { // should return a Promise ... :(
 				data.callb = callb;
 			},
 			setInitiator: function(initiator) {
@@ -180,14 +123,11 @@ $fn = function(fn) {
 	}
 	return params;
 };
-$fn.runCollected = function() { $fn.run(); }.c1Debounce(20);
+$fn.runCollected = function() { $fn.run(); }.c1Debounce(10);
 $fn.stack = [];
 $fn.run = function(cb) {
 	var fns = $fn.stack;
 	if (!fns.length) return;
-	// for (var i=0, data; data = fns[i++];) { // new
-	// 	$fn.trigger('before-'+data.fn, data); // needed? can not find some
-	// }
 	var request = Ask({
 		serverInterface: fns
 	},{

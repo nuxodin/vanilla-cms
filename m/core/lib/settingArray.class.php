@@ -86,7 +86,10 @@ class settingArray implements \ArrayAccess, \Iterator, \countable {
 		$offset = (string)$offset;
 		if (!isset($this->sub[$offset]) && !$this->has($offset)) {
 			//echo 'create setting '.$offset; // problem dont create offset if vers::$log;
-			if (D()->row("SELECT * FROM ".table('qg_setting')." WHERE basis = ".$this->i." AND offset = ".D()->quote($offset))) { trigger_error('qg_setting '.$this->i.'::'.$offset.' exists!'); }
+			if (D()->row("SELECT * FROM ".table('qg_setting')." WHERE basis = ".$this->i." AND offset = ".D()->quote($offset))) {
+				trigger_error('fatal: qg_setting '.$this->i.'::'.$offset.' exists!');
+				exit;
+			}
 			$id = D()->qg_setting->insert(['basis'=>$this->i, 'offset'=>$offset]);
 			unset(self::$All[$id]); // can exist as "false"
 			$this->hasAll = false;

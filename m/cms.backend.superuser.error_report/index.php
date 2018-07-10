@@ -41,23 +41,20 @@ if (isset($_GET['id'])) {
 				);
 				?>
 				<tbody>
-					<?php foreach ($rows as $row) { ?>
-						<tr>
-							<td>
-								<a href="<?=hee(Url()->addParam('message',$row['message']))?>"><?=$row['num']?> x</a>
-							<td>
-								<?=hee($row['source'])?>
-							<td>
-								<a target=_blank href="<?=appURL.'editor/?file='.urlencode($row['file']).'&line='.$row['line'].'&col='.$row['col']?>"><?=hee($row['message'])?></a>
-							<td>
-								<img
-									onclick="$fn('page::reload')(<?=$Cont?>,{deleteByMessage:this.getAttribute('value')})"
-									value="<?=hee($row['message'])?>"
-									src="<?=sysURL?>cms.frontend.1/pub/img/delete.svg"
-									class=-rem
-									alt="<?=hee(L('Löschen'))?>"
-									style="cursor:pointer; height:20px;">
-					<?php } ?>
+				<?php foreach ($rows as $row) { ?>
+					<tr>
+						<td> <a href="<?=hee(Url()->addParam('message',$row['message']))?>"><?=$row['num']?> x</a>
+						<td> <?=hee($row['source'])?>
+						<td> <a target=_blank href="<?=appURL.'editor/?file='.urlencode($row['file']).'&line='.$row['line'].'&col='.$row['col']?>"><?=hee($row['message'])?></a>
+						<td>
+							<img
+								onclick="$fn('page::reload')(<?=$Cont?>,{deleteByMessage:this.getAttribute('value')})"
+								value="<?=hee($row['message'])?>"
+								src="<?=sysURL?>cms.frontend.1/pub/img/delete.svg"
+								class=-rem
+								alt="<?=hee(L('Löschen'))?>"
+								style="cursor:pointer; height:20px;">
+				<?php } ?>
 			</table>
 			<?php if (!$rows) { ?>
 				<div class=-body>Super, bis jetzt keine Fehler!</div>

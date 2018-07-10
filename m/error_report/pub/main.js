@@ -33,6 +33,17 @@ window.error_report_count = window.error_report_count || 0; // global: make it p
 			backtrace: stack
 		});
   	});
+	window.addEventListener("unhandledrejection", function(e) {
+		var message = e.reason.stack.split('\n')[0];
+		var stack = unserializeStack(e.reason.stack);
+		send({
+			message: 'Unhandled rejection in Promise: '+message,
+			file: stack[0].file,
+			line: stack[0].line,
+			col:  stack[0].col,
+			backtrace: stack
+		});
+	});
 	function wrapConsole(method){
 		var original = console[method];
 		console[method] = function(message){
@@ -42,7 +53,7 @@ window.error_report_count = window.error_report_count || 0; // global: make it p
 			var latest = stack[0];
 			var data = {
 				message:message,
-				'function': latest ? latest.function : '-1',
+				function: latest ? latest.function : '-1',
 				file:     latest ? latest.file : '-1',
 				line:     latest ? latest.line : '-1',
 				col:      latest ? latest.col  : '-1',
@@ -59,21 +70,35 @@ window.error_report_count = window.error_report_count || 0; // global: make it p
 		var stack = [];
 		if (!asString) return stack; // ie11
 		var parts = asString.split('\n');
-		for (var i=0, part; part = parts[i++];) {
-			var x = part.match(/(.*)[\(@](.+)/);
+		for (var i=0, line; line = parts[i++];) {
+			// firefox:
+			// wrapConsole/console[method]@http://localhost/v6_full/m/error_report/pub/main.js?1519123438:39:16
+			// chrome:
+			// at console.(anonymous function) [as warn] (http://localhost/v6_full/m/error_report/pub/main.js?1519123580:39:16)
+			// edge:
+			// at console[method] (http://localhost/v6_full/m/error_report/pub/main.js?1519123438:39:4)
+			//var x = line.match(/(.*)(http[^)]+)/);
+			var x = line.match(/(.*)(http[^)]+):([0-9]+):([0-9]+)/);
+			//console.log('-------------------');
+			//console.log(line)
+			//console.log(x)
+//			var x = line.match(/(.*)[\(@](.+)/);
 			if (!x) continue; // first line chrome / ie
-			var fn = x[1].replace(/^ *at /,'').trim();
-			var file = x[2].trim();
-			x = file.match(/:[0-9]+/g);
-			file = file.replace(/:[0-9]+/g, '').replace(/\)$/,'');
-			var line = x ? x[0].replace(':','') : '';
-			var col  = x ? x[1].replace(':','') : ''; // todo
-			stack.push({
-				'function': fn,
-				file: file,
-				line: line,
-				col: col
-			});
+			var data = {
+				function: x[1].replace(/^ *at /,'').trim().replace(/ \($/,'').replace(/@$/,''),
+				file: x[2].trim(),
+				line: x[3],
+				col: x[4],
+			};
+			// var fn   = x[1].replace(/^ *at /,'').trim();
+			// var file = x[2].trim();
+			// var line = x[3];
+			// var col  = x[4];
+			// x = file.match(/:[0-9]+/g);
+			// file = file.replace(/:[0-9]+/g, '').replace(/\)$/,'');
+			// var line = x ? x[0].replace(':','') : '';
+			// var col  = x ? x[1].replace(':','') : ''; // todo
+			stack.push(data);
 		}
 		return stack;
 	}

@@ -1,0 +1,118 @@
+.qgDateInput.qgCalendar {
+	display:block;
+	position: absolute;
+	box-sizing: border-box;
+	width:300px;
+	background:#fff;
+	font-size:15px;
+    border: 1px solid #aaa;
+    box-shadow: 0 0 8px rgba(0,0,0,.3);
+	position:fixed;
+}
+.qgDateInput.qgCalendar td {
+	padding:7px;
+}
+.qgDateInput.qgCalendar > .-table {
+	height:240px;
+}
+@media (max-width:460px) {
+	.qgDateInput.qgCalendar {
+		width:100% !important;
+		left:0 !important;
+		right:0 !important;
+		bottom:0 !important;
+		top:auto !important;
+		border:none !important;
+	}
+}
+
+
+.qgCalendar {
+	font-size: 13px;
+	background-color:#fff;
+	border: 1px outset #444;
+	overflow: auto;
+	left: 0px;
+	white-space:nowrap;
+	z-index:10;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size:11px;
+	width: 180px;
+	box-shadow:0 2px 15px #666;
+}
+.qgCalendar > table {
+	width:100% !important;
+}
+.qgCalendar > .-table {
+	border-spacing: 0;
+	min-width:175px;
+	height:100px;
+}
+.qgCalendar td {
+	min-width:20px;
+	min-height:20px;
+	text-align:center;
+	vertical-align:middle;
+	border:1px solid white;
+	cursor:pointer;
+}
+.qgCalendar > .-table .-outMonth {
+	color: #ccc;
+}
+.qgCalendar > .-table .has {
+	border: 1px solid #dcc;
+	background-color: #fee;
+}
+.qgCalendar > .-table td:hover,
+.qgCalendar > .-table td.-today {
+	color: #0099ff;
+}
+.qgCalendar > .-table td.-selected {
+	background:#0099ff;
+	color:#fff;
+}
+
+.qgCalendar .clockFace {
+	width             : 142px;
+	height            : 142px;
+	background-image  : url(timepicker/img/clock_face.png);
+	position          : absolute;
+	top               : 0;
+	left              : 0;
+	z-index           : 21000;
+}
+.qgCalendar .ampm {
+	position    : absolute;
+	top         : 0px;
+	left        : 0px;
+	z-index     : 25000;
+	display     : block;
+	margin-top  : 87px;
+	margin-left : 57px;
+	color       : #555;
+	width       : 30px;
+	text-align  : center;
+	font-weight : bold;
+}
+.qgCalendar .minuteHand {
+	margin-top  : 15px;
+	margin-left : 15px;
+	width       : 111px;
+	height      : 112px;
+	position    : absolute;
+	top		    : 0;
+	left	    : 0;
+	z-index     : 22000;
+	background  : url(timepicker/img/clock_minutes.png) no-repeat top left;
+}
+.qgCalendar .hourHand {
+	margin-top 	: 37px;
+	margin-left	: 37px;
+	width		: 67px;
+	height		: 68px;
+	position	: absolute;
+	top			: 0;
+	left		: 0;
+	z-index		: 23000;
+	background	: url(timepicker/img/clock_hours.png) no-repeat top left;
+}

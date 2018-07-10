@@ -74,7 +74,7 @@ class csstidy_optimise {
 			return;
 		}
 
-		if ($this->parser->get_cfg('merge_selectors') === 2) {
+		if ((int)$this->parser->get_cfg('merge_selectors') === 2) {
 			foreach ($this->css as $medium => $value) {
 				$this->merge_selectors($this->css[$medium]);
 			}
@@ -269,7 +269,8 @@ class csstidy_optimise {
 	 */
 	public function compress_important(&$string) {
 		if ($this->parser->is_important($string)) {
-			$string = $this->parser->gvw_important($string) . '!important';
+			$important = $this->parser->get_cfg('space_before_important') ? ' !important' : '!important';
+			$string = $this->parser->gvw_important($string) . $important;
 		}
 		return $string;
 	}
@@ -399,9 +400,9 @@ class csstidy_optimise {
 				if ($number[1] == '' && in_array($this->property, $unit_values, true)) {
 					$number[1] = 'px';
 				}
-			} else {
-				$number[1] = '';
-			}
+                        } elseif ($number[1] != 's' && $number[1] != 'ms') {
+                                $number[1] = '';
+                        }
 
 			$temp[$l] = $number[0] . $number[1];
 		}
@@ -899,7 +900,7 @@ class csstidy_optimise {
 		$new_font_value = '';
 		$important = '';
 		// Skip if not font-family and font-size set
-		if (isset($input_css['font-family']) && isset($input_css['font-size'])) {
+		if (isset($input_css['font-family']) && isset($input_css['font-size']) && $input_css['font-family'] != 'inherit') {
 			// fix several words in font-family - add quotes
 			if (isset($input_css['font-family'])) {
 				$families = explode(',', $input_css['font-family']);

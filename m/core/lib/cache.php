@@ -96,7 +96,6 @@ register_shutdown_function(function(){cache::save();});
 
 cache::init();
 
-
 /* *
 $Cache = cache('testx',3);
 //$Cache->remove(); echo 'remove! ';

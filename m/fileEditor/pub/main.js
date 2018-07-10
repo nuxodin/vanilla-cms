@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded',function(){
         btn.style.backgroundColor = '#faa';
     });
 
-    if (cmLine !== '') {
+    if (cmLine !== '' && cmLine !== -1) {
         cmLine = parseInt(cmLine);
         setTimeout(function() {
             editor.setCursor(cmLine, cmCol);

@@ -1,7 +1,5 @@
 /* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
-
-!function(w,undf,k) {
-    'use strict';
+!function(w,undf,k) { 'use strict';
 
 	/* Frequently used and small polyfills */
 
@@ -112,21 +110,14 @@
 	    	}
 	    }.xMulti(),
 		trigger: function(ns, e) {
-	        var self = this, n, i=0, ns = ns.split(' ');
+	        var self = this, n, i=0;
+            ns = ns.split(' ');
 	    	while (n = ns[i++]) {
-		    	this._getEvents(n).forEach(function(Event) {
-		            Event.call(self,e);
-		        });
+          this._getEvents(n).forEach(function(Event) {
+              Event.call(self,e);
+          });
 	    	}
-	    },
-        no: function() {
-            console.warn('deprecated ".no()", use ".off()"');
-            return this.off.call(this, arguments);
-        },
-        fire: function() {
-            console.warn('deprecated ".fire()", use ".trigger()"');
-            return this.off.call(this, arguments);
-        }
+	    }
 	};
 	/* ext */
 	c1.ext = function (src, target, force, deep) {
@@ -204,37 +195,38 @@
     	var fn = function (props, cb) {
     		var scope = this || self, i, prop;
     		if (!scope.c1UseSrc) { throw new Error("c1Use: the Object needs a c1UseSrc property!"); }
-			if (props instanceof Array) {
-				var returns = [], index=0, counter=0;
-	    		while (prop = props[index++]) {
-	    			c1Use.call(scope, prop, function(index) {
-	    				var fn = function(res) {
-							counter++;
-	    					returns[index-1] = res;
-	    					if (props.length === counter) cb.apply(scope, returns);
-	    				};
-	    				return fn;
-	    			}(index));
-	    		}
-			} else if (typeof props === 'string') {
-				if (props.indexOf('/') === 0) { // neu beta
-					var parts = props.match(/(.*)\/([^\/]*)\..+$/);
-					return use.call(scope, {from:parts[1], property:parts[2]}, cb);
-				} else {
-					// parts ("jQuery.fn.velocity")
-	        		var parts = props.split(/\./g),
-	        			part;
-	        		prop = parts.pop();
-	        		for (var i=0;part = parts[i++];) {
-	       				c1Use.able(scope, part);
-	       				scope = scope[part];
-	        		}
-					return use.call(scope, prop, cb);
-				}
-			} else {
-				//console.log('todo?', props) // todo?
-				return use.call(scope, props, cb);
-			}
+            if (props instanceof Array) {
+            	var returns = [], index=0, counter=0;
+            		while (prop = props[index++]) {
+            			c1Use.call(scope, prop, function(index) {
+            				var fn = function(res) {
+            				counter++;
+            					returns[index-1] = res;
+            					if (props.length === counter) cb.apply(scope, returns);
+            				};
+            				return fn;
+            			}(index));
+            		}
+            } else if (typeof props === 'string') {
+            	if (props.indexOf('/') === 0) { // neu beta
+            		var parts = props.match(/(.*)\/([^\/]*)\..+$/);
+            		return use.call(scope, {from:parts[1], property:parts[2]}, cb);
+            	} else {
+                    // parts ("jQuery.fn.velocity")
+                    var parts = props.split(/\./g),
+                        part;
+                    i=0;
+                    prop = parts.pop();
+                    while (part = parts[i++]) {
+                        c1Use.able(scope, part);
+                        scope = scope[part];
+                    }
+            		return use.call(scope, prop, cb);
+            	}
+            } else {
+            	//console.log('todo?', props) // todo?
+            	return use.call(scope, props, cb);
+            }
     	};
     	return fn;
     } (c1Use);
@@ -284,25 +276,25 @@
 	var d = document;
     function loadScript(path, cb, eb) {
         var elem = d.createElement('script');
-		elem.async   = false;
-		elem.src     = path;
-		elem.onload  = cb;
-		elem.onerror = eb;
+        elem.async   = false;
+        elem.src     = path;
+        elem.onload  = cb;
+        elem.onerror = eb;
         d.documentElement.firstChild.appendChild(elem);
     }
     function loadScriptSync(path, cb, eb) {
-    	var request = new XMLHttpRequest();
-    	request.open('GET', path, false);
-    	request.send(null);
-    	if (request.status === 200) {
+        var request = new XMLHttpRequest();
+        request.open('GET', path, false);
+        request.send(null);
+        if (request.status === 200) {
             var elem = d.createElement('script');
             elem.text = request.responseText;
             d.documentElement.firstChild.appendChild(elem);
             elem.setAttribute('data-c1-src',path);
             cb({type:'load'});
-    	} else {
-       	 	eb({type:'error'});
-    	}
+        } else {
+            eb({type:'error'});
+        }
         console.warn('deprecated to load '+path+' sync');
     }
     if (!global.c1UseSrc) {
@@ -310,6 +302,29 @@
         tmp = tmp[tmp.length-1];
         global.c1UseSrc = tmp.getAttribute('src').replace(/[^\/]+$/,'');
     }
+
+    c1.import = function(path) {
+        let entry = window.c1.import.__db[path];
+        if (entry === undefined) {
+            const escape = path.replace("'", "\\'");
+            const script = Object.assign(document.createElement('script'), {
+                type: 'module',
+                textContent: 'import * as x from "'+escape+'"; c1.import.__db["'+escape+'"].resolve(x);',
+            });
+            entry = c1.import.__db[path] = {};
+            entry.promise = new Promise(function(resolve, reject){
+                entry.resolve = resolve;
+                script.onerror = reject;
+            });
+            document.head.appendChild(script);
+            script.remove();
+        }
+        return entry.promise;
+    };
+    c1.import.__db = {};
+
+
+
 }(this);
 
 /*

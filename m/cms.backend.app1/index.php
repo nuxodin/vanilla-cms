@@ -49,14 +49,14 @@
 			<br>
 	        <h2>Manifest-Standards:</h2>
 			<a href="http://www.w3.org/TR/appmanifest" target=_blank>http://www.w3.org/TR/appmanifest</a> und <br>
-	        <a href="https://developer.mozilla.org/de/docs/Apps/Manifest" target=_blank>https://developer.mozilla.org/de/docs/Apps/Manifest</a> und <br>
 			<a href="https://developer.chrome.com/webstore/hosted_apps" target=_blank>https://developer.chrome.com/webstore/hosted_apps</a>
 			<br>
 			<br>
 			<h2>Manifest-Files</h2>
-			<a target=_blank href="<?=appURL?>w3c.manifest.json">W3C webapp manifest</a><br>
-			<a target=_blank href="<?=appURL?>manifest.webapp">Firefox-Web-App-Manifest</a><br>
-			<a target=_blank href="<?=appURL?>app.crx">Chrome-CRX-File</a><br>
+			<?php foreach (L::$all as $l) { ?>
+				<a target=_blank href="<?=appURL?><?=$l?>.app1.webmanifest">W3C Web App Manifest (<?=$l?>)</a><br>
+			<?php } ?>
+			<!--a target=_blank href="<?=appURL?>app.crx">Chrome-CRX-File</a><br-->
 			<br><br><br>
 		</div>
 	</div>

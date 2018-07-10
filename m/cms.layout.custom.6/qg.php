@@ -14,20 +14,7 @@ class layoutCustom6 {
 		}
 		return $Page;
 	}
-	function getImages() {
-		trigger_error('used?');
-		$path = $this->customPath().'img/';
-		!is_dir($path) && mkdir($path);
-		$url = path2uri($path);
-		$ret = [];
-		foreach (scanDir($path) as $f) {
-			if (!is_file($path.$f)) continue;
-			$ret[] = $url.$f;
-		}
-		return $ret;
-	}
 }
-
 qg::on('action', function() {
 	if (isset($_GET['mLayoutCustom6_upload'])) {
 		$LPage = layoutCustom6::layoutPage();

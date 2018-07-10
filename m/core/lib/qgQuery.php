@@ -6,7 +6,6 @@ namespace qg;
 //require_once 'core/lib/qgQueryEntry.php';
 
 class qgQuery {
-
 	public $wheres    = [];
 	public $orders    = [];
 	public $limit_num = null;
@@ -32,7 +31,7 @@ class qgQuery {
 	}
 	function getSqlFrom() {
 		foreach ($this->Froms AS $alias => $From)
-			$froms[] = $From === $this->From ?  $From." ".$From->alias : $From->join.' JOIN '.$From->Table." ".$From." ON ".$From->getOn();
+			$froms[] = $From === $this->From ? $From." ".$From->alias : $From->join.' JOIN '.$From->Table." ".$From." ON ".$From->getOn();
 		return implode("\n\t", $froms);
 	}
 	function nextFromAlias() { static $i = 1; return 'f_'.$i++; }
@@ -54,16 +53,17 @@ class qgQuery {
 		foreach ($this->Selects AS $alias => $Select)  { $selects[] = $Select->formel()." AS ".$alias; }
 		foreach ($this->orders AS $field => $d)        { $orders[] = $field." ".$d; }
 		foreach ($this->Table->getPrimaries() AS $Pri) { $groupby[] 	= $this->From.".".$Pri; }
-		$sql =  "SELECT SQL_CALC_FOUND_ROWS \n\t".implode(",\n\t ", $selects)." 	\n".
-				"FROM  	\n\t".$this->getSqlFrom()." 								\n".
-				(count($wheres)?
-				"WHERE 	\n\t".implode("\n\t  AND ", $wheres)." 						\n":"").
-				//"GROUP BY \n\t".implode(",\n\t", $groupby)." 	\n".
-				//"GROUP BY 'a'														\n".
-				(isset($orders)?
-				"ORDER BY \n\t".implode(",\n\t", $orders)."							\n":"").
-				($this->limit_num!==null?
-				"LIMIT ".(int)$this->limit_offset.', '.(int)$this->limit_num."		\n":"");
+		$sql =
+			"SELECT SQL_CALC_FOUND_ROWS \n\t".implode(",\n\t ", $selects)." 	\n".
+			"FROM  	\n\t".$this->getSqlFrom()." 								\n".
+			(count($wheres)?
+			"WHERE 	\n\t".implode("\n\t  AND ", $wheres)." 						\n":"").
+			//"GROUP BY \n\t".implode(",\n\t", $groupby)." 	\n".
+			//"GROUP BY 'a'														\n".
+			(isset($orders)?
+			"ORDER BY \n\t".implode(",\n\t", $orders)."							\n":"").
+			($this->limit_num!==null?
+			"LIMIT ".(int)$this->limit_offset.', '.(int)$this->limit_num."		\n":"");
 		return $sql;
 	}
 	function update($eid,$values) {
@@ -74,11 +74,12 @@ class qgQuery {
 			if (!isset($this->Selects[$alias])) continue;
 			$sets[] = $this->Selects[$alias]->formel().' = '.$this->Selects[$alias]->Field->valueToSql($value);;
 		}
-		$sql =  "UPDATE  	\n\t".$this->getSqlFrom()." 							\n".
-				"SET 	\n\t".implode(",", $sets)." 								\n".
-				(count($wheres)?
-				"WHERE 	\n\t".implode("\n\t  AND ", $wheres)." 						\n":"").
-				"";
+		$sql =
+			"UPDATE  	\n\t".$this->getSqlFrom()." 							\n".
+			"SET 	\n\t".implode(",", $sets)." 								\n".
+			(count($wheres)?
+			"WHERE 	\n\t".implode("\n\t  AND ", $wheres)." 						\n":"").
+			"";
 		$this->Db->query($sql);
 		return 1;
 	}
@@ -106,7 +107,7 @@ class qgQuery {
 	function insert($vs) {
 		foreach ($this->Selects AS $alias => $Select) {
 			if (!isset($vs[$alias]) && $Select->getInsertValue())
-				$vs[$alias] = $Select->getInsertValue();
+			$vs[$alias] = $Select->getInsertValue();
 		}
 		return $this->From->insert($vs);
 	}

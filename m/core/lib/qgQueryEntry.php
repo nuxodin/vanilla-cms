@@ -14,8 +14,8 @@ class qgQueryEntry implements \ArrayAccess, \Iterator {
 	}
 	/*
 	protected $vs;
-	function __get($n) { todo?
-		return $this->vs[$n] ?? null;
+	function __get($n) { // todo?
+	return $this->vs[$n] ?? null;
 	}
 	*/
 	public function offsetExists($id)  { return isset($this->vs[$id]); }
@@ -31,13 +31,13 @@ class qgQueryEntry implements \ArrayAccess, \Iterator {
 
 	function update($vs) {
 		foreach ($this->Q->Selects AS $alias => $Select) {
-			if (isset($vs[$alias]))
-				$sets[] = " ".$Select->formel()." = '".$vs[$alias]."' \n";
+			if (isset($vs[$alias])) $sets[] = " ".$Select->formel()." = '".$vs[$alias]."' \n";
 		}
 		if (isset($sets)) {
-			$sql = 	"UPDATE  \n\t ".$this->Q->getSqlFrom()." 										\n".
-					"SET \n\t".implode("\n\t , ", $sets)." 											\n".
-					"WHERE ".$this->Q->Table->entryId2where($this->id, $this->Q->From->alias)." 	\n";
+			$sql =
+			" UPDATE  \n\t ".$this->Q->getSqlFrom()." 									\n".
+			" SET \n\t".implode("\n\t , ", $sets)." 									\n".
+			" WHERE ".$this->Q->Table->entryId2where($this->id, $this->Q->From->alias)."\n";
 			$this->Q->Db->query($sql);
 			return true;
 		}

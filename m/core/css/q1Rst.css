@@ -15,11 +15,11 @@
 	/* xtext-shadow:initial; stronger then ".qgCMS > .el" ?!?  */
 }
 .q1Rst h1, .q1Rst h2, .q1Rst h3, .q1Rst h4, .q1Rst h5, .q1Rst h6 {
-	margin:0;
+	margin:0 0 .5em 0;
     font-weight: bolder;
 }
 .q1Rst li { margin:0; }
-.q1Rst p { margin:0; }
+/*.q1Rst p { margin-top:0; }*/
 .q1Rst h1 { font-size: 2em; }
 .q1Rst h2 { font-size: 1.5em; }
 .q1Rst h3 { font-size: 1.17em; }

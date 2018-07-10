@@ -80,12 +80,13 @@ $SET['use apple-touch-icon']->setType('string')->setHandler('select')->setOption
 $SET['use apple-mobile-web-app-capable']->setHandler('checkbox');
 $SET['apple-mobile-web-app-status-bar-style']->setHandler('select')->setOptions('','black','black-translucent');
 $SET['no telefon nr detection']->setHandler('checkbox');
+$SET['no start_url']->setType('bool');
 $SET->make('tile color', '#aaaaff');
 
 $SET['viewport']->make('width', 'device-width');
-$SET['viewport']->make('initial-scale', 1);
-$SET['viewport']->make('maximum-scale', 2);
-$SET['viewport']->make('user-scalable', 'yes');
+$SET['viewport']->make('initial-scale', '');
+$SET['viewport']->make('maximum-scale', '');
+$SET['viewport']->make('user-scalable', '');
 
 
 //$SET->make('https only',0)->setType('bool');

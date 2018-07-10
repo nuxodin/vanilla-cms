@@ -1,6 +1,5 @@
-'use strict';
 (function(){
-
+    'use strict';
     let htmlEl = document.documentElement;
     let style = htmlEl.style;
     let ok =
@@ -96,6 +95,6 @@
         document.body.append(div);
         div.c1ZTop();
         clearInterval(iv);
-    },200)
+    },200);
 
 })();

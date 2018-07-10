@@ -351,8 +351,7 @@ qgStyleSheetEditor.prototype = {
 /* polyfill */
 q_CSSStyleSheetContents = function(sheet) {
 	var str = '';
-	var rules = sheet.rules || sheet.cssRules;
-	$.each(rules, function(i,rule) {
+	$.each(sheet.cssRules, function(i,rule) {
 		var selectorText = rule.selectorText;
 		str += selectorText+' {\n';
 		str += q1CssText(rule.style);

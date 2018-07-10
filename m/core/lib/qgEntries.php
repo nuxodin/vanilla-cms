@@ -33,7 +33,7 @@ class dbEntry_log extends dbEntry {
 
 function Sess($id = null) {
 	if ($id) return D()->sess->Entry($id);
-	!liveSess::$id && trigger_error('Session not initialized') && exit();
+	!liveSess::$id && trigger_error('Session not initialized') && exit;
 	return D()->sess->Entry(liveSess::$id);
 }
 class dbEntry_sess extends dbEntry {
@@ -45,7 +45,7 @@ class dbEntry_sess extends dbEntry {
 
 function Client($id = null) {
 	if ($id) return D()->client->Entry($id);
-	!liveClient::$id && trigger_error('Client not initialized') && exit();
+	!liveClient::$id && trigger_error('Client not initialized') && exit;
 	return D()->client->Entry(liveClient::$id);
 }
 class dbEntry_client extends dbEntry {

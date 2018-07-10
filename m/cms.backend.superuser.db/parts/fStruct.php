@@ -17,14 +17,13 @@ foreach (D()->Tables() as $PT) {
 }
 
 ?>
-<div class=-head>Feld: <?=$F?></div>
 <div class=-body>
 	<fieldset>
 		<legend>Verknüpfung</legend>
 
 		<select onchange="$fn('dbField::setParent')('<?=$T?>','<?=$F?>',$(this).val() ).run(); $(this).next('div')[0].style.display=$(this).val()?'block':'none'">
 			<option>
-			<?=helper_optionsFromArray($PTs,$F->Parent())?>
+			<?=util::optionsFromArray($PTs,$F->Parent())?>
 		</select><br>
 		<div style="display:<?=$F->Parent()?'block':'none'?>">
 			<br>
@@ -41,19 +40,16 @@ foreach (D()->Tables() as $PT) {
 	<fieldset>
 		<legend>Typ</legend>
 		<select onchange="$fn('superuser_db::fieldSetTyp')('<?=$T?>','<?=$F?>',$(this).val()).run()">
-			<?=helper_optionsFromArray(['VARCHAR','TINYINT','TEXT','DATE','SMALLINT','MEDIUMINT','INT','BIGINT','FLOAT','DOUBLE','DECIMAL','DATETIME','TIMESTAMP','TIME','YEAR','CHAR','TINYBLOB','TINYTEXT','BLOB','MEDIUMBLOB','MEDIUMTEXT','LONGBLOB','LONGTEXT','BOOL','BINARY'], strtoupper($F->getType()), 0)?>
+			<?=util::optionsFromArray(['VARCHAR','TINYINT','TEXT','DATE','SMALLINT','MEDIUMINT','INT','BIGINT','FLOAT','DOUBLE','DECIMAL','DATETIME','TIMESTAMP','TIME','YEAR','CHAR','TINYBLOB','TINYTEXT','BLOB','MEDIUMBLOB','MEDIUMTEXT','LONGBLOB','LONGTEXT','BOOL','BINARY'], strtoupper($F->getType()), 0)?>
 		</select>
 		<input onchange="$fn('superuser_db::fieldSetLength')('<?=$T?>','<?=$F?>',$(this).val()).run()" value="<?=$F->getLength()?>" /><br>
 		<br>
-		<select onchange="$fn('superuser_db::fieldSetSpecial')('<?=$T?>','<?=$F?>',$(this).val()).run()">
-			<?=helper_optionsFromArray([' ','UNSIGNED','UNSIGNED ZEROFILL','ON UPDATE CURRENT_TIMESTAMP'], strtoupper($F->getSpecial()), 0)?>
-		</select><br>
+		<input <?=$F->getSpecial()!==''?'checked':''?> type=checkbox onclick="$fn('superuser_db::fieldSetSpecial')('<?=$T?>','<?=$F?>',this.checked?'UNSIGNED':' ').run()">
+		Nur positive Zahlen? <br>
 		<input <?=$F->vs['Null']=='YES'?'checked':''?> type=checkbox onclick="$fn('superuser_db::fieldSetNull')('<?=$T?>','<?=$F?>',this.checked).run()" />
-		Null?
-		<br>
+		Null? <br>
 		<input <?=$F->isAutoincrement()?'checked':''?> type=checkbox onclick="$fn('superuser_db::fieldSetAutoincrement')('<?=$T?>','<?=$F?>',this.checked).run(); $(this).next('input').attr('disabled',this.checked)" />
-		Autoincrement?
-		<br>
+		Autoincrement? <br>
 		Default
 		<input onchange="$fn('superuser_db::fieldSetDefault')('<?=$T?>','<?=$F?>',$(this).val() ).run()" value="<?=$F->vs['Default']?>" <?=$F->isAutoIncrement()?'disabled="disabled"':''?> /><br>
 		<br>

@@ -4,7 +4,7 @@ namespace qg;
 $allow_login_as = $Cont->SET['allow_login_as']->setType('bool')->v || Usr()->superuser;
 
 $search = $vars['search'] ?? '';
-$sh = sqlSearchHelper($search, ['lastname', 'firstname', 'company', 'email']);
+$sh = util::sqlSearchHelper($search, ['lastname', 'firstname', 'company', 'email']);
 $res = D()->query(
 	"SELECT * 						" .
 	"FROM usr 						" .
@@ -17,7 +17,7 @@ $res = D()->query(
 foreach ($res as $vs) {
 	if ($vs['superuser'] && !Usr()->superuser) continue;
 
-	$stat = D()->row(
+	$numSess = D()->one(
 		" SELECT count(distinct sess.id) as sessions 		" .
 		" FROM sess 										" .
 		" WHERE usr_id = '".$vs['id']."' GROUP BY usr_id");
@@ -35,10 +35,17 @@ foreach ($res as $vs) {
 			<?=$is?'</a>':''?>
 		<td> <?=hee($vs['company'])?>
 		<td> <?=$vs['active']?'yes':'no'?>
-		<td> <?=hee($stat['sessions'])?>
+		<td> <?=hee($numSess)?>
 		<td> <?php
-			$time = D()->one("SELECT max(log.time) FROM log LEFT JOIN sess ON log.sess_id = sess.id WHERE sess.usr_id = ".$vs['id']);
-			if ($time) echo strftime('%x %H:%M', $time);
+			// $time = D()->one("SELECT max(log.time) FROM log LEFT JOIN sess ON log.sess_id = sess.id WHERE sess.usr_id = ".$vs['id']);
+			// if ($time) echo strftime('%x %H:%M', $time);
+			// can have alder sessions with younger logs
+			$sess_id = D()->one("SELECT max(id) FROM sess WHERE sess.usr_id = ".$vs['id']);
+			if ($sess_id) {
+				$time    = D()->one("SELECT max(time) FROM log WHERE log.sess_id = ".$sess_id);
+				if ($time) echo strftime('%x %H:%M', $time);
+			}
+
 			?>
 		<?php if ($allow_login_as) { ?>
 			<td class=-loginAs>

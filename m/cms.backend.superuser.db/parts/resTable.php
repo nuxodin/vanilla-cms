@@ -25,7 +25,7 @@ foreach ($T->Fields() as $F) {
 	$ShowFs[] = $F;
 }
 if (isset($vars['search']) && $vars['search']) {
-	$h = sqlSearchHelper($vars['search'], $ShowFs);
+	$h = util::sqlSearchHelper($vars['search'], $ShowFs);
 	$where .= ' AND '.$h['where'];
 }
 
@@ -39,17 +39,16 @@ $page = (int)($vars['page'] ?? 1);
 $page = min($numPages, $page);
 $page = max(1, $page);
 
-
 $sql =
-"SELECT *, 											" .
-"	".$sqlAccess." as _access						" .
-"FROM 												" .
-"	".$T." 											" .
-"WHERE												" .
-"	".$where."  									" .
+" SELECT *, 								   " .
+"    ".$sqlAccess." as _access				   " .
+" FROM 										   " .
+"    ".$T." 								   " .
+" WHERE										   " .
+"    ".$where."  							   " .
 ( isset($h['order']) ?
-"ORDER BY ".$h['order']."							":'') .
-"LIMIT ".(($page-1)*$perPage).", ".$perPage." " .
+" ORDER BY ".$h['order']."					   ":'') .
+" LIMIT ".(($page-1)*$perPage).", ".$perPage." " .
 "";
 
 $res = D()->query($sql);
@@ -72,7 +71,7 @@ $res = D()->query($sql);
 			<?=$i?>
 		</a>
 		<?=$i==$numPages?'':'|'?>
-	<?php } ?>  
+	<?php } ?>
 </div>
 
 <table qgDbTable="<?=hee($T)?>" class="c1-style">

@@ -104,17 +104,19 @@
 		</table>
 	</div>
 
-	<div class=-widgetHead><span class=-title><?=L('Bearbeitbare Elemente hervorheben')?></span></div>
+	<!--div class=-widgetHead><span class=-title><?=L('Bearbeitbare Elemente hervorheben')?></span></div>
 	<div style="text-align:center">
 		<button class=-showEditables>
 			<div style="padding:10px; margin:10px; background: #Faa">Textfelder</div>
 			<div style="padding:10px; margin:10px; background: var(--cms-color); !important; box-shadow: -2px -2px 5px 0px rgba(0,0,0,.9);">Inhalte</div>
 			<div style="padding:10px; margin:10px; background: var(--cms-color); !important; box-shadow: -2px -2px 5px 0px rgba(0,0,0,.9); outline: 4px solid red; outline-offset: -2px;">Container für Inhalte</div>
 		</button>
-	</div>
+	</div-->
 
 	<div class=-widgetHead><span class=-title><?=L('About')?></span></div>
 	<div>
-		Icons from <a href="http://www.flaticon.com">www.flaticon.com</a>
+		<a href="https://vanilla-cms.org/de/home" target=_blank>vanilla-cms.org</a>
+		<br>
+		Feedback willkommen!
 	</div>
 </div>

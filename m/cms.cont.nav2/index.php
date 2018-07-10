@@ -51,6 +51,7 @@ $getUl = function ($Page) use ($Cont, &$level, &$getUl) {
 				(Page()->in($Page->Page) ?' cmsInside':'').
 				(Page()===$Page->Page    ?' cmsActive':''). // aria-current="page" ?
 				($childStr !== false     ?' cmsHasSub':'').
+				(!$Page->isOnline()      ?' cmsOffline':'').
 				'"';
 		$str .= '<li '.$class.'>' . cms_link($Page) . $childStr;
 	}

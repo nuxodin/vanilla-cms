@@ -146,6 +146,8 @@ if ($freshInstallation) {
 	qg::need('cms.layout.custom.6');
 	qg::need('cms.encrypt_emails');
 	qg::need('cms.image_editor');
+	qg::need('cms.image2');
+	qg::need('cms.filebrowser');
 	qg::need('error_report');
 	qg::need('reporting');
 }

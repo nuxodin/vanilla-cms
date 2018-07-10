@@ -50,7 +50,7 @@ spl_autoload_register(function($name){
 	file_exists($file) && require_once($file);
 });
 
-ini_set('max_execution_time', '9');
+ini_set('max_execution_time', '7');
 ini_set('memory_limit', '512M');
 
 mb_internal_encoding('UTF-8');
@@ -85,7 +85,7 @@ foreach (explode(',', G()->SET['qg']['langs']->v) as $l) {
 }
 L::$def = reset(L::$all);
 
-header('X-Content-Type-Options: nosniff');
+//header('X-Content-Type-Options: nosniff'); // use for scripts and css https://sonarwhal.com/docs/user-guide/rules/rule-x-content-type-options/
 header('X-Xss-Protection: 1; mode=block');
 header('X-Frame-Options: SAMEORIGIN');
 header('Referrer-Policy: no-referrer-when-downgrade');
@@ -102,13 +102,13 @@ qg::on('output-before',function(){
 	header('Content-Security-Policy'.($enable==='report only'?'-Report-Only':'').': '.$str);
 });
 
-// todo: report-sample - https://www.chromestatus.com/feature/5792234276388864
+// ok?: report-sample - https://www.chromestatus.com/feature/5792234276388864
 G()->csp = [
 	'default-src' => ["'self'"=>1], // if none, favicon and serviceworker blocked?
 	'font-src'    => ['*'=>1, 'data:'=>1], /* firefox makes it intern to data-links and so blocks fonts? */
 	'img-src'     => ["'self'"=>1, 'data:'=>1],
-	'script-src'  => ["'self'"=>1, "'unsafe-inline'"=>1, /*"'report-sample'"=>1, */],
-	'style-src'   => ["'self'"=>1, "'unsafe-inline'"=>1],
+	'script-src'  => ["'self'"=>1, "'unsafe-inline'"=>1, "'report-sample'"=>1,], // report-sample ok?
+	'style-src'   => ["'self'"=>1, "'unsafe-inline'"=>1, "'report-sample'"=>1,], // report-sample ok?
 	'connect-src' => ["'self'"=>1],
 	'frame-src'   => ["'self'"=>1],
 ];

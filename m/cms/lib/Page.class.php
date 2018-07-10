@@ -48,7 +48,9 @@ class Page {
 	}
 	function __destruct() {
 		if (!$this->cacheChanged) return;
-		foreach ($this->cache as $key => $values) if (count($values) > 200) unset($this->cache[$key]);
+		foreach ($this->cache as $key => $values) {
+			if ($values === null || count($values) > 200) unset($this->cache[$key]);
+		}
 		$this->set('_cache', serialize($this->cache));
 	}
 
@@ -133,16 +135,22 @@ class Page {
 	}
 
 	/* render */
-	function get($vars=[]) { // get for output / rename to read output or print?
+	function get($vars=[]) { // get for output / rename to: read, out, output, render or print?
 		if (!$this->isReadable()) return '';
 		if (isset(cms::$RenderPath[$this->id])) {
 			return $this->edit ? '<div class="qgCmsCont -pid'.$this.'">Recursion, Content '.$this->id.' again!</div>' : '';
 		}
 		cms::$RenderPath[$this->id] = true;
+
+		//is_file(sysPATH.$this->vs['module'].'/pub/base.css')         && html::addCSSFile(sysURL.$this->vs['module'].'/pub/base.css');
+		is_file(appPATH.'qg/'.$this->vs['module'].'/pub/main.css') && html::addCSSFile(appURL.'qg/'.$this->vs['module'].'/pub/main.css');
+
 		$s = $this->getPrepared($vars);
+
 		$modPath = sysPATH.$this->vs['module'].'/';
 		is_file($modPath.'pub/main.js')  && html::addJsFile($this->modUrl.'pub/main.js');
-		is_file($modPath.'pub/main.css') && html::addCSSFile($this->modUrl.'pub/main.css');
+		is_file($modPath.'pub/main.css') && html::addCSSFile($this->modUrl.'pub/main.css'); // deprecated
+
 		array_pop(cms::$RenderPath);
 		return $s;
 	}
@@ -157,12 +165,12 @@ class Page {
 		$expose = cms::classesExposeCss();
 		if ($expose)
 			foreach ($this->classes() as $name => $egal)
-				if (isset($expose[$name]))
-					$class .= ' '.$name;
+				if (isset($expose[$name])) $class .= ' '.$name;
 
 		if ($this->edit) {
 			$class .= ' -e';
 			if (substr($this->vs['module'], 0, 17) === 'cms.cont.flexible') $class .= ' qgCMS-dropTarget';
+			if (!$this->isOnline()) $class .= ' qgCMS-offline';
 		}
 		$attr = '';
 		if ($this->vs['type']==='c' && $this->vs['visible']) {
@@ -170,6 +178,8 @@ class Page {
 		}
 		// $attr .= ' vcms-id='.$this->id; // future
 		// $attr .= ' vcms-mod='.$this->vs['module'];
+		if ($this->vs['name']) $attr .= ' vcms-name="'.hee($this->vs['name']).'"';
+
 		$done = null;
 		$ret = preg_replace('/^<([^>]+)class=("([^"]*)"|([^\s>]*))/','<$1class="$3$4 '.$class.'"'.$attr, $str, 1, $done);
 		if ($done) return $ret;
@@ -302,7 +312,7 @@ class Page {
 		$TextLang = $this->Texts[$name]->get($lang);
 		if ($value === null) return $TextLang->get();
 
-		if ($TextLang->get() === $value) return false; // no chang
+		if ($TextLang->get() === $value) return false; // no change
 
 		qg::fire('page::text_set-before', ['Page'=>$this, 'name'=>$name, 'lang'=>&$lang, 'value'=>&$value]);
 		$TextLang->set($value);
@@ -324,7 +334,11 @@ class Page {
 			$this->Title->edit = $this->edit;
 		}
 		if ($lang  === null) return $this->Title;
-		if ($value === null) return $this->Title->get($lang)->get();
+		$TextLang = $this->Title->get($lang);
+		if ($value === null) return $TextLang->get();
+
+		if ($TextLang->get() === $value) return false; // no change
+
 		qg::fire('page::title_set-before', ['Page'=>$this, 'lang'=>&$lang, 'value'=>&$value]);
 		$this->Title->get($lang)->set($value);
 		qg::fire('page::title_set-after',  ['Page'=>$this, 'lang'=>&$lang, 'value'=>&$value]);
@@ -358,9 +372,16 @@ class Page {
 				$Page->fromXML($this->SET['childXML']);
 			}
 		}
-		foreach ($this->Children(['type'=>$vs['type']]) as $C) {
-			$C->set('sort', $C->vs['sort']+1);
+
+		$this->Children = null; // neu 7.6.18
+		$i = 0;
+		foreach ($this->Children(['type'=>$vs['type']]) as $index => $C) {
+			$C->set('sort', ++$i);
 		}
+		// foreach ($this->Children(['type'=>$vs['type']]) as $C) {
+		// 	$C->set('sort', $C->vs['sort']+1);
+		// }
+
 		// pre generate (cache) so it does not trigger a "undo step" (cms.versions) later
 		// $Page->urlsSeoGen(); // needs title
 		$Page->Texts();
@@ -618,6 +639,7 @@ class Page {
 		if (!isset($this->Named['c'][$name])) { // && vers::$log === 0: dont create item in the past
 			if (!is_array($attris)) $attris = ['module'=>$attris];
 			$attris['name'] = $name;
+			$attris['sort'] = count($this->Conts()) + 1; // neu 7.6.18 add auto generated conts at the end, by default they will bi at the Beginning
 			$this->Named['c'][$name] = $this->createCont($attris);
 		}
 		return $this->Named['c'][$name];

@@ -1,0 +1,19 @@
+.c1-masonry {
+	display: flex;
+	flex-wrap:wrap;
+	position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--column-width),1fr));
+
+    column-width:90px; /* js only */
+    x--column-width:90px; /* preferred if browser-support */
+}
+.c1-masonry > * {
+    min-width:var(--column-width);
+	flex:1 0 1%;
+	box-sizing:border-box;
+    margin:0 !important;
+}
+.c1-masonry.-Js > * {
+	position: absolute;
+}

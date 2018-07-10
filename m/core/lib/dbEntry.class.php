@@ -27,7 +27,7 @@ class dbEntry {
 
 //public $_Cache = null; // new
 
-	protected function construct() {} // used?
+	protected function construct() {} // used in qgEntry_mail
 
 	function is() {
 		if ($this->_is === null) {
@@ -79,14 +79,14 @@ class dbEntry {
 		return $this->_vs;
 	}
 	function setVs($vs) {
-		$this->getVs(); // neu
+		$this->getVs();
 		$this->_changed = true;
 		$this->_vs = $vs + $this->_vs;
 		return $this;
 	}
-	function complementVs($vs) {
-		$this->_vs += $vs;
-	}
+	// function complementVs($vs) { zzz not used
+	// 	$this->_vs += $vs;
+	// }
 	function __set($n, $v) {
 		$this->getVs();
 		if (array_key_exists($n, $this->_vs) && $this->_vs[$n] !== $v) {
@@ -123,4 +123,20 @@ class dbEntry {
 	function __toString() {
 		return (string)$this->_eid;
 	}
+
+
+	/* beta
+	function __call($method, $args) {
+		$fn = self::$methods[$method];
+		$bound = \Closure::bind($fn, $this, get_class()); // cache bound function?
+		return call_user_func_array($bound, $args);
+	}
+	static public $methods = [];
+	 */
 }
+
+/*
+dbEntry::$methods['l1_access'] = function(){
+	echo $this;
+};
+*/

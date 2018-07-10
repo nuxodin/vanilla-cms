@@ -38,7 +38,7 @@ if (isset($_GET['showit'])) {
 		'document.write(\'<!--\');'.
 	'</script>'.
 	$html;
-	exit();
+	exit;
 }
 ?>
 <div class=c1-box style="flex-basis:800px">

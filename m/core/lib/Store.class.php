@@ -153,6 +153,7 @@ class Store {
                 $string = $this->Ftp()->getString('/module/index.json');
             } else {
                 $options = ['ssl' => ['verify_peer' => false, 'verify_peer_name' => false]];
+				time_limit(30);
                 $string = file_get_contents('https://'.$this->host.'/module/index.json', false, stream_context_create($options));
             }
             $this->index = (array)json_decode($string,true);

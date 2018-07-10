@@ -11,10 +11,9 @@ function cutSearch1($result, $search, $limit = -1, $before=30, $after=10) {
 		$pregQuoteSearches[] = preg_quote($s,'/');
 		$searches[$i] = $s;
 	}
-
 	$result    = str_replace('&nbsp;',' ', $result);
-	$result    = preg_replace('/(<\/h[1-6]>)/i','. ', $result);
-	$result    = strip_tags($result);
+	$result = util::stripTags($result);
+	$result = preg_replace('/\s+/',' ',$result);
 
 	$result = preg_split('/('.implode('|',$pregQuoteSearches).')/i', $result, $limit, PREG_SPLIT_DELIM_CAPTURE);
 

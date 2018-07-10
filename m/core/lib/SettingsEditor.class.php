@@ -4,15 +4,13 @@ namespace qg;
 class SettingsEditor {
 	static $opened = null;
 	function __construct($SET) {
-		//$this->id = i();
 		$this->SET = $SET;
 		$_SESSION['SettingsEditor roots'][$SET->i] = 1;
 	}
 	function show() {
-		html::addJSFile(sysURL.'core/js/SettingsEditor.js');
+		html::addJSM(sysURL.'core/js/SettingsEditor.mjs');
 		self::opened();
-		return '<div class=qgSettingsEditor>'.$this->showItems($this->SET).'</div>'; // $this->id is ugly
-		//return '<div class="qgSettingsEditor '.$this->id.'">'.$this->showItems($this->SET).'</div>'; // $this->id is ugly
+		return '<div class=qgSettingsEditor>'.$this->showItems($this->SET).'</div>';
 	}
 	static function showInput($S) {
 		if ($S->count()) {
@@ -37,16 +35,19 @@ class SettingsEditor {
 		}
 	}
 	static function showItems($SET) {
-		static $level = 0;
-		$level++;
-		$s = '';
+		//static $level = 0; zzz
+		//$level++;
+		//$s = '';
 
 		$hasSub = false;
-		foreach ($SET as $offset => $S) if ($S->count()) { $hasSub = true; break; }
-
-		$s .= '<ul'.($hasSub?' class=-hasSub':'').'>';
-
 		foreach ($SET as $offset => $S) {
+			if ($offset[0] === '_') continue;
+			if ($S->count()) { $hasSub = true; break; }
+		}
+
+		$s = '<ul'.($hasSub?' class=-hasSub':'').'>';
+		foreach ($SET as $offset => $S) {
+			if ($offset[0] === '_') continue;
 			$open = isset(self::$opened[$S->i]);
 			$s .= '<li>';
 			$s .= 	'<span class=-row>';
@@ -59,18 +60,15 @@ class SettingsEditor {
 			$s .=	 	'<span class=-inp>'.self::showInput($S).'</span>';
 			$s .= 		'<span class=-rem><a>x</a></span>';
 			$s .= 	'</span>';
-			if ($open) {
-				$s .= self::showItems($S);
-			}
+			if ($open) $s .= self::showItems($S);
 		}
 		$s .= '</ul>';
-		$level--;
+		//$level--;
 		return $s;
 	}
 	static function &opened() {
 		if (self::$opened === null) {
-			$opened = G()->SET['qg']['settingsTree']['opened']->custom()->v;
-			self::$opened = json_decode($opened, true);
+			self::$opened = json_decode(G()->SET['qg']['settingsTree']['opened']->custom()->v, true);
 		}
 		return self::$opened;
 	}

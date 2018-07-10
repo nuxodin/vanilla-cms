@@ -1,17 +1,17 @@
-html {
-	font-family:Arial, sans serif;
-}
+/* recommend.css | Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
 a {
     -webkit-tap-highlight-color:transparent;
-	background: transparent; /* ie10 */
 }
 ul, ol {
 	padding-left: 1.6em;
 }
 hr {
+	color:currentColor;
 	border:1px solid;
-	border-width:0 0 1px 0;
-	opacity:.4;
+	opacity:.5;
+	border-top-width:0 !important;
+	border-left-width:0 !important;
+	border-right-width:0 !important;
 }
 
 :focus:not(a) { outline:0; }
@@ -28,7 +28,6 @@ nav ul {
 	list-style-image:none;
 	padding:0;
 }
-
 nav a, nav a:hover {
 	text-decoration:none;
 }
@@ -177,11 +176,6 @@ a[href^=tel] {
     color:inherit;
     text-decoration:none;
 }
-iframe[seamless], iframe[seamless="*"]:not([seamless="false"]):not([seamless="no"]) {
-	border:none;
-	background-color: transparent;
-}
-
 
 /*
 Force hardware-acceleration in Webkits to prevent text flickering.

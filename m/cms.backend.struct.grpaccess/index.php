@@ -50,7 +50,7 @@ html::addCssFile(sysURL.'cms.backend.struct/pub/main.css');
 						echo '<span class=-toggle></span>';
 					}
 					echo '<a style="vertical-align:middle" href="'.$SubPage->url().'" title="'.$SubPage->Title().'">'.
-							((string)$SubPage->Title()?cutText($SubPage->Title(),50):'(kein Text)').
+							((string)$SubPage->Title()?util::cutText($SubPage->Title(),50):'(kein Text)').
 							' <span style="color:#888">'.$SubPage->vs['name'].'</span>'.
 							' <span style="color:#bbb">'.$SubPage->vs['module'].'</span>'.
 						'</a>';

@@ -19,7 +19,6 @@ class Image {
 	function fromjpeg($path)	{ $this->Img = @imagecreatefromjpeg($path); }
 	function fromgif($path)		{ $this->Img = imagecreatefromgif($path); }
 	function frompng($path)		{ $this->Img = imagecreatefrompng($path); }
-	function fromstring($str)	{ $this->Img = imagecreatefromstring($str); }
 	function from($path) {
 		if (is_resource($path)) {
 			$this->Img = $path;
@@ -43,17 +42,9 @@ class Image {
 
 		imagecopyresampled($newImg, $this->Img, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
 	}
-	function copy($new, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h) {
-		imagecopy($new, $this->Img, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h);
-	}
 	function getCopyresized($dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h) {
 		$new = Image::create($dst_w, $dst_h);
 		$this->copyresized($new->Img,  $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
-		return $new;
-	}
-	function getCroped($x, $y, $w, $h) {
-		$new = Image::create($w, $h);
-		$this->copy($new, 0, 0, $x, $y, $w, $h);
 		return $new;
 	}
 	function getAutoCroped($w, $h, $verticalPosition = 20, $horizontalPosition = 60, $zoom = false) {
@@ -73,33 +64,12 @@ class Image {
 		$new = $this->getCopyresized(0, 0, $src_x, $src_y, $w, $h, $dstW, $dstH);
 		return $new;
 	}
-	function getResized($w, $h, $prop = false) {
+	function getResized($w, $h, $proportional = false) {
 		$dstW = $this->x();
 		$dstH = $this->y();
-		if ($prop) {
-			image::makeProportional($dstW, $dstH, $w, $h);
-		}
+		if ($proportional) image::makeProportional($dstW, $dstH, $w, $h);
 		$new = $this->getCopyresized(0, 0, 0, 0, $w, $h, $dstW, $dstH);
 		return $new;
-	}
-	function addImg($Img, $x, $y, $scale = 1) {
-		if (!$Img instanceof Image) {
-			$Img = new Image($Img);
-		}
-		$w = $Img->x();
-		$h = $Img->y();
-		imagecopyresampled($this->Img, $Img->Img, $x, $y, 0, 0, $w*$scale, $h*$scale, $w, $h);
-	}
-	function colorallocate($color, $alpha=0) {
-			list($r, $g, $b) = color::toArray($color);
-			return imagecolorallocatealpha($this->Img, $r, $g, $b, $alpha);
-	}
-	function fill($color, $alpha = 0) {
-		if (is_string($color)) {
-			$color = $this->colorallocate($color, $alpha);
-		}
-		imagefill($this->Img, 0, 0, $color);
-		return $color;
 	}
 	function saveAs($path, $type = '', $quality = 92) {
 		!$type && ($type = strtolower(preg_replace('/.*\./', '', $path)));
@@ -126,5 +96,17 @@ class Image {
 		} else {
 			$width  = round(($musterW / $musterH) * $height);
 		}
+	}
+
+	// https://secure.php.net/manual/en/function.imagecreatefromgif.php#104473
+	static function is_gif_animated($path) {
+		if (!($fh = @fopen($path, 'rb'))) return false;
+		$count = 0;
+		while (!feof($fh) && $count < 2) {
+			$chunk = fread($fh, 1024 * 100); //read 100kb at a time
+			$count += preg_match_all('#\x00\x21\xF9\x04.{4}\x00(\x2C|\x21)#s', $chunk, $matches);
+		}
+		fclose($fh);
+		return $count > 1;
 	}
 }

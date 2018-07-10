@@ -60,12 +60,24 @@ class L {
 	static function nsStart($ns) {
 		array_push(self::$nsPath, self::$ns);
 		self::$ns = $ns;
-		self::_nsLang();
+		L::$now = self::_nsLang(self::$ns);
+		//self::_nsLang();
 	}
 	static function nsStop() {
 		self::$ns = array_pop(self::$nsPath);
-		self::_nsLang();
+		L::$now = self::_nsLang(self::$ns);
+		//self::_nsLang();
 	}
+	static function _nsLang($ns) {
+		if ($ns) {
+			$nsLang = Usr()->is()
+				? G()->SET['qg']['lang_ns'][$ns]->custom()->v
+				: $_SESSION['qg']['lang_ns'][$ns];
+			return $nsLang ?: L::$usr;
+		}
+		return L::$usr;
+	}
+	/*
 	static function _nsLang(){
 		if (self::$ns) {
 			$nsLang = Usr()->is()
@@ -76,6 +88,7 @@ class L {
 			L::$now = L::$usr;
 		}
 	}
+	*/
 	static function _addLanguage($l) {
 		!D()->smalltext->$l && $l && D()->smalltext->addField($l)->setType('text');
 	}

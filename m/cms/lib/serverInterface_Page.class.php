@@ -97,8 +97,8 @@ class serverInterface_page {
 	}
 	static function title($pid, $l, $value=null) { // todo getter
 		if (!self::checkRight(2)) return false;
-		Page($pid)->Title($l, $value);
-		G()->Answer['cmsInfo'] = L('Der Titel wurde gespeichert.');
+		$changed = Page($pid)->Title($l, $value);
+		if ($changed !== false) G()->Answer['cmsInfo'] = L('Der Titel wurde gespeichert.');
 		return 1;
 	}
 	static function onlineStart($pid, $v) {
@@ -271,6 +271,37 @@ class serverInterface_page {
 		G()->Answer['cmsInfo'] = L('Die Dateien wurden sortiert.');
 		return self::reload($pid);
 	}
+	static function FileAdd($pid, $file=null, $replace=null) {
+		if (!self::checkRight(2)) return false;
+		// file access check
+		if (is_numeric($file)) {
+			$file = dbFile($file);
+			if (!$file->access()) {
+				trigger_error('No access ('.$file.')');
+				G()->Answer['cmsInfo'] = L('Ihnen fehlen die nötigen Berechtigungen.');
+				return;
+			}
+			if ($replace) {
+				$File = Page($pid)->File($replace);
+				$file->clone($File);
+			} else {
+				$file = $file->clone();
+				$File = Page($pid)->FileAdd($file);
+			}
+		} else {
+			if ($file !== null && !preg_match('/^https?:\/\//', $file)) {
+				trigger_error('other then http/https not allowed ('.$file.')');
+				G()->Answer['cmsInfo'] = L('Ihnen fehlen die nötigen Berechtigungen.');
+				return;
+			} else {
+				$File = Page($pid)->FileAdd($file, $replace); // todo, "replace" should nod simply add a file with the same "name"
+			}
+		}
+
+		G()->Answer['cmsInfo'] = L('Die Datei wurde hinzugefügt.');
+		return ['url'=>$File->url(), 'name'=>$File->name()];
+	}
+	/*
 	static function FileAdd($pid, $file=null, $name=null) {
 		if (!self::checkRight(2)) return false;
 		// file access check
@@ -292,6 +323,7 @@ class serverInterface_page {
 		G()->Answer['cmsInfo'] = L('Die Datei wurde hinzugefügt.');
 		return ['url'=>$File->url()];
 	}
+	*/
 	static function filesSetOrder($pid, $what) {
 		if (!self::checkRight(2)) return false;
 		$P = Page($pid);
@@ -300,7 +332,7 @@ class serverInterface_page {
 			case 'date':
 				$sql =
 				" SELECT pf.* 						" .
-				" FROM file f, page_file pf			" .
+				" FROM file f, page_file pf			" . // todo draft mode table('file'), table('page_file')
 				" WHERE 							" .
 				"	f.id = pf.file_id 				" .
 				"	AND pf.page_id = ".$P." 		" .

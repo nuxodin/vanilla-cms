@@ -12,11 +12,9 @@ function time_limit($value=null) {
     }
     return $value;
 }
-
 function number($v) {
   return str_replace(',','.',$v);
 }
-
 function form_input($conf) {
 	$tag = 'input';
     $close = false;
@@ -26,8 +24,7 @@ function form_input($conf) {
 			$tag = 'textarea';
             $close = true;
 			$content = hee($conf['value']);
-			unset($conf['value']);
-			unset($conf['type']);
+			unset($conf['value'], $conf['type']);
 			break;
 		case 'select':
 			$tag = 'select';
@@ -37,42 +34,36 @@ function form_input($conf) {
             $assoc = array_keys($options) !== range(0, count($options) - 1);
 			foreach ($options as $key => $option) {
 				$key = $assoc ? $key : $option;
-				$content .= '<option '.($assoc?'value="'.hee($key).'" ':'').($conf['value'].''===$key.''?'selected':'').'>'.hee($option).'</option>';
+				$content .= '<option '.($assoc?'value="'.hee($key).'" ':'').($conf['value'].''===$key.''?'selected':'').'>'.hee($option);//.'</option>'; zzz?
 			}
-			unset($conf['value']);
-			unset($conf['type']);
-			unset($conf['options']);
+			unset($conf['value'], $conf['type'], $conf['options']);
 			break;
 		case 'checkbox':
 			$conf['checked'] = $conf['value'] ? true : false;
 			unset($conf['value']);
 			break;
 	}
-	qg::fire('form_input_get', $conf);
-
+	//qg::fire('form_input_get', $conf);
 	$attris = [];
 	foreach ($conf as $name => $value) {
-		if ($value === false) {
-		} elseif ($value === false) {
-			$attris[] = $name;
+		if ($value === false) continue;
+		if ($value === true) {
+            $attris[] = $name;
 		} else {
-			if (preg_match('/^[0-9a-z_-]+$/i', $value)) { // todo: better regexp
-				$attris[] = $name.'='.$value;
-			} else {
+			// if (preg_match('/^[0-9a-z_-]+$/i', $value)) { // todo: better regexp
+			// 	$attris[] = $name.'='.$value;
+			// } else {
 				$attris[] = $name.'="'.hee($value).'"';
-			}
+			// }
 		}
 	}
     if ($content) $close = true;
 	return '<'.$tag.' '.implode(' ',$attris).'>'.($content?:'').($close?'</'.$tag.'>':'');
 }
-
 // html entity encode
 function hee($str) {
-	//$str = mb_convert_encoding($str, 'UTF-8', 'UTF-8');
 	return htmlentities($str, ENT_QUOTES, 'UTF-8', false);
 }
-
 class template {
 	function __construct($vs = []) {
 		$this->___vars = (array)$vs;
@@ -98,20 +89,19 @@ class template {
 	}
 }
 
-//if available: fastcgi_finish_request() ???
+// if available:  ???
+// session_write_close();
+// ignore_user_abort(); // else flush (and echo) will stop execution?
+// fastcgi_finish_request()
 $str = ob_get_clean();
 ob_start();
 echo $str;
 register_shutdown_function(function(){
     //if (ob_get_level() < 1) trigger_error('no output buffer '.ob_get_level());
     //if (ob_get_level() > 1) trigger_error('more than one output buffer '.ob_get_level());
-
-    //!headers_sent() && qg::fire('output-before');
-
     $content = '';
     while (ob_get_level()) $content .= ob_get_clean();
     !headers_sent() && qg::fire('output-before',['content'=>&$content]);
-
     $hasBgEvent = isset(qg::$events['background']) && qg::$events['background'];
 	if ($hasBgEvent) {
         if (!headers_sent()) {
@@ -125,14 +115,11 @@ register_shutdown_function(function(){
             trigger_error('can not run background-events in background, headers sent!');
         }
 	}
-
     echo $content;
-
     //if (ob_get_length() > 0) ob_end_flush();
 	if ($hasBgEvent) {
         flush();
 		ignore_user_abort(true);
-		//time_limit(60*10); // should be defined in the Event-Listener
 		session_write_close();
 		qg::fire('background');
 	}
@@ -142,9 +129,8 @@ function Answer($data) {
 	if (isset(G()->Answer))	$data += G()->Answer;
 	header('Content-type: application/json');
 	echo json_encode($data);
-	exit();
+	exit;
 }
-
 class G {}
 function G() {
 	static $g;
@@ -163,51 +149,13 @@ function table($table) {
 	qg::fire('table', ['table'=>&$table]);
 	return $table;
 }
-function mail($to, $subject, $message, $additional_headers=null, $additional_parameters=null) {
+function mail($to, $subject, $message, $additional_headers='', $additional_parameters=null) {
 	$toWebmaster = debug ? G()->SET['qg']['mail']['on debugmode to']->v : false;
 	$message = ($toWebmaster ? 'original receiver :'.$to." <br><br>\n\n" : '').$message;
 	$to      = $toWebmaster ?: $to;
 	$subject = ($toWebmaster?'Debug! ':'').$subject;
 	return \mail($to, $subject, $message, $additional_headers, $additional_parameters);
 }
-
-function byte_format($file_size) {
-	$index = 0;
-	$units = ['Bytes','KB','MB','GB','TB'];
-	while ($file_size > 400) {
-		$file_size /= 1024;
-		$index++;
-	}
-    return round($file_size,1).' '.$units[$index];
-}
-
-function helper_optionsFromArray($array, $selected=[], $use_index=true) {
-	$selected = (array)$selected;
-	$str = '';
-	foreach ($array as $i => $v) {
-		$value = $use_index ? $i : $v;
-		$select = in_array($value, $selected) ? 'selected' : '';
-		$str .= '<option value="'.hee($value).'" '.$select.'>'.hee($v).'</option>';
-	}
-	return $str;
-}
-
-function sqlSearchHelper($search, $fields) {
-	$searches = explode(' ', $search, 4);
-	$wheres = [];
-	foreach ($searches as $search) {
-		$or = [];
-		foreach ($fields as $f) {
-			$orders[] = " ".$f." LIKE ".D()->quote($search.'%')." DESC ";
-			$or[] = " ".$f." LIKE ".D()->quote('%'.$search.'%')." ";
-		}
-		$wheres[] = '('.implode(' OR ', $or).')';
-	}
-	$where = implode(' AND ', $wheres);
-	$order = implode(',', $orders);
-	return ['where'=>$where, 'order'=>$order];
-}
-
 function copyDir($src, $dest) {
 	!is_dir($dest) && mkdir($dest);
 	foreach (scandir($src) as $file) {
@@ -230,23 +178,13 @@ function rrmdir($dir) {
 					rrmdir($dir."/".$object);
 				else
 					unlink($dir."/".$object);
-				reset($objects);
-				rmdir($dir);
+			reset($objects);
+			rmdir($dir);
 	}
 }
-
 function br2nl($string) {
 	return preg_replace('/\<br(\s*)?\/?\>/i', "\n", $string);
 }
-
-function cutText($txt, $maxLength = 200, $minLength = 0, $ending = '…') {
-	$txt = (string)$txt;
-	if (strlen($txt) < $maxLength) return $txt;
-	while (substr($txt,$maxLength-1,1) != ' ' && $maxLength > $minLength)
-		$maxLength--;
-	return substr($txt, 0, $maxLength).$ending;
-}
-
 function randString($max = 16, $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789") {
 	$str = '';
     $length = strlen($chars)-1;
@@ -256,8 +194,9 @@ function randString($max = 16, $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLM
 	}
 	return $str;
 }
-
 function urlize($str) {
+    //$bom = pack('H*','EFBBBF'); // TODO?
+    //$str = preg_replace("/^$bom/", '', $str);
 	$str = strtr($str, [
 			'þ' => 'th',
 			'ð' => 'dh',
@@ -283,8 +222,7 @@ function urlize($str) {
 	$str = preg_replace("/[\/_|+ -]+/", '-', $str);
 	return $str;
 }
-
-function array2formatedStr($v) {
+function array2formatedStr($v) { // todo
 	$v = new _arrayToString($v);
 	return
 	'<style>					' .
@@ -417,48 +355,19 @@ class _arrayToString {
 	}
 }
 
-/* todo?
-function hyperlink($text) {
-	// If the user has decided to deeply use html and manage himself hyperlink
-	// cancel the make clickable() function and return the text untouched.
-
-	if (preg_match ( "<(a|img)[[:space:]]*(href|src)[[:space:]]*=(.*)>", $text) ) {
-		return $text;
-	}
-
-	// pad it with a space so we can match things at the start of the 1st line.
-	$ret = " " . $text;
-
-	// matches an "xxxx://yyyy" URL at the start of a line, or after a space.
-	// xxxx can only be alpha characters.
-	// yyyy is anything up to the first space, newline, or comma.
-
-	$ret = preg_replace("#([\n ])([a-z]+?)://([^, \n\r]+)#i",
-	"\\1<a target=\"_self\" href=\"\\2://\\3\" >\\2://\\3</a>",
-	$ret);
-
-	// matches a "www.xxxx.yyyy[/aaaa]" kinda lazy URL thing
-	// Must contain at least 2 dots. xxxx contains either alphanum, or "-"
-	// yyyy contains either alphanum, "-", or "."
-	// aaaa is optional.. will contain everything up to the first space, newline, or comma.
-	// This is slightly restrictive - it's not going to match stuff like "forums.foo.com"
-	// This is to keep it from getting annoying and matching stuff that's not meant to be a link.
-
-	$ret = preg_replace("#([\n ])www\.([a-z0-9\-]+)\.([a-z0-9\-.\~]+)((?:/[^, \n\r]*)?)#i",
-	"\\1<a href=\"http://www.\\2.\\3\\4\" >www.\\2.\\3\\4</a>",
-	$ret);
-
-	// matches an email@domain type address at the start of a line, or after a space.
-	// Note: before the @ sign, the only valid characters are the alphanums and "-", "_", or ".".
-	// After the @ sign, we accept anything up to the first space, linebreak, or comma.
-
-	$ret = preg_replace("#([\n ])([a-z0-9\-_.]+?)@([^, \n\r]+)#i",
-	"\\1<a href=\"mailto:\\2@\\3\">\\2@\\3</a>",
-	$ret);
-
-	// Remove our padding..
-	$ret = substr($ret, 1);
-
-	return($ret);
+function cutText($txt, $maxLength = 200, $minLength = 0, $ending = '…') {
+    trigger_error('deprecated, use util::cutText');
+    return util::cutText($txt, $maxLength, $minLength, $ending);
 }
-*/
+function byte_format($file_size) {
+    trigger_error('deprecated, use util::byte_format');
+    return util::byte_format($file_size);
+}
+function helper_optionsFromArray($array, $selected=[], $use_index=true) {
+    trigger_error('deprecated, use util::optionsFromArray');
+    return util::optionsFromArray($array, $selected, $use_index);
+}
+function sqlSearchHelper($search, $fields) {
+    trigger_error('deprecated, use util::sqlSearchHelper');
+    return util::sqlSearchHelper($search, $fields);
+}

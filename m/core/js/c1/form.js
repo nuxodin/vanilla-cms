@@ -57,8 +57,8 @@ c1.form = {
 					inp.onchange = null;
 				}
 			    inp.click();
-			},50)
+			},80)
         });
         return P;
     }
-}
+};

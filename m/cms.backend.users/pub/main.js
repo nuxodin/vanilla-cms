@@ -18,11 +18,13 @@ cms.initCont('cms.backend.users', el=>{
                 $fn('page::api')(pid,{login_as:id}).run(()=>{
                     location.href = appURL;
                 });
+				e.preventDefault();
             }
 
             const deleteBtn = e.target.closest('.-delete');
             if (deleteBtn && confirm('Möchten Sie den Benutzer wirklich löschen?')) {
                 $fn('page::api')(pid,{delete:id}).run(ok => ok && tr.remove());
+				e.preventDefault();
             }
         })
     }

@@ -281,14 +281,13 @@ qg::on('action', function(){
 qg::on('cms-ready', function(){
 	if (!Page()->edit) return;
 	if (isset($_GET['qgCmsNoFrontend'])) return;
-	html::addJsFile(sysURL.'cms.versions/pub/vers.js');
-	html::addJsFile(sysURL.'cms.versions/pub/comparer.js');
+	html::addJSM(sysURL.'cms.versions/pub/vers.mjs');
 	if (G()->SET['cms.versions']['draftmode']->v) {
 		$versions = D()->indexCol('SELECT space, unix_timestamp(changed_page) FROM vers_cms_page_changed WHERE page_id = '.Page().'');
 		if (isset($versions[1]) && (!isset($versions[0]) || $versions[1] > $versions[0])) { // no live or draft younger then live
 			G()->js_data['cms_vers_draft_changed'] = true;
 		}
-		html::addJsFile(sysURL.'cms.versions/pub/draftmode.js');
+		html::addJSM(sysURL.'cms.versions/pub/draftmode.mjs');
 	}
 });
 

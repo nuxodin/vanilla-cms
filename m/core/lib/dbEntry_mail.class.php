@@ -84,10 +84,10 @@ class dbEntry_mail extends dbEntry {
 			$this->reply_to && $ZendMail->setReplyTo($this->reply_to, null);
 			$ZendMail->setSubject(($toWebmaster?'Debug! ':'').$this->subject);
 
-			$html = $this->getHtml($Item, $ZendMail); // dirty hack for thunderbird, it needs multipart/related for inline-images
-			if (strpos($html, 'cid:') !== false) {
-				//$ZendMail->setType(\Zend_Mime::MULTIPART_RELATED); // ok?
-			}
+			$html = $this->getHtml($Item, $ZendMail);
+			// if (strpos($html, 'cid:') !== false) { // dirty hack for thunderbird, it needs multipart/related for inline-images
+			// 	$ZendMail->setType(\Zend_Mime::MULTIPART_RELATED); // ok?
+			// }
 			$ZendMail->setBodyHtml(($toWebmaster?'original receiver :'.$Item->email.'<br><br>':'').$html);
 			$ZendMail->setBodyText(($toWebmaster?'original receiver :'.$Item->email."\n\n"    :'').$this->getText($Item, $ZendMail));
 			$ZendMail->addTo($toWebmaster ?: $Item->email, $Item->name);

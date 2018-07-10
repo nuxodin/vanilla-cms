@@ -261,8 +261,7 @@ class dbTable {
 	}
 
 	function copy($name, $value) {
-		if ($xml = $this->exportXml($name, $value))
-			return $this->Db->importXml($xml);
+		if ($xml = $this->exportXml($name, $value)) return $this->Db->importXml($xml);
 		return false;
 	}
 
@@ -272,9 +271,7 @@ class dbTable {
 		$t = (string)$this;
 		$Cl = 'qg\dbEntry_'.$t;
 		$Cl = class_exists($Cl, false) ? $Cl : 'qg\dbEntry';
-
 		if ($id instanceof $Cl) return $id; // performance
-
 		if (func_num_args() === 0) {
 			$Entry = new $Cl($this);
 			$id = (string)$Entry;

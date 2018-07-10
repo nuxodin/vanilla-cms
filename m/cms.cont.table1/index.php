@@ -35,7 +35,7 @@ if (isset($_GET['export_table']) AND $_GET['export_table'] == $Cont->id) {
 	}
 	$data = str_replace("\r","",utf8_decode($data));
 	echo $data;
-	exit();
+	exit;
 }
 ?>
 <div>

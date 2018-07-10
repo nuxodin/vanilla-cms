@@ -45,7 +45,7 @@ class qgDbFileImageEditor extends c1ImageEditor {
             onsave: ()=>{
                 this.upload(this.loading(()=>{
                     this.hide();
-                }))
+                }));
             }
         }, options);
 
@@ -60,10 +60,10 @@ class qgDbFileImageEditor extends c1ImageEditor {
         head.classList.add('c1AccordionHead');
         head.onclick=()=>{
             this.hide();
-        }
+        };
         head = this.el('.-toolsCrop :first-child');
         head.classList.add('c1AccordionHead');
-        head.onclick = ()=>this.cropper.hide()
+        head.onclick = ()=>this.cropper.hide();
 
         // meta
         this.meta = {};
@@ -98,7 +98,7 @@ class qgDbFileImageEditor extends c1ImageEditor {
             var y = rect.top  + rect.height * (this.meta.vpos*1 / 100);
             this.el('.-hotspot').style.left = x - 10 + 'px';
             this.el('.-hotspot').style.top  = y - 10 + 'px';
-        }
+        };
         $fn('dbFileImageEditor::getMeta')(this.file_id).then(meta => {
             this.meta = meta;
             this.el('.-viewport').insertAdjacentHTML('beforeend',
@@ -139,7 +139,7 @@ class qgDbFileImageEditor extends c1ImageEditor {
                 url: appURL+'?file_id='+this.file_id,
                 complete: () => {
                     this.reloadElements();
-                    cb && cb()
+                    cb && cb();
                 }
             });
         };
@@ -150,7 +150,7 @@ class qgDbFileImageEditor extends c1ImageEditor {
         return ()=>{
             c1.c1Use('loading',loading=>sidebar && loading.done(sidebar));
             return fn ? fn() : null;
-        }
+        };
     }
     reloadElements() {
         location.reload();
@@ -175,7 +175,7 @@ class qgDbFileImageEditor extends c1ImageEditor {
                 location.href = location.href.replace(/#.*$/,'');
                 //this.el('.-img').src += '?asef='+Math.random();
             });
-        }
+        };
     }
 }
 

@@ -3,8 +3,7 @@ namespace qg;
 
 function TextPro($id) {
 	static $All = [];
-	if (!isset($All[$id]))
-		$All[$id] = new TextPro($id);
+	if (!isset($All[$id])) $All[$id] = new TextPro($id);
 	return $All[$id];
 }
 
@@ -12,7 +11,6 @@ class TextPro {
 	var $edit = false;
 	function __construct($id) {
 		$this->id = (int)$id;
-//		if (!$this->id) trigger_error('textpro id should not be 0');
 	}
 	function get($lang = null) {
 		static $cache = null;
@@ -46,7 +44,7 @@ class TextPro {
 		foreach (D()->query("SELECT * FROM ".table('text')." WHERE id = ".$this->id) as $vs) {
 			$vs['id'] = $New->id;
 			$vs['log_id'] = liveLog::$id;
-			D()->one("SELECT id FROM ".table('text')." WHERE id = ".$vs['id'])
+			D()->one("SELECT id FROM ".table('text')." WHERE id = ".$vs['id']." AND lang = ".D()->quote($vs['lang']))
 				? D()->text->update($vs)
 				: D()->text->insert($vs);
 		}
@@ -63,8 +61,7 @@ class TextPro_lang {
 	var $Text;
 	var $value = null;
 	function __construct($Text, $lang) {
-		//$this->Text =& $Text; // < bug fix php 5.3?
-		$this->Text = $Text; // < bug fix
+		$this->Text = $Text;
 		$this->lang = $lang;
 	}
 	function get() {

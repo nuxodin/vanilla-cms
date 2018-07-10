@@ -22,7 +22,7 @@ class dbFile extends File {
 		$this->vs = $vs + $this->vs;
 	}
 	function url(){
-		return appURL.'dbFile/'.$this.'/u-'.substr($this->vs['md5'],0,4);
+		return appURL.'dbFile/'.$this.'/u-'.substr($this->vs['md5'],0,4); // todo: include vpos, hpos, so the url it is unique to the delevered content
 	}
 	function access($set = null) {
 		if ($set === null) {
@@ -75,9 +75,24 @@ class dbFile extends File {
  		if (preg_match('/^https?:\/\//',$path)) {
 			// not very beautiful
 			stream_context_set_default(['ssl'=> ['verify_peer'=>false,'verify_peer_name'=>false]]); // allow files from https
-			$tmp = appPATH.'cache/tmp/'.$F->basename();
-			$F->copyTo($tmp);
+			$basename = $F->basename();
+			$content = file_get_contents($path);  // bad: fill ram with content...
+			foreach ($http_response_header as $header) { // get filename (Content-Disposition-header)
+				$name_value = explode(':',$header,2);
+				if (!isset($name_value[1])) continue;
+				$name  = trim(strtolower($name_value[0]));
+				$value = trim($name_value[1]);
+				if ($name === 'content-disposition') {
+					preg_match('/filename="([^"]+)"/', $value, $matches);
+					if ($matches[1]) {
+						$basename = $matches[1];
+						break;
+					}
+				}
+			}
+			$tmp = appPATH.'cache/tmp/'.preg_replace('/\?.*/','',$basename);
 			$F = new File($tmp);
+			$F->putContents($content);
 		}
 		$md5 = $F->md5();
 		$this->path = appPATH.'qg/file/'.$md5;
@@ -105,12 +120,69 @@ class dbFile extends File {
 			'text' => $this->getText(),
 		]);
 	}
-	function clone() {
+	function clone($to=null) {
 		$data = $this->vs;
-		unset($data['id']);
-		return dbFile(D()->file->insert($data));
+		if ($to===null) {
+			unset($data['id']);
+			$to = D()->file->insert($data);
+		} else {
+			$data['id'] = (string)$to;
+			D()->file->update($data);
+			unset(dbFile::$All[(string)$to]); // remove cache
+		}
+		return dbFile($to);
 	}
+	function transform($param) {
+		if ($type = Image::able($this->path)) {
+			if ($type==='image/gif' && image::is_gif_animated($this->path) /* 0.5 ms*/ ) {
+				return $this;
+			}
+			$w = (int)($param['w'] ?? 0);
+			$h = (int)($param['h'] ?? 0);
+			if (isset($_COOKIE['q1_dpr']) && $_COOKIE['q1_dpr'] > 1) {
+				if ($param['dpr'] ?? G()->SET['qg']['dbFile_dpr_dependent']->v) {
+					$w *= (float)$_COOKIE['q1_dpr'];
+					$h *= (float)$_COOKIE['q1_dpr'];
+				}
+			}
+			$w    = min($w,9000);
+			$h    = min($h,9000);
+			$q    = (int)($param['q'] ?? 77);
+			$max  = (bool)($param['max'] ?? false);
+			$vpos = (float)($param['vpos'] ?? $this->vs['vpos'] ?? 20); // file->vpos not in core module!
+			$hpos = (float)($param['hpos'] ?? $this->vs['hpos'] ?? 50);
+			$zoom = (float)($param['zoom'] ?? 0);
+			$type = str_replace('image/', '', $this->mime());
 
+			$unique = implode([$this->vs['md5'], $w,$h,$q,$max,$vpos,$hpos,$zoom,$type]);
+
+			$nFile = new File(appPATH.'cache/pri/dbfile_img_'.md5($unique));
+			if (!$nFile->exists() || $this->mtime() > $nFile->mtime()) {
+				$Img = new Image($this->path);
+				if ($w == 0 && $h == 0) $w = $Img->x();
+
+				// prevent enlarge
+				$oldW = $w;
+				$oldH = $h;
+				$w = min($Img->x(), $w);
+				$h = min($Img->y(), $h);
+
+				if ($max || $h == 0 || $w == 0) {
+					$Img = $Img->getResized($w, $h, true);
+				} else {
+					image::makeProportional($oldW, $oldH, $w, $h);
+					$Img = $Img->getAutoCroped($w, $h, $vpos, $hpos, $zoom);
+				}
+				$Img->saveAs($nFile->path, $type, $q);
+			}
+			$mime = 'image/'.$type;
+			return $nFile;
+			// header("Pragma: public"); // Emails!?
+			// Pragma is the HTTP/1.0 implementation and cache-control is the HTTP/1.1 implementation of the same concept.
+			// header("Pragma: private"); // required, why
+		}
+		return $this;
+	}
 	static function add($path=null) {
 		$dbFile = dbFile(D()->file->insert());
 		$path && $dbFile->replaceBy($path);
@@ -129,82 +201,42 @@ class dbFile extends File {
 		$File = $RequestedFile = dbFile($id);
 		if (!$File->exists()) {
 			header('HTTP/1.1 404 Not Found');
-			exit();
+			exit;
 		}
 		if (!$File->access()) {
 			header('HTTP/1.1 401 Unauthorized');
-			exit();
+			exit;
 		}
 		header('HTTP/1.1 200 OK');
 
 		// Header
 		$mime = $File->mime() ?: File::extensionToMime($File->extension());
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $File->mtime()) .' GMT');
-		header('Pragma: private');
 		$expires = time()+60*60*24*180;
  		header('Expires: ' . gmdate('D, d M Y H:i:s', $expires) .' GMT');
-		header('Cache-Control: store, cache, max-age='.$expires.', must-revalidate');
+		//header('Cache-Control: store, cache, max-age='.$expires.', must-revalidate');
+		header('Cache-Control: store, cache, max-age='.$expires.', private');
+		header('Pragma: private'); // needed or els it will not cache
 
-		if (Image::able($File->path)) {
-			if (1 || isset($param['h']) || isset($param['w'])) {
-				$w 	= (int)($param['w'] ?? 0);
-				$h 	= (int)($param['h'] ?? 0);
-				if (isset($_COOKIE['q1_dpr']) && $_COOKIE['q1_dpr'] > 1) {
-					if ($param['dpr'] ?? G()->SET['qg']['dbFile_dpr_dependent']->v) {
-						$w *= (float)$_COOKIE['q1_dpr'];
-						$h *= (float)$_COOKIE['q1_dpr'];
-					}
-				}
-				$w      = min($w,9000);
-				$h      = min($h,9000);
-				$q 		= (int)($param['q'] ?? 92);
-				$max	= (bool)($param['max'] ?? false);
-				$vpos 	= (float)($param['vpos'] ?? $File->vs['vpos'] ?? 20); // file->vpos not in core module!
-				$hpos 	= (float)($param['hpos'] ?? $File->vs['hpos'] ?? 50);
-				$zoom	= (float)($param['zoom'] ?? 0);
-				$type   = str_replace('image/', '', $File->mime());
+		$File = $File->transform($param);
 
-				$nFile = new File(appPATH.'cache/pri/dbfile_img_'.sha1($File->vs['md5'].'|'.$request.'|'.$w.'|'.$h.'|'.$vpos.'|'.$hpos));
-				if (!$nFile->exists() || $File->mtime() > $nFile->mtime()) {
-					$Img = new Image($File->path);
-					if ($w == 0 && $h == 0) {
-						$w = $Img->x();
-					}
-
-					// prevent enlarge
-					$oldW = $w;
-					$oldH = $h;
-					$w = min($Img->x(), $w);
-					$h = min($Img->y(), $h);
-
-					if ($max || $h == 0 || $w == 0) {
-						$Img = $Img->getResized($w, $h, true);
-					} else {
-						image::makeProportional($oldW, $oldH, $w, $h);
-						$Img = $Img->getAutoCroped($w, $h, $vpos, $hpos, $zoom);
-					}
-					qg::fire('qg::dbfile-image', ['Img'=>$Img, 'id'=>$id, 'param'=>$param]);
-					$Img->saveAs($nFile->path, $type, $q);
-				}
-				$mime = 'image/'.$type;
-				$File = $nFile;
-			}
-			//header("Pragma: public"); // Emails!
-			header("Pragma: private"); // required
-
-		} elseif (preg_match('/\.pdf$/', $name) || $File->mime() == 'application/pdf') {
+		if (preg_match('/\.pdf$/', $name) || $File->mime() == 'application/pdf') {
 			$mime = 'application/pdf';
 			header('Content-Disposition: inline; filename="'.$RequestedFile->name().'";');
 			header('Expires: 0');
-			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-			header('Pragma: public');
+			//header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+			header('Cache-Control: must-revalidate'); // why?
+			//header('Pragma: public');
 		}
 		if (isset($param['dl'])) {
 			$mime = 'application/force-download';
-			header('Pragma: public'); // required!
+			//header('Pragma: public'); // required!? old ie?
 			header('Expires: 0');
-			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-			header('Cache-Control: private', false); // required for certain browsers
+
+			// header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+			// header('Cache-Control: private', false); // required for certain browsers, old ie?
+			header('Cache-Control: private, must-revalidate'); // why?
+
 			header('Content-Disposition: attachment; filename="'.$RequestedFile->name().'";');
 			header('Content-Transfer-Encoding: binary');
 		}
@@ -213,7 +245,8 @@ class dbFile extends File {
 		}
 		header('Content-Type: '.$mime);
 
-		session_write_close(); // useful?
+		ob_end_flush();
+		session_write_close(); // useful? also close db-connection?
 
 		$etag = 'qg'.$File->mtime();
 		if (!isset($_SERVER['HTTP_IF_NONE_MATCH']) || $_SERVER['HTTP_IF_NONE_MATCH'] !== $etag) {

@@ -6,14 +6,21 @@
   RewriteRule .* index.php
 </IfModule>
 <IfModule mod_mime.c>
-    AddType application/x-web-app-manifest+json .webapp
     AddType image/svg+xml svg svgz
+    AddType text/javascript js
+    AddType text/javascript mjs
 </IfModule>
 <IfModule mod_expires.c>
-	<FilesMatch "\.(js|css)(\?|$)">
-		ExpiresActive On
-		ExpiresDefault "access plus 10 year"
-	</FilesMatch>
+    <FilesMatch "\.(js|css|mjs)(\?|$)">
+        ExpiresActive On
+        ExpiresDefault "access plus 1 year"
+    </FilesMatch>
+    #<If "false">
+    #    <If "%{QUERY_STRING} =~ /qgUniq=/">
+    #        ExpiresActive On
+    #        ExpiresDefault "access plus 2 year"
+    #    </If>
+    #</If>
 </IfModule>
 <ifModule mod_deflate.c>
 	AddOutputFilterByType DEFLATE text/plain

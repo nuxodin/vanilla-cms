@@ -44,7 +44,7 @@ class c1ImageCropper {
             this.area.setAttribute('x',     this.position.left);
             this.area.setAttribute('height',this.position.height);
             this.area.setAttribute('width', this.position.width);
-            this.trigger('crop')
+            this.trigger('crop');
             this.positionizeNobs();
         });
     }
@@ -91,15 +91,15 @@ class c1ImageCropper {
                 aspectRatio = started.hasAttribute('data-manipulate-edge') ? cropper.width / cropper.height : false;
                 createNew = false;
                 if (started.classList.contains('-nob')) return;
-                let inside = e.layerX > cropper.left && e.layerX < cropper.left + cropper.width && e.layerY > cropper.top && e.layerY < cropper.top + cropper.height;
+                let inside = e.offsetX > cropper.left && e.offsetX < cropper.left + cropper.width && e.offsetY > cropper.top && e.offsetY < cropper.top + cropper.height;
                 if (!inside) { // not Inside
                     createNew = true;
-                    cropper.top    = e.layerY;
-                    cropper.left   = e.layerX;
+                    cropper.top    = e.offsetY;
+                    cropper.left   = e.offsetX;
                     cropper.width  = 0;
                     cropper.height = 0;
                 }
-            }
+            };
             observer.onmove = function(e){
                 e.preventDefault();
                 let x      = cropper.left;
@@ -136,8 +136,8 @@ class c1ImageCropper {
                     cropper.top  = y + diffY;
                     cropper.left = x + diffX;
                 }
-            }
-        })
+            };
+        });
     }
     positionizeSvg(){
         let pos = this.image.getBoundingClientRect();
@@ -152,7 +152,7 @@ class c1ImageCropper {
         let x = this.left;
         let y = this.top;
         let all = this.svg.querySelectorAll('.-nob');
-        for (let i=0,el; el=all[i++];) {
+        for (let el of all) {
             let myX = x + width/2  - 15;
             let myY = y + height/2 - 15;
             if (el.hasAttribute('data-manipulate-n')) myY -= height/2;
@@ -178,17 +178,17 @@ class c1ImageCropper {
         }
         this.svg.c1ZTop();
         addEventListener('resize',this);
-        this.trigger('show')
+        this.trigger('show');
     }
     hide(){
         this.svg.remove();
         removeEventListener('resize',this);
-        this.trigger('hide')
+        this.trigger('hide');
     }
     hidden(){ return !this.svg.parentNode; }
     toggle(){ this.hidden() ? this.show() : this.hide(); }
     handleEvent(e){
-        if (e.type !== 'resize') return
+        if (e.type !== 'resize') return;
         this.positionizeSvg();
         this.positionizeNobs();
         this.svg.c1ZTop();
@@ -207,7 +207,6 @@ Object.assign(c1ImageCropper.prototype, c1.Eventer);
 SVGElement.prototype.c1GetTransformToElement = function(toElem) {
 	return toElem.getScreenCTM().inverse().multiply(this.getScreenCTM());
 };
-
 /* */
 Object.defineProperty(SVGElement.prototype, 'innerHTML', { // needed eaven if immerHTML is present (firefox)
 	get() {
@@ -221,7 +220,7 @@ Object.defineProperty(SVGElement.prototype, 'innerHTML', { // needed eaven if im
 	},
 	set(markup) {
 		let div= document.createElement('div');
-        div.innerHTML = "<svg xmlns='http://www.w3.org/2000/svg'>" + markup + "</svg>";
+        div.innerHTML = "<svg xmlns='http://www.w3.org/2000/svg'>" + markup + "</svg>"; // xmlns needed?
         let children = div.firstChild.childNodes, child;
 		while (this.firstChild) this.firstChild.remove();
 		while (child=children[0]){

@@ -119,6 +119,6 @@ foreach ($All as $M) {
 					<img class=-remoteDelete src="<?=sysURL?>cms.frontend.1/pub/img/delete.svg" title="auf dem Server Löschen" style="cursor:pointer; height:20px" alt=löschen>
 				<?php } ?>
 		<?php } ?>
-		<td> <?=byte_format($M->server_size)?>
+		<td> <?=util::byte_format($M->server_size)?>
 <?php
 }

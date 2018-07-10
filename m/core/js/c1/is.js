@@ -1,4 +1,4 @@
-c1Use.able(c1,'is')
+c1Use.able(c1,'is');
 c1.onElement('[c1-is]',function(el){
 	var is = el.getAttribute('c1-is');
 	var multiple = is.split(/\s+/);
@@ -11,4 +11,4 @@ c1.onElement('[c1-is]',function(el){
 			is(el);
 		}
 	})
-})
+});

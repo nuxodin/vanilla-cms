@@ -124,7 +124,7 @@
 .qgCmsPage .qgStyleEditorMarkEl, body.qgStyleEditorMarkEl, html.qgStyleEditorMarkEl, .qgCmsPage.qgStyleEditorMarkEl  {
 	outline:6px solid rgba(190,0,0,.6) !important;
 	outline-offset:-3px !important;
-	animation: styleEditorMark 1s infinite alternate;
+	animation: styleEditorMark .5s infinite alternate;
 }
 
 .qgCmsPage .qgStyleEditorMarkEl_invisible      { display:block      !important; opacity:1 !important; visibility:visible !important; overflow:visible !important; }

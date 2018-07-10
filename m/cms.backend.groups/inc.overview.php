@@ -7,7 +7,7 @@ if (isset($_GET['delete']))
 if (isset($_POST['add'])) {
 	$id = D()->grp->insert(['name'=>$_POST['name'], 'page_access'=>(int)($_POST['page_access']??0)]);
 	header('Location: '.Url());
-	exit();
+	exit;
 }
 $res = D()->query(
 	" SELECT grp.*, count(usr_grp.usr_id) as num_usr 		" .

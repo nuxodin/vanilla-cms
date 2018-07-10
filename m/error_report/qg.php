@@ -62,8 +62,8 @@ function error_report($vs) {
 	foreach ($vs['backtrace'] as $key => $backtrace) {
 		$backtrace = [
 			'file'     => ($backtrace['url']??'')?:($backtrace['file']??''),
-			'line'     => $backtrace['line'] ?? '',
-			'col'      => $backtrace['col'] ?? '',
+			'line'     => $backtrace['line']??'',
+			'col'      => $backtrace['col']??'',
 			'function' => ($backtrace['func']??'')?:($backtrace['class']??'').($backtrace['type']??'').$backtrace['function'],
 			'args'     => $backtrace['args']??null,
 		];
@@ -157,6 +157,9 @@ function error_report($vs) {
 
 // regular errors
 set_error_handler(function($nr, $msg, $file, $line) {
+
+	$GLOBALS['qg_error_report_last_catched'] = $msg;
+
 	if (0 === error_reporting()) return false; // inside "@"
 	$backtrace = debug_backtrace(0);
 	// neu
@@ -174,7 +177,6 @@ set_error_handler(function($nr, $msg, $file, $line) {
 	];
 	error_report($vs);
 });
-
 // fatal errors
 register_shutdown_function(function() { // what about errors occurring in other shutdown_functions?
 	$error = error_get_last();
@@ -188,7 +190,8 @@ register_shutdown_function(function() { // what about errors occurring in other 
 			E_COMPILE_ERROR   => 'Compile Error',
 			E_COMPILE_WARNING => 'Compile Warning'
 		];
-		if (isset( $fatals[$error['type']] )) {
+//		if (isset( $fatals[$error['type']] )) { // needed?
+		if (!isset($GLOBALS['qg_error_report_last_catched']) || $GLOBALS['qg_error_report_last_catched'] !== $error['message']) {
 			// if stack trace in message:
 			$inBacktrace = false;
 			foreach (explode("\n", $error['message']) as $line) {
@@ -210,14 +213,14 @@ register_shutdown_function(function() { // what about errors occurring in other 
 				}
 	      	}
 	      	$error['message'] = implode($message);
-			$error['message'] = $fatals[$error['type']].': '.$error['message'];
+			$error['message'] = ($fatals[$error['type']]??$error['type']) .': '.$error['message'];
 			error_report($error);
 		}
+//		}
 	}
 	ini_set('log_errors', 1);
 });
 ini_set('log_errors', 0);
-
 
 qg::on('action', function() {
 
@@ -231,11 +234,11 @@ qg::on('action', function() {
 	// javascript api
 	if (appRequestUri === 'js-error' && G()->SET['error_report']['javascript']->v) {
 		$report = json_decode(file_get_contents('php://input'), true);
-		if (!$report['message']) exit();
+		if (!$report['message']) exit;
 		$report['source'] = 'js';
 		//if (!isset($report['backtrace'])) $report['backtrace'] = []; // needed?
 		error_report($report);
-		exit();
+		exit;
 	}
 	// css api
 	if (preg_match('/\/css-error\?/',$_SERVER['REQUEST_URI'])) {
@@ -249,25 +252,25 @@ qg::on('action', function() {
 			'file' => $_SERVER['HTTP_REFERER'],
 			'backtrace' => [],
 		]);
-		exit();
+		exit;
 	}
 
 	// Content-Security-Policy api
 	G()->csp_report_uri = URL(appURL).'csp-error';
 	if (appRequestUri === 'csp-error') {
 		$report = json_decode(file_get_contents('php://input'), true)['csp-report'];
-		$sample = $report['script-sample'] ?? '';
 		// $type = ($report['disposition'] ?? 'enforce') === 'enforce' ? 'Error' : 'Warning'; // chrome, no firefox!
 		$type = G()->SET['qg']['csp']['enable']->v === 'report only' ? 'Report only:' : 'Blocked:'; // better reported by the browser (1 line above)
 		error_report([
-			'message' => $type.' "'.$report['blocked-uri'].'" blocked by "'.$report['violated-directive'].'" '.($sample?' Sample:'.$sample:''),
+			'message' => $type.' "'.$report['blocked-uri'].'" blocked by "'.$report['violated-directive'].'" ',
 			'source'  => 'csp',
 			'file'    => $report['source-file']??'',
 			'line'    => $report['line-number']??'',
 			'request' => $report['document-uri'],
 			'referer' => $report['referrer'],
 			'backtrace' => [],
+			'sample'  => $report['script-sample']??null,
 		]);
-		exit();
+		exit;
 	}
 });

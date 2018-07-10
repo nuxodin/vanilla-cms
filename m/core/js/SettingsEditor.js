@@ -1,3 +1,4 @@
+console.warn('deprecated');
 window.c1Use('c1',function(){
 	'use strict';
 
@@ -112,4 +113,4 @@ window.c1Use('c1',function(){
 	'</svg>';
 
 	c1.onElement('.qgSettingsEditor',qgSettingsEditor);
-})
+});

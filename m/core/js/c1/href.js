@@ -1,9 +1,11 @@
 /* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
-
+'use strict';
 c1.href = {
     ignoreSelector:'[onmousedown]'
 };
 document.addEventListener('click',function(e){
+    if (e.which !== 1) return;
+	if (e.defaultPrevented) return;
 	if (!e.target.closest) return;
     var A = e.target.closest('[data-c1-href]');
     if (!A) return;
@@ -16,7 +18,7 @@ document.addEventListener('click',function(e){
     var target = A.getAttribute('data-c1-target');
     if (e.ctrlKey) target = '_blank'; // better random-string?
 	if (target) {
-		var win = window.open(href, target);
+		window.open(href, target);
         //!e.ctrlKey && win.focus(); // not needed in chrome, not working in ff
 	} else {
     	location.href = href;

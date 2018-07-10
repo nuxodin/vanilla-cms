@@ -1,5 +1,5 @@
 .-m-cms-cont-search1 .-item {
-	display:block;
+	zzzdisplay:block; /* ?? its a div! */
 	padding-bottom:1em;
 }
 .-m-cms-cont-search1 img {
@@ -20,6 +20,5 @@
 	margin-bottom:1em;
 }
 .-m-cms-cont-search1 .-mark {
-	background:rgb(255,255,200);
-	background:rgba(255,255,100,.3);
+	background:rgba(255,255,70,.4);
 }

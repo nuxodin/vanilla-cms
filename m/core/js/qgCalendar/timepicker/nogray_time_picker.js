@@ -1,4 +1,4 @@
-var TimePicker = function(holder, options) {
+window.TimePicker = function(holder, options) {
 	var my = this;
 	this.options = {
 		startTime: {hour:new Date().getHours(),
@@ -34,26 +34,26 @@ var TimePicker = function(holder, options) {
 
 	this.holder.on({
 		mousedown(e) {
-			coord = my.holder.offset();
+			const coord = my.holder.offset();
 			coord.width =  my.holder[0].offsetWidth;
 			coord.height = my.holder[0].offsetHeight;
 
-			var ang = my.clickAngle({x:e.clientX, y:e.clientY}, coord);
-			var h_ang = (my.time.hour%12) * 30;
-			var m_ang = my.time.minute * 6;
+			const ang = my.clickAngle({x:e.clientX, y:e.clientY}, coord);
+			const h_ang = (my.time.hour%12) * 30;
+			const m_ang = my.time.minute * 6;
 
 			my.moveEl.move = true;
 			my.moveEl.coord = coord;
 
 			if (Math.abs(ang - m_ang) < Math.abs(ang - h_ang))
-				my.moveEl.el = "minute";
+				my.moveEl.el = 'minute';
 			else if (Math.abs(ang - m_ang) > Math.abs(ang - h_ang))
-				my.moveEl.el = "hour";
+				my.moveEl.el = 'hour';
 			else {
-				if ($(e.target).css("backgroundImage").indexOf(my.options.hourHandImage) != -1)
-					my.moveEl.el = "hour";
+				if ($(e.target).css('backgroundImage').indexOf(my.options.hourHandImage) != -1)
+					my.moveEl.el = 'hour';
 				else
-					my.moveEl.el = "minute";
+					my.moveEl.el = 'minute';
 			}
 		},
 		mouseup() {
@@ -61,14 +61,12 @@ var TimePicker = function(holder, options) {
 		},
 		mousemove(e) {
 			if (my.moveEl.move) {
-				var ang = my.clickAngle({x:e.clientX, y:e.clientY}, my.moveEl.coord);
-				var ang_by = my.moveEl.el == "hour" ? 30 : 6;
-
-				if (my.moveEl.el == "hour") {
+				const ang = my.clickAngle({x:e.clientX, y:e.clientY}, my.moveEl.coord);
+				const ang_by = my.moveEl.el === 'hour' ? 30 : 6;
+				if (my.moveEl.el === 'hour') {
 					var h = parseInt(ang/ang_by);
 					if (!isNaN(h))
 						my.time.hour = h;
-
 					if (my.ampm.innerHTML == my.options.lang.pm)
 						my.time.hour = (my.time.hour+12)%24;
 				}
@@ -88,25 +86,20 @@ TimePicker.prototype = {
 		this.ampm[0].innerHTML = ( this.time.hour < 12 ? this.options.lang.am : this.options.lang.pm );
 	},
 	moveHands() {
-		this.hourHand.css("backgroundPosition", (((this.time.hour % 12) *  67) * -1));
-		this.minuteHand.css("backgroundPosition", ((this.time.minute * 111) * -1));
+		this.hourHand.css('backgroundPosition', (((this.time.hour % 12) *  67) * -1));
+		this.minuteHand.css('backgroundPosition', ((this.time.minute * 111) * -1));
 	},
 	clickAngle(pnt, coord) {
 		var c_x = coord.width/2;
 		var c_y = coord.height/2;
-
 		var x = pnt.x + pageXOffset - coord.left;
 		var y = pnt.y + pageYOffset - coord.top;
-
 		var t_x = c_x;
 		var t_y = y;
-
 		var CA = t_x - x;
 		var CO = t_y - c_y;
 		var AO = Math.sqrt(Math.pow(CA, 2) + Math.pow(CO, 2));
-
 		var ang = Math.round((Math.acos((Math.pow(Math.abs(CA), 2) - Math.pow(Math.abs(AO), 2) - Math.pow(CO, 2))/(2 * CO * AO))) * 180/Math.PI);
-
 		if (x < c_x) ang = 360 - ang;
 		return ang;
 	}

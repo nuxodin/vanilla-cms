@@ -94,7 +94,7 @@ require('class.csstidy_optimise.php');
  * An online version should be available here: http://cdburnerxp.se/cssparse/css_optimiser.php
  * @package csstidy
  * @author Florian Schmitz (floele at gmail dot com) 2005-2006
- * @version 1.5.3
+ * @version 1.5.6
  */
 class csstidy {
 
@@ -147,7 +147,7 @@ class csstidy {
 	 * @var string
 	 * @access private
 	 */
-	public $version = '1.5.2';
+	public $version = '1.5.6';
 	/**
 	 * Stores the settings
 	 * @var array
@@ -288,7 +288,7 @@ class csstidy {
 	 */
 	public function __construct() {
 		$data = array();
-		include 'data.inc.php';
+		include('data.inc.php');
 		$this->data = $data;
 
 		$this->settings['remove_bslash'] = true;
@@ -302,6 +302,7 @@ class csstidy {
 		 */
 		$this->settings['optimise_shorthands'] = 1;
 		$this->settings['remove_last_;'] = true;
+		$this->settings['space_before_important'] = false;
 		/* rewrite all properties with low case, better for later gzip OK, safe*/
 		$this->settings['case_properties'] = 1;
 		/* sort properties in alpabetic order, better for later gzip
@@ -1079,7 +1080,8 @@ class csstidy {
 			return $media;
 		}
 		end($this->css);
-		list($at,) = each($this->css);
+		//list($at,) = each($this->css);
+		$at = key($this->css); // tobi
 		if ($at == $media) {
 			return $media;
 		}
@@ -1118,7 +1120,8 @@ class csstidy {
 
 			// if last is the same, keep it
 			end($this->css[$media]);
-			list($sel,) = each($this->css[$media]);
+			//list($sel,) = each($this->css[$media]);
+			$sel = key($this->css[$media]); // tobi
 			if ($sel == $selector) {
 				return $selector;
 			}

@@ -86,7 +86,7 @@
 }
 
 
-.qgCMS ::-webkit-scrollbar { width: 6px; height: 6px; }
+.qgCMS ::-webkit-scrollbar { width: 10px; height: 10px; }
 .qgCMS ::-webkit-scrollbar-track { background: rgba(0, 0, 0, .05); }
 .qgCMS ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, .25); }
 
@@ -130,7 +130,6 @@
     margin-bottom: 1em;
     padding-bottom: .5em;
 	display:flex;
-	zzz_align-items: center;
 	align-items: flex-end;
 }
 .qgCMS .-h1 > span {
@@ -164,7 +163,6 @@
 	transition:fill .5s;
 }
 #qgCmsContTrash.-full > svg {
-	xfill:var(--cms-access-3);
 	fill:var(--cms-color);
 }
 #qgCmsContTrash > svg .-lis {
@@ -196,6 +194,8 @@
 #qgCmsContPosMenu > .-opts  { background-image:url(../img/settings.svg); cursor:pointer; }
 #qgCmsContPosMenu > .-mod   { width:auto; margin:3px 5px 0 3px; }
 
+
+
 /* text-fields */
 :hover [cmstxt][contenteditable] { min-height:.8em; min-width:1em; }
 :hover :not(.qgCmsCont)[cmstxt][contenteditable] 	   { outline:1px solid rgba(255,50,0,.3); }
@@ -207,7 +207,7 @@
 
 .cmsShowEditables .qgCmsCont.-e {
 	transition:none;
-	background:var(--cms-color); !important;
+	background:var(--cms-color) !important;
 	box-shadow:-2px -2px 5px 0 rgba(0,0,0,.9) !important;
 	opacity:1;
 	visibility:visible;
@@ -252,6 +252,11 @@
 	transition-property:box-shadow, min-height, background-color;
 }
 
+li.cmsOffline > a {
+	text-decoration: line-through !important;
+}
+
+
 :hover .qgCmsCont.-e { outline: 1px solid var(--cms-color); }
 :hover .qgCmsCont.qgCMS-dropTarget { outline:none; }
 
@@ -259,6 +264,10 @@
 .qgCmsCont.qgCmsMarked.qgCmsMarked {
 	outline:3px solid var(--cms-color);
 }
+.qgCmsCont.qgCmsMarked.qgCmsMarked.qgCMS-offline {
+	outline-color:var(--cms-access-2);
+}
+
 
 .qgCmsCont.-moving {
 	display: block;
@@ -288,9 +297,6 @@
 
 .qgCMS table.-styled {
 	border-collapse:collapse;
-}
-.qgCMS table.-styled > tbody > tr {
-	xbackground-color:#e8e8e8;
 }
 .qgCMS table.-styled > tbody > tr:hover,
 .qgCMS table.-styled > tbody > tr.active {
@@ -418,7 +424,11 @@ img::-moz-selection { background: rgba(0,0,0,.2); }
 img::selection { background: rgba(0,0,0,.2); }
 
 @keyframes qgcms_trash_activate {
-	0    { transform:scale(1); }
+	0%   { transform:scale(1); }
 	50%  { transform:scale(1.3); }
 	100% { transform:scale(1); }
+}
+@keyframes qgcms_fadeInOut {
+	0%   { opacity:0; }
+	50%  { opacity:1; }
 }

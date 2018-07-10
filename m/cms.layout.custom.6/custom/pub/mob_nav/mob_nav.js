@@ -10,7 +10,7 @@ c1.c1Use('dom',function(){
         if (nav_root) return;
         var btn = e.target.closest('.mob_nav_btn');
         var action = btn?'toggle':'remove';
-        document.body.classList[action]('mob_nav_open');
+        document.documentElement.classList[action]('mob_nav_open');
 
 		btn && e.preventDefault();
 

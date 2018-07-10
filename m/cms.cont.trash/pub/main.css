@@ -1,11 +1,12 @@
+html #content {
+	width:100%;
+}
 .-m-cms-cont-trash .-list {
-    display:flex;
-    flex-wrap:wrap;
-    margin:-5px;
+	display:grid;
+	grid-gap: 10px;
+	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr) );
 }
 .-m-cms-cont-trash .-item {
-    flex: 1 1 260px;
-    margin:5px;
     padding:10px;
     box-shadow:0 0 10px rgba(0,0,0,.4);
     position:relative;
@@ -25,6 +26,11 @@
     opacity:0;
     visibility:hidden;
     transition:opacity .2s;
+}
+#container .-m-cms-cont-trash .-item > .-more button {
+	width:auto;
+	min-width:117px;
+	font-size:.9em;
 }
 .-m-cms-cont-trash .-item > .-more > * {
     margin:5px;

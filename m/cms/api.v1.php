@@ -19,7 +19,7 @@ if ($parts[1] === 'page') {
                 }
                 Answer($return);
                 //echo json_encode($return,JSON_PRETTY_PRINT);
-                exit();
+                exit;
             }
         }
     }

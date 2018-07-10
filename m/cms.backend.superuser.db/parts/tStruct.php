@@ -21,7 +21,7 @@ $SET_T = $Cont->SET['table'][$t];
 		<?php $SET_F['show']->custom(); ?>
 		<li>
 			<input onclick="setFieldShow(<?=$Cont?>,'<?=$T?>','<?=$F?>',this.checked);" type=checkbox <?=$SET_F['show']->v?'checked':''?>>
-			<a href="javascript:$fn('page::loadPart')(<?=$Cont?>,'fStruct',{table:'<?=$T?>',field:'<?=$F?>'}).run()" style="<?=$F->isPrimary()?'font-weight:bold':''?>; <?=$F->Parent()?'color:red':''?>">
+			<a href="#" onclick="fieldUi('<?=$T?>','<?=$F?>'); return false" style="<?=$F->isPrimary()?'font-weight:bold':''?>; <?=$F->Parent()?'color:red':''?>">
 				<?=$F?>
 			</a>
 	<?php } ?>
@@ -39,4 +39,16 @@ $SET_T = $Cont->SET['table'][$t];
 			</a>
 	<?php } ?>
 	</ul>
+
+	<script>
+		window.fieldUi = async function(table, field){
+			var [dialog] = await c1.c1Use('dialog',1);
+			$fn('page::getPart')(<?=$Cont?>,'fStruct',{table,field}).run(function(body){
+				var d = new dialog({title: table+' | '+field, body, class:'qgCMS'});
+				d.element.c1Find('>.-foot').remove();
+				d.show();
+			})
+		}
+	</script>
+
 </div>

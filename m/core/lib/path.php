@@ -62,13 +62,8 @@ class Url {
 	}
 	function relativeTo($Url) {
 		$To = Url($Url);
-
-		if ($this->scheme !==$To->scheme) {
-			return (string)$this;
-		}
-		if ($this->host !==$To->host) {
-			return (string)$this;
-		}
+		if ($this->scheme !== $To->scheme) return (string)$this;
+		if ($this->host !== $To->host) return (string)$this;
 		if ($this->path !==$To->path) {
 			$back = '';
 			$base = $To->path;

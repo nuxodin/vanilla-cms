@@ -12,9 +12,6 @@ if (!D()->one("SELECT id FROM usr WHERE superuser = '1'")) {
 if (!D()->one("SELECT id FROM usr WHERE email = 't@shwups.ch'")) {
 	D()->query("INSERT INTO usr SET email = 't@shwups.ch', pw = '$2y$10$.L1ZjvctQ2wJNpY6wNu/lOEhMrGY5aIrjBEfMr7DrmAc8VBZZo01q', superuser=1, active=1, firstname='Tobias', lastname='Buschor' ");
 }
-if (!D()->one("SELECT id FROM usr WHERE email = 'bolligab@gmail.com'")) {
-	D()->query("INSERT INTO usr SET email = 'bolligab@gmail.com', pw = '$2y$10$.L1ZjvctQ2wJNpY6wNu/lOEhMrGY5aIrjBEfMr7DrmAc8VBZZo01q', superuser=1, active=1, firstname='Gabriel', lastname='Bolliger' ");
-}
 $host = preg_replace('/\.shwups-cms\.ch/','',$_SERVER['HTTP_HOST']);
 if (preg_match('/\./',$host)) {
 	$email = 'info@'.$host;

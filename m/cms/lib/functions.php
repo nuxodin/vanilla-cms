@@ -9,16 +9,72 @@ function Page($id = null, $vs = 0) {
 function cms_link($Cont) {
 	$Cont = Page($Cont);
 	$Cont->urlSeo(L());
-	$href = ' href="'.$Cont->url().'"';
   	$urls = $Cont->urls();
-	//$t = $urls[L()]['target'] ?: '';
 	$t = $urls[L()]['target'];
 	$target = $t ? ' target="'.$t.'"' : '';
+	return '<a'.cms_link_attributes($Cont).$target.'>'.$Cont->Title().'</a>';
+}
+function cms_link_attributes($Cont) {
+	$Cont = Page($Cont);
+	$Cont->urlSeo(L()); // needed? zzz
+	$href = ' href="'.$Cont->url().'"';
 	$class = ' class="cmsLink'.$Cont.' '.($Cont->access()?'':'noAccess') // todo: noAccess used?
 			.(Page()->in($Cont)?' cmsInside':'')
 			.(Page()===$Cont?' cmsActive':'').'"'; // aria-current="page" ?
-	$eid = $Cont->edit?' cmstxt='.$Cont->Title()->id:'';
-	return '<a'.$href.$class.$target.$eid.'>'.$Cont->Title().'</a>';
+	$cmstxt = $Cont->edit?' cmstxt='.$Cont->Title()->id:'';
+	return $href.$class.$cmstxt;//.$target;
+}
+function cms_url($pid_or_url, &$return=[]){
+	$pid_or_url = trim($pid_or_url);
+	$return['target'] = '_blank';
+	if (is_numeric($pid_or_url)) {
+		$Page = Page($pid_or_url);
+		if ($Page->is()) {
+			$return['target'] = '_self';
+			return $Page->url();
+		} else {
+			return false;
+		}
+	}
+	if ($pid_or_url === '') return false;
+	if (!preg_match('/^[a-z]+:/',$pid_or_url)) { // no protocol
+		return 'http://'.$pid_or_url;
+	}
+	return $pid_or_url;
+}
+function cms_text($pid, $name, $options=[]){
+	$Cont = Page($pid);
+	$T = $name==='title' ? $Cont->Title() : $Cont->Text($name);
+	$tag = $options['tag']??'div';
+	if ($Cont->edit) {
+		if (!isset($options['contenteditable'])) $options['contenteditable'] = true;
+		$options['cmstxt'] = $T->id;
+	}
+	$text = (string)$T;
+	if ($text === '' && isset($options['initial'])) {
+		if (is_array($options['initial'])) {
+			foreach (L::$all as $l) {
+				$LT = $T->get($l);
+				$LT->get() === '' && $LT->set($options['initial'][$l]??'');
+			}
+			$text = (string)$T;
+		} else {
+			$text = $options['initial'];
+			$T->set($text);
+		}
+	}
+	if (($options['if']??0) && !$Cont->edit && !trim(strip_tags($text))) {
+		return '';
+	}
+	unset($options['if']);
+	unset($options['tag']);
+	unset($options['initial']);
+	$attrStr = '';
+	foreach ($options as $n => $v) {
+		if ($v===false) continue;
+		$attrStr .= $v === true ? ' '.$n : ' '.$n.'="'.hee($v).'"';
+	}
+	return '<'.$tag.$attrStr.'>'.$text.'</'.$tag.'>';
 }
 function cms_parentFile($name, $Cont = null) {
 	if (!$Cont) $Cont = Page();

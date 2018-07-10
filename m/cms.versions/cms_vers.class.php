@@ -83,9 +83,9 @@ class cms_vers {
         return false;
     }
 	static function cacheHeaders() {
-		header("Cache-Control: max-age=2592000");
-		header("Expires: Thu, 01 Dec 2035 16:00:00 GMT");
-		header("Cache-Control: store, cache, max-age=2592000, must-revalidate");
-		header("Pragma: cache");
+        $expires = time()+60*60*24*180;
+ 		header('Expires: ' . gmdate('D, d M Y H:i:s', $expires) .' GMT');
+		header('Cache-Control: store, cache, max-age='.$expires.', private');
+		header('Pragma: private'); // needed or els it will not cache
 	}
 }

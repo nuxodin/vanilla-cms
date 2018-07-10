@@ -39,7 +39,7 @@ foreach ($Cont->FilesAndPlaceholders() as $name => $F) { ?>
 			}
 			?>
 		<td class=-size>
-			<?= $F->exists() ? byte_format($F->size()) : '' ?>
+			<?= $F->exists() ? util::byte_format($F->size()) : '' ?>
 		<td class=-handle>
 		<td class=-delete>
 <?php } ?>

@@ -39,10 +39,8 @@ class serverInterface_cms_frontend_1 {
 		$P = Page($params['pid']);
 		if ($P->access() < 2) return false;
 		if (strpos($widget,'/'))  return null;
-
 		global $cmsWidgetCont;
 		$cmsWidgetCont = $P;
-
 		L::nsStart('cms');
 		$T = new Template(['Cont'=>$P ,'param'=>$params]);
 		$html = $T->get(sysPATH.'cms.frontend.1/view/widgets/'.$widget.'.php');
@@ -53,31 +51,33 @@ class serverInterface_cms_frontend_1 {
 
 qg::on('cms-ready', function(){
 	if (isset($_GET['qgCmsNoFrontend'])) return;
-	if (cms::$MainPage->access() < 2) return;
-
-	G()->csp['img-src']['blob:'] = true;
-	G()->csp['default-src']["'self'"] = true; /* as of firefox 50, svgs loaded via "use" are blocked */
-	$Cont = Page();
-	$cmsSET = G()->SET['cms'];
-	$cmsSET->make('last_backend_page',$cmsSET['backend']->v)->custom();
-	$cmsSET->make('last_frontend_page',2)->custom();
-	$edit = $cmsSET['editmode']->v;
-	G()->js_data['Page'] = $Cont->id;
-	G()->js_data['cmsToggleEditUrl']  = (string)Url()->addParam('qgCms_editmode', $cmsSET['editmode']->v ? 0 : 1, false)->addParam('cmspid', cms::$RequestedPage->id, false);
-	if (Usr()->superuser) G()->js_data['cmsToggleDebugUrl'] = (string)Url()->addParam('debugmode',debug ? 0 : 1 ,false);
-	$inBackend = $Cont->in($cmsSET['backend']->v);
-	$cmsSET[$inBackend?'last_backend_page':'last_frontend_page']->setUser($Cont);
-	$BPage = Page($cmsSET[$inBackend?'last_frontend_page':'last_backend_page']->v);
-	if ($BPage->access()) G()->js_data['cmsBackendUrl'] = (string)Url($BPage->url());
-	G()->js_data['qgCmsEditmode'] = (int)$edit;
-	if (!$edit) return;
-	G()->js_data['cmsClipboard'] = (int)$cmsSET['clipboard']->v;
-
-
-	ob_start();
-	include sysPATH.'cms.frontend.1/view/panel.php';
-	//html::$content .= ob_get_clean();
-	html::$content = ob_get_clean().html::$content;
+	$Cont = cms::$MainPage;
+	$access = $Cont->access();
+	$inBackend = $Cont->vs['module'] === 'cms.layout.backend';
+	//toggle backend
+	if ($access > 1 || $inBackend) {
+		if (G()->SET['cms']['pageNotFound']->v != $Cont->id) {
+			G()->SET['cms'][$inBackend?'last_backend_page':'last_frontend_page']->setUser($_SERVER['REQUEST_URI']);
+			$backendTogglelUrl = G()->SET['cms'][$inBackend?'last_frontend_page':'last_backend_page']->v;
+			G()->js_data['cmsBackendUrl'] = $backendTogglelUrl;
+			html::addJSFile( sysURL.'cms.frontend.1/pub/js/init.js',    'cms/noEdit');
+		}
+	}
+	if ($access > 1) {
+		G()->csp['img-src']['blob:'] = true; // drag&drop images
+		//G()->csp['default-src']["'self'"] = true; // as of firefox 50, svgs loaded via "use" are blocked
+		G()->js_data['Page'] = $Cont->id;
+		G()->js_data['qgCmsRequestedPage'] = cms::$RequestedPage->id;
+		G()->js_data['qgDebugmode'] = Usr()->superuser ? debug : null;
+		G()->js_data['qgCmsEditmode'] = (int)G()->SET['cms']['editmode']->v;
+		// show frontend
+		if (G()->SET['cms']['editmode']->v) {
+			G()->js_data['cmsClipboard'] = (int)G()->SET['cms']['clipboard']->v;
+			ob_start();
+			include sysPATH.'cms.frontend.1/view/panel.php';
+			html::$content = ob_get_clean().html::$content; // frontend first
+		}
+	}
 });
 qg::on('deliverHtml', function(){
 	if (isset($_GET['qgCmsNoFrontend'])) return;
@@ -91,43 +91,19 @@ qg::on('deliverHtml', function(){
 		html::addJSFile( sysURL.'core/js/qg.js',                         'cms/edit');
 		html::addJSFile( sysURL.'core/js/c1/onElement.js',               'cms/edit');
 		html::addJSFile( sysURL.'cms/pub/js/cms.js',                     'cms/edit', true, '');
-		html::addJSFile( sysURL.'core/js/c1/NodeCleaner.js',             'cms/edit');
-//		html::addJSFile( sysURL.'core/js/c1/dialog.js',             	 'cms/edit');
-		html::addJSFile( sysURL.'core/js/qg/fakeSelect.js',              'cms/edit');
+		// jQuery neede for "sortable" and "dynatree"
 		html::addJSFile(sysURL.'core/js/jQuery.js',                      'cms/edit');
-		html::addJSFile( sysURL.'core/js/jQuery/ui.js',                  'cms/edit');
-		html::addJSFile( sysURL.'core/js/qg/fileHelpers.js',             'cms/edit');
-		html::addJSFile( sysURL.'core/js/qgRte/crossbrowser.js',         'cms/edit');
-		html::addJSFile( sysURL.'core/js/qgRte/htmlparser.js',           'cms/edit');
-		html::addJSFile( sysURL.'core/js/qgRte/helpers.js',              'cms/edit');
-		html::addCSSFile(sysURL.'core/js/qgRte/main.css',                'cms/edit');
-		html::addJSFile( sysURL.'core/js/qgRte/Rte.js',                  'cms/edit');
-		html::addJSFile( sysURL.'core/js/qgRte/Rte.ui.js',               'cms/edit');
-		html::addJSFile( sysURL.'core/js/qgRte/Rte.ui.items.js',         'cms/edit');
+		html::addJSFile(sysURL.'core/js/jQuery/ui.js',                   'cms/edit');
 		html::addJsFile(sysURL.'core/js/jQuery/fn/dynatree.js',          'cms/edit');
+		// js modules
+		html::addJSM( sysURL.'cms.frontend.1/pub/js/frontend.mjs');
+		html::addJSM( sysURL.'cms.frontend.1/pub/js/panel.mjs');
+		//html::addJSM( sysURL.'cms.frontend.1/pub/js/c1Intro.mjs');
+		//html::addJSM( sysURL.'core/js/c1/tooltip.mjs');
+		// css
+		html::addCSSFile(sysURL.'core/js/Rte/main.css',                  'cms/edit');
 		html::addCSSFile(sysURL.'core/js/jQuery/fn/dynatree/skin-vista/ui.dynatree.css', 'cms/edit');
-		html::addJSFile( sysURL.'core/js/c1/Placer.js',                  'cms/edit', true, 'defer');
-		html::addJSFile( sysURL.'core/js/qgCalendar/date_extend.js',     'cms/edit', true, 'defer');
-		html::addJSFile( sysURL.'core/js/qgCalendar/qgCalendar.js',      'cms/edit', true, 'defer');
-		html::addJSFile( sysURL.'core/js/qgCalendar/qgDateInput.js',     'cms/edit', true, 'defer');
-		html::addJSFile( sysURL.'core/js/qgCalendar/timepicker/nogray_time_picker.js',   'cms/edit', true, 'defer');
 		html::addCSSFile(sysURL.'core/js/qgCalendar/calendar.css',       'cms/edit');
-		html::addJSFile( sysURL.'cms/pub/js/rte.js',                     'cms/edit', true, 'defer');
-		html::addJSFile( sysURL.'cms/pub/js/dropPaste.js',               'cms/edit', true, 'defer');
-		html::addJSFile( sysURL.'cms/pub/js/dropPasteHelper.js',         'cms/edit', true, 'defer');
-		//html::addJSFile( sysURL.'cms.frontend.1/pub/js/c1Intro.js',      'cms/edit'); // todo
-		html::addJSFile( sysURL.'cms.frontend.1/pub/js/frontend1.js',    'cms/edit', true, 'defer');
-		html::addJSFile( sysURL.'cms.frontend.1/pub/js/ddConts.js',      'cms/edit', true, 'defer');
-
-		html::addJSFile( sysURL.'cms.frontend.1/pub/js/tree.js',         'cms/edit', true, 'defer');
-		html::addJSFile( sysURL.'cms.frontend.1/pub/js/panel.js',        'cms/edit', true, 'defer');
-
-		html::addJSFile( sysURL.'core/js/c1/fix/contextMenu.js',         'cms/edit', true, 'defer');
-		html::addJSFile( sysURL.'core/js/c1/contextMenu.js',             'cms/edit', true, 'defer');
-		//html::addJSFile( sysURL.'core/js/c1/tooltip.js',             'cms/edit', true, 'defer');
-		html::addJSFile( sysURL.'cms.frontend.1/pub/js/contextMenu.js',  'cms/edit', true, 'defer');
-		html::addJSFile( sysURL.'core/js/SettingsEditor.js',             'cms/edit', true, 'async');
-
 		html::addCSSFile(sysURL.'core/css/q1Rst.css',                    'cms/edit');
 		html::addCSSFile(sysURL.'core/css/c1/box.css',                   'cms/edit');
 		html::addCSSFile(sysURL.'cms.frontend.1/pub/css/main.css',       'cms/edit');

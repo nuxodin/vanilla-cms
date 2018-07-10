@@ -7,7 +7,7 @@ $vs = D()->row("SELECT * FROM usr WHERE id = ".(int)$_GET['id']);
 <div class=beBoxCont itemid="<?=hee($_GET['id'])?>">
 	<?php
 	?>
-	<div class=c1-box style="flex:0 1 auto">
+	<div class=c1-box style="flex:0 1 340px">
 		<div class=-head>Benutzer <?=$vs['id']?></div>
 		<div style="overflow:auto">
 			<table class="c1-style -detail">

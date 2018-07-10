@@ -17,7 +17,7 @@ qg::on('action', function(){
         $_FILES['qgDbFileImageEditor']['name'] = $File->name(); // dont change file-name
         $File->replaceFromUpload($_FILES['qgDbFileImageEditor']);
         qg::fire('page::file_upload-after');
-        exit();
+        exit;
     }
 });
 
@@ -37,17 +37,17 @@ class serverInterface_dbFileImageEditor {
         $str = '<table style="width:100%">';
         foreach (D()->query($sql) as $row) {
             if (!is_file(appPATH.'qg/file/'.$row['md5'])) continue;
-            $old = vers::setLog($row['_vers_log']);
-            ob_start();
-            $_SESSION['cms_vers::log']   = $row['_vers_log'] + 1;
-        	$_SESSION['cms_vers::space'] = $row['_vers_space'];
+            $old = vers::setLog($row['_vers_log']+1);
+
+            // $_SESSION['cms_vers::log']   = $row['_vers_log'] + 1; // needed?
+            // $_SESSION['cms_vers::space'] = $row['_vers_space'];
             dbFile::$All = [];
-            dbFile::output($id.'/u-'.substr($row['md5'],0,4).'/w-60/h-40/dpr-0/max/'.$row['name']); // like preview
-            header_remove('Content-Length');
-            $out = ob_get_contents();
-            ob_end_clean();
+            $File = dbFile($id)->transform(['w'=>60,'h'=>'40','dpr'=>0,'max'=>true]); // same size as preview (already generated)
+            if (!$File->path) continue;
+            $out = file_get_contents($File->path);
+
             $str .= '<tr>';
-            $str .=   '<td style="padding:3px 4px 3px 0; width:60px"><img log="'.$row['log_id'].'" style="display:block; margin:auto; border:1px solid black; cursor:pointer" src="data:'.$row['mime'].';base64,'.base64_encode($out).'">';
+            $str .=   '<td style="padding:3px 4px 3px 0; width:60px"><img log="'.($row['log_id']).'" style="display:block; margin:auto; border:1px solid black; cursor:pointer" src="data:'.$row['mime'].';base64,'.base64_encode($out).'">';
             $str .=   '<td style="padding:3px 0   3px 0;">'.strftime('%x %H:%M',$row['log_time']);
             if ($Log = D()->log->Entry($row['log_id'])) {
                 if ($Log->is() && ($Sess = $Log->Sess())) {
@@ -56,8 +56,7 @@ class serverInterface_dbFileImageEditor {
                     }
                 }
             }
-            //$str .= '<img src="'.$DbFile->url().'/w-60/h-40/dpr-0/max/'.$row['name'].'?qgCmsVersLog='.$row['_vers_log'].'">';
-            vers::setLog($old);
+            vers::setLog($old); // todo, after loop?
         }
         $str .= '</table>';
         unset($_SESSION['cms_vers::log']);

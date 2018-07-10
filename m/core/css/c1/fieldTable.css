@@ -33,4 +33,13 @@ baseline aligning, would be the perfect solution - but...
 ugly hack for ff
 safari works if textarea has content or a placeholder!!
 http://jsbin.com/topobayatu/1/edit?html,css,output
+
+### flexbox solution
+http://jsbin.com/pafuhizeza/1/edit?html,css,output
+adventage:
+- use margins instead of padding in cells
+- smaller
+
+### grid solution, all advantages, but display contents has to be supported;
+http://jsbin.com/xalirebofo/1/edit?html,css,output
 */

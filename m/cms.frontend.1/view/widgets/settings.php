@@ -1,32 +1,32 @@
 <?php namespace qg ?>
 <div class="-standalone qgCMSFron1ContManager" pid="<?=$Cont?>" page-type="<?=hee($Cont->vs['type'])?>" style="font-size:1.2em; margin-bottom:1em">
-    <div>
+    <div title="Nr.<?=$Cont?>">
 
         <div class=-h1>
+            <?=L($Cont->vs['type']==='p'?'Seite':'Inhalt')?>:&nbsp;
             <?php
             L::nsStart('');
             $T = $Cont->Title();
-            L::nsStop();
             ?>
             <input<?=$Cont->edit?' cmstxt='.$T->id:''?> value="<?=hee($T)?>" style="color:inherit; background:transparent; letter-spacing:.1em; width:100%; padding:0; border:none; outline:none; font-size:inherit" placeholder="kein Titel">
             <?php
+            L::nsStop();
             $path = sysPATH.$Cont->vs['module'].'/pub/';
             $url = is_file($path.'module.svg') ? path2uri($path).'module.svg' : sysURL.'cms.frontend.1/pub/img/module_default.svg';
             ?>
             <div style="margin-top:-15px">
-                <svg class=-img xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="var(--cms-dark)" width="46" height="46" style="display:block">
-                    <use xlink:href="<?=$url?>#main" />
+                <svg class=-img fill="var(--cms-dark)" width="46" height="46" style="display:block">
+                    <use href="<?=$url?>#main" />
                 </svg>
             </div>
     	</div>
 
-        <div>Nr. <b><?=$Cont?></b></div>
         <?php
         $Module = D()->module->Entry($Cont->vs['module']);
         ?>
-        <div style="display:inline-flex; width:100%">
+        <div style="display:flex; margin-bottom:4px;">
             <span title="<?=hee($Module->name)?>"><?=$Cont->vs['type']==='p'?'Layout':'Modul'?>: </span>
-            <select class=-changemodule style="border:none; font-size:inherit; font-weight:bold; flex:1 1 auto; width:100%; padding:0; margin-top:-1px; margin-top: -4px; margin-bottom: -3px; background:transparent">
+            <select class=-changemodule style="border:none; font-size:inherit; font-weight:bold; flex:1; padding:0; margin-top:-1px; margin-top: -4px; margin-bottom: -3px; background:transparent">
             <?php
             $modules = $Cont->vs['type'] === 'p' ? cms::getLayouts() : cms::getModules();
             foreach ($modules as $name => $path) {

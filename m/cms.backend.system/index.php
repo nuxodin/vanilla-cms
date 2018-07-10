@@ -9,6 +9,7 @@ if (!isset($_GET['open'])) $_GET['open'] = null;
 		<div class=-body>
 			<?php
 			if (isset($_POST['clearCache'])) {
+				time_limit(20);
 				echo '<b>'.L('Cache gelöscht').':<br></b>';
 				$verzeichnis = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator( appPATH.'cache/' ), true);
 				foreach ($verzeichnis as $datei) {
@@ -21,6 +22,7 @@ if (!isset($_GET['open'])) $_GET['open'] = null;
 				}
 			}
 			if (isset($_POST['clearTmp'])) {
+				time_limit(20);
 				echo '<b>'.L('Temporäre Dateien gelöscht').':<br></b>';
 				$verzeichnis = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator( appPATH.'cache/tmp/' ), true);
 				foreach ($verzeichnis as $datei) {
@@ -119,7 +121,7 @@ if (!isset($_GET['open'])) $_GET['open'] = null;
 
 							$value = $row['Value'];
 							echo '<td>';
-							echo isset($byte[$name]) ? byte_format($value) : $value;
+							echo isset($byte[$name]) ? util::byte_format($value) : $value;
 					}
 					?>
 				</table>

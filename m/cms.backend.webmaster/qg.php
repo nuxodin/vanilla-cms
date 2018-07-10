@@ -4,7 +4,7 @@ namespace qg;
 qg::on('action', function() {
 	if (appRequestUri === 'robots.txt') {
 		echo G()->SET['cms.backend.webmaster']['robots.txt']->v;
-		exit();
+		exit;
 	}
 	if (appRequestUri === 'sitemap.xml') {
 		header('Content-Type: application/xml');
@@ -28,6 +28,7 @@ qg::on('action', function() {
 					  	echo
 						'    <xhtml:link rel="alternate" hreflang="'.$altL.'" href="'.hee(Url('/'.$P->urlSeo($altL))).'" />'."\n";
 		            }
+				/*
 	            if ($P->vs['log_id_ch']) {
 					$Log = D()->log->Entry($P->vs['log_id_ch']);
 					if ($Log->is()) {
@@ -49,17 +50,17 @@ qg::on('action', function() {
 		}
 		echo
 		'</urlset>'."\n";
-		exit();
+		exit;
 	}
     if (preg_match('/^google/',appRequestUri)) {
-          $code = G()->SET['cms.backend.webmaster']['webmaster code google']->v;
-      	  $code = preg_replace( '/^google/', '', $code );
-      	  $code = preg_replace( '/\.html/', '', $code );
-          $code = 'google'.$code.'.html';
-    	  if (appRequestUri === $code) {
-      		echo 'google-site-verification: '.$code;
-      		exit();
-          }
+		$code = G()->SET['cms.backend.webmaster']['webmaster code google']->v;
+		$code = preg_replace( '/^google/', '', $code );
+		$code = preg_replace( '/\.html/', '', $code );
+		$code = 'google'.$code.'.html';
+		if (appRequestUri === $code) {
+			echo 'google-site-verification: '.$code;
+			exit;
+		}
     }
     if (appRequestUri === 'BingSiteAuth.xml' && G()->SET['cms.backend.webmaster']['webmaster code bing']->v) {
 		header('content-type: application/xml');
@@ -68,7 +69,7 @@ qg::on('action', function() {
 		"<users>".
 		"	<user>".G()->SET['cms.backend.webmaster']['webmaster code bing']->v."</user>".
 		"</users>";
-        exit();
+        exit;
     }
     if (preg_match('/^yandex_/',appRequestUri) && appRequestUri === 'yandex_'.G()->SET['cms.backend.webmaster']['webmaster code yandex'].'.html') {
         echo
@@ -78,7 +79,7 @@ qg::on('action', function() {
         '    </head>'."\n".
         '    <body>Verification: '.G()->SET['cms.backend.webmaster']['webmaster code yandex'].'</body>'."\n".
         '</html>'."\n";
-        exit();
+        exit;
     }
 
 	// browser fix
@@ -97,14 +98,14 @@ qg::on('action', function() {
 			if (preg_match('/rv:([0-9.]+)/',$ua,$tmp)) $version = $tmp[1];
 		}
 	}
-	if ($browser === 'IE' && $version < 11) {
-		html::addJsFile(sysURL.'cms.backend.webmaster/pub/browser-warning.js');
-	}
-	if ($browser === 'Safari' && $version < 9) {
-		html::addJsFile(sysURL.'cms.backend.webmaster/pub/browser-warning.js');
-	}
-	if ($browser === 'Firefox' && $version < 48) {
-		html::addJsFile(sysURL.'cms.backend.webmaster/pub/browser-warning.js');
+	if (   ($browser === 'IE' && $version < 11)
+		|| ($browser === 'Safari' && $version < 9.1)
+		|| ($browser === 'Firefox' && $version < 52)
+		|| ($browser === 'Edge' && $version < 16)
+		|| ($browser === 'Chrome' && $version < 65)
+		|| ($browser === 'SamsungBrowser' && $version < 6.2)
+	) {
+		html::addJsFile(sysURL.'cms.backend.webmaster/pub/browser-warning.js',null,true,'async');
 	}
 });
 
@@ -115,9 +116,10 @@ qg::on('deliverHtml', function() {
 
 		G()->csp['script-src']['https://www.google-analytics.com'] = true;
 		G()->csp['img-src']['https://www.google-analytics.com'] = true;
+		// G()->csp['img-src']['https://stats.g.doubleclick.net'] = true; // ok?
 		G()->csp['connect-src']['https://www.google-analytics.com'] = true;
 		html::addJsFile(sysURL.'cms.backend.webmaster/pub/analytics.js',null,null,'async');
-		G()->js_data['gAnalyticsCode'] = $S['analytics code google']->v;
+		G()->js_data['gAnalytics']['code'] = $S['analytics code google']->v;
 
 		// html::$head .=
 		// '<script>

@@ -27,7 +27,7 @@ class File {
 	}
 	function copyTo($dest) {
 		$r = copy($this->path, $dest);
-		$F = new File($dest);
+		$F = new File($dest); // needed????? zzz
 		return $r;
 	}
 	function replaceBy($path) {
@@ -421,6 +421,7 @@ class File {
 			case 'shtml':
 				return 'text/html';
 			case 'js':
+			case 'mjs':
 				return 'text/javascript';
 			case 'txt':
 				return 'text/plain';

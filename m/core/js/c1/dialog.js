@@ -1,5 +1,5 @@
-c1.c1Use(['focusIn','onElement'],function(){
-    'use strict';
+c1.c1Use(['focusIn','onElement'],function(){ 'use strict';
+
 	if (c1.dialog) { console.log('c1.dialog loaded once more'); return; }
 
     document.head.prepend(c1.dom.fragment('<style> \
@@ -47,8 +47,8 @@ c1.c1Use(['focusIn','onElement'],function(){
 
     function open(el){
         //el.setAttribute('open','open');
-        backdrop.for(el);
         el.dispatchEvent(new CustomEvent('c1-dialog-open',{bubbles:true,cancelable:true})); // cancelable needed?
+        setTimeout(function(){backdrop.for(el)});
         //document.documentElement.style.overflow = 'hidden';
     }
     function close(el){
@@ -69,7 +69,7 @@ c1.c1Use(['focusIn','onElement'],function(){
     			var active = document.activeElement;
                 if (el.contains(active)) return;
                 close(el);
-            })
+            });
         });
         el.addEventListener('keydown',function(e){
             if (e.which !== 27 && e.target !== el) return;
@@ -77,10 +77,10 @@ c1.c1Use(['focusIn','onElement'],function(){
         });
         el.addEventListener('c1-close',function(e){
             var active = document.activeElement;
-            el.contains(active) && active.blur()
+            el.contains(active) && active.blur();
 			e.preventDefault();
             e.stopPropagation();
-            close(el)
+            close(el);
         });
         function stopPropagation(e){
 			e.stopPropagation();
@@ -99,12 +99,13 @@ c1.c1Use(['focusIn','onElement'],function(){
 		'	</div>'+
         (options.body?
         '	<div class=-body>'+options.body+'</div>':'')+
+        (options.foot||options.buttons?
         '	<div class=-foot>'+
         '		<div class=-buttons style="xmargin:-.4em; flex:1; display:flex; flex-wrap:wrap; justify-content: flex-end;"></div>'+
-		'	</div>'+
+		'	</div>':'')+
 		'</form>';
 		var element = this.element = c1.dom.fragment(str).firstChild;
-        if (options.class) element.className += ' '+options.class
+        if (options.class) element.className += ' '+options.class;
 		var btnCont = element.c1Find('>.-foot>.-buttons');
 		element.addEventListener('submit',  function(e){ e.preventDefault(); });
         options.buttons && options.buttons.forEach(function(btn, i){
@@ -115,12 +116,13 @@ c1.c1Use(['focusIn','onElement'],function(){
             el.addEventListener('click',function(e){
                 btn.then && btn.then.call(this,e);
                 element.focus(); // not needed in chrome
+                element.blur(); // ie11
                 element.remove();
             });
             btnCont.appendChild(el);
             if (i === 0) setTimeout(function(){el.focus();});
         });
-    }
+    };
     c1.dialog.prototype = {
         show:function(){
             var element = this.element;
@@ -130,39 +132,43 @@ c1.c1Use(['focusIn','onElement'],function(){
             element.c1Focus();
             return new Promise(function(resolve, reject){
                 element.addEventListener('c1-dialog-close',function(e){
+					console.log('event comes twice?')
                     if (element !== e.target) return;
                     resolve(dialog.value);
-                })
+                });
             });
         },
         hide:function(){
     		this.element.dispatchEvent(new CustomEvent('c1-close',{bubbles:true,cancelable:true}));
         }
-    }
+    };
 
-    c1.dialog.alert = function(title) {
+    c1.dialog.alert = function(body, options) {
+        if (options===undefined) options = {};
         var dialog = new c1.dialog({
-            title:title,
+            title: options.title || 'Hinweis',
+            body:body,
             buttons:[{title:'ok'}]
         });
         return dialog.show();
-    }
+    };
     c1.dialog.confirm = function(title) {
         var dialog = new c1.dialog({
-            title:title,
+            title:'Bestätigen',
+            body:title,
             buttons:[{
                 title:'ok',then:function(){
                     dialog.value = true;
                 }
-            },{title:'schliessen'}]
+            },{title:'abbrechen'}]
         });
         dialog.value = false;
         return dialog.show();
-    }
+    };
     c1.dialog.prompt = function(title) {
         var dialog = new c1.dialog({
-            title:title,
-            body: '<input style="width:20em; max-width:100%">',
+            title:'Eingabe',
+            body: title+'<br><input style="width:20em; max-width:100%">',
             buttons:[{
                 title:'ok',then:function(){
                     dialog.value = input.value;
@@ -173,9 +179,7 @@ c1.c1Use(['focusIn','onElement'],function(){
         setTimeout(function(){ input.focus(); });
         dialog.value = null;
         return dialog.show();
-    }
-
-
+    };
 
 
     /* HELPERS */
@@ -194,19 +198,16 @@ c1.c1Use(['focusIn','onElement'],function(){
             requestAnimationFrame(function(){
                 bdDiv.style.pointerEvents = '';
                 bdDiv.style.opacity = 1;
-            })
+            });
             el.c1ZTop();
         },
         hide:function(){
             bdDiv.style.opacity = 0;
-            var todoTimeout = setTimeout(function(){
-	            bdDiv.style.pointerEvents = 'none';
-            },100);
             bdTimeout = setTimeout(function(){
                 bdDiv.remove();
             },300);
         }
-    }
+    };
     bdDiv.addEventListener('mousedown', function(e){ e.stopPropagation(); },true);
     bdDiv.addEventListener('touchstart',function(e){ e.stopPropagation(); },true);
 

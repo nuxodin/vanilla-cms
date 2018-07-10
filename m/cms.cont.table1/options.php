@@ -42,4 +42,4 @@ Spalten (max: 15)<br>
 </div>
 
 <p>&nbsp;</p>
-<a href="<?=Url()->addParam('export_table', $Cont)?>">Tabelle als Excel exportieren</a>
+<a href="<?=hee(Url()->addParam('export_table', $Cont))?>">Tabelle als Excel exportieren</a>

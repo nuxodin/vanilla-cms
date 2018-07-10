@@ -1,29 +1,28 @@
 html, body {
-	height:100%;
+	zzzzheight:100%;
 }
-
 #container {
 	min-height:100%;
 	display:flex;
 	flex-flow:wrap row;
 	background:#eee;
-	height:100%; /* test */
+	zzz_height:100%; /* test */
+	height:100vh; /* test */
 	background:#00aaff; /* ie11 */
 	background:var(--cms-background);
 }
-
-
 /* navi  */
 #nav {
 	box-shadow:0 0 10px rgba(0,0,0,.3);
 	overflow:auto;
 	background:rgba(255,255,255,.4);
+	max-height:100%;
 }
 #nav > ul {
 	width:200px;
 	margin:0;
 	padding:0;
-  	list-style:none;
+	list-style:none;
 }
 #nav .-item {
 	display:block;
@@ -36,20 +35,19 @@ html, body {
 	font-family: 'qg_cms';
 	font-size:11px;
 	font-weight:normal;
-    content: '\e800';
-    position: absolute;
-    display: flex;
-    align-items: center;
-    right:.8em;
-    top:.7em;
-    bottom:.7em;
-    padding-left:10px;
-    transition: opacity .2s;
+	content: '\e800';
+	position: absolute;
+	display: flex;
+	align-items: center;
+	right:.8em;
+	top:.7em;
+	bottom:.7em;
+	padding-left:10px;
+	transition: opacity .2s;
 }
 #nav .-item.-hasSub.-active:after {
 	content: '\e801';
 }
-
 #nav ul {
 	margin:0;
 	padding:0;
@@ -66,8 +64,6 @@ html, body {
 #nav ul ul ul .-item {
 	padding-left:56px;
 }
-
-
 /* content  */
 #content {
 	display:flex;
@@ -78,12 +74,13 @@ html, body {
 
 	max-width: 100%;
 	box-sizing:border-box;
+	max-height:100%;
 
 	overflow:auto; /* test */
 	background:rgba(255,255,255,.2);
 
 	position: relative; /* neu */
-    z-index: 0;
+	z-index: 0;
 }
 .beBoxCont {
 	display:flex;
@@ -93,7 +90,6 @@ html, body {
 #content > * {
 	flex:1 1 auto;
 }
-
 /* c1-box */
 .beBox::before {
 	content:'deprecated class ".beBox", report to tobias buschor';
@@ -109,12 +105,9 @@ html, body {
 	box-sizing:border-box;
 	box-shadow:0 0 10px rgba(0,0,0,.4);
 	background:#fff;
-	zzz_display:flex; /* zzz */
-	zzz_flex-direction: column; /* zzz */
 }
 .beBox > .-head,
 .qgCMS .c1-box > .-head {
-	zzz_margin:0; /* needed */
 	align-items:center;
 	justify-content: space-between;
 	background:var(--cms-dark);
@@ -123,25 +116,16 @@ html, body {
 	box-sizing:border-box;
 	margin-bottom:1px;
 	font-weight: bold;
-	zzz_flex:0 0 auto; /* zzz */
-	zzz_display:flex; /* zzz */
-	zzz_color:#fff; /* zzz */
 }
-
 .beBox > .-body,
 .qgCMS .c1-box > .-body {
 	padding:15px;
 }
 tr.beHead > *,
-.qgCMS tr.c1-box-head > *
- {
-    padding-top:13px;
-    padding-bottom:12px;
+.qgCMS tr.c1-box-head > * {
+	padding-top:13px;
+	padding-bottom:12px;
 }
-
-
-
-
 /* Table */
 table.data {
 	border-top:solid 1px #a3a3a3;
@@ -162,12 +146,9 @@ table.data > thead > tr {
 	text-align:left;
 }
 table.data > tbody > tr:hover { background-color:#eee; }
-
 td.right {
 	text-align:right;
 }
-
-
 /*-m-cms-layout-backend*/
 .-m-cms-layout-backend button,
 .-m-cms-layout-backend input,
@@ -176,8 +157,6 @@ td.right {
 .-m-cms-layout-backend .c1-inp {
 	padding:4px 6px;
 }
-
-
 thead [l1\:order]:after {
 	margin-left:.4em;
 	font-size:.8em;
@@ -187,6 +166,7 @@ thead [l1\:order]:after {
 thead [l1\:order=DESC]:after {
 	content:'\e800';
 }
+::placeholder { color:#bbb }
 
 @media (max-width: 900px) {
 	#nav {
@@ -198,24 +178,22 @@ thead [l1\:order=DESC]:after {
 		overflow:visible;
 		margin:5px;
 	}
-
 	#nav:before {
-	  content: "";
-	  position: absolute;
-	  left: 5px;
-	  top: 5px;
-	  bottom: 5px;
-	  right:5px;
-	  background: linear-gradient(
-	    to bottom,
-	    var(--cms-dark), var(--cms-dark) 20%,
-	    white 20%, white 40%,
-	    var(--cms-dark) 40%, var(--cms-dark) 60%,
-	    white 60%, white 80%,
-	    var(--cms-dark) 80%, var(--cms-dark) 100%
-	  );
+		content: "";
+		position: absolute;
+		left: 5px;
+		top: 5px;
+		bottom: 5px;
+		right:5px;
+		background: linear-gradient(
+			to bottom,
+			var(--cms-dark), var(--cms-dark) 20%,
+			white 20%, white 40%,
+			var(--cms-dark) 40%, var(--cms-dark) 60%,
+			white 60%, white 80%,
+			var(--cms-dark) 80%, var(--cms-dark) 100%
+		);
 	}
-
 	#nav > ul {
 		position:fixed;
 		top:0;

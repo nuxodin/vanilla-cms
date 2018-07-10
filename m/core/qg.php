@@ -9,7 +9,7 @@ qg::on('action', function() {
 		if ($_SERVER['SCHEME'] === 'http') {
 			header('HTTP/1.1 301');
 			header('Location: https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-			exit();
+			exit;
 		}
 		if ($SET['HSTS']['max-age']->v) {
 			$header = 'Strict-Transport-Security:max-age='.$SET['HSTS']['max-age']->v;
@@ -49,7 +49,7 @@ qg::on('action', function() {
 	);
 	if (strpos(appRequestUri, 'dbFile/') === 0) {
 		dbFile::output(substr(appRequestUri, 7));
-		exit();
+		exit;
 	}
 	$_FILES && File::uploadListener();
 	isset($_GET['qgha']) && hashAction::fire($_GET['qgha']);
@@ -71,7 +71,7 @@ qg::on('action', function() {
 		is_file($file) && include($file);
 		//qg::fire('unanswered_api_v1_request');
 		trigger_error('untriggered api v1 request');
-		exit();
+		exit;
 	}
 	*/
 });

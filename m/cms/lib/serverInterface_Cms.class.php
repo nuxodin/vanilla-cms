@@ -6,24 +6,25 @@ class serverInterface_cms{
 	static function searchPagesByTitle($search, $filter=[]) {
 		$search = str_replace('cmspid://','',$search);
 		$sql =
-		" SELECT 												 " .
-		"	p.id AS id 											 " .
-		" FROM 													 " .
-		"	page p,												 " .
-		"	text t												 " .
-		" WHERE 1												 " .
-		"	AND ( p.type = 'p' OR p.visible ) 					 " .
-		"	AND t.lang = '".L()."' 			                     " .
-		"	AND p.title_id = t.id 								 " .
-		"	AND ( p.id = ".D()->quote($search)."                 " .
+		" SELECT 												  " .
+		"	p.id AS id 											  " .
+		" FROM 													  " .
+		"	page p,												  " .
+		"	text t												  " .
+		" WHERE 1												  " .
+		"	AND ( p.type = 'p' OR p.visible ) 					  " .
+		"	AND p.title_id = t.id 								  " .
+		"	AND ( p.id = ".D()->quote($search)."                  " .
 		"        OR t.text LIKE ".D()->quote('%'.$search.'%')." ) " .
-		" ORDER BY 												 " .
-		"	p.id   = ".D()->quote($search)."	DESC,			 " .
-		"	t.text = ".D()->quote($search)."	DESC,    		 " .
-		"	t.text LIKE ".D()->quote($search.'%')."	     DESC,	 " .
-		"	t.text LIKE ".D()->quote('% '.$search.'%')." DESC,	 " .
-		"	t.text ASC											 " .
-		" LIMIT 20												 " .
+		" GROUP BY p.id                                           " .
+		" ORDER BY 												  " .
+		"	p.id   = ".D()->quote($search)."	DESC,			  " .
+		"	t.lang = '".L()."' DESC, 			                  " .
+		"	t.text = ".D()->quote($search)."	DESC,    		  " .
+		"	t.text LIKE ".D()->quote($search.'%')."	     DESC,	  " .
+		"	t.text LIKE ".D()->quote('% '.$search.'%')." DESC,	  " .
+		"	t.text ASC											  " .
+		" LIMIT 20												  " .
 		"";
 		$res = [];
 		foreach (D()->query($sql) as $vs) {
@@ -109,11 +110,12 @@ class serverInterface_cms{
 		$u = D()->one("SELECT url FROM ".table('page_url')." WHERE url = ".D()->quote($v)." ");
 		return $r || $u;
 	}
-	static function setTxt($id, $v) {
+	static function setTxt($id, $v, $lang=null) {
+		$lang = $lang ?? L();
 		$vs = D()->row("SELECT name, page_id FROM ".table('page_text')." WHERE text_id = ".(int)$id." ");
-		if ($vs) return Api::call('page::text', [$vs['page_id'], $vs['name'], L(), $v]);
+		if ($vs) return Api::call('page::text', [$vs['page_id'], $vs['name'], $lang, $v]);
 		$vs = D()->row("SELECT id FROM ".table('page')." WHERE title_id = ".(int)$id." ");
-		if ($vs) return Api::call('page::title', [$vs['id'], L(), $v]);
+		if ($vs) return Api::call('page::title', [$vs['id'], $lang, $v]);
 		return false;
 	}
 	static function pidFromTxtId($id) {

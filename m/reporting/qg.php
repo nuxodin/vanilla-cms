@@ -78,6 +78,7 @@ function reporting_send() {
     ];
 
     $context  = stream_context_create($options);
+    time_limit(15);
     $result   = file_get_contents($url, false, $context);
     if ($result === FALSE) { /* Handle error */ }
 }

@@ -1,10 +1,8 @@
 <?php
 /* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
-
 namespace qg;
 
 class db {
-
 	public $_Tables = [];
 
 	function __construct($conn, $user, $pass) {
@@ -105,30 +103,21 @@ class db {
 		$this->Cache->remove();
 	}
 	function query($sql) {
-
-// $start = microtime(1);
-
+		qg::fire('db::query-before');
 		$r = $this->PDO->query($sql);
-
-// echo "\n".trim(preg_replace('/\s+/',' ',$sql))."\n";
-// $diff = (microtime(1) - $start)*1000-0.0015;
-// echo number_format($diff, 2)."\n\n";
-// static $sum = 0;
-// // $sum += $diff;
-// // echo number_format($sum, 2)."\n";
-
+		qg::fire('db::query-after',['sql'=>&$sql]);
 		if ($this->PDO->errorCode() !== "00000") {
 			$x = $this->PDO->errorInfo();
 			$GLOBALS['skip_stacks'] += 1;
 			trigger_error('mysql: '.$x[2]." <br>\n".preg_replace('/\s+/', ' ', $sql));
 			$GLOBALS['skip_stacks'] -= 1;
-			//exit();
+			//exit;
 		}
 		return $r;
 	}
 	function all($sql) {
 		$GLOBALS['skip_stacks'] += 1;
-		$st = $this->query($sql);
+		$st = $this->query($sql);// test if ($res===false) return false;?
 		$GLOBALS['skip_stacks'] -= 1;
 		$ret = [];
 		if ($st) // todo: test if $st needed?
@@ -138,7 +127,7 @@ class db {
 	}
 	function row($sql) {
 		$GLOBALS['skip_stacks'] += 1;
-		$st = $this->query($sql);
+		$st = $this->query($sql);// test if ($res===false) return false;?
 		$GLOBALS['skip_stacks'] -= 1;
 		if ($st) // todo: test if $st needed?
 			return $st->fetch();
@@ -146,7 +135,7 @@ class db {
 	function col($sql) {
 		$ret = [];
 		$GLOBALS['skip_stacks'] += 1;
-		foreach ($this->query($sql) as $vs) $ret[] = array_shift($vs);
+		foreach ($this->query($sql) as $vs) $ret[] = array_shift($vs); // test if ($res===false) return false;?
 		$GLOBALS['skip_stacks'] -= 1;
 		return $ret;
 	}
@@ -155,6 +144,7 @@ class db {
 		$GLOBALS['skip_stacks'] += 1;
 		$res = $this->query($sql);
 		$GLOBALS['skip_stacks'] -= 1;
+		if ($res===false) return false;
 		foreach ($res as $vs) {
 			$i = array_shift($vs);
 			$v = array_shift($vs);
@@ -164,7 +154,7 @@ class db {
 	}
 	function one($sql) {
 		$GLOBALS['skip_stacks'] += 1;
-		$row = (array)$this->row($sql);
+		$row = (array)$this->row($sql);// test if ($res===false) return false;?
 		$GLOBALS['skip_stacks'] -= 1;
 		foreach ($row as $v) return $v;
 	}

@@ -2,7 +2,7 @@
 <div class="-standalone qgCmsFront1ModuleManager">
 	<div class=-h1>
 		<span><?=L('Module')?></span>
-		<input placeholder=suche style="width:50%">
+		<input placeholder="<?=L('Suchen')?>..." style="width:50%">
 	</div>
 
 	<div class="cmsAddModule -module-boxes">
@@ -16,11 +16,11 @@
 			?>
 			<div itemid="<?=hee($name)?>" title="<?=hee($desc)?>" todo_c1-tooltip style="--c1-tooltip-delay:.5">
 				<div class=-title title="<?=hee($M->name)?>"><?=$title?></div>
-				<svg class=-img xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#fff">
+				<svg class=-img fill="#fff">
 					<?php if (is_file($path.'pub/module.svg')) { ?>
-							<use xlink:href="<?=path2uri($path)?>pub/module.svg#main" />
+							<use href="<?=path2uri($path)?>pub/module.svg#main" />
 					<?php } else { ?>
-							<use xlink:href="<?=sysURL?>cms.frontend.1/pub/img/module_default.svg#main" />
+							<use href="<?=sysURL?>cms.frontend.1/pub/img/module_default.svg#main" />
 					<?php } ?>
 				</svg>
 			</div>
@@ -59,11 +59,11 @@
 					$title = ucfirst($P->Title());
 				?>
 				<div itemid="<?=$P->id?>" title="<?=hee($desc)?>">
-					<svg class=-img xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#fff">
+					<svg class=-img fill="#fff">
 						<?php if (is_file($path.'pub/module.svg')) { ?>
-								<use xlink:href="<?=path2uri($path)?>pub/module.svg#main" />
+								<use href="<?=path2uri($path)?>pub/module.svg#main" />
 						<?php } else { ?>
-								<use xlink:href="<?=sysURL?>cms.frontend.1/pub/img/module_default.svg#main" />
+								<use href="<?=sysURL?>cms.frontend.1/pub/img/module_default.svg#main" />
 						<?php } ?>
 					</svg>
 					<div class=-title title="<?=hee($P->id)?>"><?=$title?></div>

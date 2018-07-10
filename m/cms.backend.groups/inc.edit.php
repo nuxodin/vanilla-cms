@@ -4,7 +4,7 @@ namespace qg;
 if (isset($_POST['edit'])) {
 	D()->grp->update((int)$_GET['id'], $_POST);
 	header('Location: '.Url()->stripParam('id'));
-	exit();
+	exit;
 }
 $vs = D()->row("SELECT * FROM grp WHERE id='".(int)$_GET['id']."'");
 ?>

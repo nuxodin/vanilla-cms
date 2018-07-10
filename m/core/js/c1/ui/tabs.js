@@ -1,3 +1,4 @@
+console.warn('used?')
 $(function() {
 	$(document).on('mousedown', '.c1Tabs > h3', function() {
 		var h = $(this);

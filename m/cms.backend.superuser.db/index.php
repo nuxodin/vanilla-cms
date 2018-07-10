@@ -13,5 +13,4 @@
 	</div>
 	<div class=c1-box data-part=tStruct></div>
 	<div class=c1-box data-part=tEntries></div>
-	<div class=c1-box data-part=fStruct></div>
 </div>

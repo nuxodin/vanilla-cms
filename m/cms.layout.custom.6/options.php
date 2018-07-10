@@ -4,17 +4,15 @@ namespace qg;
 $module = $Cont->vs['module'];
 $LPage = layoutCustom6::layoutPage();
 
-if (is_file(appPATH.'qg/'.$module.'/options.php')) {
-	include appPATH.'qg/'.$module.'/options.php';
-  	echo '<br><br>';
-}
+include appPATH.'qg/'.$module.'/options.php';
 
 if ($LPage->access() < 2) return;
 
 ?>
-<b>Layout</b>
-<hr>
+<h2>Layout (global)</h2>
+
 <div id=customLayoutSettings>
+
   	<button style="font-size:18px; float:right" id=layoutCssEditor>css-Editor</button>
 
   	<script>
@@ -24,7 +22,7 @@ if ($LPage->access() < 2) return;
 	});
   	</script>
 
-	<?php foreach (['pub/custom.css','pub/base.css','pub/main.js'] as $part) { ?>
+	<?php foreach (['pub/base.css','pub/custom.css','pub/main.js','index.php'] as $part) { ?>
 		<?php
 		$path = appPATH.'qg/'.$module.'/'.$part;
 		$_SESSION['fileEditor']['allow'][$path] = 1;
@@ -38,30 +36,26 @@ if ($LPage->access() < 2) return;
 
 	<br>
 	<br>
-	<div id=mCmsLayouter3_container>
-		<h3>Bilder <button id=mCmsLayouter3_pickfiles>hochladen</button></h3>
+	<div>
+		<h3>Bilder <button id=cmsLayoutCustom6_pickfiles>hochladen</button></h3>
 		<script>
-		{
-			let btn = document.getElementById('mCmsLayouter3_pickfiles');
-			btn.addEventListener('click',()=>{
-				let fileInp = document.createElement('input');
-				fileInp.type = 'file';
-				fileInp.click();
-				fileInp.addEventListener('change',()=>{
-					for (file of fileInp.files) {
-						let data = new FormData();
-						data.append('file', file);
-						fetch(appURL+'?mLayoutCustom6_upload', {
-						  method: 'POST',
-						  credentials: 'same-origin',
-						  body: data
-						}).then(()=>{
-							cms.cont(cms.cont.active).showWidget('options');
-						});
-					}
-				})
-			})
-		}
+		c1.c1Use('form',function(){
+			let btn = document.getElementById('cmsLayoutCustom6_pickfiles');
+			btn.addEventListener('click', async ()=>{
+				var files = await c1.form.fileDialog();
+				for (file of files) {
+					let body = new FormData();
+					body.append('file', file);
+					fetch(appURL+'?mLayoutCustom6_upload', {
+					  method: 'POST',
+					  credentials: 'same-origin',
+					  body,
+					}).then(()=>{
+						cms.cont(cms.cont.active).showWidget('options');
+					});
+				}
+			});
+		});
 		</script>
 		<?php
 		$path = appPATH.'qg/'.$module.'/pub/img/';

@@ -1,14 +1,13 @@
 <?php
 namespace qg;
 
-$heading = $Cont->SET->make('Heading', 'h2')->setHandler('select')->setOptions('1', '2', '3', '4')->v;
+$heading = $Cont->SET['Heading']->v;
+
 $printPart = function($part, $text) use ($Cont, $heading) {
-	$Text = $Cont->Text($part.'_h');
-	!trim($Text) && $Cont->Text($part.'_h', 'de', $part);
-	echo '<h'.$heading.' '.($Cont->edit? 'contenteditable cmstxt='.$Text->id : '').'>'.$Text.'</h'.$heading.'>';
-	$Text = $Cont->Text($part.'_p');
-	!trim($Text) && $Cont->Text($part.'_p', 'de', $text);
-	echo '<p '.($Cont->edit? 'contenteditable cmstxt='.$Text->id : '').'>'.$Text.'</p><br>';
+	echo '<div class=-block>';
+		echo cms_text($Cont, $part.'_h', ['tag'=>'h'.$heading, 'initial'=>['de'=>$part] ]);
+		echo cms_text($Cont, $part.'_p', ['tag'=>'p', 'initial'=>['de'=>$text] ]);
+	echo '</div>';
 };
 
 if ($Cont->SET['Einblenden']['Haftungsausschluss']->v) {

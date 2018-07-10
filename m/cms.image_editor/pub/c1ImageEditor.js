@@ -28,7 +28,7 @@ class c1ImageEditor extends c1FullScreenPopup {
             for (let prop of ['top','left','width','height']) {
                 let el = this.el('.-cropValues [name='+prop+']');
                 if (el === document.activeElement) continue;
-                el.value = Math.round(this.cropper[prop] * this.scale)
+                el.value = Math.round(this.cropper[prop] * this.scale);
             }
         });
 
@@ -48,7 +48,7 @@ class c1ImageEditor extends c1FullScreenPopup {
         this.el('.-save').onclick = ()=>{
             this.changed = false;
             options.onsave();
-        }
+        };
         super.show();
         addEventListener('resize',this);
     }
@@ -63,14 +63,12 @@ class c1ImageEditor extends c1FullScreenPopup {
         if (!file) return;
         if (!file.type.match('image.*')) return;
         if (file.size > 8000000) {
-            await c1Use(sysURL+'core/js/qg/fileHelpers.js',1)
-            file.q9ToImage(img=>{
-                img.q9ScaleToArea(2000*3000,()=>{
-                    img.q9ToBlob(blob=>{
-                        this.el('.-img').src = URL.createObjectURL(blob);
-    				}, file.type, 1);
-    			});
-    		});
+            //await c1Use(sysURL+'core/js/qg/fileHelpers.js',1)
+            await c1.import(sysURL+'core/js/qg/fileHelpers.mjs');
+            const img = await file.c1ToImage();
+            await img.c1ScaleToArea(2000*3000);
+            const blob = await img.c1ToBlob(file.type, 1);
+            this.el('.-img').src = URL.createObjectURL(blob);
         } else {
             this.el('.-img').src = URL.createObjectURL(file);
         }
@@ -173,7 +171,7 @@ class c1ImageEditor extends c1FullScreenPopup {
                 crop.bottom = this.scale * this.cropper.bottom;
                 crop.right  = this.scale * this.cropper.right;
                 this.cropper.hide();
-            }
+            };
             this.cropper.svg.addEventListener('dblclick',cropit);
             this.el('.-cropit').addEventListener('click',cropit);
             this.el().addEventListener('keydown',e=>{
@@ -184,7 +182,7 @@ class c1ImageEditor extends c1FullScreenPopup {
             });
             this.el('.-cropValues').addEventListener('input',(e=>{
                 this.cropper[e.target.name] = e.target.value / this.scale;
-            }).c1Debounce(200))
+            }).c1Debounce(200));
 
 
 			crop.on('resize', ()=>{
@@ -202,7 +200,7 @@ class c1ImageEditor extends c1FullScreenPopup {
                     self.el('.-sidebar').style.opacity = '';
                     self.el('.-sidebar').style.pointerEvents = '';
                     self.el('.-img').src = URL.createObjectURL(result);
-                })
+                });
             }.c1Debounce(100);
 
             // rotate

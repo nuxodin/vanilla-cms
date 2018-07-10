@@ -1,15 +1,13 @@
 <?php
 namespace qg;
 
-qg::need('cms.layouter3');
-
 if (!D()->one("SELECT name FROM module WHERE name = 'cms.layout.custom.6'")) {
 	D()->query("INSERT INTO module SET access = '1', name = 'cms.layout.custom.6'");
 }
-
 if (!is_dir(appPATH.'qg/'.$module)) {
 	copyDir(sysPATH.$module.'/custom', appPATH.'qg/'.$module);
 	$content = "#container {\n";
+	$content .= "	word-break:break-word;\n";
 	$content .= "	-webkit-hyphens:auto;\n";
 	$content .= "	-ms-hyphens:auto;\n";
 	$content .= "	hyphens:auto;\n";

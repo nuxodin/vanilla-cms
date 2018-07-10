@@ -9,12 +9,11 @@
 	background-repeat: no-repeat;
 }
 .cmsBeTree .-minus {
-	background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' stroke='#000' stroke-width='4.6'><line x1='8' y1='32' x2='56' y2='32'/></svg>");
+	background-image:url(close.svg)
 }
 .cmsBeTree .-plus  {
-	background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' stroke='#000' stroke-width='4.6'><line x1='8' y1='32' x2='56' y2='32'/><line x1='32' y1='8' x2='32' y2='56'/></svg>");
+	background-image:url(open.svg)
 }
-
 #content .cmsBeTree tbody tr {
     background: #fff;
 }

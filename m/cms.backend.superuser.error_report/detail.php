@@ -1,7 +1,8 @@
 <?php namespace qg;
-$id = $_GET['id'];
-
+$id = (int)$_GET['id'];
+if (!$id) return;
 $error = D()->row("SELECT * FROM m_error_report WHERE id = ".D()->quote($id));
+if (!$error) { echo 'Error-Entry not found'; return; };
 $log = D()->row("SELECT * FROM log WHERE id = ".$error['log_id']);
 $sess = D()->row("SELECT * FROM sess WHERE id = ".$log['sess_id']);
 $usr = D()->row("SELECT * FROM usr WHERE id = ".$sess['usr_id']);

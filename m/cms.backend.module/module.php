@@ -47,7 +47,7 @@ $hasNewVersion = $storeData && $storeData['version'] > $localData['version'];
 		<table class=c1-style>
 			<tr> <td> Lokale Version : <td> <?=$localData['version']?>
 			<tr> <td> Server Version : <td> <?=$storeData['version']?>
-			<tr> <td> Geupdated : <td> <?=strftime('%x %H:%M',$localData['updated'])?>
+			<tr> <td> letztes Update : <td> <?=strftime('%x %H:%M',$localData['updated'])?>
 			<?php
 			$color = '';
 			if ($changed) {
@@ -64,7 +64,7 @@ $hasNewVersion = $storeData && $storeData['version'] > $localData['version'];
 			<button onclick="this.c1Find('>svg').style.color='black'; $fn('page::api')(<?=$Cont?>,{init:'<?=$name?>'}).then(()=>{this.c1Find('>svg').style.color=''})">
 				initialisieren
 				<svg style="width:1.5em; height:1.5em; fill:currentColor; vertical-align:middle; display:inline-block; margin:-.5em 0" viewBox="0 0 24 24">
-					<use xlink:href="<?=sysURL?>cms.frontend.1/pub/img/reload.svg#main" />
+					<use href="<?=sysURL?>cms.frontend.1/pub/img/reload.svg#main" />
 				</svg>
 			</button>
 			<form id=updateForm style="display:inline; <?=$hasNewVersion?'':'opacity:.4'?>">

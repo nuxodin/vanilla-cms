@@ -58,7 +58,7 @@ class Api {
         if (!isset(G()->ASK['serverInterface'])) return; // no request from the client, no need to test token
         if (!isset($_POST['qgToken'])) {
             trigger_error('hacking? qgToken not set');
-            exit();
+            exit;
         }
         if ($_POST['qgToken'] !== qg::token()) {
             Answer([

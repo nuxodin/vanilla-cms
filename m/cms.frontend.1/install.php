@@ -27,3 +27,6 @@ $SET['custom']['widget']['superuser']->custom();
 $SET['custom']['sidebar']->custom();
 $SET['custom']['tree_show_c']->custom();
 $SET['custom']['crowd out']->custom();
+
+G()->SET['cms']->make('last_backend_page', appURL.'?cmspid='.G()->SET['cms']['backend']->v)->custom();
+G()->SET['cms']->make('last_frontend_page',appURL.'?cmspid=2')->custom();

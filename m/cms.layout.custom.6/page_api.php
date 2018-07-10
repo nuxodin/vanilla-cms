@@ -18,10 +18,8 @@ if ($LPage->access() > 1) {
 		$url = path2uri($path);
 		$images = [];
 		foreach (scanDir($path) as $f) {
-			if (!is_file($path.$f)) continue;
-			$images[] = $url.$f;
+			if (is_file($path.$f)) $images[] = $url.$f;
 		}
         return $images;
-        //return self::$Layouter->getImages();
     }
 }

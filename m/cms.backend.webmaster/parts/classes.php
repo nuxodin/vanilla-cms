@@ -3,14 +3,12 @@
 $exp = (array)json_decode( G()->SET['cms']['classes_expose_css']->v , 1 );
 
 if (isset($vars['class_expose_css'])) {
-  $class = $vars['class_expose_css'];
-  if ($vars['value']) $exp[$class] = 1;
-  else unset($exp[$class]);
-  G()->SET['cms']['classes_expose_css'] = json_encode($exp);
-  exit();
+    $class = $vars['class_expose_css'];
+    if ($vars['value']) $exp[$class] = 1;
+    else unset($exp[$class]);
+    G()->SET['cms']['classes_expose_css'] = json_encode($exp);
+    exit;
 }
-
-
 
 ?>
 <?php if (isset($vars['class_detail'])) {

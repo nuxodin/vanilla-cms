@@ -5,7 +5,7 @@ if (!$Cont->edit && Usr()->is()) {
 	$redirect = (int)$Cont->SET['redirect']->v;
 	if ($redirect) {
 		header('Location: '. Url( Page($redirect)->url() ) );
-		exit();
+		exit;
 	}
 }
 
@@ -61,14 +61,16 @@ if (isset(G()->loginError)) {
 			<tr  class=-login>
 				<th>
 				<td>
-					<button name=liveUser_login><?=L('Login')?></button>
+					<button name=liveUser_login><?=L('Anmelden')?></button>
 			<?php if ($Cont->SET['saveLogin']->v) { ?>
 				<tr  class=-save_login>
 					<th>
 						<?php $T = $Cont->Text('saveLogin'); !(string)$T && $Cont->Text('saveLogin','de','Eingeloggt bleiben:'); ?>
 						<div <?=$Cont->edit?'contenteditable cmstxt='.$T->id:''?>><?=$T?></div>
 					<td>
-						<input name=save_login type=checkbox value=1>
+						<label>
+							<input name=save_login type=checkbox value=1 class=c1-fakable><i></i>
+						</label>
 			<?php } ?>
 		</table>
 	</form>
@@ -76,7 +78,7 @@ if (isset(G()->loginError)) {
 		$redirect = $Cont->SET['logout_redirect']->v;
 		?>
 		<form method=post <?=$redirect ? 'action="'.Page($redirect)->url().'"' : ''?> >
-			<button name=liveUser_logout><?=L('logout')?></button>
+			<button name=liveUser_logout><?=L('Abmelden')?></button>
 		</form>
 	<?php } ?>
 </div>

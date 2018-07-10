@@ -1,9 +1,9 @@
 /* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
-console.warn('used?');
-
-!function() {
-	'use strict';
+'use strict';
+{
+	throw('not used!');
 	c1.RTE = {};
+	/*
 	c1.RTE.formatBlock = function(tag) {
 		if (tag) {
 			//document.execCommand('formatBlock',null,'h1');
@@ -30,12 +30,8 @@ console.warn('used?');
 		} else {
 			var el = q1.selection().container();
 			do {
-				if (blockLikes.includes( cssDisplay(el) )) {
-					return el.tagName;
-				}
-				if (!el.parentNode.parentNode.isContentEditable) {
-					return false;
-				}
+				if (blockLikes.includes( cssDisplay(el) )) return el.tagName;
+				if (!el.parentNode.parentNode.isContentEditable) return false;
 				el = el.parentNode; // next
 			} while (true);
 		}
@@ -80,51 +76,19 @@ console.warn('used?');
 	function rangeFromInlineSiblings(el) {
 		var current = el;
 		var range = document.createRange();
-		var next, display = null;
-
+		var next;
 		while (next = current.previousSibling) {
-			display = cssDisplay(next);
-			if (blockLikes.includes(display)) break; // allow float:left and right?
+			if (blockLikes.includes(cssDisplay(next))) break; // allow float:left and right?
 			current = next;
 		}
 		range.setStartBefore(current);
-
 		current = el;
 		while (next = current.nextSibling) {
-			display = cssDisplay(next);
-			if (blockLikes.includes(display)) break;
+			if (blockLikes.includes(cssDisplay(next))) break;
 			current = next;
 		}
 		range.setEndAfter(current);
 		return range;
 	}
-}();
-
-// polyfills / extensions
-if (!window.Selection) { // Android 4.3, Safari 5.1
-  window.Selection = {};
-  Selection.prototype = getSelection().__proto__;
+	*/
 }
-Selection.prototype.c1AnchorElement = function() {
-	var node = this.anchorNode;
-	return node.nodeType === 1 ? node : node.parentNode;
-};
-Selection.prototype.c1FocusElement = function() {
-	var node = this.focusNode;
-	return node.nodeType === 1 ? node : node.parentNode;
-};
-Selection.prototype.c1GetRange = function() {
-	return this.getRangeAt(0);
-};
-Selection.prototype.c1SetRange = function(range) {
-	this.removeAllRanges();
-	this.addRange(range);
-};
-Range.prototype.c1Insert = function(node) {
-	if (node instanceof Array) {
-		for (var i=0, n ; n = node[i++];) this.insertNode(n);
-		return;
-	}
-	if (typeof node === 'string') { node = document.createTextNode(node); }
-	this.insertNode(node);
-};

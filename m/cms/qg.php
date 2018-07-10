@@ -70,14 +70,14 @@ qg::on('action', function(){
 		header('Content-Length: '.filesize($tmpfname));
 		readfile($tmpfname);
 		unlink($tmpfname);
-		exit();
+		exit;
 	}
 });
 qg::on('dbFile::access2', function($e){
 	if ($e['access']) return;
 	foreach (D()->query("SELECT page_id FROM ".table('page_file')." WHERE file_id = ".$e['File']) as $vs) {
 		$P = Page($vs['page_id']);
-		if ($P->access()) { // todo: better $P->isReadable() ?
+		if ($P->isReadable()) { // was $P->access(), ok? zzz
 			$e['access'] = 1;
 			return;
 		}
@@ -86,7 +86,7 @@ qg::on('dbFile::access2', function($e){
 qg::on('textpro_lang::get',function($data){
 	$Obj = $data['obj'];
 	if (isset($Obj->Text->edit)) {
-		//$GLOBALS['cmsModifyTxt_lastObj'] = $Obj;
+		$GLOBALS['cmsModifyTxt_lastObj'] = $Obj;
 		if (!$Obj->Text->edit) {
 			$Obj->value = preg_replace_callback('/cmspid:\/\/([0-9]+)/' ,'qg\cmsModifyTexts_replaceLinks', $Obj->value);
 		} else {
@@ -108,10 +108,11 @@ function cmsModifyTexts_replaceLinks($treffer) {
 function cmsModifyTexts_replaceFileUrls($treffer) { // edit only
 	$File = dbFile($treffer[1]);
 	if (!$File->exists()) {
-		//$Txt = $GLOBALS['cmsModifyTxt_lastObj'];
-		qg::on('background',function() use($treffer/*, $Txt*/) {
-			//trigger_error('dbFile "'.$treffer[1].'" does not exist, txt-id:'.$Txt->Text->id.' lang:'.$Txt->lang);
-			trigger_error('dbFile "'.$treffer[1].'" does not exist');
+		$Txt = $GLOBALS['cmsModifyTxt_lastObj'];
+		qg::on('background',function() use($treffer, $Txt) {
+			$pid = D()->one("SELECT page_id FROM page_text WHERE text_id = ".D()->quote($Txt->Text->id));
+			trigger_error('dbFile "'.$treffer[1].'" does not exist, txt-id:'.$Txt->Text->id.' lang:'.$Txt->lang.' page:'.$pid);
+			//trigger_error('dbFile "'.$treffer[1].'" does not exist');
 		});
 	}
 	$u = substr($File->vs['md5'],0,4);

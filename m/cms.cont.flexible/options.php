@@ -7,7 +7,7 @@
 				<tr itemid="<?=$C?>">
 					<td>
 					<?php
-						$title = cutText(strip_tags($C->title()),40);
+						$title = util::cutText(util::stripTags($C->title()),40);
 						echo $title ?: '<span style="color:#aaa">kein Titel</span>';
 					?>
 					<td>

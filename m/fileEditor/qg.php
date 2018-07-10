@@ -18,5 +18,5 @@ qg::on('action', function() {
 	}
 	$T = new template(['file'=>$file]);
 	echo $T->get(sysPATH.'fileEditor/view/codemirror.php');
-	exit();
+	exit;
 });

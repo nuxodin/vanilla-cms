@@ -15,14 +15,14 @@ if (is_array($cmsContImpressum2)) {
 }
 
 foreach (['Kontaktadresse', 'Technische Umsetzung', 'Konzept', 'Design', 'Fotografie'] as $worker) {
-	$Cont->SET[$worker]->make('company',   '');
-	$Cont->SET[$worker]->make('name',	  '');
-	$Cont->SET[$worker]->make('address',	  '');
-	$Cont->SET[$worker]->make('zip',	  '');
-	$Cont->SET[$worker]->make('city',	  '');
-	$Cont->SET[$worker]->make('phone',	  '');
-	$Cont->SET[$worker]->make('email',		  '');
-	$Cont->SET[$worker]->make('website',	  '');
+	$Cont->SET[$worker]->make('company',      '');
+	$Cont->SET[$worker]->make('name',	      '');
+	$Cont->SET[$worker]->make('address',      '');
+	$Cont->SET[$worker]->make('zip',	      '');
+	$Cont->SET[$worker]->make('city',	      '');
+	$Cont->SET[$worker]->make('phone',	      '');
+	$Cont->SET[$worker]->make('email',	      '');
+	$Cont->SET[$worker]->make('website',      '');
 	$Cont->SET[$worker]->make('website-title','');
 }
 

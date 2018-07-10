@@ -5,8 +5,9 @@ html {
   overflow-y: scroll;
 }
 body {
-  background-color: rgb(250, 250, 250);
-  color: rgb(85, 85, 85);
+	/* ie11 fix: #container display:flex and min-height */
+	display:flex;
+	flex-direction:column;
 }
 h1, h2, h3, h4, h5, h6 {
   margin: 0px 0px 0.25em 0px;
@@ -16,7 +17,10 @@ h1 {
 h2 {
 }
 p {
-  margin: 0px;
+  margin-top: 0;
+}
+p:last-child {
+  margin-bottom: 0;
 }
 a {
   text-decoration: none;
@@ -25,10 +29,10 @@ a:visited {}
 a:hover {}
 
 .l1_width {
-  max-width: 800px;
+  max-width: 860px;
   margin: auto;
-  padding-left:2vw;
-  padding-right:2vw;
+  padding-left:4vw;
+  padding-right:4vw;
 }
 #container {
   position: relative;
@@ -38,7 +42,7 @@ a:hover {}
   display: flex;
   flex-direction: column;
   flex-wrap: initial;
-  margin: auto;
+  xxxmargin: auto; /* why? */
 }
 #head {
   background-color: rgb(17, 17, 17);
@@ -50,7 +54,7 @@ a:hover {}
   color: inherit;
   text-decoration: none;
 }
-#head > .-l1_width {
+#head > .l1_width {
   align-items: center;
 }
 #logo > img {
@@ -59,6 +63,7 @@ a:hover {}
 }
 #content {
     flex:1 1 auto;
+	min-width: 0px; /* neu, ok? */
 }
 #main {
     flex:1 1 auto;

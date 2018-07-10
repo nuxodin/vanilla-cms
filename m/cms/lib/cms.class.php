@@ -42,7 +42,7 @@ class cms {
 				}
 				header('HTTP/1.1 301'); // better 302 (temporary) ?
 				header('Location: '.$url);
-				exit();
+				exit;
 			}
 			// not found
 			header("HTTP/1.1 404 Not Found");
