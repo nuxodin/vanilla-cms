@@ -46,9 +46,9 @@ zzz.c1-style > tbody > tr.c1-focusIn > :first-child { box-shadow:4px 0 0 -2px #f
 .c1-style > * > tr > * > .c1-inp:only-child,
 .c1-style > * > tr > * > button:only-child {
 	width:100%;
-	box-sizing:border-box;
-	display:block;
-	min-width:20px;
+	xbox-sizing:border-box; /* inputs are border-box from recomment... */
+	xdisplay:block; /* useful? */
+	min-width:30px;
 }
 .c1-style > * > tr > * > input[type=checkbox]:only-child,
 .c1-style > * > tr > * > input[type=radio]:only-child,

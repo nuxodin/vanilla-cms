@@ -86,6 +86,6 @@ class qg {
 	}
 	// token
 	static function token() {
-		return $_SESSION['qgToken'] ?? ($_SESSION['qgToken'] = randString(12));
+		return $_SESSION['qg']['token'] ?? ($_SESSION['qg']['token'] = randString(12));
 	}
 }

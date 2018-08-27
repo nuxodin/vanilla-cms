@@ -60,7 +60,7 @@ qg::on('cms-ready', function(){
 			G()->SET['cms'][$inBackend?'last_backend_page':'last_frontend_page']->setUser($_SERVER['REQUEST_URI']);
 			$backendTogglelUrl = G()->SET['cms'][$inBackend?'last_frontend_page':'last_backend_page']->v;
 			G()->js_data['cmsBackendUrl'] = $backendTogglelUrl;
-			html::addJSFile( sysURL.'cms.frontend.1/pub/js/init.js',    'cms/noEdit');
+			html::addJSFile( sysURL.'cms.frontend.1/pub/js/init.js', null, true, 'defer');
 		}
 	}
 	if ($access > 1) {
@@ -85,7 +85,7 @@ qg::on('deliverHtml', function(){
 	html::addJSFile(sysURL.'core/js/c1.js',                     'cms/noEdit');
 	html::addJsFile(sysURL.'core/js/c1/dom.js',                 'cms/noEdit');
 	html::addCSSFile(sysURL.'cms.frontend.1/pub/css/off.css',   'cms/noEdit');
-	html::addJSFile( sysURL.'cms.frontend.1/pub/js/init.js',    'cms/noEdit');
+	//html::addJSFile( sysURL.'cms.frontend.1/pub/js/init.js', null, true, 'async');
 	if (Page()->edit) {
 		html::addJSFile( sysURL.'cms.frontend.1/pub/js/browserCheck.js', 'cms/edit');
 		html::addJSFile( sysURL.'core/js/qg.js',                         'cms/edit');

@@ -17,7 +17,7 @@ class Store {
         foreach (qg::$modules as $module => $egal) { // loop modules in dependency order
             if (!isset($index[$module]))      continue; // not on the server
             if (!isset($localIndex[$module])) { // not local
-                trigger_error('should not happen cause we loop local modules!?');
+                trigger_error('"'.$module.'" not in index.json | void folder?');
                 continue;
             }
             // if ($localIndex[$module]['server'] !== $this->host) {

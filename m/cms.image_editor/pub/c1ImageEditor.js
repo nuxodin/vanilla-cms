@@ -5,7 +5,7 @@ class c1ImageEditor extends c1FullScreenPopup {
         this.minWidth  = 0;
     }
     show(src, options){
-        c1.c1Use('form',1);
+        c1.c1Use('form');
         this.options = options;
         this.init();
         let img     = this.el('.-img');
@@ -63,7 +63,6 @@ class c1ImageEditor extends c1FullScreenPopup {
         if (!file) return;
         if (!file.type.match('image.*')) return;
         if (file.size > 8000000) {
-            //await c1Use(sysURL+'core/js/qg/fileHelpers.js',1)
             await c1.import(sysURL+'core/js/qg/fileHelpers.mjs');
             const img = await file.c1ToImage();
             await img.c1ScaleToArea(2000*3000);
@@ -220,7 +219,7 @@ class c1ImageEditor extends c1FullScreenPopup {
 			seriously.go();
         }
         var baseUrl = sysURL+'cms.image_editor/pub/Seriously.js/';
-        await c1Use(baseUrl+'lib/require.js',1);
+        await c1Use(baseUrl+'lib/require.js');
         require([
             baseUrl+'seriously.js',
         ], ()=>{

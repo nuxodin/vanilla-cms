@@ -83,29 +83,19 @@ qg::on('action', function() {
     }
 
 	// browser fix
-	$ua = $_SERVER['HTTP_USER_AGENT'];
-	$ua = preg_replace('/(Mozilla|AppleWebKit)\//', '', $ua);
-	$ua = str_replace('Version/', 'Safari/', $ua);
-	$ua = preg_replace('/MSIE /', 'IE/', $ua);
-	$ua = preg_replace('/ Chrome.*Edge\//', 'Edge/', $ua);
-	preg_match('/([a-zA-Z]+)\/([0-9]+\.[0-9])/', $ua, $matches);
-	$browser = 'other';
-	$version = '1';
-	if ($matches) {
-		list($x,$browser,$version) = $matches;
-		if ($browser =='Trident') {
-			$browser = 'IE';
-			if (preg_match('/rv:([0-9.]+)/',$ua,$tmp)) $version = $tmp[1];
+	if (!util::ua_is_bot($_SERVER['HTTP_USER_AGENT'])) {
+		$uaInfo = util::ua_info($_SERVER['HTTP_USER_AGENT']);
+		$browser = $uaInfo['browser'];
+		$version = $uaInfo['version'];
+		if (   ($browser === 'IE' && $version < 11)
+			|| ($browser === 'Safari' && $version < 9.1)
+			|| ($browser === 'Firefox' && $version < 52)
+			|| ($browser === 'Edge' && $version < 16)
+			|| ($browser === 'Chrome' && $version < 65)
+			|| ($browser === 'SamsungBrowser' && $version < 6.2)
+		) {
+			html::addJsFile(sysURL.'cms.backend.webmaster/pub/browser-warning.js',null,true,'async');
 		}
-	}
-	if (   ($browser === 'IE' && $version < 11)
-		|| ($browser === 'Safari' && $version < 9.1)
-		|| ($browser === 'Firefox' && $version < 52)
-		|| ($browser === 'Edge' && $version < 16)
-		|| ($browser === 'Chrome' && $version < 65)
-		|| ($browser === 'SamsungBrowser' && $version < 6.2)
-	) {
-		html::addJsFile(sysURL.'cms.backend.webmaster/pub/browser-warning.js',null,true,'async');
 	}
 });
 
@@ -116,8 +106,9 @@ qg::on('deliverHtml', function() {
 
 		G()->csp['script-src']['https://www.google-analytics.com'] = true;
 		G()->csp['img-src']['https://www.google-analytics.com'] = true;
-		// G()->csp['img-src']['https://stats.g.doubleclick.net'] = true; // ok?
+		G()->csp['img-src']['https://stats.g.doubleclick.net'] = true; // ok?
 		G()->csp['connect-src']['https://www.google-analytics.com'] = true;
+		G()->csp['connect-src']['https://stats.g.doubleclick.net'] = true;
 		html::addJsFile(sysURL.'cms.backend.webmaster/pub/analytics.js',null,null,'async');
 		G()->js_data['gAnalytics']['code'] = $S['analytics code google']->v;
 
@@ -145,3 +136,48 @@ qg::on('deliverHtml', function() {
 		}
 	}
 });
+
+
+switch ($_SERVER['REQUEST_URI']) {
+	case '/wp-login.php':
+	case '/.ftpconfig':
+	case '/sftp-config.json':
+	case '/.remote-sync.json':
+	case '/.vscode/ftp-sync.json':
+	case '/homewp-admin/':
+	case '/wp-admin/':
+	case '//cms/wp-includes/wlwmanifest.xml':
+	case '//site/wp-includes/wlwmanifest.xml':
+	case '//wp/wp-includes/wlwmanifest.xml':
+	case '//wordpress/wp-includes/wlwmanifest.xml':
+	case '//blog/wp-includes/wlwmanifest.xml':
+	case '//xmlrpc.php?rsd':
+	case '//wp-includes/wlwmanifest.xml':
+	case '/.git/config':
+	case '/js/mage/cookies.js':
+	case '/plugins/system/rokbox/':
+	case '/test/wp-admin/setup-config.php':
+	case '/old/wp-admin/setup-config.php':
+	case '/wordpress/wp-admin/setup-config.php':
+	case '/wp/wp-admin/setup-config.php':
+	case '/user/register':
+	case '/index.php?option=com_user&task=register':
+	case '/wp-login.php?action=register':
+	case '/up.php':
+	case '/wp-content/plugins/xaisyndicate/idx.php':
+	case '//dbs.php':
+	case '//connectors/system/phpthumb.php':
+	case '/system/phpthumb.php':
+		// trigger_error('suspicious_activity');
+	case '/autodiscover/autodiscover.xml':
+	case '/.well-known/assetlinks.json':
+	case '/apple-app-site-association':
+	case '/.well-known/apple-app-site-association':
+	case '/readme.txt':
+	case '/README.txt':
+	case '/license.txt':
+	case '/ads.txt';
+		header('HTTP/1.0 404 Not Found');
+		echo 'not implemented, please contact the website owner';
+		exit();
+}

@@ -139,10 +139,13 @@ class dbFile extends File {
 			}
 			$w = (int)($param['w'] ?? 0);
 			$h = (int)($param['h'] ?? 0);
-			if (isset($_COOKIE['q1_dpr']) && $_COOKIE['q1_dpr'] > 1) {
+
+			$dpr = $_SERVER['HTTP_DPR'] ?? $_COOKIE['q1_dpr'] ?? 1; // todo: move to ::output()
+			$dpr = round($dpr,1);
+			if ($dpr > 1) {
 				if ($param['dpr'] ?? G()->SET['qg']['dbFile_dpr_dependent']->v) {
-					$w *= (float)$_COOKIE['q1_dpr'];
-					$h *= (float)$_COOKIE['q1_dpr'];
+					$w *= (float)$dpr;
+					$h *= (float)$dpr;
 				}
 			}
 			$w    = min($w,9000);
@@ -173,7 +176,29 @@ class dbFile extends File {
 					image::makeProportional($oldW, $oldH, $w, $h);
 					$Img = $Img->getAutoCroped($w, $h, $vpos, $hpos, $zoom);
 				}
-				$Img->saveAs($nFile->path, $type, $q);
+
+				// old:
+				//$Img->saveAs($nFile->path, $type, $q);
+
+				// new:
+				if (Image::has_alpha($this->path)) {
+					$Img->saveAs($nFile->path, 'png', 9);
+					$type = 'png';
+				} else {
+					$Img->saveAs($nFile->path.'.jpg', 'jpeg', $q);
+					$Img->saveAs($nFile->path.'.png', 'png', 9);
+
+					if (filesize($nFile->path.'.jpg') > filesize($nFile->path.'.png')) {
+						rename($nFile->path.'.png', $nFile->path);
+						unlink($nFile->path.'.jpg');
+						$type = 'png';
+					} else {
+						rename($nFile->path.'.jpg', $nFile->path);
+						unlink($nFile->path.'.png');
+						$type = 'jpeg';
+					}
+				}
+
 			}
 			$mime = 'image/'.$type;
 			return $nFile;
@@ -211,14 +236,17 @@ class dbFile extends File {
 
 		// Header
 		$mime = $File->mime() ?: File::extensionToMime($File->extension());
+		if ($mime==='image/svg+xml') $mime .= '; charset=utf-8';
 		header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $File->mtime()) .' GMT');
 		$expires = time()+60*60*24*180;
  		header('Expires: ' . gmdate('D, d M Y H:i:s', $expires) .' GMT');
 		//header('Cache-Control: store, cache, max-age='.$expires.', must-revalidate');
-		header('Cache-Control: store, cache, max-age='.$expires.', private');
+		//header('Cache-Control: store, cache, max-age='.$expires.', private'); // zzz
+		header('Cache-Control: max-age='.$expires.', private, immutable');
 		header('Pragma: private'); // needed or els it will not cache
 
 		$File = $File->transform($param);
+		// header('Content-DPR: '.$dpr); // todo
 
 		if (preg_match('/\.pdf$/', $name) || $File->mime() == 'application/pdf') {
 			$mime = 'application/pdf';
@@ -253,6 +281,7 @@ class dbFile extends File {
 			header('ETag: '.$etag);
 			/* rangeDownload http://mobiforge.com/developing/story/content-delivery-mobile-devices */
 			header('Content-Length: '.$File->size());
+			//header('X-Accel-Redirect: '. $File->path); header('Content-Length: 0 ???'); exit;
 			$File->read();
 		} else {
 			header("HTTP/1.1 304 Not Modified");

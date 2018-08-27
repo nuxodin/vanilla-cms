@@ -4,8 +4,8 @@ if (!$id) return;
 $error = D()->row("SELECT * FROM m_error_report WHERE id = ".D()->quote($id));
 if (!$error) { echo 'Error-Entry not found'; return; };
 $log = D()->row("SELECT * FROM log WHERE id = ".$error['log_id']);
-$sess = D()->row("SELECT * FROM sess WHERE id = ".$log['sess_id']);
-$usr = D()->row("SELECT * FROM usr WHERE id = ".$sess['usr_id']);
+$sess = D()->row("SELECT * FROM sess WHERE id = ".(int)$log['sess_id']);
+$usr = D()->row("SELECT * FROM usr WHERE id = ".(int)$sess['usr_id']);
 ?>
 
 <div class=beBoxCont style="xfont-size:.95em">
@@ -20,16 +20,44 @@ $usr = D()->row("SELECT * FROM usr WHERE id = ".$sess['usr_id']);
                 <b><?=$error['file']?></b> line:<?=$error['line']?> column:<?=$error['col']?>
                 <pre style="box-shadow:0 0 10px; padding:10px"><?=hee($error['sample'])?></pre>
             </a>
+			<table class=c1-style>
+				<tr>
+					<th> Request
+					<td> <a href="<?=hee($error['request'])?>"><?=hee($error['request'])?></a>
+				<tr>
+					<?php
+					$info = util::ua_info($error['browser']);
+					$bot = util::ua_is_bot($error['browser']);
+					?>
+					<th> Browser
+					<td>
+						<?=$bot?'<b>bot</b>':''?> <?=$info['browser']?> <?=$info['version']?><br>
+						<small><?=$error['browser']?></small>
+				<tr>
+					<th> Time
+					<td>
+						<?=$error['time']?><br>
+				<tr>
+					<th> IP
+					<td>
+						<?=$error['ip']?><br>
+						<small><?=gethostbyaddr($error['ip'])?></small>
+			</table>
             <?php
             $print = $error;
             unset($print['backtrace']);
+            unset($print['request']);
+            unset($print['browser']);
+            unset($print['time']);
+            unset($print['ip']);
             unset($print['file']);
             unset($print['line']);
             unset($print['col']);
             unset($print['sample']);
             unset($print['message']);
             unset($print['source']);
-            dump::h($print);
+
+			dump::h($print);
             dump::h($sess);
             ?>
 		</div>
@@ -74,9 +102,25 @@ $usr = D()->row("SELECT * FROM usr WHERE id = ".$sess['usr_id']);
 	</div>
 
     <div class=c1-box style="overflow:auto; width:auto; flex:0 0 auto">
-		<div class=-head>Sesstion History</div>
+		<div class=-head>History</div>
+		<div class=-body style="flex-grow:0">
+			History of:
+			<a href="<?=Url()->addParam('history_of', 'sess')?>">Sesssion</a> |
+			<a href="<?=Url()->addParam('history_of', 'client')?>">Client</a> |
+			<a href="<?=Url()->addParam('history_of', 'ip')?>">IP</a>
+		</div>
 		<?php
-		$logs = D()->all("SELECT * FROM log WHERE sess_id = ".D()->quote($log['sess_id'])." AND id <= ".D()->quote($error['log_id'])." ORDER BY id DESC LIMIT 20");
+		switch ($_GET['history_of']??'sess') {
+			case 'sess':
+				$logs = D()->all("SELECT * FROM log WHERE sess_id = ".D()->quote($log['sess_id'])." AND id <= ".D()->quote($error['log_id'])." ORDER BY id DESC LIMIT 20");
+				break;
+			case 'client':
+				$logs = D()->all("SELECT * FROM log WHERE sess_id IN(SELECT id FROM sess WHERE client_id = ".D()->quote($sess['client_id']).") AND id <= ".D()->quote($error['log_id'])." ORDER BY id DESC LIMIT 20");
+				break;
+			case 'ip':
+				$logs = D()->all("SELECT * FROM log WHERE sess_id IN(SELECT id FROM sess WHERE ip = ".D()->quote($sess['ip']).") AND id <= ".D()->quote($error['log_id'])." ORDER BY id DESC LIMIT 20");
+				break;
+		}
 		?>
         <table class=c1-style>
             <thead>

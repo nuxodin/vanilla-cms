@@ -1,6 +1,6 @@
 /* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
 import '../../../core/js/SettingsEditor.mjs?qgUniq=62bf8df';
-import './frontend.mjs?qgUniq=7c4097f';
+import './frontend.mjs?qgUniq=2706115';
 
 document.addEventListener('DOMContentLoaded',function(){
 
@@ -316,7 +316,7 @@ c1.onElement('.qgCmsFileManager',el=>{
 	}
 });
 c1.onElement('.qgCmsFront1ModuleManager',el=>{
-	c1.c1Use(['loading'/*,'tooltip'*/],1); // preload
+	c1.c1Use(['loading'/*,'tooltip'*/]); // preload
 
 	const searchInp = el.c1Find('input');
 	searchInp.addEventListener('input',function(){

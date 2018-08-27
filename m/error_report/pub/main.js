@@ -4,7 +4,8 @@ window.error_report_count = window.error_report_count || 0; // global: make it p
 		if (error_report_count++ > 50) return;
 		if (data.message) {
 			var req = new XMLHttpRequest();   // new HttpRequest instance
-			req.open('POST', appURL+'js-error');
+			req.open('POST', appURL+'js-error'); // needs c1.js
+			req.open('POST', (window.appURL||'/')+'js-error'); // needs c1.js
 			req.setRequestHeader('Content-Type','application/json');
 			data.referer = document.referrer;
 			data.request = location.href;
@@ -13,10 +14,13 @@ window.error_report_count = window.error_report_count || 0; // global: make it p
 		if (window.error_report_debug && error_report_count < 2) {
 			if (document.body) {
 				var div = document.createElement('div');
-				div.style.cssText = 'position:fixed; top:0; left:0; right:0; background:rgba(255,40,0,.9); color:#fff; padding:20px; font-size:17px; z-index:1000; text-align:center';
-				div.innerHTML = data.message;
+				div.style.cssText = 'position:fixed; top:0; left:0; right:0; background:rgba(255,40,0,.7); color:#fff; padding:20px; font-size:17px; z-index:1000; text-align:center';
+				div.innerHTML = data.message+'<br>'+data.file+' :'+data.line+' :'+data.col;
 				document.body.append(div);
-				setTimeout(function(){ div.remove(); }, 2000);
+				var to = setTimeout(function(){ div.remove(); }, 2000);
+				div.addEventListener('mouseenter',function(){ clearTimeout(to); });
+				div.addEventListener('mouseleave',function(){ div.remove(); });
+				div.addEventListener('click',function(){ div.remove(); });
 			} else {
 				alert(data.message);
 			}
@@ -33,7 +37,7 @@ window.error_report_count = window.error_report_count || 0; // global: make it p
 			backtrace: stack
 		});
   	});
-	window.addEventListener("unhandledrejection", function(e) {
+	window.addEventListener('unhandledrejection', function(e) {
 		var message = e.reason.stack.split('\n')[0];
 		var stack = unserializeStack(e.reason.stack);
 		send({
@@ -44,6 +48,25 @@ window.error_report_count = window.error_report_count || 0; // global: make it p
 			backtrace: stack
 		});
 	});
+
+
+	if (window.ReportingObserver) {
+		var observer = new ReportingObserver(function(reports){
+			for (var i=0, report; report=reports[i++];) {
+				send({
+					message:  report.type + ' | ' + report.body.message,
+					function: report.body.id,
+					file:     report.body.sourceFile,
+					line:     report.body.lineNumber,
+					col:      report.body.columnNumber,
+					backtrace: [],
+				});
+			}
+		}, {buffered: true});
+		observer.observe();
+	}
+
+
 	function wrapConsole(method){
 		var original = console[method];
 		console[method] = function(message){

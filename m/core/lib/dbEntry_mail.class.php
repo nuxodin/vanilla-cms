@@ -85,9 +85,9 @@ class dbEntry_mail extends dbEntry {
 			$ZendMail->setSubject(($toWebmaster?'Debug! ':'').$this->subject);
 
 			$html = $this->getHtml($Item, $ZendMail);
-			// if (strpos($html, 'cid:') !== false) { // dirty hack for thunderbird, it needs multipart/related for inline-images
-			// 	$ZendMail->setType(\Zend_Mime::MULTIPART_RELATED); // ok?
-			// }
+			if (strpos($html, 'cid:') !== false) { // dirty hack for thunderbird, it needs multipart/related for inline-images
+				$ZendMail->setType(\Zend_Mime::MULTIPART_RELATED); // needed by fotoblitz, what if i always add this? => testing
+			}
 			$ZendMail->setBodyHtml(($toWebmaster?'original receiver :'.$Item->email.'<br><br>':'').$html);
 			$ZendMail->setBodyText(($toWebmaster?'original receiver :'.$Item->email."\n\n"    :'').$this->getText($Item, $ZendMail));
 			$ZendMail->addTo($toWebmaster ?: $Item->email, $Item->name);

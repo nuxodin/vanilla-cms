@@ -10,13 +10,13 @@
 		<thead>
 			<tr>
 				<th style="width:20px"> Nr.
-				<th style="min-width:250px; width:100%"> Seite
-				<th> Online ab
-				<th> Online bis
-				<th> Öffentlich
-				<th> Sichtbar
-				<th> Durchsuchbar
-				<th> Layout
+				<th style="min-width:250px"> Seite
+				<th style="width:80px"> Online ab
+				<th style="width:80px"> Online bis
+				<th style="width:80px"> Öffentlich
+				<th style="width:80px"> Sichtbar
+				<th style="width:80px"> Durchsuchbar
+				<th style="width:160px"> Layout
 		<tbody data-part=list>
 			<?php include 'parts/list.php'; ?>
 	</table>

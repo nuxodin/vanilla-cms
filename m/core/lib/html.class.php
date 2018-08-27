@@ -17,14 +17,21 @@ class html {
 		if (isset(self::$jsms[$v])) return;
 		self::$jsms[$v] = [];
 	}
+	static function uniqUrl($url){
+		$path = uri2path($url);
+		//$hash = filemtime($path);
+		$hash = substr(md5_file($path),0,7);
+		// $pointPos  = strrpos($url,'.');
+		// $extension = substr($url, $pointPos + 1);
+		// $rest      = substr($url, 0, $pointPos);
+		// return $rest.'.qgV-'.$hash.'.'.$extension;
+		return $url.'?qgUniq='.$hash;
+	}
 	static function _getHeaderJSMs() {
 		$ret = '';
 		foreach (self::$jsms as $url => $egal) {
 			//qg::fire('html::url-jsm',['url'=>&$url]); todo?
-			$path = uri2path($url);
-			//$mtime = filemtime($path);
-			$hash = substr(md5_file($path),0,7);
-			$ret .= '<script type=module src="'.$url.'?qgUniq='.$hash.'"></script>'."\n";
+			$ret .= '<script type=module src="'.self::uniqUrl($url).'"></script>'."\n";
 		}
 		return $ret;
 	}
@@ -192,6 +199,7 @@ class html {
 	}
 	static function output() {
 		header('content-type: text/html; charset=utf-8');
+		header('cache-control: no-cache'); // phps default is "no-store, no-cache, must-revalidate", but no-store and must-revalidate are not recommended
 		echo self::render();
 	}
 }

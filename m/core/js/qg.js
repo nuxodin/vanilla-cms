@@ -1,32 +1,8 @@
 /* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
-!function(undf, k) {
-	'use strict';
-	window.qg = {};
-    /* devicePixelRatio polyfill */
-    if (!('devicePixelRatio' in window)) window.devicePixelRatio = ('systemXDPI' in screen) ? screen.systemXDPI / screen.logicalXDPI : 1;
-    if (window.devicePixelRatio) document.cookie = "q1_dpr=" + devicePixelRatio + "; path=/";
+'use strict';
+window.qg = {};
 
-    window.ImageRealSize = function() {
-        var cache = {}, undef;
-        return function (url, cb) {
-            if (cache[url]===undef) {
-        		var nImg = new Image();
-        		nImg.src = url;
-				nImg.onload = function() {
-                    cb.apply(null, cache[url] = [nImg.width, nImg.height]);
-        		};
-            } else {
-                cb.apply(null,cache[url]);
-            }
-        };
-    }();
-
-}();
-
-// remote
-
-Ask = function(obj, opt) {
-	'use strict';
+window.Ask = function(obj, opt) {
 	opt = opt || {};
 	Ask.trigger('start', obj);
 	var data = new FormData();
@@ -50,13 +26,11 @@ c1.ext(c1.Eventer, Ask);
 
 Ask.async = true;
 addEventListener('beforeunload',function() { // blur before unload (save)
-	'use strict';
 	Ask.async = false;
 	document.activeElement && document.activeElement.blur(); // ok?
 });
 
 Ask.on('complete', function(res) {
-	'use strict';
 	if (!res) return;
 	function executeHTML(html){
 		if (!html.match('<script')) return;
@@ -102,7 +76,7 @@ Ask.on('complete', function(res) {
 	}
 });
 
-$fn = function(fn) {
+window.$fn = function(fn) {
 	function params() {
 		var data = {fn: fn, args: [].slice.call(arguments), callb: undefined};
 		$fn.stack.push(data);
@@ -128,9 +102,7 @@ $fn.stack = [];
 $fn.run = function(cb) {
 	var fns = $fn.stack;
 	if (!fns.length) return;
-	var request = Ask({
-		serverInterface: fns
-	},{
+	var request = Ask({ serverInterface: fns },{
 		url: location.href,
 		onComplete: function(res) {
 			if (!res) return;

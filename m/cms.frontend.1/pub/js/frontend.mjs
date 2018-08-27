@@ -3,14 +3,14 @@
 import '../../../core/js/c1/Placer.mjs?qgUniq=674ed19';
 import '../../../core/js/qg/c1Combobox.mjs?qgUniq=08ac9c2';
 import '../../../core/js/qg/fileHelpers.mjs?qgUniq=93e5e49';
-import '../../../core/js/Rte/index.mjs?qgUniq=e4cde79';
+import '../../../core/js/Rte/index.mjs?qgUniq=20904c6';
 import '../../../core/js/c1/fix/contextMenu.mjs?qgUniq=e373456';
 import '../../../core/js/c1/contextMenu.mjs?qgUniq=6806c25';
 
-import './rte.mjs?qgUniq=a48ded0';
+import './rte.mjs?qgUniq=fbfbb7e';
 import './contextMenu.mjs?qgUniq=6fea602';
 import './ddConts.mjs?qgUniq=e509985';
-import './dropPasteHelper.mjs?qgUniq=94441d1';
+import './dropPasteHelper.mjs?qgUniq=3ff884a';
 import './dropPaste.mjs?qgUniq=c40292d';
 
 cms.frontend1 = {

@@ -1,16 +1,37 @@
 <IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_FILENAME} !-l
-  RewriteRule .* index.php
+	RewriteEngine On
+
+	# static versions
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteRule ^(.+)\.qgV-[^.]+\.([^.]+)$ $1.$2 [L]
+	# RewriteRule ^(.+)\.qgV-[^.]+\.(.+)$ $1.$2 [L]
+
+	# minified (todo)
+	# RewriteCond %{REQUEST_FILENAME} !-f
+	# RewriteRule ^(.+)\.qgMin\.(.+)$ qgMin/$1.$2 [L]
+
+	# everything nonexisting is handled by the system
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteCond %{REQUEST_FILENAME} !-l
+	RewriteRule .* index.php
 </IfModule>
 <IfModule mod_mime.c>
     AddType image/svg+xml svg svgz
     AddType text/javascript js
     AddType text/javascript mjs
+	# does not work?:
+	# AddDefaultCharset UTF-8
+	AddCharset UTF-8 .css
+	AddCharset UTF-8 .js
+	AddCharset UTF-8 .mjs
+	AddCharset UTF-8 .svg
 </IfModule>
 <IfModule mod_expires.c>
+    <FilesMatch "\.(svg)(\?|$)">
+        ExpiresActive On
+        ExpiresDefault "access plus 2 hours"
+    </FilesMatch>
     <FilesMatch "\.(js|css|mjs)(\?|$)">
         ExpiresActive On
         ExpiresDefault "access plus 1 year"
@@ -55,5 +76,9 @@
 <IfModule mod_headers.c>
 	Header unset Server
 	Header unset X-Powered-By
+    <FilesMatch "\.(js|css|mjs)(\?|$)">
+		Header edit Cache-Control "^(.*)$" "$1, immutable"
+		Header set X-Content-Type-Options nosniff
+    </FilesMatch>
 </IfModule>
 Options -Indexes

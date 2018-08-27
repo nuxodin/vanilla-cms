@@ -33,7 +33,7 @@ $hasNewVersion = $storeData && $storeData['version'] > $localData['version'];
 	<?php if (G()->SET->has($name)) { ?>
 		<div class=c1-box>
 			<div class=-head>Einstellungen</div>
-			<div style="max-height:60vh; overflow:auto">
+			<div style="max-height:500px; overflow:auto">
 				<?php
 				$form = new SettingsEditor(G()->SET[$name]);
 				echo $form->show();
@@ -128,7 +128,7 @@ $hasNewVersion = $storeData && $storeData['version'] > $localData['version'];
 		<div class=-body>
 			<input placeholder="neue Datei" onkeyup="event.which===13&&$fn('page::reload')(<?=$Cont?>,{addModuleFile:this.value})" >
 		</div>
-        <div style="overflow:auto; max-height:60vh">
+        <div style="overflow:auto; max-height:500px">
           	<table class="c1-style files" id=files_table style="white-space:nowrap">
 				<colgroup>
 					<col>
@@ -170,9 +170,46 @@ $hasNewVersion = $storeData && $storeData['version'] > $localData['version'];
         </div>
     </div>
 
+	<?php if (is_dir(appPATH.'qg/'.$name)) { ?>
+	<div class=c1-box style="flex:320px">
+    	<div class=-head>Projektspezifische Dateien</div>
+    	<style>.files a { display:block;} </style>
+        <div style="overflow:auto; max-height:500px">
+          	<table class="c1-style files" id=files_table style="white-space:nowrap">
+				<colgroup>
+					<col>
+					<col style="width:20px">
+					<col style="width:10px">
+				<tbody>
+				<?php
+				$verzeichnis = new \RecursiveIteratorIterator( new \RecursiveDirectoryIterator(appPATH.'qg/'.$name), true );
+				$startOffset = strlen( realpath( appPATH.'qg/'.$name ) )+1;
+				foreach ($verzeichnis as $datei) {
+					$show = substr($datei, $startOffset);
+					$search = str_replace('\\', '/', $datei);
+					if (!is_file($datei)) continue;
+
+					$file = realpath($datei);
+					$_SESSION['fileEditor']['allow'][$file] = 1;
+					$src = appURL.'editor?file='.urlencode($file);
+
+					$fMtime   = filemtime($file);
+					$fAge     = time() - $fMtime;
+					?><tr><?php
+						?><td><a href="<?=hee($src)?>" target=<?=md5($file)?>><?=$show?></a><?php
+						?><td><?='geändert vor '.round($fAge/60).'min'
+						?><!--td><img class=-del onclick="" src="<?=sysURL?>cms.frontend.1/pub/img/delete.svg" style="cursor:pointer; height:20px" alt=löschen--><?php
+				}
+				?>
+          	</table>
+        </div>
+    </div>
+	<?php } ?>
+
+
 	<div class=c1-box style="flex:320px">
 		<div class=-head>als Seiten / Inhalte Vorhanden</div>
-		<div style="max-height:60vh; overflow:auto">
+		<div style="max-height:500px; overflow:auto">
 			<table class=c1-style style="width:auto">
 				<?php foreach (D()->query("SELECT * FROM page WHERE module = ".D()->quote($name)) as $row) {
 					$P = Page($row['id'], $row);
@@ -189,7 +226,7 @@ $hasNewVersion = $storeData && $storeData['version'] > $localData['version'];
 
 	<div class=c1-box style="flex:320px">
 		<div class=-head>Changelog</div>
-		<div style="max-height:60vh; overflow:auto">
+		<div style="max-height:500px; overflow:auto">
 			<table class=c1-style style="white-space:nowrap;">
 				<?php
 				$changes = @qg::Store()->changelog($name);

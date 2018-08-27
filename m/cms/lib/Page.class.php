@@ -12,7 +12,7 @@ class Page {
 
 	protected $Parent     = null;
 	protected $Path       = null;
-	public    $Children     = null;
+	public    $Children   = null;
 	public    $Named      = [];
 	protected $Title 	  = null;
 	protected $Conts      = null;
@@ -148,7 +148,8 @@ class Page {
 		$s = $this->getPrepared($vars);
 
 		$modPath = sysPATH.$this->vs['module'].'/';
-		is_file($modPath.'pub/main.js')  && html::addJsFile($this->modUrl.'pub/main.js');
+		//is_file($modPath.'pub/main.js')  && html::addJsFile($this->modUrl.'pub/main.js');
+		is_file($modPath.'pub/main.js')  && html::addJsFile($this->modUrl.'pub/main.js',null,true,'defer');
 		is_file($modPath.'pub/main.css') && html::addCSSFile($this->modUrl.'pub/main.css'); // deprecated
 
 		array_pop(cms::$RenderPath);

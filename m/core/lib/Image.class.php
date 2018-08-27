@@ -15,8 +15,10 @@ class Image {
 	function __construct($path = null) {
 		if ($path) $this->from($path);
 	}
+	// "@" in imagecreatefromjpeg($path)
 	// ignore warnings like "gd-jpeg, libjpeg: recoverable error: Invalid SOS parameters for sequential JPEG" and "gd-jpeg, libjpeg: recoverable error: Invalid SOS parameters for sequential JPEG"
-	function fromjpeg($path)	{ $this->Img = @imagecreatefromjpeg($path); }
+	// better globaly set ini_set('gd.jpeg_ignore_warning', true); ??? default in php7.1
+	function fromjpeg($path)	{ $this->Img = imagecreatefromjpeg($path); }
 	function fromgif($path)		{ $this->Img = imagecreatefromgif($path); }
 	function frompng($path)		{ $this->Img = imagecreatefrompng($path); }
 	function from($path) {
@@ -108,5 +110,25 @@ class Image {
 		}
 		fclose($fh);
 		return $count > 1;
+	}
+	// http://www.php.net/manual/en/function.getimagesize.php#105033
+	// todo: deal with "gif"
+	static function has_alpha($path){
+		if (self::able($path) === 'image/png') {
+			$byte25 = ord(@file_get_contents($path, NULL, NULL, 25, 1));
+			$canHave = $byte25 == 4 || $byte25 === 6;
+			if (!$canHave) return;
+			$img = imagecreatefrompng($path);
+			$width = imagesx($img);
+			$height = imagesy($img);
+			for($i = 0; $i < $width; $i++) {
+				for($j = 0; $j < $height; $j++) {
+					$rgba = imagecolorat($img, $i, $j);
+					if(($rgba & 0x7F000000) >> 24) {
+						return true;
+					}
+				}
+			}
+		}
 	}
 }

@@ -12,7 +12,39 @@ class cms_app1 {
 			if ($File->exists()) return $File->path;
 		}
 	}
+	static function icon($width, $options=[]){
+		$height = $options['height']??$width; // todo if needed
+		$padding = $options['padding']??0;
+		$padding = max($padding,0);
 
+		$file = self::bestIcon($width-($padding*2));
+		if (!$file) return;
+		$Img = new Image($file);
+
+		$color = imagecolorallocatealpha($Img->Img, 0, 0, 0, 127); // transparent
+		// if ($options['edge-colors']) {
+		// 	$corners[] = imagecolorat($Img->Img, 2,           2);
+		// 	$corners[] = imagecolorat($Img->Img, $Img->x()-3, 2);
+		// 	$corners[] = imagecolorat($Img->Img, $Img->x()-3, $Img->y()-3);
+		// 	$corners[] = imagecolorat($Img->Img, 2,           $Img->y()-3);
+		// 	foreach ($corners as $corner => $color) {
+		// 		$colors[$color] = ($colors[$color] ?? 0) + 1;
+		// 	}
+		// 	$count = max($colors);
+		// 	$color = array_search($count, $colors);
+		// }
+		$Img = $Img->getResized($width-($padding*2), $height-($padding*2), true);
+		$Bg = Image::create($width, $height);
+		imagealphablending($Bg->Img, false);
+		imagesavealpha    ($Bg->Img, true);
+		imagefill($Bg->Img, 0, 0, $color);
+		$dst_x = ( $Bg->x() - $Img->x() ) / 2;
+		$dst_y = ( $Bg->y() - $Img->y() ) / 2;
+		imagecopyresampled($Bg->Img, $Img->Img, $dst_x, $dst_y, 0, 0, $Img->x(), $Img->y(), $Img->x(), $Img->y());
+		$export = appPATH.'cache/pri/app-icon-filled-'.$width.'-'.$height.'.png';
+		imagepng($Bg->Img, $export);
+		return $export;
+	}
 	static function filledIcon($w, $h=null) {
 		if ($h === null) $h = $w;
 		$file = self::bestIcon($w);
@@ -50,15 +82,18 @@ qg::on('action', function() {
 	/****************************************
 	/****  icons
 	/***************************************/
-	$outputFile = function($size) {
-		$file = cms_app1::filledIcon($size);
+	$outputFile = function($size, $options=[]) {
+		$file = cms_app1::icon($size, $options);
+		//$file = cms_app1::filledIcon($size);
+		header('cache-control: max-age='.(60*60*2));
 		header('content-type: image/png');
 		is_file($file) && readfile($file);
 		exit;
 	};
 	if (preg_match('/^app-icon-/', appRequestUri)) {
 		$size = (int)substr(appRequestUri, 9);
-		$outputFile($size);
+		$padding = floor(($size-48)/8);
+		$outputFile($size, ['padding'=>$padding]);
 	}
 	switch (appRequestUri) {
 		case 'favicon.ico':
@@ -66,90 +101,56 @@ qg::on('action', function() {
 			$destination = appPATH.'cache/pri/app1-favicon.ico1';
 			$ico_lib = new \PHP_ICO();
 			foreach ([16,32,48] as $size) {
-				$file = cms_app1::filledIcon($size,$size);
+				$file = cms_app1::icon($size);
 				$file && $ico_lib->add_image($file, [[$size, $size]]);
 			}
 			$ico_lib->save_ico($destination);
 			header('content-type: image/x-icon');
 			is_file($destination) && readfile($destination);
 			exit;
-		case 'mstile-70x70.png':
-			$outputFile(128);
-			//For Windows 8 / IE11.
-		case 'mstile-144x144.png':
-			$outputFile(144);
-			//For Windows 8 / IE10.
-		case 'mstile-150x150.png':
-			$outputFile(270);
-			//For Windows 8 / IE11.
-		case 'mstile-310x310.png':
-			$outputFile(558);
-			//For Windows 8 / IE11.
-		//case 'mstile-310x150.png':
-			//$outputFile(310);
-			//For Windows 8 / IE11.
-		case 'apple-touch-icon-57x57-precomposed.png':
-		case 'apple-touch-icon-57x57.png':
-			$outputFile(57);
-			//iPhone and iPad users can turn web pages into icons on their home screen. Such link appears as a regular iOS native application. When this happens, the device looks for a specific picture. The 57x57 resolution is convenient for non-retina iPhone with iOS6 or prior. Learn more in Apple docs.
-		case 'apple-touch-icon-60x60-precomposed.png':
-		case 'apple-touch-icon-60x60.png':
-			$outputFile(60);
-			//Same as apple-touch-icon-57x57.png, for non-retina iPhone with iOS7.
-		case 'apple-touch-icon-72x72-precomposed.png':
-		case 'apple-touch-icon-72x72.png':
-			$outputFile(72);
-			//Same as apple-touch-icon-57x57.png, for non-retina iPad with iOS6 or prior.
-		case 'apple-touch-icon-76x76-precomposed.png':
-		case 'apple-touch-icon-76x76.png':
-			$outputFile(76);
-			//Same as apple-touch-icon-57x57.png, for non-retina iPad with iOS7.
-		case 'apple-touch-icon-114x114-precomposed.png':
-		case 'apple-touch-icon-114x114.png':
-			$outputFile(114);
-			//Same as apple-touch-icon-57x57.png, for retina iPhone with iOS6 or prior.
-		case 'apple-touch-icon-120x120-precomposed.png':
-		case 'apple-touch-icon-120x120.png':
-			$outputFile(120);
-			//Same as apple-touch-icon-57x57.png, for retina iPhone with iOS7.
-		case 'apple-touch-icon-144x144-precomposed.png':
-		case 'apple-touch-icon-144x144.png':
-			$outputFile(144);
-			//Same as apple-touch-icon-57x57.png, for retina iPad with iOS6 or prior.
-		case 'apple-touch-icon-152x152-precomposed.png':
-		case 'apple-touch-icon-152x152.png':
-			$outputFile(152);
-			//Same as apple-touch-icon-57x57.png, for retina iPad with iOS7.
-			//case 'apple-touch-icon-precomposed.png':
-		case 'apple-touch-icon-precomposed.png':
-			//Same as apple-touch-icon.png, expect that is already have rounded corners (but neither drop shadow nor gloss effect).
-		case 'apple-touch-icon.png':
-			//Same as apple-touch-icon-57x57.png, for "default" requests, as some devices may look for this specific file. This picture may save some 404 errors in your HTTP logs. See Apple docs
-		case 'apple-touch-icon-180x180-precomposed.png':
-		case 'apple-touch-icon-180x180.png':
-			$outputFile(180);
-			// iphone 6
+		case 'mstile-70x70.png': $outputFile(128, ['padding'=>14]); //For Windows 8 / IE11.
+		//case 'mstile-144x144.png': $outputFile(144, ['padding'=>70]); //For Windows 8 / IE10. //zzz?
+		case 'mstile-150x150.png': $outputFile(270, ['padding'=>82]); //For Windows 8 / IE11.
+		case 'mstile-310x310.png': $outputFile(558, ['padding'=>120]); //For Windows 8 / IE11.
+		//case 'mstile-310x150.png': //$outputFile(310); //For Windows 8 / IE11.
+		// case 'apple-touch-icon-57x57-precomposed.png': case 'apple-touch-icon-57x57.png': $outputFile(57);
+		// case 'apple-touch-icon-60x60-precomposed.png': case 'apple-touch-icon-60x60.png': $outputFile(60);
+		// case 'apple-touch-icon-72x72-precomposed.png': case 'apple-touch-icon-72x72.png': $outputFile(72);
+		// case 'apple-touch-icon-76x76-precomposed.png': case 'apple-touch-icon-76x76.png': $outputFile(76);
+		// case 'apple-touch-icon-114x114-precomposed.png': case 'apple-touch-icon-114x114.png': $outputFile(114);
+		// case 'apple-touch-icon-120x120-precomposed.png': case 'apple-touch-icon-120x120.png': $outputFile(120);
+		// case 'apple-touch-icon-144x144-precomposed.png': case 'apple-touch-icon-144x144.png': $outputFile(144);
+		// case 'apple-touch-icon-152x152-precomposed.png': case 'apple-touch-icon-152x152.png': $outputFile(152);
+		case 'apple-touch-icon-precomposed.png': case 'apple-touch-icon.png': case 'apple-touch-icon-180x180-precomposed.png': case 'apple-touch-icon-180x180.png': $outputFile(180);
+		case 'apple-touch-icon-192x192-precomposed.png': case 'apple-touch-icon-192x192.png': $outputFile(192);
 	}
 
 	/****************************************
 	/****  favicon
 	/***************************************/
-	if (appURL !== '/')  html::$head .= '<link rel=icon href="'.appURL.'favicon.ico">'."\n";
+	if (appURL !== '/')  html::$head .= '<link rel=icon href="'.appURL.'favicon.ico">'."\n"; // better rel="shortcut icon" ?
 	/****************************************
 	/****  icons
 	/***************************************/
 	if ($SET['use icon']->setType('bool')->v) {
 		//foreach ([558,192,160,96,32,16] as $size) {
-		foreach ([558,192,160,96] as $size) {
+		foreach ([192,160,96,48] as $size) {
 			html::$head .= '<link rel=icon type=image/png href='.appURL.'app-icon-'.$size.'.png sizes='.$size.'x'.$size.">\n";
 		}
-	}
-	/****************************************
-	/****  apple-touch-icons
-	/***************************************/
-	if ($SET['use apple-touch-icon']->v) {
+		/****************************************
+		/****  apple-touch-icons
+		/***************************************/
 		$precomposed = $SET['use apple-touch-icon']->v === 'precomposed' ? '-precomposed' : '';
-		foreach ([180,152,144,120,114,76,72,60,57] as $size) {
+		// 57px iPhone(first generation or 2G), iPhone 3G, iPhone 3GS
+		// 76px iPad and iPad mini @1x
+		// 120px (retina) iPhone 4, iPhone 4s, iPhone 5, iPhone 5c, iPhone 5s, iPhone 6, iPhone 6s, iPhone 7, iPhone 7s, iPhone8
+		// 128px Android Devices Normal Resolution
+		// 152px iPad and iPad mini @2x
+		// 167px iPad Pro
+		// 180px iPhone X, iPhone 8 Plus, iPhone 7 Plus, iPhone 6s Plus, iPhone 6 Plus
+		// 192px Android Devices High Resolution
+		//foreach ([192,180,167,152,144,128,120,114,76,72,60,57] as $size) {
+		foreach ([192] as $size) {
 			html::$head .= '<link rel=apple-touch-icon'.$precomposed.' sizes='.$size.'x'.$size.' href="'.appURL.'apple-touch-icon-'.$size.'x'.$size.$precomposed.'.png">'."\n";
 		}
 		//For non-Retina iPhone, iPod Touch, and Android 2.1+ devices:
@@ -198,9 +199,11 @@ qg::on('action', function() {
 
 	if (preg_match('/^([a-z][a-z])\.app1\.webmanifest/',appRequestUri,$matches)) {
 		$lang = $matches[1]; // todo
-		// header(''); expires header?
-		header('Content-Type: application/manifest+json');
-		foreach ([16,30,32,48,60,64,90,120,128,256,558] as $size) {
+		header('cache-control: no-cache'); // ok?
+		header('content-type: application/manifest+json; charset=utf-8');
+		// https://docs.microsoft.com/en-us/microsoft-edge/progressive-web-apps/microsoft-store (minimum 512px)
+		//foreach ([16,30,32,48,60,64,90,120,128,192,256,512,558] as $size) {
+		foreach ([48,192,256,512] as $size) {
 			$icons[] = [
 				'src'   => appURL.'app-icon-'.$size.'.png',
 				'sizes' => $size.'x'.$size,
@@ -222,9 +225,7 @@ qg::on('action', function() {
 			'background_color' => $SET['background_color']->v,
 			'categories'       => explode("\n", $SET['categories']->v),
 		];
-		if ($SET['no start_url']->v) {
-			unset($app['start_url']);
-		}
+		if ($SET['no start_url']->v) unset($app['start_url']);
 		foreach ($app as $name => $value) if ($value === '' || $value === [0=>'']) unset($app[$name]);
 
 		if ($SET['service-worker']->v) {
@@ -239,46 +240,14 @@ qg::on('action', function() {
 	}
 
 	/****************************************
-	/****  chrome crx https://developer.chrome.com/webstore/hosted_apps
-	/***************************************
-	if (appRequestUri === 'app.crx') {
-		$app = [
-			'name'			=> $SET['short_name']->v,
-			'description'	=> $SET['name']->v,
-			'version'		=> $SET['version']->v,
-			'app' => [
-				'launch' => [
-					'web_url' => (string)Url(appURL)->addParam('c1Standalone',1),
-				]
-			],
-			'icons' => [
-				'128' => appURL.'app-icon-128.png',
-			],
-			'manifest_version' => 2
-		];
-		foreach ($SET['chrome_permissions'] as $k => $S) {
-			if ($S->v) $app['permissions'][] = $k;
-		}
-		$manifest = json_encode($app,JSON_PRETTY_PRINT);
-		$zip = new Zip;
-		$path = appPATH.'cache/tmp/googleApp.crx';
-		$zip->open($path, Zip::CREATE);
-		$zip->addFromString('manifest.json', $manifest);
-		$zip->close();
-		header('Content-Type: application/zip');
-		readfile($path);
-		exit;
-	}
-
-	/****************************************
 	/****  ie tile http://www.buildmypinnedsite.com/de-DE
 	/***************************************/
 	if ($SET['use ie10 tile']->setType('bool')->v) {
-		html::$meta['msapplication-TileImage'] = appURL.'mstile-144x144.png';
+		//html::$meta['msapplication-TileImage'] = appURL.'mstile-144x144.png';
 		html::$meta['msapplication-TileColor'] = $SET['tile color']->v ?: $SET['background_color']->v;
-		html::$meta['msapplication-starturl']  = appURL.'?c1Standalone=1';
 		//html::$meta['msapplication-window']  = 'width=1024;height=768';
 		//html::$meta['msapplication-task']    = 'name=Blog;action-uri=http://app.com/blog;icon-uri=http://app.com/blog.ico';
+		html::$meta['msapplication-starturl']  = appURL.'?c1Standalone=1';
 		html::$meta['msapplication-config'] = appURL.'browserconfig.xml';
 		if (appRequestUri === 'browserconfig.xml') {
 			$cont =
@@ -309,7 +278,7 @@ qg::on('action', function() {
 	if (appRequestUri === 'cms.app1.offline.html') {
 		header('content-type: text/html');
 		$SET = G()->SET['app1'];
-		$file = cms_app1::filledIcon(256);
+		$file = cms_app1::icon(256);
 		if ($file) {
 			$type = pathinfo($file, PATHINFO_EXTENSION);
 			$data = file_get_contents($file);

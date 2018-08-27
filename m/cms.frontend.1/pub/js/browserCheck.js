@@ -5,7 +5,7 @@
     let ok =
         'grid' in style &&
         'will-change' in style &&
-        'serviceWorker' in navigator &&
+        //'serviceWorker' in navigator && // zzz not without https
         window.CSS &&
         CSS.supports('color', 'var(--primary)');
 
@@ -64,7 +64,7 @@
         let browser = browsers[id];
         if (browser.beta) continue;
         html +=
-        '<a style="display:table-cell; padding:20px; width:10%; text-align:center" href="'+browser.link+'" target="browser">'+
+        '<a style="display:table-cell; padding:20px; width:10%; text-align:center" href="'+browser.link+'" target=browser>'+
             browser.icon+
             '<div>'+browser.name+'</div>'+
         '</a>';

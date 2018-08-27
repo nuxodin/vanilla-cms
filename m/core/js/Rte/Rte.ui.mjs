@@ -106,7 +106,7 @@ window.Rte.ui = {
 			opt.el.className = '-item -'+name;
 		}
 		if (opt.cmd) {
-			if (!opt.click && opt.click != false) opt.click = ()=>qgExecCommand(opt.cmd,false,false);
+			if (!opt.click && opt.click != false) opt.click = ()=>qgExecCommand(opt.cmd, false);
 			if (!opt.check && opt.check != false) opt.check = ()=>qgQueryCommandState(opt.cmd);
 		}
 		var enable = opt.enable;

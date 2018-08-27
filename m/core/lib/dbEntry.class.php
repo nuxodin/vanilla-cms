@@ -20,6 +20,7 @@ class dbEntry {
 			$this->_is  = true;
 			$this->construct();
 		} else {
+			trigger_error('dbEntry as direct id used?');
 			$this->_eid = (string)$vs;
 		}
 //$this->_Cache = cache('dbEntry', $this->_T->_name, $this->_eid); // new, todo make if no argument $vs?

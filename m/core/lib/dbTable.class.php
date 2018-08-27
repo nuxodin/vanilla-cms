@@ -70,9 +70,15 @@ class dbTable {
 		if (!is_array($vs)) return $vs;
 		$this->Fields();
 		$part = [];
-		foreach ($this->Primaries AS $primary => $Obj) {
+		foreach ($this->Primaries AS $primary => $Field) {
 			if (!isset( $vs[$primary] )) return false;
-			$part[] = $vs[$primary];
+			$value = $vs[$primary];
+
+			// neu // todo? : $Field->toValue($value); ??
+			$type = strtoupper($Field->getType());
+			if (isset(dbField::$numTypes[$type])) $value = (string)(float)(string)$value;
+
+			$part[] = $value;
 		}
 		return implode('-:-', $part);
 	}
@@ -80,13 +86,13 @@ class dbTable {
 		$this->Fields();
 		$arr = [];
 		if (is_array($id)) {
-			foreach ($this->Primaries AS $primary => $Obj) {
+			foreach ($this->Primaries AS $primary => $Field) {
 				if (!isset($id[$primary])) return false;
 				$arr[$primary] = $id[$primary];
 			}
 		} else {
 			$vs = explode('-:-',$id);
-			foreach ($this->Primaries AS $primary => $Obj)
+			foreach ($this->Primaries AS $primary => $Field)
 				$arr[$primary] = array_shift($vs);
 		}
 		return $arr;

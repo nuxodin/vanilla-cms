@@ -1,8 +1,8 @@
 #qgRteToolbar .-options > h1, #qgRteToolbar .-options > h4, #qgRteToolbar .-options > h5, #qgRteToolbar .-options > h6 {
-  display: none !important;
+	display: none !important;
 }
 html {
-  overflow-y: scroll;
+	overflow-y: scroll;
 }
 body {
 	/* ie11 fix: #container display:flex and min-height */
@@ -10,52 +10,52 @@ body {
 	flex-direction:column;
 }
 h1, h2, h3, h4, h5, h6 {
-  margin: 0px 0px 0.25em 0px;
+	margin: 0px 0px 0.25em 0px;
 }
 h1 {
 }
 h2 {
 }
 p {
-  margin-top: 0;
+	margin-top: 0;
 }
 p:last-child {
-  margin-bottom: 0;
+	margin-bottom: 0;
 }
 a {
-  text-decoration: none;
+	text-decoration: none;
 }
 a:visited {}
 a:hover {}
 
 .l1_width {
-  max-width: 860px;
-  margin: auto;
-  padding-left:4vw;
-  padding-right:4vw;
+	max-width: 860px;
+	margin: auto;
+	padding-left:4vw;
+	padding-right:4vw;
 }
 #container {
-  position: relative;
-  z-index: 0;
-  zzz_height: 200px; /* ie11, why?, its bad vor safari and ie11 */
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: initial;
-  xxxmargin: auto; /* why? */
+	position: relative;
+	z-index: 0;
+	zzz_height: 200px; /* ie11, why?, its bad vor safari and ie11 */
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: initial;
+	xxxmargin: auto; /* why? */
 }
 #head {
-  background-color: rgb(17, 17, 17);
-  color: rgb(255, 255, 255);
-  padding: 20px 0px;
-  z-index:1;
+	background-color: rgb(17, 17, 17);
+	color: rgb(255, 255, 255);
+	padding: 20px 0px;
+	z-index:1;
 }
 #head a {
-  color: inherit;
-  text-decoration: none;
+	color: inherit;
+	text-decoration: none;
 }
 #head > .l1_width {
-  align-items: center;
+	align-items: center;
 }
 #logo > img {
 	display:block;
@@ -69,49 +69,49 @@ a:hover {}
     flex:1 1 auto;
 }
 #left {
-  padding-right: 10px;
-  width: 170px;
+	padding-right: 10px;
+	width: 170px;
 }
 #right {
-  padding-left: 10px;
-  width: 170px;
+	padding-left: 10px;
+	width: 170px;
 }
 #foot {
-  background-color: rgb(17, 17, 17);
-  color: rgb(255, 255, 255);
-  padding: 20px 0px;
+	background-color: rgb(17, 17, 17);
+	color: rgb(255, 255, 255);
+	padding: 20px 0px;
 }
 #foot a {
-  color: inherit;
-  text-decoration: none;
+	color: inherit;
+	text-decoration: none;
 }
 .l1_cols {
-  display: flex;
+	display: flex;
 }
 .l1_cols > div {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 #main nav a {
-  display: block;
-  color:inherit;
+	display: block;
+	color:inherit;
 }
 #main nav ul {
-  padding-left: 0px;
+	padding-left: 0px;
 }
 #main nav > ul > li > ul > li > a {
-  padding-left: 10px;
+	padding-left: 10px;
 }
 #main nav > ul > li > ul > li > ul > li > a {
-  padding-left: 20px;
+	padding-left: 20px;
 }
 #main nav > ul > li > ul > li > ul > li > ul > li > a {
-  padding-left: 30px;
+	padding-left: 30px;
 }
 .Center {
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-  display: block;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	display: block;
 }
 
 .Left {

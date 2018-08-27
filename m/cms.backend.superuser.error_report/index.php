@@ -37,7 +37,7 @@ if (isset($_GET['id'])) {
 			<table class=c1-style>
 				<?php
 				$rows = D()->all(
-					"SELECT *, count(*) as num FROM m_error_report GROUP BY message ORDER BY ".(isset($_GET['latest'])?'id DESC':'count(*) DESC')." "
+					"SELECT *, count(*) as num, max(time) as time FROM m_error_report GROUP BY message ORDER BY ".(isset($_GET['latest'])?'max(id) DESC':'count(*) DESC')." "
 				);
 				?>
 				<tbody>
@@ -45,7 +45,9 @@ if (isset($_GET['id'])) {
 					<tr>
 						<td> <a href="<?=hee(Url()->addParam('message',$row['message']))?>"><?=$row['num']?> x</a>
 						<td> <?=hee($row['source'])?>
-						<td> <a target=_blank href="<?=appURL.'editor/?file='.urlencode($row['file']).'&line='.$row['line'].'&col='.$row['col']?>"><?=hee($row['message'])?></a>
+						<td>
+							<a target=_blank href="<?=appURL.'editor/?file='.urlencode($row['file']).'&line='.$row['line'].'&col='.$row['col']?>"><?=hee($row['message'])?></a><br>
+							<div style="color:#9998; font-size:11px"><?=strftime( '%x %X',  strtotime($row['time']) )?></div>
 						<td>
 							<img
 								onclick="$fn('page::reload')(<?=$Cont?>,{deleteByMessage:this.getAttribute('value')})"

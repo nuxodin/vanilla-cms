@@ -72,10 +72,16 @@ function error_report($vs) {
 		}
 		$arg = [];
 		foreach ((array)$backtrace['args'] as $n => $v) { // nicht immer ein array!?
-			if (is_object($v)) { $v = '(object)'.get_class($v); }
+			if (is_object($v)) {
+				$str = method_exists($v, '__toString') ? ' "'.$v->__toString().'"' : '';
+				$v = '(object)'.get_class($v).$str;
+			}
 			if (is_array($v))  {
 				foreach ($v as $sn => $sv) { // nicht immer ein array!?
-					if (is_object($sv)) { $sv = '(object)'.get_class($sv); }
+					if (is_object($sv)) {
+						$str = method_exists($sv, '__toString') ? ' "'.$sv->__toString().'"' : '';
+						$sv = '(object)'.get_class($sv).$str;
+					}
 					if (is_array($sv))  { $sv = '(Array)'; }
 					$arg[$n][$sn] = (string)$sv;
 				}
@@ -227,7 +233,7 @@ qg::on('action', function() {
 	if (G()->SET['error_report']['javascript']->v) {
 		if (debug) G()->js_data['error_report_debug'] = 1;
 		html::$optimiseJs = false;
-		html::addJsFile(sysURL.'core/js/c1.js','core');
+		//html::addJsFile(sysURL.'core/js/c1.js','core'); // really needed?
 		html::addJsFile(sysURL.'error_report/pub/main.js','core');
 	}
 

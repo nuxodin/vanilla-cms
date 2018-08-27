@@ -83,7 +83,7 @@
             baseUrl+'c1ImageCropper.js',
             baseUrl+'c1ImageEditor.js',
             baseUrl+'qgDbFileImageEditor.js',
-        ],1);
+        ]);
         const editor = new qgDbFileImageEditor();
         editor.show(src);
     }

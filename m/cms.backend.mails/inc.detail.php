@@ -9,6 +9,12 @@ if (!$Mail->is()) {
 }
 
 if (isset($vars['send'])) $Mail->send();
+if (isset($vars['add_recipient'])) {
+	$Mail->addTo($vars['add_recipient']);
+}
+
+
+
 
 if (Page($Mail->page_id)->access() < 2) return;
 
@@ -54,6 +60,9 @@ if (isset($_GET['showit'])) {
 			<td> Absender
 			<td> <?=hee($Mail->sender)?>
 		<tr>
+			<td> Antwort an:
+			<td> <?=hee($Mail->reply_to)?>
+		<tr>
 			<td> Versenden
 			<td>
 				<?php
@@ -65,6 +74,7 @@ if (isset($_GET['showit'])) {
 					echo 'alle Versendet!';
 				}
 				?>
+				<button style="width:auto" onclick="var email = prompt('E-Mail?'); $fn('page::reload')(<?=$Cont?>,{add_recipient:email})">empfänger hinzufügen</button>
 		<!-- tr>
 			<td> Text
 			<td> <pre><?=hee($Mail->getText())?></pre -->

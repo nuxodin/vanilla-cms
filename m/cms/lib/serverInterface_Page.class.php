@@ -180,7 +180,7 @@ class serverInterface_page {
 			$P->SET['__deleted_time']   = time();
 			$TrashPage = Page($trash);
 			$TrashPage->insertBefore($P, $TrashPage->Cont('main'));
-			$P->set('access', 0);
+			//$P->set('access', 0); handled by ->Bough() and there it checks null!
 			//$P->onlineEnd(time()); // no effect!? // why this
 			foreach ($P->Bough() as $Child) {
 				$Child->vs['access'] !== null && $Child->set('access', 0);
@@ -301,29 +301,6 @@ class serverInterface_page {
 		G()->Answer['cmsInfo'] = L('Die Datei wurde hinzugefügt.');
 		return ['url'=>$File->url(), 'name'=>$File->name()];
 	}
-	/*
-	static function FileAdd($pid, $file=null, $name=null) {
-		if (!self::checkRight(2)) return false;
-		// file access check
-		if (is_numeric($file)) {
-			$file = dbFile($file);
-			if (!$file->access()) {
-				trigger_error('No access ('.$file.')');
-				G()->Answer['cmsInfo'] = L('Ihnen fehlen die nötigen Berechtigungen.');
-				return;
-			}
-			$file = $file->clone();
-		} else if ($file !== null && !preg_match('/^https?:\/\//', $file)) {
-			trigger_error('other then http/https not allowed ('.$file.')');
-			G()->Answer['cmsInfo'] = L('Ihnen fehlen die nötigen Berechtigungen.');
-			return;
-		}
-		// main logic
-		$File = Page($pid)->FileAdd($file, $name);
-		G()->Answer['cmsInfo'] = L('Die Datei wurde hinzugefügt.');
-		return ['url'=>$File->url()];
-	}
-	*/
 	static function filesSetOrder($pid, $what) {
 		if (!self::checkRight(2)) return false;
 		$P = Page($pid);
@@ -340,12 +317,12 @@ class serverInterface_page {
 				break;
 			case 'reverse':
 				$sql =
-				" SELECT pf.* 							" .
-				" FROM file f, page_file pf				" .
-				" WHERE 								" .
-				"	f.id = pf.file_id 					" .
-				"	AND pf.page_id = ".$P." 			" .
-				" ORDER BY pf.sort DESC					";
+				" SELECT pf.* 						" .
+				" FROM file f, page_file pf			" .
+				" WHERE 							" .
+				"	f.id = pf.file_id 				" .
+				"	AND pf.page_id = ".$P." 		" .
+				" ORDER BY pf.sort DESC				";
 				break;
 			case 'name':
 			case 'name_reverse':

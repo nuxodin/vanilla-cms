@@ -46,9 +46,6 @@ $_SESSION['SettingsEditor roots'][$SET->i] = 1; // allow change settings
             <a target=_blank href="http://realfavicongenerator.net/favicon_checker?site=<?=$domain?>">
               <b>Favion</b> realfavicongenerator.net
             </a>
-            <a target=_blank href="http://loc.modern.ie/de-de/report#http%3A%2F%2F<?=$domain?>">
-              <b>Compatibility</b> modern.ie
-            </a>
             <a target=_blank href="https://sonarwhal.com/">
               <b>Compatibility</b> sonarwhal.com (Microsoft)
             </a>
@@ -376,39 +373,22 @@ $_SESSION['SettingsEditor roots'][$SET->i] = 1; // allow change settings
         	    <tbody>
         	    	<?php foreach (D()->Query($sql) as $data) {
                         if ($data['usr_id'] == Usr()->id) continue;
-                        if (preg_match('/bot/',$data['browser'])) continue;
-                        if (preg_match('/libwww-perl/',$data['browser'])) continue;
-                        if (preg_match('/Java/',$data['browser'])) continue;
-                        if (preg_match('/spider/',$data['browser'])) continue;
-
-                    ?>
-        	    	<tr title="log_id: <?=$data['id']?>">
-        	    		<td style="font-size:10px"> <?=strftime('%x %X',$data['time'])?>
-        	    		<td style="word-break:break-all"> <div style="max-width:400px"><a href="<?=hee($data['url'])?>"><?=hee($data['url'])?></a></div>
-        	    		<td>
-        	    			<div style="max-width:400px; word-break:break-all">
-        		    			<?= $data['email'] ? 'Usr: '.hee($data['email']).'<br>' : '' ?>
-        		    			<?= $data['referer'] && !preg_match('/\/\/[^\/]*'.preg_quote($_SERVER['HTTP_HOST']).'\//',$data['referer']) ? 'Referer: '.hee($data['referer']) : '' ?>
-        		    		</div>
-        	    		<td> <?=$data['ip']?>
-        	    		<td title="<?=hee($data['browser'])?>">
-        		    		<?php
-        		    		$string = preg_replace('/(Mozilla|AppleWebKit)\//', '', $data['browser']);
-        		    		$string = str_replace('Version/', 'Safari/', $string);
-        		    		$string = preg_replace('/MSIE /', 'IE/', $string);
-                            $string = preg_replace('/ Chrome.*Edge\//', 'Edge/', $string);
-        		    		preg_match('/([a-zA-Z]+)\/([0-9]+\.[0-9])/', $string, $matches);
-        		    		if ($matches) {
-        						list($x,$browser,$version) = $matches;
-        						if ($browser =='Trident') {
-        							$browser = 'IE';
-        							if (preg_match('/rv:([0-9.]+)/',$string,$tmp)) $version = $tmp[1];
-        						}
-        		    			echo hee($browser.' '.$version);
-        		    		} else {
-        		    			echo 'other';
-        		    		}
-        		    		?>
+                        if (util::ua_is_bot($data['browser'])) continue;
+                        ?>
+            	    	<tr title="log_id: <?=$data['id']?>">
+            	    		<td style="font-size:10px"> <?=strftime('%x %X',$data['time'])?>
+            	    		<td style="word-break:break-all"> <div style="max-width:400px"><a href="<?=hee($data['url'])?>"><?=hee($data['url'])?></a></div>
+            	    		<td>
+            	    			<div style="max-width:400px; word-break:break-all">
+            		    			<?= $data['email'] ? 'Usr: '.hee($data['email']).'<br>' : '' ?>
+            		    			<?= $data['referer'] && !preg_match('/\/\/[^\/]*'.preg_quote($_SERVER['HTTP_HOST']).'\//',$data['referer']) ? 'Referer: '.hee($data['referer']) : '' ?>
+            		    		</div>
+            	    		<td> <?=$data['ip']?>
+            	    		<td title="<?=hee($data['browser'])?>">
+            		    		<?php
+                                $browserInfo = util::ua_info($data['browser']);
+                                echo $browserInfo['browser'].' '.$browserInfo['version'];
+            		    		?>
         	    	<?php } ?>
         	</table>
         </div>

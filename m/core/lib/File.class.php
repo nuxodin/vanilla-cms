@@ -11,12 +11,14 @@ class File {
 		return $this->path;
 	}
 	function touch() {
+		trigger_error('used?');
 		touch($this->path);
 	}
 	function read() {
 		readfile($this->path);
 	}
 	function getContents() {
+		trigger_error('used?');
 		return file_get_contents($this->path);
 	}
 	function putContents($data) {
@@ -27,16 +29,18 @@ class File {
 	}
 	function copyTo($dest) {
 		$r = copy($this->path, $dest);
-		$F = new File($dest); // needed????? zzz
+		//$F = new File($dest); // needed????? zzz
 		return $r;
 	}
 	function replaceBy($path) {
+		trigger_error('used?');
 		$path = is_object($path) ? $path->path : (string)$path;
 		$r = copy($path, $this->path);
 		$this->csh = null;
 		return $r;
 	}
 	function dirname() {
+		trigger_error('used?');
 		return dirname($this->path);
 	}
 	function exists() {
@@ -50,6 +54,7 @@ class File {
 		return filesize($this->path);
 	}
 	function rename($newname) {
+		trigger_error('used?');
 		if (rename($this->path, $newname)) {
 			$this->path = realpath($newname);
 			$this->csh = null;
@@ -57,6 +62,7 @@ class File {
 		}
 	}
 	function unlink() {
+		trigger_error('used?');
 		if (unlink($this->path)) {
 			$this->csh = null;
 			return true;
@@ -88,6 +94,7 @@ class File {
 		$ret = '';
 		if (!file_exists($this->path)) return '';
 		switch ($this->extension()) {
+			/*
 			case 'todo_pdf':
 				if (!G()->SET['qg']['binary']['xpdf']->v) return '';
 				$tmpFile = tempnam("","content");
@@ -110,6 +117,7 @@ class File {
 				exec(G()->SET['qg']['binary']['catppt']." " . escapeshellarg($this->path), $ret);
 				$ret = join("\n", $ret);
 			break;
+			*/
 			case 'csv':
 			case 'txt':
 				$ret = $this->getContents();

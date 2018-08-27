@@ -13,8 +13,8 @@ qg::on('action', function() {
 		}
 		if ($SET['HSTS']['max-age']->v) {
 			$header = 'Strict-Transport-Security:max-age='.$SET['HSTS']['max-age']->v;
-			if ($SET['HSTS']['includeSubDomains']->v) $header .= ';includeSubDomains';
-			if ($SET['HSTS']['preload']->v)           $header .= ';preload';
+			if ($SET['HSTS']['includeSubDomains']->v) $header .= '; includeSubDomains';
+			if ($SET['HSTS']['preload']->v)           $header .= '; preload';
 			header($header);
 		}
 	}

@@ -96,15 +96,16 @@ class serverInterface_cms_vers {
 		$Sess   = Sess($Log->sess_id);
 		$Usr    = $Sess->Usr();
 		$Client = D()->client->Entry($Sess->client_id);
+		$browserInfo = util::ua_info($Client->browser); // todo: wrong useragen (client initialisation)
 		return [
 			'messages'   => $messages,
 			'usr'        => $Usr->is() ? $Usr->email : 'guest',
 			'url'        => $Log->url,
 			'referer'    => $Log->referer,
 			'ip'         => $Sess->ip,
-			'browser'    => ua_to_browser($Client->browser),
+			'browser'    => $browserInfo['browser'].' '.$browserInfo['version'],
 			'time'       => (int)$Log->time,
-			'user_agent' => $Client->browser,
+			'user_agent' => $Client->browser, // todo: wrong useragen (client initialisation)
 		];
 	}
 }
@@ -167,20 +168,4 @@ function vers_protocol($table, $where = 1) {
 		];
 	}
 	return $data;
-}
-
-
-function ua_to_browser($str) {
-	$str = preg_replace('/Trident.+rv:([0-9.]+)/', 'IE/$1', $str);
-	$str = preg_replace('/Version\/([0-9.]+).+Safari\/([0-9.]+).+/', 'Safari/$1', $str);
-	$str = preg_replace('/MSIE ([0-9.]+)/', 'IE/$1', $str);
-	$str = preg_replace('/Edge\//', 'IE/', $str);
-	$str = preg_replace('/(Mozilla|AppleWebKit|Trident|Gecko)\//', '', $str);
-	preg_match('/([a-zA-Z]+)\/([0-9]+\.[0-9])/', $str, $matches);
-	if ($matches) {
-		list($x, $vendor, $version) = $matches;
-		return $vendor.' '.$version;
-	} else {
-		return 'other';
-	}
 }

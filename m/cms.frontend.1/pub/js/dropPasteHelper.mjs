@@ -27,8 +27,11 @@ cms.txtCleanElement = function(el,tid){
         el.style.maxWidth = '100%';
         el.style.width = el.offsetWidth+'px';
         el.style.height = '';
+
+        el.setAttribute('intrinsicsize', el.offsetWidth+'x'+el.offsetHeight);
         el.setAttribute('data-c1-ratio', ratio);
-        el.style.setProperty('--c1-ratio', ratio);
+        el.style.setProperty('--c1-ratio', ratio); // zzz?
+
         el.removeAttribute('width');
         el.removeAttribute('height');
     }
@@ -42,24 +45,6 @@ cms.txtClean = function(el,tid) {
 	el = el.data ? el.parentNode : el;
     el.querySelectorAll('*').forEach(function(el) {
         cms.txtCleanElement(el,tid);
-        // if (el.tagName === 'IMG' && el.src.match(/^data:/)) {
-        //     cms.txtIdToPid(tid).then( pid => cms.imgToDbFile(el, pid) );
-		// }
-        // if (el.tagName === 'IMG' && el.src.match('dbFile/')) {
-        //     const ratio = el.offsetWidth / el.offsetHeight;
-        //     el.style.maxWidth = '100%';
-        //     el.style.width = el.offsetWidth+'px';
-        //     el.style.height = '';
-        //     el.setAttribute('data-c1-ratio', ratio);
-		// 	el.style.setProperty('--c1-ratio', ratio);
-        //     el.removeAttribute('width');
-        //     el.removeAttribute('height');
-		// }
-		// if (el.src  && el.src.match  && el.src.match('dbFile/')  && el.src .match(location.host)) { el.src  = appURL+el.src .replace(/.*dbFile\//,'dbFile/'); }
-		// if (el.href && el.href.match && el.href.match('dbFile/') && el.href.match(location.host)) { el.href = appURL+el.href.replace(/.*dbFile\//,'dbFile/'); }
-		// el.removeAttribute('cmstxt');
-		// el.classList.remove('qgCmsCont')
-		// el.classList.remove('qgCmsPage')
 	});
 };
 // text add file from fs
@@ -122,7 +107,7 @@ function fileGetPreview(f) {
 
 
 cms.NodeCleanerConf_ForeignContent = {
-	tags: {H1:1,H2:1,H3:1,H4:1,H5:1,H6:1,A:1,BR:1,P:1,B:1,STRONG:1,IMG:1,DIV:1,TABLE:1,TR:1,TD:1,TBODY:1,THEAD:1,SPAN:1,LI:1,UL:1},
+	tags: {H1:1,H2:1,H3:1,H4:1,H5:1,H6:1,A:1,BR:1,HR:1,P:1,B:1,STRONG:1,IMG:1,DIV:1,TABLE:1,TR:1,TD:1,TBODY:1,THEAD:1,SPAN:1,LI:1,UL:1},
 	tagsRemove: {'O:P':1,'STYLE':1,'SCRIPT':1,'META':1,'LINK':1,'TITLE':1},
 	attributes: {src:1,target:1,href:1,alt:1},
 	//styles: {},

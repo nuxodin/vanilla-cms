@@ -25,9 +25,11 @@ $Logo = $LPage->File('logo');
 ?>
 <div id=container>
 	<style>
-	body {
+	:root {
 		--l1-theme-color:<?=G()->SET['app1']['theme_color']->v?>;
-		--l1-background-color:<?=G()->SET['app1']['background-color']->v?>;
+		--l1-background-color:<?=G()->SET['app1']['background_color']->v?>;
+		--l1-black: #000;
+		--l1-white: #fff;
 	}
 	</style>
 	<header id=head>
@@ -38,7 +40,7 @@ $Logo = $LPage->File('logo');
 			<div id=nav style="flex:1">
 				<?=$LPage->Cont('head')->get()?>
 			</div>
-			<svg class=mob_nav_btn xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewbox="0 0 30 30">
+			<svg class=mob_nav_btn xmlns="http://www.w3.org/2000/svg" viewbox="0 0 30 30">
 			    <g class=-menu>
 			      <line x1="5" y1="7"  x2="25" y2="7" ></line>
 			      <line x1="5" y1="15" x2="25" y2="15"></line>

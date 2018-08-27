@@ -11,20 +11,25 @@
 	cms.initCont = function(module, fn) {
 		if (cms.modConnected[module]) return; // once per module
 		cms.modConnected[module] = fn;
-		// ***only*** future elements are considered, so we have call "fn" it for existing ones
+		// ***only*** future elements are considered, so we have call "fn" for existing ones
 		var els = document.querySelectorAll('.qgCmsPage .-m-'+module.replace(/\./g,'-'));
 		for (var i=0, el; el=els[i++];) {
-			//console.warn('hm, it happened for '+module+'...');
+			if (el.__cms_initialized) continue;
 			fn(el);
+			el.__cms_initialized = true;
 		}
 		// ***not only*** future elements are considered
-		//c1.onElement('.qgCmsPage .-m-'+module.replace(/\./g,'-'),fn);
+		//c1.onElement('.qgCmsPage .-m-'+module.replace(/\./g,'-'),fn); // too much "onElement"-listeners?
 	};
 	/* listen for new contents */
 	c1.onElement('.qgCmsPage .qgCmsCont',function(el){  // inside qgCmsPage ok?
+		if (el.__cms_initialized) return;
 		var module = cms.el.module(el);
 		var fn = cms.modConnected[module];
-		fn && fn(el);
+		if (fn) {
+			fn(el);
+			el.__cms_initialized = true;
+		}
 	});
 
 	cms.el = {

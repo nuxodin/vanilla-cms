@@ -6,12 +6,6 @@ if (!D()->one("SELECT name FROM module WHERE name = 'cms.layout.custom.6'")) {
 }
 if (!is_dir(appPATH.'qg/'.$module)) {
 	copyDir(sysPATH.$module.'/custom', appPATH.'qg/'.$module);
-	$content = "#container {\n";
-	$content .= "	word-break:break-word;\n";
-	$content .= "	-webkit-hyphens:auto;\n";
-	$content .= "	-ms-hyphens:auto;\n";
-	$content .= "	hyphens:auto;\n";
-	$content .= "}\n";
 	$content .= "@media (max-width: 1200px) {}\n\n";
 	$content .= file_get_contents(sysPATH.'core/css/c1/normalize.css')."\n\n";
 	$content .= file_get_contents(sysPATH.'core/css/c1/recommend.css');

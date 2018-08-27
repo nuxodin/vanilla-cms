@@ -8,29 +8,6 @@ class dbEntry_module extends dbEntry {
 		!trim($T) && $T->set($this->name);
 		return $T;
 	}
-	function path() {
-		$GLOBALS['skip_stacks'] += 1;
-		trigger_error('dbEntry_module::path used?');
-		$GLOBALS['skip_stacks'] -= 1;
-		return sysPATH.$this->name.'/';
-	}
-	function _get($name) { // deprecated zzz
-		$GLOBALS['skip_stacks'] += 2;
-		trigger_error('dbEntry_module::_get used?');
-		$GLOBALS['skip_stacks'] -= 2;
-		switch ($name) {
-			case 'local_version':
-			return module::index()[$this->name]['version'] ?? null;
-			case 'local_changed':
-			return module::index()[$this->name]['changed'] ?? null;
-			case 'local_updated':
-			return module::index()[$this->name]['updated'] ?? null;
-			default:
-			$GLOBALS['skip_stacks'] += 2;
-			trigger_error('_get module::'.$name.'" not implemented');
-			$GLOBALS['skip_stacks'] -= 2;
-		}
-	}
 }
 
 class module {

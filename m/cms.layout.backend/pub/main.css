@@ -166,7 +166,7 @@ thead [l1\:order]:after {
 thead [l1\:order=DESC]:after {
 	content:'\e800';
 }
-::placeholder { color:#bbb }
+::placeholder { color:#999 }
 
 @media (max-width: 900px) {
 	#nav {

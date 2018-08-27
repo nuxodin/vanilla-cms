@@ -39,7 +39,6 @@ qg::on('dbTable::delete-after', function($e){
 	}
 });
 
-
 //////////////////////////////////////////////////
 // hooks vor spaces other then live (0)
 qg::on('dbTable::update-before', function($e){
@@ -48,9 +47,7 @@ qg::on('dbTable::update-before', function($e){
 	$table = $Table->_name;
 	if (!isset(vers::$db[$table])) return;
 	$data += $Table->entryId2Array($id) + ['_vers_log'=>0,'_vers_space'=>vers::$space];
-
 	//vers::versTable($Table)->update($data);
-
 	// split in space- / original-data;
 	if (is_array(vers::$db[$table])) {
 		$dataOriginal = [];
@@ -64,9 +61,7 @@ qg::on('dbTable::update-before', function($e){
 			D()->query("UPDATE ".$Table." SET ".$Table->valuesToSet($dataOriginal)." WHERE ".$Table->entryId2where($id));
 		}
 	}
-
 	vers::versTable($Table)->update($data);
-
 	$return = $id;
 });
 qg::on('dbTable::insert-before', function($e){
@@ -91,8 +86,6 @@ qg::on('dbTable::delete-before', function($e){
 	$data += ['_vers_log'=>0, '_vers_space'=>vers::$space];
 	$return = vers::versTable($Table)->delete($data);
 });
-
-
 //////////////////////////////////////////////////
 // auto_increment from vers-table > original-table
 qg::on('dbTable::insert-after', function($e){

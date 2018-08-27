@@ -19,7 +19,6 @@ $SET = G()->SET['app1'];
 /* settings */
 if (!$SET['name']->v) $SET['name'] = $_SERVER['HTTP_HOST'];
 $SET['description'];
-if (!$SET['version']->v) $SET['version'] = 1;
 
 /* chrome *
 $SET['chrome_permissions']['unlimitedStorage']->setType('bool');

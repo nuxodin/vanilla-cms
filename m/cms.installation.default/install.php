@@ -111,11 +111,11 @@ if (!D()->one("SELECT id FROM page WHERE id = 70")) {
 /* install the frontend */
 G()->SET['cms']->make('frontend','cms.frontend.1');
 qg::need('cms.frontend.1');
-qg::need('cms.versions');
 qg::need('cms.backend');
 
 
 if ($freshInstallation) {
+	qg::need('cms.versions');
 	qg::need('cms.cont.phpfile');
 	qg::need('cms.cont.notFound1');
 	qg::need('cms.backend.superuser');

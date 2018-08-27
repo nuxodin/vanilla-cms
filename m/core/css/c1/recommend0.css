@@ -1,13 +1,5 @@
 /* recommend.css | Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
-body {
-    word-break:   break-word; /* chrome, -firefox,  edge,  safari, -ie   exactly the save as: ? */
-    word-wrap:    break-word; /* chrome,  firefox,  edge,  safari,  ie   w3c changed to: */
-    overflow-wrap:break-word; /* chrome,  firefox, -edge, ?safari, -ie */
-    -webkit-hyphens:auto;
-    -ms-hyphens:auto;
-    hyphens:auto;
-}
-a { /* on buttons to, or * ? */
+a {
     -webkit-tap-highlight-color:transparent;
 }
 ul, ol {
@@ -63,7 +55,6 @@ textarea {
 select {
 	padding:3px 3px 3px 4px;
 }
-/* overwritten after
 input[type=button],
 input[type=submit],
 input[type=reset],
@@ -71,7 +62,6 @@ button {
 	padding-left:1em;
 	padding-right:1em;
 }
-*/
 xinput[type=file],
 input[type=range],
 input[type=checkbox],
@@ -122,6 +112,7 @@ select, input, textarea, .c1-inp, button, .c1-btn {
 	color:inherit;
 }
 .c1-inp {
+	display:inline-block;
 	background-color:#fff;
 	border:1px solid #999;
 	min-height:1.9em;
@@ -147,8 +138,8 @@ input[type=reset],
 input[type=button] {
 	background-image:linear-gradient(#fff,#ddd);
 	border-radius:3px;
-	padding-left:.8em;
-	padding-right:.8em;
+	padding-left:.5em;
+	padding-right:.5em;
 	cursor:pointer;
 	color:inherit;
 	text-align:center;

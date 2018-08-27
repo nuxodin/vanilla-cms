@@ -51,7 +51,7 @@ c1.onElement('.c1-accordion', function (accordion) {
             },10);
 
 			if (singleMode) {
-				c1.c1Use('scroll',1);
+				c1.c1Use('scroll');
 				var dur = getComputedStyle(panel).getPropertyValue('transition-duration');
 				dur = parseFloat(dur)*1000;
 				setTimeout(function(){

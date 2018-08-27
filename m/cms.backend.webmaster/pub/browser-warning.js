@@ -1,4 +1,5 @@
 !function(){
+
 //    window.error_report_count = 1000; // dont send errors
     var iv = setInterval(function(){
         if (!document.body) return;
@@ -29,7 +30,8 @@
         for (var i=0,browser; browser = browsers[i++];) {
             html +=
             '<a href="'+(browser.link)+'" style="display:inline-block; margin-right:20px" target="install_'+browser.name+'">'+
-                '<img alt="'+browser.name+'" title="download '+browser.name+'" src="'+sysURL+'cms.backend.webmaster/pub/browsers/'+(browser.name)+'.png" style="height:34px">'+
+				// src="'+sysURL+'cms.backend.webmaster/pub/browsers/'+(browser.name)+'.png" // sysURL needs c1
+				'<img alt="'+browser.name+'" title="download '+browser.name+'" src="/m/cms.backend.webmaster/pub/browsers/'+(browser.name)+'.png" style="height:34px">'+
             '</a>';
         }
         html += '</div>';

@@ -197,6 +197,7 @@
 
 
 /* text-fields */
+a[cmstxt][contenteditable]:empty, span[cmstxt][contenteditable]:empty { display:inline-block; } /* new, 8.8.18, ok? */
 :hover [cmstxt][contenteditable] { min-height:.8em; min-width:1em; }
 :hover :not(.qgCmsCont)[cmstxt][contenteditable] 	   { outline:1px solid rgba(255,50,0,.3); }
 :hover :not(.qgCmsCont)[cmstxt][contenteditable]:hover { outline:1px solid rgba(255,50,0,.5); }

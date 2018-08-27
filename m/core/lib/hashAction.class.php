@@ -6,7 +6,7 @@ namespace qg;
 // function functionToCall($name) {
 //     return 'Hello '.$name;
 // }
-// $Hash = hashAction::add('functionToCall', 60*60, 1)->arguments('World');
+// $Hash = hashAction::add('\qg\functionToCall', 60*60, 1)->arguments('World');
 // echo 'expires at: '.strftime('%x %X', $Hash->expires);
 // // 5 years later:
 // try {

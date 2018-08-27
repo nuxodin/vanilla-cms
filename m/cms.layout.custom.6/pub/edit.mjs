@@ -15,11 +15,15 @@ function showEditor(ss){
 	}
 	qgCssEditor.show(ss);
 }
-document.fonts && document.fonts.forEach(font=>{ // no edge 17
-	const family = font.family;
-	const opts = qgCssProps.fontFamily.options;
-	!opts.includes(family) && opts.push(family);
-});
+
+// get fonts
+setTimeout(function(){
+	document.fonts && document.fonts.forEach(font=>{ // no edge 17
+		const family = font.family;
+		const opts = qgCssProps.fontFamily.options;
+		!opts.includes(family) && opts.push(family);
+	});
+},100)
 
 window.cmsLayouter3_styleEditor = function() {
 	for (var ss of document.styleSheets) {

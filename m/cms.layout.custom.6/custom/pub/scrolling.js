@@ -58,7 +58,7 @@ window.addEventListener('hashchange',function(e){
 });
 
 // scroll
-c1.c1Use('scroll',1);
+c1.c1Use('scroll');
 function scrollToEl(el, cb) {
 	if (!el) return;
     var top = el.getBoundingClientRect().top + pageYOffset - l1ScrollOffset();

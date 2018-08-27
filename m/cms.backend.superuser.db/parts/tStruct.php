@@ -42,10 +42,9 @@ $SET_T = $Cont->SET['table'][$t];
 
 	<script>
 		window.fieldUi = async function(table, field){
-			var [dialog] = await c1.c1Use('dialog',1);
+			var [dialog] = await c1.c1Use('dialog');
 			$fn('page::getPart')(<?=$Cont?>,'fStruct',{table,field}).run(function(body){
 				var d = new dialog({title: table+' | '+field, body, class:'qgCMS'});
-				d.element.c1Find('>.-foot').remove();
 				d.show();
 			})
 		}

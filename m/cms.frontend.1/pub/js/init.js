@@ -43,13 +43,15 @@ if (config) {
 	});
 }
 
-editable && document.addEventListener('DOMContentLoaded',function(){
-	var editToggle = c1.dom.fragment('<a style="position:fixed; z-index:3; cursor:pointer" class="qgCMS_editmode_switch '+(qgCmsEditmode?'-active':'')+'" title="Bearbeiten (E)"><div><i></i></div></a>').firstChild;
-	document.body.append(editToggle);
-	editToggle.addEventListener('click',function(){
-		qgCmsToggleEdit();
-		this.classList.toggle('-active');
-	});
-});
+if (editable) {
+	//document.addEventListener('DOMContentLoaded',function(){
+		var editToggle = c1.dom.fragment('<a style="position:fixed; z-index:3; cursor:pointer" class="qgCMS_editmode_switch '+(qgCmsEditmode?'-active':'')+'" title="Bearbeiten (E)"><div><i></i></div></a>').firstChild;
+		document.body.append(editToggle);
+		editToggle.addEventListener('click',function(){
+			qgCmsToggleEdit();
+			this.classList.toggle('-active');
+		});
+	//});
+}
 
 }();

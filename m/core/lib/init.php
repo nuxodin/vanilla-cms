@@ -26,10 +26,10 @@ class liveSess {
 	static $id = null;
 	static function init() {
 		!isset($_SESSION) && session_start();
-		if (self::$maxpause && isset($_SESSION['qgLastAccessTime']) && $_SESSION['qgLastAccessTime'] + self::$maxpause < time()) {
+		if (self::$maxpause && isset($_SESSION['qg']['LastAccessTime']) && $_SESSION['qg']['LastAccessTime'] + self::$maxpause < time()) {
 			$_SESSION = [];
 		}
-		$_SESSION['qgLastAccessTime'] = time();
+		$_SESSION['qg']['LastAccessTime'] = time();
 		liveClient::init();
 		Auth::listen();
 		if (!isset($_SESSION['liveSess'])) {

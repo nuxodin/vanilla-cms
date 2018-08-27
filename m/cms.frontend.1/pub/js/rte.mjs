@@ -1,6 +1,6 @@
 /* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
 // todo? // externe Seiten http://github.com/codepo8/GooHooBi/blob/master/multisearch.html
-import '../../../core/js/Rte/Rte.ui.items.mjs?qgUniq=645f74c';
+import '../../../core/js/Rte/Rte.ui.items.mjs?qgUniq=4abc310';
 
 let urlRegexp = /^[a-zA-Z0-9-]{2,999}\.[a-z0-9]{2,10}/;
 let mailRegexp = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,10})+$/;
@@ -174,8 +174,11 @@ document.addEventListener('qgResize',e=>{
 		let width = el.width;
 		let height = el.height;
 		let ratio = width / height;
+
+		el.setAttribute('intrinsicsize', width+'x'+height);
 		el.setAttribute('data-c1-ratio', ratio);
-		el.style.setProperty('--c1-ratio', ratio);
+		el.style.setProperty('--c1-ratio', ratio); // zzz?
+
 		el.style.maxWidth = '100%';
 		new dbFile(el).set('w',width).set('h',height).set('max', 0);
 		el.style.width = el.style.height = '';

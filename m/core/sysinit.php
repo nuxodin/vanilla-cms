@@ -11,11 +11,13 @@ require_once sysPATH.'core/lib/path.php';
 !defined('QG_HTTPS') && define('QG_HTTPS', false);
 
 error_reporting(E_ALL);
+ini_set('session.gc_maxlifetime', 6*60*60); // 6 hours
 session_name('qg'.substr(md5(appPATH), 0, 4));
 session_set_cookie_params(0, appURL, '', QG_HTTPS, true);
 session_start();
 
-if (!isset($_SESSION['qg'])) $_SESSION['qg'] = ['debug'=>false];
+if (!isset($_SESSION['qg'])) $_SESSION['qg'] = [];
+if (!isset($_SESSION['qg']['debug'])) $_SESSION['qg']['debug'] = false;
 if (isset($_SESSION['liveUser']) && isset($_GET['debugmode'])) {
 	$_SESSION['qg']['debug'] = (int)$_GET['debugmode']; // todo: every logedin-user can be in debugmode!
 }
@@ -85,14 +87,17 @@ foreach (explode(',', G()->SET['qg']['langs']->v) as $l) {
 }
 L::$def = reset(L::$all);
 
-//header('X-Content-Type-Options: nosniff'); // use for scripts and css https://sonarwhal.com/docs/user-guide/rules/rule-x-content-type-options/
+header('X-Content-Type-Options: nosniff'); // use for scripts/css-headers, added here becouse online-security-tests need it :/ https://sonarwhal.com/docs/user-guide/rules/rule-x-content-type-options/
 header('X-Xss-Protection: 1; mode=block');
 header('X-Frame-Options: SAMEORIGIN');
 header('Referrer-Policy: no-referrer-when-downgrade');
 
 qg::on('output-before',function(){
+	header('Accept-CH: DPR');
 	$enable = G()->SET['qg']['csp']['enable']->v;
 	if (!$enable) return;
+	G()->csp['script-src']["'report-sample'"] = 1; // ok?
+	G()->csp['style-src']["'report-sample'"] = 1; // ok?
 	if (isset(G()->csp['default-src']["'none'"]) && count(G()->csp['default-src']) > 1) unset(G()->csp['default-src']["'none'"]);
 	$str = '';
 	foreach (G()->csp as $type => $allowed) {
@@ -107,8 +112,8 @@ G()->csp = [
 	'default-src' => ["'self'"=>1], // if none, favicon and serviceworker blocked?
 	'font-src'    => ['*'=>1, 'data:'=>1], /* firefox makes it intern to data-links and so blocks fonts? */
 	'img-src'     => ["'self'"=>1, 'data:'=>1],
-	'script-src'  => ["'self'"=>1, "'unsafe-inline'"=>1, "'report-sample'"=>1,], // report-sample ok?
-	'style-src'   => ["'self'"=>1, "'unsafe-inline'"=>1, "'report-sample'"=>1,], // report-sample ok?
+	'script-src'  => ["'self'"=>1, "'unsafe-inline'"=>1, ],
+	'style-src'   => ["'self'"=>1, "'unsafe-inline'"=>1, ],
 	'connect-src' => ["'self'"=>1],
 	'frame-src'   => ["'self'"=>1],
 ];

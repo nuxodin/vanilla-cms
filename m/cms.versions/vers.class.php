@@ -103,6 +103,7 @@ class vers {
 					"   ) \n".
 					"";
 					register_shutdown_function(function() use($view) {
+						//D()->query("DROP VIEW IF EXISTS ".$view); // IF EXISTS => can be that the next request has dropped the view already??
 						D()->query("DROP VIEW ".$view);
 						D()->removeTable($view); // for the cache
 					});
@@ -118,6 +119,7 @@ class vers {
 					"     LEFT JOIN ".$table." original ON ".implode(" AND ",$joins_original)." \n".
 					" WHERE m._vers_space = ".$space." AND m._vers_log = 0 \n";
 				}
+				D()->query("DROP VIEW IF EXISTS ".$view); // can be that the previews request has not dropped the view yet...
 				D()->query($sql);
 				D()->addTable($view); // for the cache
 			}

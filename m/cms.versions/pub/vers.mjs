@@ -1,6 +1,6 @@
 /* Copyright (c) 2016 Tobias Buschor https://goo.gl/gl0mbf | MIT License https://goo.gl/HgajeK */
 //import '../../cms.frontend.1/pub/js/contextMenu.mjs?qgUniq=6fea602';
-import '../../cms.frontend.1/pub/js/frontend.mjs?qgUniq=7c4097f';
+import '../../cms.frontend.1/pub/js/frontend.mjs?qgUniq=2706115';
 
 var css =
 ' '+

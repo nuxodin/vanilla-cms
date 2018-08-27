@@ -118,7 +118,7 @@ window.qgStyleEditor = function() {
 		}
 		if (node.handler=='bigtext') {
 			vInit = vInit.replace(/;\s+/g,';\n');
-			var rawInp = $('<textarea style="width:200px; height:300px"/>').appendTo(el);
+			var rawInp = $('<textarea style="width:300px; height:300px"/>').appendTo(el);
 		} else {
 			var rawInp = $('<input>').appendTo(el);
 		}

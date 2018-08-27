@@ -86,4 +86,35 @@ class util {
         $text = preg_replace("# +#ism"," ",$text);
         return $text;
     }
+
+    static function ua_is_bot($ua){
+        $contains = ['bot','libwww-perl','Java','spider','Outlook','perl','Yahoo','Headless','Check','Validator','search','Go-http','Python','Node.js','crawler','Zombie.js'];
+        foreach ($contains as $contain) {
+            if (strpos($ua, $contain) !== false) return true;
+        }
+        if (strpos($ua, '/') === false) return true;
+    }
+    static function ua_info($userAgent){
+        $ua = str_replace('Mozilla/', '', $userAgent);
+        $ua = str_replace('Gecko/', '', $ua);
+        $ua = str_replace('AppleWebKit/', '', $ua);
+        $ua = str_replace('Version/', 'Safari/', $ua);
+        $ua = str_replace('MSIE ', 'IE/', $ua);
+        $ua = preg_replace('/ Chrome.*Edge\//', 'Edge/', $ua);
+        preg_match('/([a-zA-Z]+)\/([0-9\.]+)/', $ua, $matches); // every version a dot?
+    	$browser = 'other';
+        $version = null;
+    	if ($matches) {
+    		list(,$browser,$version) = $matches;
+    		if ($browser =='Trident') {
+    			$browser = 'IE';
+    			if (preg_match('/rv:([0-9.]+)/',$ua,$tmp)) $version = $tmp[1];
+    		}
+    	}
+        return [
+            'browser' => $browser,
+            'version' => $version,
+            //'bot'     => self::ua_is_bot($userAgent),
+        ];
+    }
 }
