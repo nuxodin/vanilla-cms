@@ -4,7 +4,7 @@
 var d = document;
 var touching = false;
 var Observer = function(el, options) {
-    this.options = options || {mouse: true, touch: true};
+    this.options = c1.ext({mouse: true, touch: true, passive:true}, options);
     this.el   = el;
 	this.pos  = {};
 	this.last = {};
@@ -30,9 +30,10 @@ var Observer = function(el, options) {
 		if (self.options.mouse) {
             d.addEventListener('mousemove', move);
             d.addEventListener('mouseup'  , stop);
+			d.addEventListener('dragstart', stop);
 		}
 		if (self.options.touch) {
-			d.addEventListener('touchmove', move);
+			d.addEventListener('touchmove', move, {passive: self.options.passive});
             d.addEventListener('touchend' , stop);
 //	            d.addEventListener('touchstart', gstart);
 		}
@@ -96,13 +97,16 @@ var Observer = function(el, options) {
 		self.onstop && self.onstop(e);
 		d.removeEventListener('mousemove', move);
 		d.removeEventListener('mouseup'  , stop);
+		d.removeEventListener('dragstart', stop);
         d.removeEventListener('touchmove', move);
 		d.removeEventListener('touchend' , stop);
 //			d.removeEventListener('touchstart', gstart);
 		touching = false;
 	};
-	!touching && el.addEventListener('mousedown', start);
-	el.addEventListener('touchstart', start);
+	if (!touching) {
+		el.addEventListener('mousedown', start);
+	}
+	el.addEventListener('touchstart', start, {passive: this.options.passive});
 };
 Observer.prototype.lastDiff = function() {
 	return {

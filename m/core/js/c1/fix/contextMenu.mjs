@@ -9,13 +9,14 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 	c1.c1Use('focusIn',()=>{});
 
-	document.documentElement.addEventListener('contextmenu',function(e){
+	document.documentElement.addEventListener('contextmenu', e=>{
 		if (e.shiftKey) return;
 		var base = e.target.closest('[contextmenu]');
 		if (base) {
 			var id = base.getAttribute('contextmenu');
 			var mEl = document.getElementById(id);
 			if (mEl && mEl.children.length) {
+				e.preventDefault();
 				parse(mEl, poly);
 				poly.style.display = 'block';
 				var top  = e.clientY;
@@ -26,7 +27,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 				poly.style.left = left+'px';
 				poly.c1ZTop();
 				poly.focus();
-				e.preventDefault();
 			}
 		}
 	});

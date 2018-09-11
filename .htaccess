@@ -32,7 +32,7 @@
         ExpiresActive On
         ExpiresDefault "access plus 2 hours"
     </FilesMatch>
-    <FilesMatch "\.(js|css|mjs)(\?|$)">
+    <FilesMatch "\.(js|css|mjs|woff2)(\?|$)">
         ExpiresActive On
         ExpiresDefault "access plus 1 year"
     </FilesMatch>
@@ -76,7 +76,7 @@
 <IfModule mod_headers.c>
 	Header unset Server
 	Header unset X-Powered-By
-    <FilesMatch "\.(js|css|mjs)(\?|$)">
+    <FilesMatch "\.(js|css|mjs|woff2)(\?|$)">
 		Header edit Cache-Control "^(.*)$" "$1, immutable"
 		Header set X-Content-Type-Options nosniff
     </FilesMatch>

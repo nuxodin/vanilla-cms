@@ -47,7 +47,7 @@ if (isset($_GET['id'])) {
 						<td> <?=hee($row['source'])?>
 						<td>
 							<a target=_blank href="<?=appURL.'editor/?file='.urlencode($row['file']).'&line='.$row['line'].'&col='.$row['col']?>"><?=hee($row['message'])?></a><br>
-							<div style="color:#9998; font-size:11px"><?=strftime( '%x %X',  strtotime($row['time']) )?></div>
+							<div style="color:#9998; font-size:11px"><?=util::niceDate(strtotime($row['time']))?></div>
 						<td>
 							<img
 								onclick="$fn('page::reload')(<?=$Cont?>,{deleteByMessage:this.getAttribute('value')})"
@@ -74,7 +74,7 @@ if (isset($_GET['id'])) {
 						<tr style="white-space:nowrap">
 							<td>
 								<a href="<?=URL($Cont->Page->url())->addParam('id',$row['id'])?>">
-									<?=$row['time']?> <br> <?=$row['log_id']?>
+									<?=util::niceDate($row['time'])?> <br> <?=$row['log_id']?>
 								</a>
 							<td> <a href="<?=hee($row['request'])?>" target=_blank>
 									<?=$row['request']?>

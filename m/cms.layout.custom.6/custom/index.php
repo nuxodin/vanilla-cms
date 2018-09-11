@@ -14,8 +14,9 @@ html::addJsFile(sysURL.'core/js/c1/img-ratio.js');
 //html::addJsFile(sysURL.'core/js/jQuery.js');
 
 //html::addJsFile (appURL.'qg/'.$Cont->vs['module'].'/pub/main.js');
-//html::addJsFile (appURL.'qg/'.$Cont->vs['module'].'/pub/mob_nav/mob_nav.js');
-//html::addCssFile(appURL.'qg/'.$Cont->vs['module'].'/pub/mob_nav/mob_nav.css');
+html::addJsFile (appURL.'qg/'.$Cont->vs['module'].'/pub/mob_nav/mob_nav.js');
+html::addCssFile(appURL.'qg/'.$Cont->vs['module'].'/pub/mob_nav/mob_nav.css');
+html::addJsFile (appURL.'qg/'.$Cont->vs['module'].'/pub/scrolling.js');
 //html::addCssFile(appURL.'qg/'.$Cont->vs['module'].'/pub/dropdown_nav.css');
 
 // preload fonts

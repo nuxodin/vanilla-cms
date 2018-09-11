@@ -23,7 +23,8 @@ $usr = D()->row("SELECT * FROM usr WHERE id = ".(int)$sess['usr_id']);
 			<table class=c1-style>
 				<tr>
 					<th> Request
-					<td> <a href="<?=hee($error['request'])?>"><?=hee($error['request'])?></a>
+					<td> <a href="<?=hee($error['request'])?>"><?=hee($error['request'])?></a><br>
+						<small>Referer <a href="<?=hee($error['referer'])?>"><?=hee($error['referer'])?></a></small>
 				<tr>
 					<?php
 					$info = util::ua_info($error['browser']);
@@ -36,17 +37,19 @@ $usr = D()->row("SELECT * FROM usr WHERE id = ".(int)$sess['usr_id']);
 				<tr>
 					<th> Time
 					<td>
-						<?=$error['time']?><br>
+						<?=util::niceDate($error['time'])?><br>
+						<small><?=$error['time']?></small>
 				<tr>
 					<th> IP
 					<td>
 						<?=$error['ip']?><br>
-						<small><?=gethostbyaddr($error['ip'])?></small>
+						<small><?=gethostbyaddr(str_replace('X','1',$error['ip']))?></small>
 			</table>
             <?php
             $print = $error;
             unset($print['backtrace']);
             unset($print['request']);
+            unset($print['referer']);
             unset($print['browser']);
             unset($print['time']);
             unset($print['ip']);
@@ -133,7 +136,7 @@ $usr = D()->row("SELECT * FROM usr WHERE id = ".(int)$sess['usr_id']);
 				$errorItems = D()->all("SElECT * FROM m_error_report WHERE log_id = ".$item['id']." ORDER BY id DESC");
 				?>
                 <tr>
-                    <td> <?=strftime('%x %X',$item['time'])?> <br> <?=hee($item['sess_id'])?> <br> <?=hee($item['id'])?>
+                    <td> <?=util::niceDate($item['time'])?> <br> Session:<?=hee($item['sess_id'])?> <br> Log-ID:<?=hee($item['id'])?>
                     <td>
 						<a href="<?=hee($item['url'])?>" target="_blank"><?=hee($item['url'])?></a>
 						<br>

@@ -80,7 +80,7 @@ class c1ImageCropper {
         this.position = {top:0,left:0,height:0,width:0};
         this.area = this.svg.querySelector('.-area');
         c1.c1Use('pointerObserver',Observer=>{
-            let observer = new Observer(this.svg);
+            let observer = new Observer(this.svg, {passive:false});
             let started = null;
             let aspectRatio = null;
             let cropper = this;

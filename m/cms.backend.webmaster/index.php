@@ -46,8 +46,8 @@ $_SESSION['SettingsEditor roots'][$SET->i] = 1; // allow change settings
             <a target=_blank href="http://realfavicongenerator.net/favicon_checker?site=<?=$domain?>">
               <b>Favion</b> realfavicongenerator.net
             </a>
-            <a target=_blank href="https://sonarwhal.com/">
-              <b>Compatibility</b> sonarwhal.com (Microsoft)
+            <a target=_blank href="https://webhint.io/scanner/">
+              <b>Compatibility</b> webhint.io (Microsoft)
             </a>
 
 
@@ -132,6 +132,9 @@ $_SESSION['SettingsEditor roots'][$SET->i] = 1; // allow change settings
             </a>
 
             <h3> Mobile </h3>
+            <a target=_blank href="https://search.google.com/test/mobile-friendly?url=<?=urldecode(URL(Page(2)->url()))?>">
+              <b>search.google.com/test</b> google
+            </a>
             <a target=_blank href="http://validator.w3.org/mobile/check?docAddr=<?=$domain?>&async=true">
               <b>Mobile tests</b> w3.org
             </a>

@@ -421,7 +421,6 @@ li.cmsOffline > a {
 
 
 /* rte */
-img::-moz-selection { background: rgba(0,0,0,.2); }
 img::selection { background: rgba(0,0,0,.2); }
 
 @keyframes qgcms_trash_activate {

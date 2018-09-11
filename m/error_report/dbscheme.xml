@@ -12,6 +12,7 @@
 		<field name="backtrace" type="text" />
 		<field name="browser"   type="varchar"  length="255"  key="MUL" />
 		<field name="request"   type="varchar"  length="255"  key="MUL" />
+		<field name="referer"   type="varchar"  length="255"  key="MUL" />
 		<field name="ip"        type="varchar"  length="255"  key="MUL" />
 	</table>
 </dbscheme>

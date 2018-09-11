@@ -22,6 +22,8 @@ c1.dom.fragment = function(html){
 	}
 	return tmpl.content;
 };
+c1.dom.ready = new Promise(function(resolve){document.addEventListener('DOMContentLoaded',resolve);});
+
 
 /* needed polyfills */
 var poly = {

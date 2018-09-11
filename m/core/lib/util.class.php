@@ -88,7 +88,7 @@ class util {
     }
 
     static function ua_is_bot($ua){
-        $contains = ['bot','libwww-perl','Java','spider','Outlook','perl','Yahoo','Headless','Check','Validator','search','Go-http','Python','Node.js','crawler','Zombie.js'];
+        $contains = ['bot','libwww-perl','Java','spider','Outlook','perl','Yahoo','Headless','Check','Validator','search','Go-http','Python','Node.js','rawler','Zombie.js','Google Page Speed Insights'];
         foreach ($contains as $contain) {
             if (strpos($ua, $contain) !== false) return true;
         }
@@ -116,5 +116,46 @@ class util {
             'version' => $version,
             //'bot'     => self::ua_is_bot($userAgent),
         ];
+    }
+    static function niceDate($ts, $options=[]/*todo*/){
+        // https://stackoverflow.com/questions/2690504/php-producing-relative-date-time-from-timestamps
+        if (!ctype_digit($ts)) $ts = strtotime($ts);
+        $diff = time() - $ts;
+        if ($diff == 0)
+            return 'now';
+        elseif ($diff > 0) {
+            $day_diff = floor($diff / 86400);
+            if ($day_diff == 0) {
+                if ($diff < 120) return $diff.' seconds ago';
+                if ($diff < 86400) return 'Today '.date('H:i:s', $ts);
+                // if ($diff < 60) return $diff.' seconds ago';
+                // if ($diff < 120) return '1 minute ago';
+                // if ($diff < 3600) return floor($diff / 60) . ' minutes ago';
+                // if ($diff < 7200) return '1 hour ago';
+                // if ($diff < 86400) return floor($diff / 3600) . ' hours ago';
+            }
+            if ($day_diff == 1) return 'Yesterday '.date('H:i:s', $ts);
+            if ($day_diff < 3)  return strftime('%a %H:%M:%S', $ts);
+            return strftime('%x %H:%M:%S', $ts);
+            // if ($day_diff < 7) return $day_diff . ' days ago';
+            // if ($day_diff < 31) return ceil($day_diff / 7) . ' weeks ago';
+            // if ($day_diff < 60) return 'last month';
+            //return date('F Y', $ts);
+        } else { // todo
+            $diff = abs($diff);
+            $day_diff = floor($diff / 86400);
+            if ($day_diff == 0) {
+                if ($diff < 120) return 'in a minute';
+                if ($diff < 3600) return 'in ' . floor($diff / 60) . ' minutes';
+                if ($diff < 7200) return 'in an hour';
+                if ($diff < 86400) return 'in ' . floor($diff / 3600) . ' hours';
+            }
+            if ($day_diff == 1) return 'Tomorrow';
+            if ($day_diff < 4) return date('l', $ts);
+            if ($day_diff < 7 + (7 - date('w'))) return 'next week';
+            if (ceil($day_diff / 7) < 4) return 'in ' . ceil($day_diff / 7) . ' weeks';
+            if (date('n', $ts) == date('n') + 1) return 'next month';
+            return date('F Y', $ts);
+        }
     }
 }
