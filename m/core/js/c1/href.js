@@ -19,9 +19,9 @@ document.addEventListener('click',function(e){
     if (e.ctrlKey) target = '_blank'; // better random-string?
 	if (target) {
 		window.open(href, target);
-        //!e.ctrlKey && win.focus(); // not needed in chrome, not working in ff
+		//!e.ctrlKey && win.focus(); // not needed in chrome, not working in ff
 	} else {
-    	location.href = href;
+		location.href = href;
 	}
 });
 document.head.insertAdjacentHTML('beforeend','<style>[data-c1-href] {cursor:pointer},[data-c1-href=""]{cursor:normal}</style>');
