@@ -22,4 +22,4 @@ G()->SET['qg']['mail']->make('defSender',     $email);
 G()->SET['qg']['mail']->make('defSendername', $email);
 G()->SET['qg']['mail']->make('replay',        $email);
 G()->SET['cms']['feedback']['email'] = 'office@shwups.ch';
-G()->SET['cms.backend.webmaster']['google.api.key'] = 'AIzaSyDBewkr4_EDLmQCZOulBlPtdrVPKq3F1Yw';
+G()->SET['cms.backend.webmaster']['google.api.key'] = '....';
